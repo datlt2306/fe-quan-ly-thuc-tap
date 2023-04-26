@@ -1,4 +1,39 @@
-@import url('https://rsms.me/inter/inter.css');
+@import url("https://rsms.me/inter/inter.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+	.table {
+		@apply w-full divide-y divide-gray-300;
+	}
+	.table th {
+		@apply py-3.5 pl-4 pr-3 text-left text-sm font-semibold capitalize text-gray-900 sm:pl-0;
+	}
+	.table tbody {
+		@apply divide-y divide-gray-200;
+	}
+	.table td {
+		@apply whitespace-nowrap px-3 py-4 text-sm text-gray-500;
+	}
+
+	.scroll {
+		@apply: w-1 [&:-webkit-scrollbar];
+	}
+
+	.scroll::-webkit-scrollbar {
+		@apply mr-1 w-1 opacity-0;
+	}
+	.scroll::-webkit-scrollbar-track {
+		@apply h-1;
+	}
+	.scroll::-webkit-resizer {
+		@apply h-1;
+	}
+	.scroll::-webkit-scrollbar-thumb {
+		@apply bg-gray-200;
+	}
+	.invisible-scroll::-webkit-scrollbar {
+		@apply hidden;
+	}
+}
