@@ -3,12 +3,13 @@ const colors = require("tailwindcss/colors");
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+	important: true,
 	theme: {
 		colors: {
 			primary: "#f27125",
-			secondary: "#52a5d6",
+			secondary: "#0d51a1",
 
-			error: "#f87272",
+			error: "#f87171",
 			success: "#4eb849",
 			disabled: "#9ca3af",
 			...colors,
