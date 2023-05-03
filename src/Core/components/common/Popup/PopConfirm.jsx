@@ -8,7 +8,7 @@ const ButtonGroup = tw.div`flex items-center gap-1`;
 const PopConfirm = ({
 	onConfirm,
 	onCancel,
-	title,
+	title = "",
 	description,
 	children,
 	okText = "Ok",

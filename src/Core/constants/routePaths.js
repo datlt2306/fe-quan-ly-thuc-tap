@@ -12,8 +12,8 @@ const BasePaths = {
 const StudentPaths = {
 	STUDENT_INFO: "/thong-tin-sinh-vien",
 	REGISTRATION: "/dang-ky-thuc-tap",
-	REPORT: "/sinh-vien/bao-cao-thuc-tap",
-	RECORD: "/sinh-vien/bien-ban-thuc-tap",
+	REPORT: "/bao-cao-thuc-tap",
+	RECORD: "/bien-ban-thuc-tap",
 };
 
 /**
@@ -34,8 +34,8 @@ const StaffPaths = {
 	STUDENT_LIST: "/danh-sach-dang-ky",
 	REVIEWS: "/review-cv",
 	SEMESTER: "/ky-hoc",
-	REGISTRATION_TIME: "thoi-gian-dang-ky",
-	STUDENT_REQUESTS: "yeu-cau-sinh-vien",
+	REGISTRATION_TIME: "/thoi-gian-dang-ky",
+	STUDENT_REQUESTS: "/yeu-cau-sinh-vien",
 };
 
 export { BasePaths, StudentPaths, StaffPaths, ManagerPaths };

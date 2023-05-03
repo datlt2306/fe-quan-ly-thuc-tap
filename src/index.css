@@ -77,9 +77,9 @@
 		@apply aspect-square;
 	}
 	.btn-circle {
-		@apply aspect-[1] rounded-full;
+		@apply aspect-[1] !rounded-full;
 	}
 	.btn-pill {
-		@apply aspect-[1,3] rounded-full;
+		@apply aspect-[1,3] !rounded-full;
 	}
 }

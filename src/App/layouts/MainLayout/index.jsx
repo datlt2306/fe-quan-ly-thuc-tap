@@ -11,6 +11,7 @@ import {
 } from "./constants/navigationConstants";
 import tw from "twin.macro";
 import { useSelector } from "react-redux";
+import ErrorBoundary from "@/Core/components/ErrorBoundary";
 
 const Main = tw.div`lg:pl-72`;
 const OutletWrapper = tw.div`py-10 px-4 sm:px-6 lg:px-8`;
@@ -21,6 +22,7 @@ const SidebarWrapper = tw.div`hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-
 const Navigation = tw.nav`flex flex-1 flex-col`;
 
 const Page = memo(Outlet);
+
 const MainLayout = () => {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const user = useSelector((state) => state.auth?.user);
@@ -52,7 +54,9 @@ const MainLayout = () => {
 				<Navbar onToggleSidebar={setSidebarOpen} navigation={navigation} />
 				{/* Page content */}
 				<OutletWrapper>
-					<Page />
+					<ErrorBoundary>
+						<Page />
+					</ErrorBoundary>
 				</OutletWrapper>
 			</Main>
 		</Fragment>
