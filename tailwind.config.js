@@ -8,7 +8,7 @@ export default {
 		colors: {
 			primary: "#fb923c",
 			secondary: "#0ea5e9",
-
+			info: "#22d3ee",
 			error: "#f43f5e",
 			success: "#10b981",
 			warning: "#f59e0b",

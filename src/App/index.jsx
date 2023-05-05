@@ -4,7 +4,12 @@ import AppRoutes from "./routers";
 import { BrowserRouter } from "react-router-dom";
 import { Fragment } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import {
+	CheckCircleIcon,
+	ExclamationTriangleIcon,
+	InformationCircleIcon,
+	XCircleIcon,
+} from "@heroicons/react/24/outline";
 
 function App() {
 	return (
@@ -16,10 +21,24 @@ function App() {
 			<ToastContainer
 				hideProgressBar={true}
 				transition={Slide}
-				toastClassName="bg-white shadow-lg text-gray-800 place-content-center font-medium"
+				toastClassName="bg-white shadow-lg text-gray-500 place-content-center font-medium"
 				position="top-center"
 				closeButton={true}
 				autoClose={1000}
+				icon={({ type }) => {
+					switch (type) {
+						case "success":
+							return <CheckCircleIcon className="h-8 w-8 text-success" />;
+						case "warning":
+							return <ExclamationTriangleIcon className="h-8 w-8 text-warning" />;
+						case "error":
+							return <XCircleIcon className="h-8 w-8 text-error" />;
+						case "info":
+							return <InformationCircleIcon className="h-8 w-8 text-secondary" />;
+						default:
+							return null;
+					}
+				}}
 			/>
 		</Fragment>
 	);
