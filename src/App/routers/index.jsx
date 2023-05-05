@@ -1,13 +1,13 @@
+import { BasePaths } from "@/Core/constants/routePaths";
 import { Navigate, useRoutes } from "react-router-dom";
-import SigninPage from "../pages/Signin";
-import PrivateLayout from "../layouts/PrivateLayout";
 import MainLayout from "../layouts/MainLayout";
+import PrivateLayout from "../layouts/PrivateLayout";
 import DefaultPage from "../pages";
 import NotFoundPage from "../pages/404";
-import studentRoutes from "./studentRoutes";
+import SigninPage from "../pages/Signin";
 import managerRoutes from "./managerRoutes";
 import staffRoutes from "./staffRoutes";
-import { BasePaths } from "@/Core/constants/routePaths";
+import studentRoutes from "./studentRoutes";
 
 const routes = [
 	{

@@ -1,16 +1,20 @@
 import { useExportToExcel, useImportFromExcel } from "@/App/hooks/useExcel";
+import { studentDataValidator } from "@/App/schemas/studentSchema";
+import Badge from "@/Core/components/common/Badge";
 import Button from "@/Core/components/common/Button";
-import { Option, Select } from "@/Core/components/common/FormControl/SelectFieldControl";
-import SlideOver from "@/Core/components/common/SlideOver";
-import Table, { InputColumnFilter } from "@/Core/components/common/Table/ReactTable";
-import { Input } from "@/Core/components/common/FormControl/TextFieldControl";
-import { ArrowDownIcon, ArrowUpIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { Fragment, useEffect, useMemo, useState } from "react";
-import tw from "twin.macro";
 import PopConfirm from "@/Core/components/common/Popup/PopConfirm";
-import Modal from "@/Core/components/common/Modal";
-import ButtonGroup from "@/Core/components/common/Button/ButtonGroup";
+import SlideOver from "@/Core/components/common/SlideOver";
+import ReactTable from "@/Core/components/common/Table/ReactTable";
+import {
+	InputColumnFilter,
+	SelectColumnFilter,
+} from "@/Core/components/common/Table/ReactTableFilters";
+import mapExcelData from "@/Core/utils/mapExcelData";
+import { ArrowDownIcon, ArrowUpIcon, PlusIcon } from "@heroicons/react/24/outline";
+import classNames from "classnames";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import tw from "twin.macro";
 
 const Box = tw.div`flex flex-col gap-6`;
 const ButtonList = tw.div`flex items-center gap-2`;
@@ -20,59 +24,78 @@ const initialData = [
 ];
 
 const StudentListPage = () => {
-	const [students, setStudents] = useState([]);
-	const { data, handleGetFile } = useImportFromExcel();
+	const { handleGetFile, data, error } = useImportFromExcel();
+	const [tableData, setTableData] = useState(data);
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
-	const [modalState, setModalState] = useState({
-		open: false,
-		result: false,
-	});
+
 	const handleExport = useExportToExcel({
 		fileName: "Danh sách sinh viên",
 		data: data.length > 0 ? data : initialData,
 	});
 
 	useEffect(() => {
-		const keys = data.shift();
-
-		const result = data.map((array, index) =>
-			array.reduce((object, value, i) => {
-				object[keys[i]] = value;
-				return { id: index + 1, ...object };
-			}, {})
-		);
-		console.log(result);
-		/**
-		 * validate result
-		 * ok -> render into table
-		 * not ok -> show error
-		 */
-
-		setStudents(result);
-	}, [data]);
-
-	const handleImportFile = (e) => {
-		handleGetFile(e.target.files[0]);
-	};
+		if (error) {
+			toast.error("File không đúng định dạng dữ liệu!");
+			return;
+		}
+		if (data.length) {
+			const mappedData = mapExcelData(data);
+			studentDataValidator
+				.validate(mappedData)
+				.then((data) => {
+					setTableData(data);
+					toast.success("Import dữ liệu thành công!");
+				})
+				.catch((error) => toast.error("File không đúng định dạng dữ liệu!"));
+		}
+	}, [data, error]);
 
 	const columnsData = useMemo(
 		() => [
 			{
-				Header: "MSV",
-				accessor: "id", // object key
+				Header: "STT",
+				accessor: "stt",
+			},
+			{
+				Header: "Họ tên",
+				accessor: "Họ tên",
+				Filter: InputColumnFilter,
+				filterable: true,
+				isSort: true,
+			},
+			{
+				Header: "Mã sinh viên",
+				accessor: "MSSV", // object key
 				Filter: InputColumnFilter,
 				filterable: true,
 				isSort: true,
 				canSort: true,
 				canFilter: true,
+				Cell: ({ value }) => <span className="font-medium">{value}</span>,
 			},
 			{
-				Header: "Thành viên",
-				accessor: "Thành viên",
+				Header: "Khóa nhập học",
+				accessor: "Khóa nhập học",
 				Filter: InputColumnFilter,
 				filterable: true,
 				isSort: true,
 			},
+			{
+				Header: "Trạng thái",
+				accessor: "Trạng thái",
+				Filter: SelectColumnFilter,
+				filterable: true,
+				isSort: true,
+				Cell: ({ value }) => <Badge variant={"error"}>{value}</Badge>,
+			},
+			{
+				Header: "Mã ngành",
+				accessor: "Mã ngành",
+				Filter: InputColumnFilter,
+				filterable: true,
+				isSort: true,
+			},
+
 			{
 				Header: "Số điện thoại",
 				accessor: "Số điện thoại",
@@ -81,26 +104,20 @@ const StudentListPage = () => {
 				isSort: true,
 			},
 			{
-				Header: "Mail cá nhân",
-				accessor: "Mail cá nhân",
+				Header: "Email",
+				accessor: "Email",
 				Filter: InputColumnFilter,
 				filterable: true,
 				isSort: true,
 			},
 			{
-				Header: "Mail FPT",
-				accessor: "Mail FPT",
+				Header: "Bổ sung",
+				accessor: "Bổ sung",
 				Filter: InputColumnFilter,
 				filterable: true,
 				isSort: true,
 			},
-			{
-				Header: "Git Account",
-				accessor: "Git Account",
-				Filter: InputColumnFilter,
-				filterable: true,
-				isSort: true,
-			},
+
 			{
 				Header: "Thao tác",
 				canFilter: false,
@@ -132,15 +149,12 @@ const StudentListPage = () => {
 
 	return (
 		<Fragment>
-			<SlideOver open={slideOverVisibility} onOpen={setSlideOverVisibility}>
+			<SlideOver
+				open={slideOverVisibility}
+				onOpen={setSlideOverVisibility}
+				panelTitle={"Thêm sinh viên"}>
 				{/* Add student form */}
 			</SlideOver>
-			{/* <ModalConfirm
-				title={"Xóa sinh viên khỏi danh sách"}
-				open={modalState.open}
-				setResult={setModalState}
-				content={"Bạn chắc chắn muốn xóa sinh viên này ?"}
-			/> */}
 
 			<Box>
 				<ButtonList>
@@ -158,7 +172,7 @@ const StudentListPage = () => {
 							type="file"
 							id="file-input"
 							className="hidden"
-							onChange={(e) => handleImportFile(e)}
+							onChange={(e) => handleGetFile(e.target.files[0])}
 						/>
 					</Button>
 
@@ -168,7 +182,15 @@ const StudentListPage = () => {
 					</Button>
 				</ButtonList>
 
-				<Table columns={columnsData} data={students} />
+				<ReactTable
+					columns={columnsData}
+					data={tableData}
+					noDataComponent={
+						<tr>
+							<td>Empty</td>
+						</tr>
+					}
+				/>
 			</Box>
 		</Fragment>
 	);

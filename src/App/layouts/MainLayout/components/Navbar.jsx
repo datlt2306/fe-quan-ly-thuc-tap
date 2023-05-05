@@ -4,25 +4,31 @@ import { ArrowLeftOnRectangleIcon, Bars3Icon, ChevronDownIcon } from "@heroicons
 import { Fragment } from "react";
 import { useSelector } from "react-redux";
 import tw from "twin.macro";
+import Breadcrumbs from "./Breadcrumbs";
 
-const StickyHeader = tw.div`sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 justify-between lg:justify-end`;
+const StickyHeader = tw.div`sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 justify-between lg:justify-between`;
 const Avatar = tw.img`h-8 w-8 rounded-full bg-gray-50`;
-const Separator = tw.div`hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200`;
-
-const Navbar = ({ onToggleSidebar }) => {
+const Separator = tw.div`hidden sm:hidden md:block h-6 w-px bg-gray-200`;
+const NavbarStart = tw.div`flex items-center gap-3`;
+const Navbar = ({ onToggleSidebar, navigation }) => {
 	const user = useSelector((state) => state.auth?.user);
 
 	return (
 		<StickyHeader>
-			<Button
-				variant="ghost"
-				shape="square"
-				size="sm"
-				className="hidden sm:inline-flex md:inline-flex"
-				onClick={() => onToggleSidebar(true)}>
-				<Bars3Icon className="h-5 w-5" aria-hidden="true" />
-			</Button>
-			{/* Separator */}
+			<NavbarStart>
+				<Button
+					variant="ghost"
+					shape="square"
+					size="sm"
+					className="hidden sm:inline-flex md:inline-flex"
+					onClick={() => onToggleSidebar(true)}>
+					<Bars3Icon className="h-5 w-5" aria-hidden="true" />
+				</Button>
+
+				<Separator />
+
+				<Breadcrumbs navigation={navigation} />
+			</NavbarStart>
 
 			<Popover as="div" className="relative">
 				<Popover.Button className="-m-1.5 flex items-center p-1.5 outline-none">

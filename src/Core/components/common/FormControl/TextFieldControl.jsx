@@ -4,32 +4,43 @@ import tw from "twin.macro";
 export const Input = tw.input`block w-full rounded-md border-0 duration-300 px-2.5 py-1.5 text-gray-900 outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`;
 const FormControl = tw.div`flex flex-col gap-2`;
 
-const TextFieldControl = (props) => {
+const TextFieldControl = ({
+	control,
+	name,
+	placeholder,
+	label,
+	type,
+	disabled,
+	rules,
+	min,
+	max,
+}) => {
 	const id = useId();
 	return (
 		<Controller
-			control={props.control}
-			name={props.name}
+			control={control}
+			name={name}
 			render={({
 				field: { onChange, onBlur, value, ref },
 				fieldState: { invalid, isTouched, isDirty, error },
 				formState,
 			}) => (
 				<FormControl>
-					{props.label && <label htmlFor={id}>{props.label}</label>}
+					{label && <label htmlFor={id}>{label}</label>}
 					<Input
-						type={props.type}
+						type={type} // available type: text, number, email, password, url,...
 						onChange={onChange}
 						id={id}
-						disabled={props.disabled}
+						disabled={disabled}
 						defaultValue={value}
-						placeholder={props.placeholder}
-						min={props.min}
+						placeholder={placeholder}
+						min={min}
+						max={max}
 					/>
 					{error && <small className="font-medium text-error">{error.message}</small>}
 				</FormControl>
 			)}
-			rules={props.rules}
+			rules={rules}
 		/>
 	);
 };

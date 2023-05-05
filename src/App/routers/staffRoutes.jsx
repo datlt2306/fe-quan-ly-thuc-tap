@@ -1,23 +1,19 @@
 import { StaffPaths } from "@/Core/constants/routePaths";
+import { lazy } from "react";
 import StaffPrivateLayout from "../layouts/PrivateLayout/StaffPrivateLayout";
-import { Suspense, lazy } from "react";
-import LoadingProgressBar from "@/Core/components/common/Loading/LoadingProgressBar";
+const ReviewPage = lazy(() => import("../pages/StaffPages/ReviewPage"));
+const RegistrationPage = lazy(() => import("../pages/StudentPages/RegistrationPage"));
 const StudentListPage = lazy(() => import("../pages/StaffPages/StudentListPage"));
 const CompanyListPage = lazy(() => import("../pages/StaffPages/CompanyListPage"));
+const SemesterPage = lazy(() => import("../pages/StaffPages/SemesterPage"));
+const StudentSuportPage = lazy(() => import("../pages/StaffPages/StudentSuportPage"));
 
-/**
- * @interface RouteObject
- * @param {RouteObject} RouteObject.path
- * @param {React.JSXElement} RouteObject.element
- */
 const staffRoutes = [
 	{
 		path: StaffPaths.STUDENT_LIST,
 		element: (
 			<StaffPrivateLayout>
-				<Suspense fallback={<LoadingProgressBar />}>
-					<StudentListPage />
-				</Suspense>
+				<StudentListPage />
 			</StaffPrivateLayout>
 		),
 	},
@@ -25,9 +21,39 @@ const staffRoutes = [
 		path: StaffPaths.COMPANY_LIST,
 		element: (
 			<StaffPrivateLayout>
-				<Suspense fallback={<LoadingProgressBar />}>
-					<CompanyListPage />
-				</Suspense>
+				<CompanyListPage />
+			</StaffPrivateLayout>
+		),
+	},
+	{
+		path: StaffPaths.REGISTRATION_TIME,
+		element: (
+			<StaffPrivateLayout>
+				<RegistrationPage />
+			</StaffPrivateLayout>
+		),
+	},
+	{
+		path: StaffPaths.REVIEWS,
+		element: (
+			<StaffPrivateLayout>
+				<ReviewPage />
+			</StaffPrivateLayout>
+		),
+	},
+	{
+		path: StaffPaths.SEMESTER,
+		element: (
+			<StaffPrivateLayout>
+				<SemesterPage />
+			</StaffPrivateLayout>
+		),
+	},
+	{
+		path: StaffPaths.STUDENT_REQUESTS,
+		element: (
+			<StaffPrivateLayout>
+				<StudentSuportPage />
 			</StaffPrivateLayout>
 		),
 	},

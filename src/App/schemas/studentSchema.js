@@ -1,9 +1,13 @@
-import yup from 'yup';
+import { object, string, array } from "yup";
 
-export const studentSchema = yup.object({
-	first_name: yup.string().required(),
-	last_name: yup.string().required(),
-	email: yup.string().match().required(),
-	campus: yup.string().required(),
-	// ... other fields
-});
+export const studentDataValidator = array(
+	object({
+		"Họ tên": string().required(),
+		MSSV: string().required(),
+		"Khóa nhập học": string().required(),
+		"Trạng thái": string().required(),
+		"Mã ngành": string().required(),
+		"Số điện thoại": string().required(),
+		Email: string().email().required("Email là field bắt buộc"),
+	})
+);

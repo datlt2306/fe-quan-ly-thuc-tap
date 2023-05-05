@@ -3,6 +3,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router-dom";
 import tw from "twin.macro";
 import Logo from "/logo.png";
+
 import { Image, Navigation, SidebarContent, SidebarWrapper } from "..";
 import classNames from "classnames";
 

@@ -28,7 +28,9 @@ const PopConfirm = ({
 	}, []);
 	return (
 		<Popover className="relative">
-			<Popover.Button className={"outline-none"}>{children}</Popover.Button>
+			<Popover.Button className={"outline-none"} as={"div"}>
+				{children}
+			</Popover.Button>
 
 			<Transition
 				as={Fragment}
@@ -38,7 +40,7 @@ const PopConfirm = ({
 				leave="transition transform duration-300 ease-in-out"
 				leaveFrom="opacity-100 translate-y-0"
 				leaveTo="opacity-0 translate-y-4">
-				<Popover.Panel className="absolute right-0 z-10 bg-white p-4 shadow-lg">
+				<Popover.Panel className="absolute right-0 z-10 rounded-md bg-white p-4 shadow-lg">
 					{({ close }) => (
 						<>
 							<h3 className="mb-3 text-base font-medium text-gray-600">{title}</h3>

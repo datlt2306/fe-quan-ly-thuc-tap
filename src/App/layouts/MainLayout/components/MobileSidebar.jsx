@@ -13,7 +13,7 @@ import { Image, Navigation, SidebarContent } from "..";
 import Logo from "/logo.png";
 import tw from "twin.macro";
 
-const Overlay = tw.div`fixed inset-0 bg-gray-900/50 backdrop-blur-sm`;
+const Overlay = tw.div`fixed inset-0 bg-gray-800/80`;
 
 const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, navigation }) => {
 	const navlinkClasses = (isActive) =>

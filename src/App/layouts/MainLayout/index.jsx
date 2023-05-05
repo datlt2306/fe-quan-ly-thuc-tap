@@ -1,4 +1,4 @@
-import { Fragment, memo, useMemo, useState } from "react";
+import { Fragment, Suspense, memo, useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
 import DesktopSidebar from "./components/DesktopSidebar";
 import MobileSidebar from "./components/MobileSidebar";
@@ -12,6 +12,7 @@ import {
 import tw from "twin.macro";
 import { useSelector } from "react-redux";
 import ErrorBoundary from "@/Core/components/ErrorBoundary";
+import LoadingProgressBar from "@/Core/components/common/Loading/LoadingProgressBar";
 
 const Main = tw.div`lg:pl-72`;
 const OutletWrapper = tw.div`py-10 px-4 sm:px-6 lg:px-8`;
@@ -55,7 +56,9 @@ const MainLayout = () => {
 				{/* Page content */}
 				<OutletWrapper>
 					<ErrorBoundary>
-						<Page />
+						<Suspense fallback={<LoadingProgressBar />}>
+							<Page />
+						</Suspense>
 					</ErrorBoundary>
 				</OutletWrapper>
 			</Main>

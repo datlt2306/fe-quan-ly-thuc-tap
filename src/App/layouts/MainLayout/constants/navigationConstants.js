@@ -60,18 +60,6 @@ export const staffNavigation = [
 		label: "Kì học",
 		icon: CalendarDaysIcon,
 		path: StaffPaths.SEMESTER,
-		children: [
-			{
-				label: "Danh sách kỳ học",
-				icon: ListBulletIcon,
-				path: "/semester",
-			},
-			{
-				label: "Tạo mới",
-				icon: PlusSmallIcon,
-				path: "/semester/create",
-			},
-		],
 	},
 	{
 		label: "Thời gian đăng kí",
@@ -80,7 +68,7 @@ export const staffNavigation = [
 	},
 	{
 		label: "Yêu cầu từ sinh viên",
-		path: "/student-requests",
+		path: StaffPaths.STUDENT_REQUESTS,
 		icon: EnvelopeOpenIcon,
 	},
 ];

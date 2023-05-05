@@ -6,11 +6,12 @@ export default {
 	important: true,
 	theme: {
 		colors: {
-			primary: "#f27125",
-			secondary: "#0d51a1",
+			primary: "#fb923c",
+			secondary: "#0ea5e9",
 
-			error: "#f87171",
-			success: "#4eb849",
+			error: "#f43f5e",
+			success: "#10b981",
+			warning: "#f59e0b",
 			disabled: "#9ca3af",
 			...colors,
 		},
@@ -35,5 +36,9 @@ export default {
 			},
 		},
 	},
-	plugins: [require("prettier-plugin-tailwindcss")],
+	plugins: [
+		require("prettier-plugin-tailwindcss"),
+		require("@tailwindcss/forms"),
+		require("tailwind-scrollbar")({ nocompatible: true }),
+	],
 };

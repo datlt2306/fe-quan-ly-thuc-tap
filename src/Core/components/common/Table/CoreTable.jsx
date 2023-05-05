@@ -1,3 +1,4 @@
+import { ArchiveBoxXMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import tw from "twin.macro";
 
@@ -15,23 +16,26 @@ const Header = ({ sticky, children, ...props }) => (
 		{children}
 	</thead>
 );
-const Body = ({ children, ...props }) => <tbody {...props}>{children}</tbody>;
-const Footer = ({ children, ...props }) => <tfoot {...props}>{children}</tfoot>;
-const Row = ({ children, ...props }) => <tr {...props}>{children}</tr>;
-
-/**
- *
- * @param {{div:'div'}} Element
- * @returns
- */
+const Body = (props) => <tbody {...props}>{props.children}</tbody>;
+const Footer = (props) => <tfoot {...props}>{props.children}</tfoot>;
+const Row = (props) => <tr {...props}>{props.children}</tr>;
 const Cell = ({ as: Element = "td", children, ...props }) => {
 	return <Element {...props}>{children}</Element>;
 };
-
+const Empty = () => (
+	<tr>
+		<td align="center" colSpan="70%" className="select-none py-6 text-center">
+			<div className="flex items-center gap-3 text-disabled">
+				<ArchiveBoxXMarkIcon className="h-10 w-10 text-center" />
+				Không có dữ liệu
+			</div>
+		</td>
+	</tr>
+);
 Table.Header = Header;
 Table.Body = Body;
 Table.Row = Row;
 Table.Footer = Footer;
 Table.Cell = Cell;
-
+Table.Empty = Empty;
 export default Table;
