@@ -1,19 +1,17 @@
+import useLocalStorage from "@/App/hooks/useLocalstorage";
 import { useSigninMutation } from "@/App/providers/apis/authApi";
 import { useGetAllCampusQuery } from "@/App/providers/apis/campusApi";
 import { Option, Select } from "@/Core/components/common/FormControl/SelectFieldControl";
-import LoadingProgressBar from "@/Core/components/common/Loading/LoadingProgressBar";
 import axiosClient from "@/Core/configs/axiosConfig";
 import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
+import classNames from "classnames";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
+import BeeImage from "/bee.png";
 import google from "/google.svg";
 import Logo from "/logo.png";
-import useLocalStorage from "@/App/hooks/useLocalstorage";
-import BeeImage from "/bee.png";
-import Button from "@/Core/components/common/Button";
-import classNames from "classnames";
 
 const Screen = tw.div`relative flex h-screen w-full items-center justify-center lg:bg-gray-50`;
 const Box = tw.div`sm:max-w-full md:max-w-full lg:(max-w-xl w-full p-8 shadow-2xl ) mx-auto bg-white rounded-lg`;
@@ -29,12 +27,6 @@ export default function SigninPage() {
 	const [signinMutation, { isLoading }] = useSigninMutation();
 	const navigate = useNavigate();
 	const [accessToken, setAccessToken] = useLocalStorage("accessToken", null);
-
-	useGoogleOneTapLogin({
-		onSuccess(credentialResponse) {
-			signinCallback(credentialResponse.credential);
-		},
-	});
 
 	// Chọn cơ sở
 	const handleSelectCampus = async (campus) => {
