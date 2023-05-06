@@ -5,13 +5,18 @@ import { Fragment } from "react";
 import { useSelector } from "react-redux";
 import tw from "twin.macro";
 import Breadcrumbs from "./Breadcrumbs";
+import { signout } from "@/App/providers/slices/authSlice";
+import { useDispatch } from "react-redux";
 
+// Styled components
 const StickyHeader = tw.div`sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 justify-between lg:justify-between`;
 const Avatar = tw.img`h-8 w-8 rounded-full bg-gray-50`;
 const Separator = tw.div`hidden sm:hidden md:block h-6 w-px bg-gray-200`;
 const NavbarStart = tw.div`flex items-center gap-3`;
+
 const Navbar = ({ onToggleSidebar, navigation }) => {
 	const user = useSelector((state) => state.auth?.user);
+	const dispatch = useDispatch();
 
 	return (
 		<StickyHeader>
@@ -57,7 +62,9 @@ const Navbar = ({ onToggleSidebar, navigation }) => {
 					<Popover.Panel
 						className="group absolute right-0 z-10 mt-2.5 flex w-fit origin-top-right cursor-pointer flex-col gap-1 rounded-md bg-white p-1 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
 						as="ul">
-						<li className="flex items-center gap-2 whitespace-nowrap p-2 hover:bg-gray-100">
+						<li
+							className="flex items-center gap-2 whitespace-nowrap p-2 hover:bg-gray-100"
+							onClick={() => dispatch(signout())}>
 							<ArrowLeftOnRectangleIcon className="h-5 w-5 text-gray-700" /> Đăng xuất
 						</li>
 					</Popover.Panel>
