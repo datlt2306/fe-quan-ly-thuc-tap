@@ -1,6 +1,6 @@
 import { Fragment, useMemo, useState } from "react";
 import { useAsyncDebounce } from "react-table";
-import { Input } from "../FormControl/TextFieldControl";
+import { Input } from "../FormControl/InputFieldControl";
 import { Popover, Transition } from "@headlessui/react";
 import Button from "../Button";
 import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";

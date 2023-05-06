@@ -22,6 +22,7 @@ const Row = (props) => <tr {...props}>{props.children}</tr>;
 const Cell = ({ as: Element = "td", children, ...props }) => {
 	return <Element {...props}>{children}</Element>;
 };
+
 const Empty = () => (
 	<tr>
 		<td align="center" colSpan="70%" className="select-none py-6 text-center">

@@ -3,7 +3,7 @@
  */
 const BasePaths = {
 	NOT_FOUND: "/404",
-	SIGNIN: "/dang-nhap",
+	SIGNIN: "/signin",
 };
 
 /**
