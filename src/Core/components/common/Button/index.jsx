@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 
 /**
  * @param {string} size
@@ -12,67 +12,42 @@ const Button = ({
 	variant = "outline",
 	shape = undefined,
 	className = "",
-	as: Element = "button",
+	as: Element = "button", // Polymorphic component, display as other tag
 	children,
 	...props
 }) => {
-	const getVariantProp = (value) => {
-		switch (value) {
-			case "primary":
-				return "btn-primary";
-			case "secondary":
-				return "btn-secondary";
-			case "outline":
-				return "btn-outline";
-			case "ghost":
-				return "btn-ghost";
-			case "success":
-				return "btn-success";
-			case "error":
-				return "btn-error";
-			case "disabled":
-				return "btn-disabled";
-			default:
-				return "btn-default";
-		}
-	};
-	const getSizeProp = (value) => {
-		switch (value) {
-			case "xs":
-				return "btn-xs";
-			case "sm":
-				return "btn-sm";
-			case "md":
-				return "btn-md";
-			case "lg":
-				return "btn-lg";
-			default:
-				return "btn-md";
-		}
-	};
-	const getShapeProp = (value) => {
-		switch (value) {
-			case "square":
-				return "btn-square";
-			case "circle":
-				return "btn-circle";
-			case "pill":
-				return "btn-pill";
-			default:
-				return "";
-		}
-	};
-
-	return (
-		<Element
-			{...props}
-			className={classNames(
-				"btn",
-				getVariantProp(variant),
-				getSizeProp(size),
-				getShapeProp(shape),
+	const buttonStyles = useMemo(
+		() =>
+			classNames(
+				{
+					// default
+					btn: true,
+					"btn-md": !size,
+					// variant
+					"btn-primary": variant === "primary",
+					"btn-secondary": variant === "secondary",
+					"btn-outline": variant === "outline",
+					"btn-ghost": variant === "ghost",
+					"btn-success": variant === "success",
+					"btn-error": variant === "error",
+					"btn-disabled": variant === "disabled",
+					// shape
+					"btn-square": shape === "square",
+					"btn-circle": shape === "circle",
+					"btn-pill": shape === "pill",
+					// size
+					"btn-xs": size === "xs",
+					"btn-sm": size === "sm",
+					"btn-md": size === "md",
+					"btn-lg": size === "lg",
+				},
+				// others
 				className
-			)}>
+			),
+		[variant, shape, size]
+	);
+	return (
+		<Element {...props} className={buttonStyles}>
 			{children}
 		</Element>
 	);
