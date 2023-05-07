@@ -22,7 +22,7 @@ const Button = ({
 				{
 					// default
 					btn: true,
-					"btn-md": !size,
+					"btn-outline btn-md": !variant && !size && !shape,
 					// variant
 					"btn-primary": variant === "primary",
 					"btn-secondary": variant === "secondary",
