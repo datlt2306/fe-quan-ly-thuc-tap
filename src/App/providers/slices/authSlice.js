@@ -19,8 +19,6 @@ const authSlice = createSlice({
 	initialState: initialState,
 	extraReducers: (build) => {
 		build.addMatcher(authApi.endpoints.signin.matchFulfilled, (state, { payload }) => {
-			localStorage.setItem("accessToken", `Bearer ${payload.token}`);
-			console.log(payload);
 			if (payload.isAdmin) {
 				return {
 					isSignedIn: payload.success,

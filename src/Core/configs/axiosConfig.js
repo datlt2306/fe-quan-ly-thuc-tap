@@ -1,6 +1,7 @@
 import { signout } from "@/App/providers/slices/authSlice";
 import store from "@/App/providers/store";
 import axios from "axios";
+import isJSON from "../utils/checkJsonType";
 
 const axiosClient = axios.create({
 	baseURL: import.meta.env.VITE_BASE_URL,
@@ -12,8 +13,8 @@ axiosClient.interceptors.request.use(
 		if (skippingCheckTokenEndpoints.includes(config.url)) {
 			return config;
 		}
-		const accessToken = localStorage.getItem("accessToken");
-		config.headers.Authorization = accessToken;
+		const accessToken = localStorage.getItem("access_token");
+		config.headers.Authorization = isJSON(accessToken) ? JSON.parse(accessToken) : accessToken;
 		return config;
 	},
 	(error) => {
