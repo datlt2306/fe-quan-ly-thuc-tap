@@ -3,9 +3,9 @@ import { useSigninMutation } from "@/App/providers/apis/authApi";
 import { useGetAllCampusQuery } from "@/App/providers/apis/campusApi";
 import { Option, Select } from "@/Core/components/common/FormControl/SelectFieldControl";
 import axiosClient from "@/Core/configs/axiosConfig";
-import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import classNames from "classnames";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
@@ -17,8 +17,7 @@ const Screen = tw.div`relative flex h-screen w-full items-center justify-center 
 const Box = tw.div`sm:max-w-full md:max-w-full lg:(max-w-xl w-full p-8 shadow-2xl ) mx-auto bg-white rounded-lg`;
 const Image = tw.img`mx-auto max-w-full object-cover mb-10`;
 const ImageDecorator = tw.img`absolute bottom-0 right-2 max-w-full object-cover invisible lg:visible`;
-const Form = tw.div`flex items-center justify-center flex-col gap-3 w-full`;
-const GoogleIcon = (props) => <img {...props} src={google} tw="w-4 h-4 object-contain" />;
+const Form = tw.div`flex items-center justify-center flex-col gap-3 w-full min-w-fit`;
 
 export default function SigninPage() {
 	const [isAllowToLoggin, setAllowToLogin] = useState(false);
@@ -56,14 +55,14 @@ export default function SigninPage() {
 			});
 			console.log(response);
 			if (!response.data?.success) {
-				toast.error("Đăng nhập thất bại!");
+				toast.error("Đăng nhập thất bại !");
 				return;
 			}
 			setAccessToken(`Bearer ${response?.data?.token}`);
-			toast.success("Đăng nhập thành công");
+			toast.success("Đăng nhập thành công !");
 			navigate("/");
 		} catch (error) {
-			toast.error("Đăng nhập thất bại!");
+			toast.error("Đăng nhập thất bại !");
 		}
 	};
 
@@ -82,8 +81,9 @@ export default function SigninPage() {
 							))}
 					</Select>
 					<div
-						className={classNames("duration-300", {
-							"pointer-events-none opacity-50": !isAllowToLoggin,
+						tw="duration-300 flex items-center gap-2 w-full before:([content:''] basis-1/3 border-t border-t-gray-300 h-1 w-full) after:([content:''] basis-1/3 border-t border-t-gray-200)"
+						className={classNames({
+							"pointer-events-none select-none opacity-50": !isAllowToLoggin,
 						})}>
 						<GoogleLogin
 							onSuccess={(credentialResponse) =>
