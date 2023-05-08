@@ -7,6 +7,7 @@ import tw from "twin.macro";
 import Breadcrumbs from "./Breadcrumbs";
 import { signout } from "@/App/providers/slices/authSlice";
 import { useDispatch } from "react-redux";
+import useLocalStorage from "@/App/hooks/useLocalstorage";
 
 // Styled components
 const StickyHeader = tw.div`sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 justify-between lg:justify-between`;
@@ -17,6 +18,11 @@ const NavbarStart = tw.div`flex items-center gap-3`;
 const Navbar = ({ onToggleSidebar, navigation }) => {
 	const user = useSelector((state) => state.auth?.user);
 	const dispatch = useDispatch();
+	const [accessToken, setAccessToken] = useLocalStorage("access_token", null);
+	const handleSignout = () => {
+		dispatch(signout());
+		setAccessToken(null);
+	};
 
 	return (
 		<StickyHeader>
@@ -64,7 +70,7 @@ const Navbar = ({ onToggleSidebar, navigation }) => {
 						as="ul">
 						<li
 							className="flex items-center gap-2 whitespace-nowrap p-2 hover:bg-gray-100"
-							onClick={() => dispatch(signout())}>
+							onClick={handleSignout}>
 							<ArrowLeftOnRectangleIcon className="h-5 w-5 text-gray-700" /> Đăng xuất
 						</li>
 					</Popover.Panel>

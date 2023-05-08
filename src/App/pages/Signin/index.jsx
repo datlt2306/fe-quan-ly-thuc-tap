@@ -26,7 +26,7 @@ export default function SigninPage() {
 	const { data } = useGetAllCampusQuery();
 	const [signinMutation, { isLoading }] = useSigninMutation();
 	const navigate = useNavigate();
-	const [accessToken, setAccessToken] = useLocalStorage("accessToken", null);
+	const [accessToken, setAccessToken] = useLocalStorage("access_token", null);
 
 	// Chọn cơ sở
 	const handleSelectCampus = async (campus) => {
@@ -54,7 +54,7 @@ export default function SigninPage() {
 				...loginInformation,
 				token: accessToken,
 			});
-			setAccessToken(response?.data?.token);
+			setAccessToken(`Bearer ${response?.data?.token}`);
 			toast.success(response?.data?.message);
 			navigate("/");
 		} catch (error) {
