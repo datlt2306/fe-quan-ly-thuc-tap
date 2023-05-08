@@ -5,7 +5,7 @@ import { Option, Select } from "@/Core/components/common/FormControl/SelectField
 import axiosClient from "@/Core/configs/axiosConfig";
 import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import classNames from "classnames";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
@@ -23,10 +23,20 @@ const GoogleIcon = (props) => <img {...props} src={google} tw="w-4 h-4 object-co
 export default function SigninPage() {
 	const [isAllowToLoggin, setAllowToLogin] = useState(false);
 	const [loginInformation, setLoginInformation] = useState(null);
-	const { data } = useGetAllCampusQuery();
+	// const { data } = useGetAllCampusQuery();
+	//! Tempfix
+	const [data, setData] = useState({});
 	const [signinMutation, { isLoading }] = useSigninMutation();
 	const navigate = useNavigate();
 	const [accessToken, setAccessToken] = useLocalStorage("accessToken", null);
+
+	// console.log(axiosBaseQuery()({}));
+
+	useEffect(() => {
+		(async () => {
+			setData(await axiosClient.get("/cumpus"));
+		})();
+	}, []);
 
 	// Chọn cơ sở
 	const handleSelectCampus = async (campus) => {
@@ -35,7 +45,6 @@ export default function SigninPage() {
 				params: { campus_id: campus },
 			});
 
-			console.log(defaultSemester);
 			setLoginInformation({
 				smester_id: defaultSemester.result?._id,
 				cumpusId: defaultSemester.result?.campus_id,
