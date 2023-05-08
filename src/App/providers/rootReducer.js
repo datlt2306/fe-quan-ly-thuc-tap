@@ -10,7 +10,6 @@ const rootReducer = combineReducers({
 	[semesterApi.reducerPath]: semesterApi.reducer,
 	[campusApi.reducerPath]: campusApi.reducer,
 	[studentsApi.reducerPath]: studentsApi.reducer,
-
 });
 
 export default rootReducer;
