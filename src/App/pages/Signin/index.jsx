@@ -23,20 +23,10 @@ const GoogleIcon = (props) => <img {...props} src={google} tw="w-4 h-4 object-co
 export default function SigninPage() {
 	const [isAllowToLoggin, setAllowToLogin] = useState(false);
 	const [loginInformation, setLoginInformation] = useState(null);
-	// const { data } = useGetAllCampusQuery();
-	//! Tempfix
-	const [data, setData] = useState({});
+	const { data } = useGetAllCampusQuery();
 	const [signinMutation, { isLoading }] = useSigninMutation();
 	const navigate = useNavigate();
 	const [accessToken, setAccessToken] = useLocalStorage("accessToken", null);
-
-	// console.log(axiosBaseQuery()({}));
-
-	useEffect(() => {
-		(async () => {
-			setData(await axiosClient.get("/cumpus"));
-		})();
-	}, []);
 
 	// Chọn cơ sở
 	const handleSelectCampus = async (campus) => {
@@ -64,11 +54,11 @@ export default function SigninPage() {
 				...loginInformation,
 				token: accessToken,
 			});
-			setAccessToken(response.token);
-			toast.success(response?.message);
+			setAccessToken(response?.data?.token);
+			toast.success(response?.data?.message);
 			navigate("/");
 		} catch (error) {
-			toast.error("Đăng nhập thất bại!");
+			toast.error(error?.message || "Đăng nhập thất bại!");
 		}
 	};
 
