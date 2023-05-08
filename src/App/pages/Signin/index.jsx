@@ -58,7 +58,7 @@ export default function SigninPage() {
 				toast.error("Đăng nhập thất bại !");
 				return;
 			}
-			setAccessToken(`Bearer ${response?.data?.token}`);
+			setAccessToken(`Bearer ${response?.data?.accessToken}`);
 			toast.success("Đăng nhập thành công !");
 			navigate("/");
 		} catch (error) {
