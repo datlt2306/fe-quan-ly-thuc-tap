@@ -1,0 +1,212 @@
+{
+	"auth": {
+		"displayName": "Test",
+		"picture": "https://ui-avatars.com/api/?name=A",
+		"semester": "Summer 2023",
+		"phoneNumber": "",
+		"MSSV": "PH19356",
+		"Status": 0,
+		"email": "test@email.com",
+		"role": "STAFF"
+	},
+	"students": [
+		{
+			"_id": "6156d7b8b5a04d00170f6bf6",
+			"semesterID": "SUM23",
+			"phoneNumber": "0912345678",
+			"MSSV": "PH18245",
+			"status": 7,
+			"email": "george.bluth@reqres.in",
+			"name": "George Bluth",
+			"avatar": "https://reqres.in/img/faces/1-image.jpg",
+			"majorCode": "CS"
+		},
+		{
+			"_id": "6156d7b8b5a04d00170f6bf7",
+			"semesterID": "SUM23",
+			"phoneNumber": "0987654321",
+			"MSSV": "PH13242",
+			"status": 3,
+			"email": "janet.weaver@reqres.in",
+			"name": "Janet Weaver",
+			"avatar": "https://reqres.in/img/faces/2-image.jpg",
+			"majorCode": "BA"
+		},
+		{
+			"_id": "6156d7b8b5a04d00170f6bf8",
+			"semesterID": "SUM23",
+			"phoneNumber": "0901234567",
+			"MSSV": "PH11045",
+			"status": 8,
+			"email": "emma.wong@reqres.in",
+			"name": "Emma Wong",
+			"avatar": "https://reqres.in/img/faces/3-image.jpg",
+			"majorCode": "MKT"
+		},
+		{
+			"_id": "6156d7b8b5a04d00170f6bf9",
+			"semesterID": "SUM23",
+			"phoneNumber": "0976543210",
+			"MSSV": "PH19966",
+			"status": 1,
+			"email": "eve.holt@reqres.in",
+			"name": "Eve Holt",
+			"avatar": "https://reqres.in/img/faces/4-image.jpg",
+			"majorCode": "PSY"
+		},
+		{
+			"_id": "6156d7b8b5a04d00170f6bfa",
+			"semesterID": "SUM23",
+			"phoneNumber": "0923456789",
+			"MSSV": "PH18231",
+			"status": 9,
+			"email": "charles.morris@reqres.in",
+			"name": "Charles Morris",
+			"avatar": "https://reqres.in/img/faces/5-image.jpg",
+			"majorCode": "ENG"
+		},
+		{
+			"_id": "6156d7b8b5a04d00170f6bfb",
+			"semesterID": "SPR23",
+			"phoneNumber": "0987654321",
+			"MSSV": "PH22222",
+			"status": 6,
+			"email": "tracey.ramos@reqres.in",
+			"name": "Tracey Ramos",
+			"avatar": "https://reqres.in/img/faces/6-image.jpg",
+			"majorCode": "EDU"
+		},
+		{
+			"_id": "6156d7b8b5a04d00170f6bfc",
+			"semesterID": "SUM23",
+			"phoneNumber": "0901234567",
+			"MSSV": "PH19516",
+			"status": 4,
+			"email": "michael.lawson@reqres.in",
+			"name": "Michael Lawson",
+			"avatar": "https://reqres.in/img/faces/7-image.jpg",
+			"majorCode": "POL"
+		},
+		{
+			"_id": "6156d7b8b5a04d00170f6bfd",
+			"semesterID": "FAL23",
+			"phoneNumber": "0976543210",
+			"MSSV": "PH18134",
+			"status": 5,
+			"email": "lindsay.ferguson@reqres.in",
+			"name": "Lindsay Ferguson",
+			"avatar": "https://reqres.in/img/faces/8-image.jpg",
+			"majorCode": "ART"
+		}
+	],
+	"majors": [
+		{
+			"name": "Computer Science",
+			"majorCode": "CS",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "Business Administration",
+			"majorCode": "BA",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "Marketing",
+			"majorCode": "MK",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "Psychology",
+			"majorCode": "PSY",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "Engineering",
+			"majorCode": "ENG",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "Education",
+			"majorCode": "EDU",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "Political Science",
+			"majorCode": "POL",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "Sociology",
+			"majorCode": "SOC",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "Film Studies",
+			"majorCode": "FS",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "Architecture",
+			"majorCode": "ARCH",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "History",
+			"majorCode": "HIST",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "English Literature",
+			"majorCode": "ELIT",
+			"campus": null,
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		}
+	],
+	"semesters": [
+		{
+			"name": "Summer 2023",
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "Spring 2023",
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"name": "Fall 2023",
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		}
+	],
+	"campuses": [
+		{
+			"_id": "6156d7b8b5a04d00170f6bf6",
+			"name": "Cơ sở Hà Nội",
+			"createdAt": "2023-05-06T00:00:00.000Z"
+		},
+		{
+			"_id": "6156d8a1b5a04d00170f6bf7",
+			"name": "Cơ sở Hồ Chí Minh",
+			"createdAt": "2023-05-06T00:01:00.000Z"
+		},
+		{
+			"_id": "6156d8b7b5a04d00170f6bf8",
+			"name": "Cơ sở Đà Nẵng",
+			"createdAt": "2023-05-06T00:02:00.000Z"
+		},
+		{
+			"_id": "6156d8ccb5a04d00170f6bf9",
+			"name": "Cơ sở Hải Phòng",
+			"createdAt": "2023-05-06T00:03:00.000Z"
+		}
+	]
+}

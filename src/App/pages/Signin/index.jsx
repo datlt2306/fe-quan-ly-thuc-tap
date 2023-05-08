@@ -5,7 +5,7 @@ import { Option, Select } from "@/Core/components/common/FormControl/SelectField
 import axiosClient from "@/Core/configs/axiosConfig";
 import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import classNames from "classnames";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
@@ -35,7 +35,6 @@ export default function SigninPage() {
 				params: { campus_id: campus },
 			});
 
-			console.log(defaultSemester);
 			setLoginInformation({
 				smester_id: defaultSemester.result?._id,
 				cumpusId: defaultSemester.result?.campus_id,
@@ -55,11 +54,11 @@ export default function SigninPage() {
 				...loginInformation,
 				token: accessToken,
 			});
-			setAccessToken(response.token);
-			toast.success(response?.message);
+			setAccessToken(response?.data?.token);
+			toast.success(response?.data?.message);
 			navigate("/");
 		} catch (error) {
-			toast.error("Đăng nhập thất bại!");
+			toast.error(error?.message || "Đăng nhập thất bại!");
 		}
 	};
 
