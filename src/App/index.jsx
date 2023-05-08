@@ -9,7 +9,7 @@ import {
 	ExclamationTriangleIcon,
 	InformationCircleIcon,
 	XCircleIcon,
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/20/solid";
 
 function App() {
 	return (
