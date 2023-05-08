@@ -54,11 +54,16 @@ export default function SigninPage() {
 				...loginInformation,
 				token: accessToken,
 			});
+			console.log(response);
+			if (!response.data?.success) {
+				toast.error("Đăng nhập thất bại!");
+				return;
+			}
 			setAccessToken(`Bearer ${response?.data?.token}`);
-			toast.success(response?.data?.message);
+			toast.success("Đăng nhập thành công");
 			navigate("/");
 		} catch (error) {
-			toast.error(error?.message || "Đăng nhập thất bại!");
+			toast.error("Đăng nhập thất bại!");
 		}
 	};
 
