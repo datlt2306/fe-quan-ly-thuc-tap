@@ -8,6 +8,7 @@ export default defineConfig({
 		alias: [
 			{
 				find: "@",
+				// eslint-disable-next-line no-undef
 				replacement: path.resolve(__dirname, "src"),
 			},
 		],
@@ -23,5 +24,12 @@ export default defineConfig({
 
 	server: {
 		port: 3000,
+		proxy: {
+			'/api': {
+				target: 'https://polytuts.website/api',
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/api/, ''),
+			}
+		}
 	},
 });
