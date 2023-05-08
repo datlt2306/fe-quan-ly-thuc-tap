@@ -2,6 +2,7 @@ import { signout } from "@/App/providers/slices/authSlice";
 import store from "@/App/providers/store";
 import axios from "axios";
 import isJSON from "../utils/checkJsonType";
+import HttpStatusCode from "../constants/httpStatus";
 
 const axiosClient = axios.create({
 	baseURL: import.meta.env.VITE_BASE_URL,
@@ -27,12 +28,12 @@ axiosClient.interceptors.response.use(
 		return config.data;
 	},
 	(error) => {
-		if (error.response.status === 401) {
-			// Force signout if access token expired
-			store.dispatch(signout());
+		if (error.response.status === HttpStatusCode.UNAUTHORIZED) {
 			// Cancel request
 			const controller = new AbortController();
 			axios.request({ signal: controller.signal, ...error.config });
+			// Force signout if access token expired
+			store.dispatch(signout());
 			return Promise.reject(error);
 		}
 		return Promise.reject(error);
