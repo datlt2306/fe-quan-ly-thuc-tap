@@ -1,7 +1,4 @@
-import { useExportToExcel, useImportFromExcel } from "@/App/hooks/useExcel";
-import { useGetAllStaffQuery } from "@/App/providers/apis/staffApi";
-import { studentDataValidator } from "@/App/schemas/studentSchema";
-import Badge from "@/Core/components/common/Badge";
+import { useGetAllStaffQuery } from "@/App/providers/apis/staffListApi";
 import Button from "@/Core/components/common/Button";
 import PopConfirm from "@/Core/components/common/Popup/PopConfirm";
 import SlideOver from "@/Core/components/common/SlideOver";
@@ -10,12 +7,9 @@ import {
 	InputColumnFilter,
 	SelectColumnFilter,
 } from "@/Core/components/common/Table/ReactTableFilters";
-import axiosClient from "@/Core/configs/axiosConfig";
-import mapExcelData from "@/Core/utils/mapExcelData";
 import { ArrowDownIcon, ArrowUpIcon, PlusIcon } from "@heroicons/react/24/outline";
-import classNames from "classnames";
 import { Fragment, useEffect, useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
+import axiosClient from "@/Core/configs/axiosConfig";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
 
@@ -23,40 +17,43 @@ const Box = tw.div`flex flex-col gap-6`;
 const ButtonList = tw.div`flex items-center gap-2`;
 
 const StaffListPage = () => {
-	const [tableData, setTableData] = useState();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
-	const { data } = useGetAllStaffQuery();
-	useEffect(() => {
-		axiosClient.get("/staff").then(res => setTableData(res.list))
-	}, [])
+	const [tableData, setTableData] = useState([]);
 
+	useEffect(() => {
+		const getAllStaff = async () => {
+			const data = await axiosClient.get("http://localhost:9998/api/manager");
+			setTableData(data)
+		}
+		getAllStaff()
+	},[])
 	const columnsData = useMemo(
 		() => [
 			{
 				Header: "Tên nhân viên",
-				dataIndex: "name",
+				accessor: "name",
 				Filter: InputColumnFilter,
 				filterable: true,
 				isSort: true,
 			},
 			{
 				Header: "Email nhân viên",
-				dataIndex: "email",
+				accessor: "email",
 				Filter: InputColumnFilter,
 				filterable: true,
 				isSort: true,
 			},
 			{
 				Header: "Quyền Hạn nhân viên",
-				dataIndex: "role",
+				accessor: "role",
 				Filter: SelectColumnFilter,
 				filterable: true,
 				isSort: true,
-				render: (value) => (value === 1 ? "Nhân viên" : "Quản Lí"),
+				Cell: (value) => (value == 1 ? "Nhân viên" : "Quản Lí"),
 			},
 			{
 				Header: "Cơ sở đang làm việc",
-				dataIndex: ["campus_id", "name"],
+				accessor: "campus_id",
 				Filter: InputColumnFilter,
 				filterable: true,
 				isSort: true,
@@ -95,7 +92,7 @@ const StaffListPage = () => {
 			<SlideOver
 				open={slideOverVisibility}
 				onOpen={setSlideOverVisibility}
-				panelTitle={"Thêm sinh viên"}>
+				panelTitle={"Thêm nhân viên"}>
 				{/* Add student form */}
 			</SlideOver>
 
@@ -112,7 +109,7 @@ const StaffListPage = () => {
 
 				<ReactTable
 					columns={columnsData}
-					data={[]}
+					data={tableData}
 					noDataComponent={
 						<tr>
 							<td>Empty</td>

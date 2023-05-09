@@ -1,18 +1,18 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axiosBaseQuery from "../axiosBaseQuery";
 
-const staffApi = createApi({
-	reducerPath: "staffApi",
+const staffListApi = createApi({
+	reducerPath: "staffListApi",
 	baseQuery: axiosBaseQuery(),
 	endpoints: (build) => ({
 		getAllStaff: build.query({
 			query: () => {
-				return { url: "/staff", method: "GET"}
+				return { url: "/manager", method: "GET" }
 			},
 		}),
 	}),
 });
 
-export const { useGetAllStaffQuery } = staffApi;
+export const { useGetAllStaffQuery } = staffListApi;
 
-export default staffApi;
+export default staffListApi;
