@@ -17,7 +17,7 @@ export default {
 		},
 		screens: {
 			sm: {
-				min: "375px",
+				min: "320px",
 				max: "767px",
 			},
 			md: {

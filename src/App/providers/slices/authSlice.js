@@ -19,7 +19,7 @@ const authSlice = createSlice({
 	initialState: initialState,
 	extraReducers: (build) => {
 		build.addMatcher(authApi.endpoints.signin.matchFulfilled, (state, { payload }) => {
-			console.log(payload)
+			console.log('payload',payload)
 			if (payload.isAdmin) {
 				return {
 					isSignedIn: payload.success,
@@ -29,6 +29,7 @@ const authSlice = createSlice({
 						email: payload.manager?.email,
 						picture: payload.picture,
 						role: payload.manager?.role === 1 ? UserRoleEnum.STAFF : UserRoleEnum.MANAGER,
+					
 					},
 				};
 			}
@@ -40,6 +41,11 @@ const authSlice = createSlice({
 					email: payload.student?.email,
 					picture: payload.picture,
 					role: UserRoleEnum.STUDENT,
+					smester_id:payload?.student?.smester_id,
+					capmus_id:payload?.student?.campus_id,
+					internshipTime:payload?.student?.internshipTime,
+					endInternShipTime:payload?.student?.endInternShipTime,
+						
 				},
 			};
 		});

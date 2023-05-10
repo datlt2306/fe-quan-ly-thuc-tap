@@ -7,7 +7,6 @@ const studentsApi = createApi({
 	endpoints: (build) => ({
 		getStudent: build.query({
 			query: (id) => {
-                console.log('id',id)
 				return { url: `/student/${id}`, method: "GET" };
 			},
 		}),

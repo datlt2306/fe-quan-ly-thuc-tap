@@ -79,70 +79,7 @@ const StudentListPage = () => {
 				Filter: InputColumnFilter,
 				filterable: true,
 				isSort: true,
-			},
-			{
-				Header: "Trạng thái",
-				accessor: "Trạng thái",
-				Filter: SelectColumnFilter,
-				filterable: true,
-				isSort: true,
-				Cell: ({ value }) => <Badge variant={"error"}>{value}</Badge>,
-			},
-			{
-				Header: "Mã ngành",
-				accessor: "Mã ngành",
-				Filter: InputColumnFilter,
-				filterable: true,
-				isSort: true,
-			},
-
-			{
-				Header: "Số điện thoại",
-				accessor: "Số điện thoại",
-				Filter: InputColumnFilter,
-				filterable: true,
-				isSort: true,
-			},
-			{
-				Header: "Email",
-				accessor: "Email",
-				Filter: InputColumnFilter,
-				filterable: true,
-				isSort: true,
-			},
-			{
-				Header: "Bổ sung",
-				accessor: "Bổ sung",
-				Filter: InputColumnFilter,
-				filterable: true,
-				isSort: true,
-			},
-
-			{
-				Header: "Thao tác",
-				canFilter: false,
-				canSort: false,
-				filterable: false,
-				isSort: false,
-				Cell: (
-					<ButtonList>
-						<Button type="button" size="xs" variant="secondary">
-							Chỉnh sửa
-						</Button>
-						<PopConfirm
-							okText="Ok"
-							cancelText="Cancel"
-							title={"Xóa sinh viên"}
-							description={"Bạn muốn xóa sinh viên này ?"}
-							// onCancel={() => toast.info("Cancelled")}
-							onConfirm={() => toast.info("Removed")}>
-							<Button size="xs" variant="error">
-								Xóa
-							</Button>
-						</PopConfirm>
-					</ButtonList>
-				),
-			},
+			}
 		],
 		[]
 	);
