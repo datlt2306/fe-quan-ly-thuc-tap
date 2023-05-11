@@ -41,7 +41,6 @@ export default function SigninPage() {
 
 			setAllowToLogin(!!campus);
 		} catch (error) {
-			console.log(error.message);
 			setAllowToLogin(false);
 		}
 	};

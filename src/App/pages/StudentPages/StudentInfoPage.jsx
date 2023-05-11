@@ -1,20 +1,28 @@
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Menu } from "@headlessui/react";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Table from "@/Core/components/common/Table/CoreTable";
-// import Modal from "@/Core/components/common/Modal";
 import { useGetStudentQuery } from "@/App/providers/apis/studentsApi";
 import { useGetBusinessQuery } from "@/App/providers/apis/bussinessApi";
 import { StudentStatusEnum } from "@/Core/constants/studentStatus";
-import { useGetSetTimeQuery } from "@/App/providers/apis/configTimes";
+import { useGetSetTimeQuery } from "@/App/providers/apis/configTimesApi";
+import { useRequestOfStudentMutation } from "@/App/providers/apis/requestStudentsApi";
 import Button from "@/Core/components/common/Button";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
 import ModalLoading from "@/Core/components/common/Loading/ModalLoading";
 import formatDate from "@/Core/utils/dateToTime";
+import TextAreaFieldControl from "@/Core/components/common/FormControl/TextAreaFieldControl";
+import tw from "twin.macro";
+import { requestOfStudentValidator } from "@/App/schemas/requestStudentSchema.js";
+import { supportOptionsEnum } from "@/Core/constants/supportOptionsEnum";
+import axiosClient from "@/Core/configs/axiosConfig";
+import { toast } from "react-toastify";
+
 const Modal = lazy(() => import("@/Core/components/common/Modal"));
 
-import tw from "twin.macro";
 const VerticalList = (props) => (
 	<ul {...props} tw="flex flex-col gap-3">
 		{props.children}
@@ -23,21 +31,25 @@ const VerticalList = (props) => (
 
 const StudentInfoPage = () => {
 	const user = useSelector((state) => state.auth?.user);
-	console.log("user", user);
+	// console.log(user)
+	// const string = `typeNumber=${0}&semester_id=${user?.smester_id}&campus_id=${
+	//    user?.campus_id
+	//  }`;
 	const [openState, setOpenState] = useState(false);
 	const [modalContent, setModalContent] = useState(null);
 	const [title, setTitle] = useState("");
 
 	const { data, isFetching } = useGetStudentQuery(user.id);
-	console.log(data);
-	const { data: business } = useGetBusinessQuery();
+	// console.log(data);
+	// const { data: business } = useGetBusinessQuery();
 	// const { data: times } = useGetSetTimeQuery(string);
+	// useEffect(() => {
+	// 	const string = `typeNumber=${1}&semester_id=${user?.smester_id}&campus_id=${user?.campus_id}`;
+	// 	const url = `/settime/?${string}`;
+	// 	axiosClient.get(url);
 
-	const supportOptions = {
-		0: "Tự tìm nơi thực tập",
-		1: "Nhận hỗ trợ từ nhà trường",
-	};
-
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, []);
 	const columnsData = useMemo(
 		() => [
 			{
@@ -79,7 +91,7 @@ const StudentInfoPage = () => {
 		{ label: "Email :", value: data?.email },
 		{
 			label: "Lựa chọn :",
-			value: supportOptions[data?.support],
+			value: supportOptionsEnum[data?.support],
 		},
 		{
 			label: "Công ty đã chọn :",
@@ -97,75 +109,9 @@ const StudentInfoPage = () => {
 		},
 	];
 
-	const viewCv = () => {
-		const dataFormInterShip = [
-			{ label: "Kiểu đăng ký :", value: supportOptions[+data?.support] },
-			{ label: "Mã sinh viên :", value: data?.mssv },
-			{ label: "Họ tên :", value: data?.name },
-			{ label: "Email:", value: data?.email },
-			{ label: "Số diện thoại:", value: data?.phoneNumber },
-			{ label: "Địa chỉ:", value: data?.address },
-			{ label: "Chuyên ngành:", value: data?.majors?.name },
-			{ label: "Vị trí thực tập:", value: data?.position },
-			{
-				label: (
-					<>
-						{data?.support === 1 ? (
-							<li>CV</li>
-						) : data?.support === 0 ? (
-							<>
-								<li className="font-medium">Địa chỉ thực tập:</li>
-								<li className="font-medium">Mã số thuế: </li>
-								<li className="font-medium">Chức vụ người tiếp nhận</li>
-								<li className="font-medium">SĐT doanh nghiệp</li>
-								<li className="font-medium">Email người tiếpn nhận</li>
-							</>
-						) : null}
-					</>
-				),
-				value: (
-					<>
-						{data?.support === 0 && (
-							<>
-								<li className="font-medium">{data?.nameCompany}</li>
-								<li className="font-medium">{data?.addressCompany}</li>
-								<li className="font-medium">{data?.taxCode}</li>
-								<li className="font-medium">{data?.position}</li>
-								<li className="font-medium">{data?.phoneNumberCompany}</li>
-								<li c className="font-medium"lassName="font-medium">{data?.emailEnterprise}</li>
-							</>
-						)}
-						{data?.support === 1 && (
-							<>
-								<p>{data?.business?.name}</p>
-								{Object.keys(data).length !== 0 && (
-									<p>
-										<button type="link" onClick={() => window.open(data.link)} />
-									</p>
-								)}
-							</>
-						)}
-					</>
-				),
-			},
-		];
-
-		return (
-			<>
-				<VerticalList>
-					{dataFormInterShip.map((item) => (
-						<li key={item.label}>
-							{item.label} 
-							<span className="font-medium">{item.value}</span>
-						</li>
-					))}
-				</VerticalList>
-			</>
-		);
-	};
 	const viewForm = () => {
 		const dataViewForm = [
-			{ label: "Kiểu đăng ký:", value: supportOptions[+data?.support] },
+			{ label: "Kiểu đăng ký:", value: supportOptionsEnum[+data?.support] },
 			{ label: "Mã sinh viký:", value: data?.mssv },
 			{ label: "Họ tên:", value: data?.name },
 			{ label: "Email:", value: data?.email },
@@ -215,7 +161,9 @@ const StudentInfoPage = () => {
 	const formSubmittedRoute = [
 		{
 			label: "Form Đăng ký Thực Tập",
-			content: viewCv(),
+			content: (
+				<ViewCv setOpenState={setOpenState} data={data} supportOptions={supportOptionsEnum} />
+			),
 		},
 		{
 			label: "Form Biên Bản",
@@ -287,14 +235,137 @@ const StudentInfoPage = () => {
 				</div>
 			</section>
 			{openState && (
-				<Suspense fallback={<ModalLoading  />}>
+				<Suspense fallback={<ModalLoading />}>
 					<Modal openState={openState} onOpenStateChange={setOpenState} title={title}>
 						{modalContent}
 					</Modal>
 				</Suspense>
 			)}
-		</>	
+		</>
 	);
 };
 
+const ViewCv = ({ data, supportOptions, setOpenState }) => {
+	const [open, setOpen] = useState(false);
+	const [requestOfStudentMutation, { isLoading }] = useRequestOfStudentMutation();
+	const user = useSelector((state) => state.auth?.user);
+	// console.log(user);
+	const { control, handleSubmit, reset } = useForm({
+		resolver: yupResolver(requestOfStudentValidator),
+	});
+	const onSubmit = async ({ description }) => {
+		try {
+			const response = await requestOfStudentMutation({
+				type: "narrow",
+				description: description,
+				userId: user?._id,
+			});
+			setOpenState(false);
+			if (!response.data.success) {
+				toast.error(response.data.message);
+				return;
+			}
+			toast.success(response.data.message);
+		} catch (error) {
+			setOpenState(false);
+			toast.error(error?.response?.data?.message);
+		}
+	};
+
+	const dataFormInterShip = [
+		{ label: "Kiểu đăng ký :", value: supportOptions[+data?.support] },
+		{ label: "Mã sinh viên :", value: data?.mssv },
+		{ label: "Họ tên :", value: data?.name },
+		{ label: "Email:", value: data?.email },
+		{ label: "Số diện thoại:", value: data?.phoneNumber },
+		{ label: "Địa chỉ:", value: data?.address },
+		{ label: "Chuyên ngành:", value: data?.majors?.name },
+		{ label: "Vị trí thực tập:", value: data?.position },
+		{
+			label: (
+				<>
+					{data?.support === 1 ? (
+						<li>CV</li>
+					) : data?.support === 0 ? (
+						<>
+							<li className="font-medium">Địa chỉ thực tập:</li>
+							<li className="font-medium">Mã số thuế: </li>
+							<li className="font-medium">Chức vụ người tiếp nhận</li>
+							<li className="font-medium">SĐT doanh nghiệp</li>
+							<li className="font-medium">Email người tiếpn nhận</li>
+						</>
+					) : null}
+				</>
+			),
+			value: (
+				<>
+					{data?.support === 0 && (
+						<>
+							<li className="font-medium">{data?.nameCompany}</li>
+							<li className="font-medium">{data?.addressCompany}</li>
+							<li className="font-medium">{data?.taxCode}</li>
+							<li className="font-medium">{data?.position}</li>
+							<li className="font-medium">{data?.phoneNumberCompany}</li>
+							<li className="font-medium">{data?.emailEnterprise}</li>
+						</>
+					)}
+					{data?.support === 1 && (
+						<>
+							<p>{data?.business?.name}</p>
+							{Object.keys(data).length !== 0 && (
+								<p>
+									<button type="link" onClick={() => window.open(data.link)} />
+								</p>
+							)}
+						</>
+					)}
+				</>
+			),
+		},
+	];
+
+	return (
+		<>
+			<VerticalList>
+				{dataFormInterShip.map((item) => (
+					<li key={item.label}>
+						{item.label}
+						<span className="font-medium">{item.value}</span>
+					</li>
+				))}
+
+				<form onSubmit={handleSubmit(onSubmit)}>
+					{open && (
+						<>
+							<TextAreaFieldControl control={control} name="description" />
+							<div className="mt-2 flex justify-between">
+								<Button
+									variant="error"
+									className="hover:bg-red-600"
+									onClick={() => {
+										setOpen(false);
+										reset();
+									}}>
+									Huỷ
+								</Button>
+								<Button
+									variant="secondary"
+									className="hover:bg-gray-300"
+									onClick={() => setOpen(true)}>
+									Gửi
+								</Button>
+							</div>
+						</>
+					)}
+
+					{!open && (
+						<Button variant="primary" className="mt-3 w-full" onClick={() => setOpen(true)}>
+							Gửi yêu cầu hỗ trợ
+						</Button>
+					)}
+				</form>
+			</VerticalList>
+		</>
+	);
+};
 export default StudentInfoPage;

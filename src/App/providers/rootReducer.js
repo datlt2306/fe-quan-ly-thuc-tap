@@ -5,16 +5,20 @@ import campusApi from "./apis/campusApi";
 import campusSlice from "./slices/campusSlice";
 import studentsApi from "./apis/studentsApi";
 import bussinessApi from "./apis/bussinessApi";
-import configTimes from "./apis/configTimes";
+import configTimesApi from "./apis/configTimesApi";
+import authApi from "./apis/authApi";
+import requestStudentsApi from "./apis/requestStudentsApi";
 const rootReducer = combineReducers({
 	[authSlice.name]: authSlice.reducer,
 	[campusSlice.name]: campusSlice.reducer,
+	
+	[authApi.reducerPath]: authApi.reducer,
 	[semesterApi.reducerPath]: semesterApi.reducer,
 	[campusApi.reducerPath]: campusApi.reducer,
 	[studentsApi.reducerPath]: studentsApi.reducer,
 	[bussinessApi.reducerPath]: bussinessApi.reducer,
-	[configTimes.reducerPath]: configTimes.reducer,
-
+	[configTimesApi.reducerPath]: configTimesApi.reducer,
+	[requestStudentsApi.reducerPath]: requestStudentsApi.reducer,
 });
 
 export default rootReducer;

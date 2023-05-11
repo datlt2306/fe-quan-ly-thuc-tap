@@ -42,7 +42,7 @@ const authSlice = createSlice({
 					picture: payload.picture,
 					role: UserRoleEnum.STUDENT,
 					smester_id:payload?.student?.smester_id,
-					capmus_id:payload?.student?.campus_id,
+					campus_id:payload?.student?.campus_id,
 					internshipTime:payload?.student?.internshipTime,
 					endInternShipTime:payload?.student?.endInternShipTime,
 						

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState,forwardRef} from "react";
 
 /**
  * @param {string} size
@@ -15,7 +15,10 @@ const Button = ({
 	as: Element = "button", // Polymorphic component, display as other tag
 	children,
 	...props
-}) => {
+},
+ref
+
+) => {
 	const buttonStyles = useMemo(
 		() =>
 			classNames(
@@ -47,10 +50,10 @@ const Button = ({
 		[variant, shape, size]
 	);
 	return (
-		<Element {...props} className={buttonStyles}>
+		<Element {...props} className={buttonStyles} ref={ref}>
 			{children}
 		</Element>
 	);
 };
 
-export default Button;
+export default forwardRef(Button);
