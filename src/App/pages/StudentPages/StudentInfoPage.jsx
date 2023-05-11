@@ -42,7 +42,7 @@ const StudentInfoPage = () => {
 
 	const { data, isFetching } = useGetStudentQuery(user.id);
 	// console.log(data);
-	// const { data: business } = useGetBusinessQuery();
+	const { data: business } = useGetBusinessQuery();
 	// const { data: times } = useGetSetTimeQuery(string);
 	// useEffect(() => {
 	// 	const string = `typeNumber=${1}&semester_id=${user?.smester_id}&campus_id=${user?.campus_id}`;
@@ -232,11 +232,11 @@ const StudentInfoPage = () => {
 				</div>
 			</section>
 
-			{/* <section className="border-b-2 py-6">
+		 <section className="border-b-2 py-6">
 				<h1 className=" text-lg font-bold text-primary my-2">Thông tin tuyển dụng</h1>
 				<ReactTable columns={columnsData} data={business.list ?? []} />
 			 <p>Chưa có thông tin thực tập</p>
-			</section> */}
+			</section>
 			<section className="mt-3">
 				<div>
 					<label
@@ -292,11 +292,11 @@ const ViewCv = ({ data, supportOptions, setOpenState }) => {
 	};
 
 	const dataFormInterShip = [
-		{ label: "Kiểu đăng ký :", value: supportOptions[+data?.support] },
+		{ label: "Kiểu đăng ký :", value:data?.support? supportOptions[+data?.support]:null },
 		{ label: "Mã sinh viên :", value: data?.mssv },
 		{ label: "Họ tên :", value: data?.name },
 		{ label: "Email:", value: data?.email },
-		{ label: "Số diện thoại:", value: data?.phoneNumber },
+		{ label: "Số điện thoại:", value: data?.phoneNumber },
 		{ label: "Địa chỉ:", value: data?.address },
 		{ label: "Chuyên ngành:", value: data?.majors?.name },
 		{ label: "Vị trí thực tập:", value: data?.position },
