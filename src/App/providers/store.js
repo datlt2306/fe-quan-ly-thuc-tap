@@ -16,7 +16,7 @@ import semesterApi from "./apis/semesterApi";
 import rootReducer from "./rootReducer";
 import authApi from "./apis/authApi";
 import studentsApi from "./apis/studentsApi";
-import bussinessApi from "./apis/bussinessApi";
+import businessApi from "./apis/businessApi";
 import configTimesApi from "./apis/configTimesApi";
 import requestStudentsApi from "./apis/requestStudentsApi";
 
@@ -39,7 +39,7 @@ const store = configureStore({
 			campusApi.middleware,
 			authApi.middleware,
 			studentsApi.middleware,
-			bussinessApi.middleware,
+			businessApi.middleware,
 			configTimesApi.middleware,
 			requestStudentsApi.middleware,
 		]),
