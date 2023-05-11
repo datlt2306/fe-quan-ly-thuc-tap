@@ -19,8 +19,9 @@ import tw from "twin.macro";
 import { requestOfStudentValidator } from "@/App/schemas/requestStudentSchema.js";
 import { supportOptionsEnum } from "@/Core/constants/supportOptionsEnum";
 import axiosClient from "@/Core/configs/axiosConfig";
+import { EyeIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
-
+import { useNavigate } from "react-router-dom";
 const Modal = lazy(() => import("@/Core/components/common/Modal"));
 
 const VerticalList = (props) => (
@@ -120,14 +121,23 @@ const StudentInfoPage = () => {
 			{ label: "Chuyên ngành:", value: data?.narrow?.name },
 			{ label: "Vị trí thực tập:", value: data?.dream },
 			{ label: "Ngày bắt đầu:", value: formatDate(data?.internshipTime) },
-			{ label: "Biên bản thực tập:", value: "Xem" },
+			{
+				label: "Biên bản thực tập:",
+				value: (
+					<>
+						{data?.["form"] && (
+							<Button onClick={() => window.open(data?.["form"])}>Xem</Button>
+						)}
+					</>
+				),
+			},
 		];
 		return (
 			<>
 				<VerticalList>
 					{dataViewForm.map((item, index) => (
-						<li key={index}>
-							{item.label} <span className="font-medium">{item.value}</span>
+						<li key={index} className="flex items-center gap-3">
+							<p>{item.label}</p> <span className="font-medium">{item.value}</span>
 						</li>
 					))}
 				</VerticalList>
@@ -145,13 +155,22 @@ const StudentInfoPage = () => {
 			{ label: "Điểm thái độ:", value: data?.attitudePoint },
 			{ label: "Thời gian bắt đầu:", value: formatDate(data?.internshipTime) },
 			{ label: "Thời gian kết thúc:", value: formatDate(data?.endInternShipTime) },
-			{ label: "Báo cáo:", value: <button></button> },
+			{
+				label: "Báo cáo:",
+				value: (
+					<>
+						{data?.["report"] && (
+							<Button onClick={() => window.open(data?.["report"])}>Xem</Button>
+						)}
+					</>
+				),
+			},
 		];
 		return (
 			<VerticalList>
 				{initDataViewReport.map((item, index) => (
-					<li key={index}>
-						{item.label} <div className="font-medium">{item.value}</div>
+					<li key={index} className="flex gap-2 items-center">
+						<p>{item.label}</p> <div className="font-medium">{item.value}</div>
 					</li>
 				))}
 			</VerticalList>
@@ -292,7 +311,7 @@ const ViewCv = ({ data, supportOptions, setOpenState }) => {
 							<li className="font-medium">Mã số thuế: </li>
 							<li className="font-medium">Chức vụ người tiếp nhận</li>
 							<li className="font-medium">SĐT doanh nghiệp</li>
-							<li className="font-medium">Email người tiếpn nhận</li>
+							<li className="font-medium">Email người tiếp nhận</li>
 						</>
 					) : null}
 				</>
@@ -312,11 +331,11 @@ const ViewCv = ({ data, supportOptions, setOpenState }) => {
 					{data?.support === 1 && (
 						<>
 							<p>{data?.business?.name}</p>
-							{Object.keys(data).length !== 0 && (
-								<p>
-									<button type="link" onClick={() => window.open(data.link)} />
-								</p>
-							)}
+							<>
+								{data?.["CV"] && (
+									<Button onClick={() => window.open(data?.["CV"])}>Xem</Button>
+								)}
+							</>
 						</>
 					)}
 				</>
@@ -328,8 +347,8 @@ const ViewCv = ({ data, supportOptions, setOpenState }) => {
 		<>
 			<VerticalList>
 				{dataFormInterShip.map((item) => (
-					<li key={item.label}>
-						{item.label}
+					<li key={item.label} className="flex items-center gap-1">
+						<p>{item.label}</p>
 						<span className="font-medium">{item.value}</span>
 					</li>
 				))}
