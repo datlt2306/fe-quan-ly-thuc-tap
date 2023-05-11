@@ -10,6 +10,8 @@ const studentsApi = createApi({
 			query: (id) => {
 				return { url: `/student/${id}`, method: "GET" };
 			},
+		
+
 			providesTags: ['Students'],
 		}),
 	}),

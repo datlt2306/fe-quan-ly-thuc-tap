@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Menu } from "@headlessui/react";
 import { Suspense, lazy } from "react";
@@ -11,6 +11,7 @@ import ReactTable from "@/Core/components/common/Table/ReactTable";
 import ModalLoading from "@/Core/components/common/Loading/ModalLoading";
 import tw from "twin.macro";
 import { supportOptionsEnum } from "@/Core/constants/supportOptionsEnum";
+import axiosClient from "@/Core/configs/axiosConfig";
 const ViewReport = lazy(() => import("./Modal/ViewReport"));
 const ViewForm = lazy(() => import("./Modal/ViewForm"));
 const ViewCv = lazy(() => import("./Modal/ViewCv"));
@@ -25,18 +26,27 @@ export const VerticalList = (props) => (
 
 const StudentInfoPage = () => {
 	const user = useSelector((state) => state.auth?.user);
+	const [dateNow] = useState(Date.now());
 	const [openState, setOpenState] = useState(false);
 	const [modalContent, setModalContent] = useState(null);
 	const [title, setTitle] = useState("");
-
-	const { data, isFetching } = useGetStudentQuery(user.id);
-	console.log(data);
+	const [data, setData] = useState([]);
+	useEffect(() => {
+		const getStudentById = async () => {
+			try {
+				const studentData = await axiosClient.get(`/student/${user?.id}`);
+				// console.log('student',studentData);
+				setData(studentData);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getStudentById();
+	}, []);
+	// const { data, isFetching } = useGetStudentQuery(user.id);
 	const { data: business } = useGetAllCompanyQuery();
-	const [dateNow] = useState(Date.now());
-
 	const string = `typeNumber=${1}&semester_id=${user?.smester_id}&campus_id=${user?.campus_id}`;
 	const { data: timeForm } = useGetSetTimeQuery(string);
-	console.log(timeForm);
 	const columnsData = useMemo(
 		() => [
 			{
@@ -79,40 +89,37 @@ const StudentInfoPage = () => {
 		],
 		[]
 	);
-	const dataRegisterInfomation = useMemo(
-		() => [
-			{ label: "Họ và tên :", value: data?.name },
-			{ label: "Khóa học :", value: data?.course },
-			{ label: "Ngành học :", value: data?.majors?.name },
+	const dataRegisterInfomation =  [
+		{ label: "Họ và tên :", value: data?.name },
+		{ label: "Khóa học :", value: data?.course },
+		{ label: "Ngành học :", value: data?.majors?.name },
 
-			{ label: "Email :", value: data?.email },
-			{
-				label: "Lựa chọn :",
-				value: data?.support?supportOptionsEnum[data?.support]:null,
-			},
-			{
-				label: "Công ty đã chọn :",
-				value: data?.support === 1 ? data?.business?.name : data?.nameCompany,
-			},
-			{
-				label: "Trạng thái sinh viên :",
-				value: (
-					<>
-						{StudentStatusEnum.map((status, index) =>
-							status.value === data?.statusCheck ? (
-								<span key={index} className={status.color}>
-									{status.title}
-								</span>
-							) : (
-								""
-							)
-						)}
-					</>
-				),
-			},
-		],
-		[]
-	);
+		{ label: "Email :", value: data?.email },
+		{
+			label: "Lựa chọn :",
+			value: data?.support ? supportOptionsEnum[data?.support] : null,
+		},
+		{
+			label: "Công ty đã chọn :",
+			value: data?.support === 1 ? data?.business?.name : data?.nameCompany,
+		},
+		{
+			label: "Trạng thái sinh viên :",
+			value: (
+				<>
+					{StudentStatusEnum.map((status, index) =>
+						status.value === data?.statusCheck ? (
+							<span key={index} className={status.color}>
+								{status.title}
+							</span>
+						) : (
+							""
+						)
+					)}
+				</>
+			),
+		},
+	];
 	const formSubmittedRoute = [
 		{
 			condition: user?.CV,
@@ -124,18 +131,18 @@ const StudentInfoPage = () => {
 		{
 			condition: user?.form,
 			label: "Form Biên Bản",
-			content: <ViewForm data={user} />,
+			content: <ViewForm data={data} />,
 		},
 		{
 			condition: user?.report,
 			label: "Form Báo Cáo",
-			content: <ViewReport data={user} />,
+			content: <ViewReport data={data} />,
 		},
 	];
 
 	return (
 		<>
-			<section className="mb-8  grid grid-cols-2 sm:grid-cols-1 ">
+			<section className="mb-8  grid grid-cols-2 sm:grid-cols-1  ">
 				<div tw="border-r-2 sm:(border-r-0 border-b-2 pb-4 border-r-0)  ">
 					<VerticalList className="text-gray-500">
 						<h1 className="mb-5  text-lg font-medium text-primary">Thông Tin Đăng Ký</h1>
@@ -180,7 +187,7 @@ const StudentInfoPage = () => {
 				{timeForm?.time?.startTime <= dateNow && dateNow <= timeForm?.time.endTime ? (
 					<ReactTable columns={columnsData} data={business?.list ?? []} />
 				) : (
-					<p>Chưa có thông tin thực tập</p>
+					<p>Chưa có thông tin tuyển dụng</p>
 				)}
 			</section>
 			<section className="mt-3">

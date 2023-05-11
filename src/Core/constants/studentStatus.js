@@ -55,6 +55,6 @@ export const StudentStatusEnum = [
 	{
 		title: "Chưa đăng ký",
 		value: 10,
-		color: "text-warning",	
+		color: "text-secondary",	
 	},
 ];
