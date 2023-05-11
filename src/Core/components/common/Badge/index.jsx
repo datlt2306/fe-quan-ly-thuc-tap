@@ -5,10 +5,11 @@ const Badge = ({ variant, ...props }) => {
 	return (
 		<span
 			className={classNames(
-				"inline-flex items-center gap-x-1.5 rounded-full px-1.5 py-1 text-xs font-medium",
+				"inline-flex items-center gap-x-1.5 rounded-full px-1.5 py-1 text-xs font-semibold",
 				{
 					"bg-primary/25 text-primary": variant === "primary",
 					"bg-success/25 text-success": variant === "success",
+					"bg-info/25 text-info": variant === "info",
 					"bg-error/25 text-error": variant === "error",
 					"bg-warning/25 text-warning": variant === "warning",
 					"bg-disabled/25 text-disabled": variant === "disabled",
