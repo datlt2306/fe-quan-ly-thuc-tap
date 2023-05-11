@@ -18,23 +18,29 @@
 	}
 
 	.table td {
-		@apply whitespace-nowrap px-3 py-4 text-sm text-gray-500;
+		@apply whitespace-nowrap px-3 py-2 text-sm text-gray-500;
 	}
 
 	.btn {
-		@apply flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] font-semibold outline-none duration-200 focus:outline-none;
+		@apply flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] font-semibold shadow-sm outline-none duration-300 focus:active:scale-95 focus:active:shadow-lg;
 	}
 	.btn-default {
-		@apply bg-white text-gray-500 hover:bg-gray-50 focus:active:bg-gray-100;
+		@apply bg-white text-gray-500 hover:bg-gray-50;
 	}
 	.btn-primary {
-		@apply bg-orange-400 text-white hover:bg-orange-500 focus:active:bg-orange-600;
+		@apply bg-primary text-white hover:bg-primary-active;
 	}
 	.btn-secondary {
-		@apply bg-blue-600/10 text-blue-600 focus:active:bg-blue-500/20;
+		@apply bg-secondary text-white hover:bg-secondary-active;
+	}
+	.btn-success {
+		@apply bg-success text-white hover:bg-success-active;
+	}
+	.btn-info {
+		@apply bg-info text-white hover:bg-info-active;
 	}
 	.btn-error {
-		@apply bg-red-400 text-white focus:active:bg-red-500;
+		@apply bg-error text-white hover:bg-error-active;
 	}
 	.btn-ghost {
 		@apply bg-transparent text-gray-600 hover:bg-gray-100 focus:active:bg-gray-200;
