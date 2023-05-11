@@ -1,5 +1,4 @@
 import Button from "@/Core/components/common/Button";
-import Badge from "@/Core/components/common/Badge";
 import PopConfirm from "@/Core/components/common/Popup/PopConfirm";
 import SlideOver from "@/Core/components/common/SlideOver";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
@@ -8,39 +7,19 @@ import {
 	SelectColumnFilter,
 } from "@/Core/components/common/Table/ReactTableFilters";
 import { ArrowDownIcon, ArrowUpIcon, PlusIcon } from "@heroicons/react/24/outline";
-
-import classNames from "classnames";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
-
-import axiosClient from "@/Core/configs/axiosConfig";
 import { useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
 
 const Box = tw.div`flex flex-col gap-6`;
 const ButtonList = tw.div`flex items-center gap-2`;
 
-const columnName = [
-	[
-		"STT",
-		"Mã Doanh Nghiệp",
-		"Tên Doanh Nghiệp",
-		"Vị trí thực tập",
-		"Số lượng",
-		"Quyền lợi",
-		"Địa chỉ",
-		"Ngành",
-		"Yêu Cầu",
-		"Chi tiết",
-		"Thao tác",
-	],
-];
-
 const CompanyListPage = () => {
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const [tableData, setTableData] = useState([]);
 	const { data } = useGetAllCompanyQuery();
-	
+	console.log(data)
 	useEffect(() => {
 		setTableData(data?.list);
 	}, [data]);
@@ -150,10 +129,6 @@ const CompanyListPage = () => {
 
 	return (
 		<Fragment>
-			<SlideOver
-				open={slideOverVisibility}
-				onOpen={setSlideOverVisibility}
-				panelTitle={"Thêm doanh nghiệp"}></SlideOver>
 			<Box>
 				<ButtonList>
 					<Button
