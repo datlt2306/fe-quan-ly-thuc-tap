@@ -36,9 +36,23 @@ export default {
 			},
 			xl: { min: "1921px" },
 		},
-		extends: {
+		extend: {
 			fontFamily: {
 				sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+			},
+			animation: {
+				slide: "shimmer 1s ease infinite",
+				// spin: "spin 1.2s ease infinite",
+			},
+			keyframes: {
+				shimmer: {
+					"0%": {
+						transform: "translateX(0%)",
+					},
+					"100%": {
+						transform: "translateX(100%)",
+					},
+				},
 			},
 		},
 	},
