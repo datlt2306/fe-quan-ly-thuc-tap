@@ -18,7 +18,7 @@
 	}
 
 	.table td {
-		@apply whitespace-nowrap px-3 py-2 text-sm text-gray-500;
+		@apply whitespace-nowrap px-3 py-1 text-sm text-gray-500;
 	}
 
 	.btn {
