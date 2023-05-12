@@ -85,7 +85,6 @@ const ReactTable = ({ columns, data, manualPagination, onPageChange: handlePageC
 		usePagination
 		// useResizeColumns
 	);
-	console.log(filters);
 
 	return (
 		<Wrapper>
@@ -121,7 +120,7 @@ const ReactTable = ({ columns, data, manualPagination, onPageChange: handlePageC
 															{column.isSorted ? (
 																<ArrowDownIcon
 																	className={classNames("block h-3.5 w-3.5", {
-																		"rotate-180": column.isSortedDesc,
+																		"-rotate-180": column.isSortedDesc,
 																	})}
 																/>
 															) : (
@@ -249,7 +248,7 @@ const Header = ({ children, ...props }) => (
 const Body = ({ children, isEmpty, ...props }) => (
 	<div
 		{...props}
-		className={classNames("overflow-x-auto overscroll-x-auto", {
+		className={classNames("h-full max-h-[400px] overflow-x-auto overflow-y-auto overscroll-x-auto", {
 			"pb-10 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200": isEmpty,
 			"scrollbar-none": !isEmpty,
 		})}>
