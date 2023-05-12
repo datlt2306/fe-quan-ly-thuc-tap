@@ -6,7 +6,10 @@ import Badge from "@/Core/components/common/Badge";
 import Button from "@/Core/components/common/Button";
 import { Option, Select } from "@/Core/components/common/FormControl/SelectFieldControl";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
-import { InputColumnFilter, SelectColumnFilter } from "@/Core/components/common/Table/ReactTableFilters";
+import {
+	InputColumnFilter,
+	SelectColumnFilter,
+} from "@/Core/components/common/Table/ReactTableFilters";
 import { AllowedFileExt } from "@/Core/constants/allowedFileType";
 import { StudentStatusEnum, StudentStatusGroup } from "@/Core/constants/studentStatus";
 import { convertToExcelData } from "@/Core/utils/excelDataHandler";
@@ -51,38 +54,40 @@ const StudentListPage = () => {
 
 	// Callback function will be executed after import file excel
 	const importExcelDataCallback = (excelData) => {
-		const newStudentList = excelData.map((obj) => ({
-			name: obj[columnAccessors.name],
-			mssv: obj[columnAccessors.mssv],
-			course: obj[columnAccessors.course],
-			email: obj[columnAccessors.email],
-			phoneNumber: obj[columnAccessors.phoneNumber],
-			majorCode: obj[columnAccessors.majorCode],
-			smester_id: defaultSemester._id,
-			campus_id: currentCampus._id,
-		}));
+		if (excelData.length) {
+			const newStudentList = excelData.map((obj) => ({
+				name: obj[columnAccessors.name],
+				mssv: obj[columnAccessors.mssv],
+				course: obj[columnAccessors.course],
+				email: obj[columnAccessors.email],
+				phoneNumber: obj[columnAccessors.phoneNumber],
+				majorCode: obj[columnAccessors.majorCode],
+				smester_id: defaultSemester._id,
+				campus_id: currentCampus._id,
+			}));
 
-		// console.log(newStudentList);
-		newStudentSchema
-			.validate(newStudentList)
-			.then((data) => {
-				const response = addStudents({
-					data,
-					smester_id: defaultSemester._id,
-					campus_id: currentCampus._id,
-					majors: "",
-				});
+			// console.log(newStudentList);
+			newStudentSchema
+				.validate(newStudentList)
+				.then((data) => {
+					const response = addStudents({
+						data,
+						smester_id: defaultSemester._id,
+						campus_id: currentCampus._id,
+						majors: "",
+					});
 
-				toast.promise(response, {
-					success: "Import sinh viên thành công !",
-					error: "Import dữ liệu thất bại",
-					pending: "Đang tải lên dữ liệu ...",
+					toast.promise(response, {
+						success: "Import sinh viên thành công !",
+						error: "Import dữ liệu thất bại",
+						pending: "Đang tải lên dữ liệu ...",
+					});
+					fileInputRef.current.value = null;
+				})
+				.catch((error) => {
+					toast.error("Vui lòng nhập chính xác và đầy đủ dữ liệu !");
 				});
-				fileInputRef.current.value = null;
-			})
-			.catch((error) => {
-				toast.error("Vui lòng nhập chính xác và đầy đủ dữ liệu !");
-			});
+		}
 	};
 
 	const handleImportStudents = (file) => {
@@ -106,16 +111,21 @@ const StudentListPage = () => {
 		return status;
 	};
 
-	const exportData = convertToExcelData(
-		tableData.map((student) => {
-			return {
-				...student,
-				phoneNumber: student.phoneNumber.toString(),
-				statusCheck: StudentStatusEnum[student.statusCheck],
-			};
-		}),
-		columnAccessors
-	);
+	const getExportData = (data) => {
+		Array.isArray(data)
+			? convertToExcelData(
+					data.map((student) => {
+						return {
+							...student,
+							phoneNumber: student.phoneNumber?.toString(),
+							statusCheck: StudentStatusEnum[student?.statusCheck],
+						};
+					}),
+					columnAccessors
+			  )
+			: [];
+	};
+
 	// Define columns of table
 	const columnsData = useMemo(
 		() => [
@@ -156,7 +166,9 @@ const StudentListPage = () => {
 					/>
 				),
 				filterable: true,
-				Cell: ({ value }) => <Badge variant={getIntershipStatusStyle(value)}>{StudentStatusEnum[value]}</Badge>,
+				Cell: ({ value }) => (
+					<Badge variant={getIntershipStatusStyle(value)}>{StudentStatusEnum[value]}</Badge>
+				),
 			},
 			{
 				Header: "Mã ngành",
@@ -200,7 +212,13 @@ const StudentListPage = () => {
 				sortable: false,
 				Cell: ({ value }) =>
 					!!value ? (
-						<Button as="a" href={value} target="_blank" variant="ghost" shape="square" size="sm">
+						<Button
+							as="a"
+							href={value}
+							target="_blank"
+							variant="ghost"
+							shape="square"
+							size="sm">
 							<EyeIcon className="h-4 w-4" />
 						</Button>
 					) : (
@@ -262,11 +280,20 @@ const StudentListPage = () => {
 						type="button"
 						variant="success"
 						size="sm"
-						onClick={() => handleExportFile({ data: exportData, fileName: "Danh sách sinh viên" })}>
+						onClick={() =>
+							handleExportFile({
+								data: getExportData(tableData),
+								fileName: "Danh sách sinh viên",
+							})
+						}>
 						<DocumentArrowDownIcon className="h-6 w-6 text-[inherit]" />
 						Export file Excel
 					</Button>
-					<Button type="button" variant="secondary" size="sm" onClick={() => handleExportFile(excelSampleData)}>
+					<Button
+						type="button"
+						variant="secondary"
+						size="sm"
+						onClick={() => handleExportFile(excelSampleData)}>
 						<ArrowDownTrayIcon className="h-6 w-6 text-[inherit]" />
 						Tải file mẫu
 					</Button>
@@ -276,7 +303,10 @@ const StudentListPage = () => {
 					<label htmlFor="semester-list" className="whitespace-nowrap">
 						Kỳ học
 					</label>
-					<Select id="semester-list" className="capitalize" defaultValue={defaultSemester._id}>
+					<Select
+						id="semester-list"
+						className="capitalize"
+						defaultValue={defaultSemester?._id}>
 						{Array.isArray(semesterData?.listSemesters) &&
 							semesterData?.listSemesters?.map((semester) => (
 								<Option value={semester._id}>{semester?.name}</Option>
