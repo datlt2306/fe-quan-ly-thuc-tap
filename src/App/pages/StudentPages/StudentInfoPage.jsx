@@ -4,7 +4,7 @@ import { Menu } from "@headlessui/react";
 import { Suspense, lazy } from "react";
 import { useGetStudentQuery } from "@/App/providers/apis/studentsApi";
 import { useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
-import { StudentStatusEnum } from "@/Core/constants/studentStatus";
+import { StudentStatusEnum, StudentStatusGroup } from "@/Core/constants/studentStatus";
 import { useGetSetTimeQuery } from "@/App/providers/apis/configTimesApi";
 import Button from "@/Core/components/common/Button";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
@@ -31,6 +31,15 @@ const StudentInfoPage = () => {
 	const [modalContent, setModalContent] = useState(null);
 	const [title, setTitle] = useState("");
 	const [data, setData] = useState([]);
+	const getIntershipStatusStyle = (value) => {
+		let status;
+		Object.keys(StudentStatusGroup).forEach((groupKey) => {
+			if (StudentStatusGroup[groupKey].includes(value)) {
+				status = groupKey;
+			}
+		});
+		return status;
+	};
 	useEffect(() => {
 		const getStudentById = async () => {
 			try {
@@ -89,7 +98,7 @@ const StudentInfoPage = () => {
 		],
 		[]
 	);
-	const dataRegisterInfomation =  [
+	const dataRegisterInfomation = [
 		{ label: "Họ và tên :", value: data?.name },
 		{ label: "Khóa học :", value: data?.course },
 		{ label: "Ngành học :", value: data?.majors?.name },
@@ -107,25 +116,31 @@ const StudentInfoPage = () => {
 			label: "Trạng thái sinh viên :",
 			value: (
 				<>
-					{StudentStatusEnum.map((status, index) =>
+					{/* {StudentStatusEnum.map((status, index) =>
 						status.value === data?.statusCheck ? (
-							<span key={index} className={status.color}>
+							<span className={status.color}>
 								{status.title}
 							</span>
 						) : (
 							""
 						)
-					)}
+					)} */}
+					{
+						<span className={`text-${getIntershipStatusStyle(data?.statusCheck)}`}>
+							{StudentStatusEnum[data?.statusCheck]}
+						</span>
+					}
 				</>
 			),
 		},
 	];
+
 	const formSubmittedRoute = [
 		{
 			condition: user?.CV,
 			label: "Form Đăng ký Thực Tập",
 			content: (
-				<ViewCv setOpenState={setOpenState} data={user} supportOptions={supportOptionsEnum} />
+				<ViewCv setOpenState={setOpenState} data={data} supportOptions={supportOptionsEnum} />
 			),
 		},
 		{
@@ -208,7 +223,11 @@ const StudentInfoPage = () => {
 			</section>
 			{openState && (
 				<Suspense fallback={<ModalLoading />}>
-					<Modal openState={openState} onOpenStateChange={setOpenState} title={title}>
+					<Modal
+						max_height="650"
+						openState={openState}
+						onOpenStateChange={setOpenState}
+						title={title}>
 						{modalContent}
 					</Modal>
 				</Suspense>

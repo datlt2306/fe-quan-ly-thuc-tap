@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { VerticalList } from "../StudentInfoPage";
 import TextAreaFieldControl from "@/Core/components/common/FormControl/TextAreaFieldControl";
 const ViewCv = ({ data, supportOptions, setOpenState }) => {
+	console.log(data)
 	const [open, setOpen] = useState(false);
 	const [requestOfStudentMutation, { isLoading }] = useRequestOfStudentMutation();
 	const user = useSelector((state) => state.auth?.user);
@@ -47,15 +48,15 @@ const ViewCv = ({ data, supportOptions, setOpenState }) => {
 		{
 			label: (
 				<>
-					{data?.support === 1 ? (
-						<li>CV</li>
-					) : data?.support === 0 ? (
+					{data?.support === 1 ? 	(
+						<p className="pr-1">CV:</p>
+					): data?.support === 0 ? (
 						<>
-							<li className="font-medium">Địa chỉ thực tập:</li>
-							<li className="font-medium">Mã số thuế: </li>
-							<li className="font-medium">Chức vụ người tiếp nhận</li>
-							<li className="font-medium">SĐT doanh nghiệp</li>
-							<li className="font-medium">Email người tiếp nhận</li>
+							<li>Địa chỉ thực tập:</li>
+							<li>Mã số thuế: </li>
+							<li>Chức vụ người tiếp nhận:</li>
+							<li>SĐT doanh nghiệp:</li>
+							<li>Email người tiếp nhận:</li>
 						</>
 					) : null}
 				</>

@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import Button from "../Button";
 
-export default function Modal({ openState, onOpenStateChange, title, children,...props }) {
+export default function Modal({ openState, onOpenStateChange,max_height="520", title, children,...props }) {
 	return (
 		<Transition appear show={openState} as={Fragment}>
 			<Dialog as="div" className="relative  z-[9999]" onClose={() => onOpenStateChange(false)}>
@@ -27,7 +27,7 @@ export default function Modal({ openState, onOpenStateChange, title, children,..
 							leave="ease-in duration-200"
 							leaveFrom="opacity-100 scale-100"
 							leaveTo="opacity-0 scale-95">
-							<Dialog.Panel  className="relative max-h-[520px] w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all ">
+							<Dialog.Panel  className={`relative max-height-[${max_height}px] w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all`}>
 								{!!title && (
 									<Dialog.Title
 										as="h3"
