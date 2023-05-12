@@ -23,6 +23,8 @@ const authSlice = createSlice({
 				return {
 					isSignedIn: payload.success,
 					user: {
+						id: payload.manager?._id,
+						campus: payload.manager?.campus_id,
 						displayName: payload.name,
 						email: payload.manager?.email,
 						picture: payload.picture,
@@ -33,6 +35,8 @@ const authSlice = createSlice({
 			return {
 				isSignedIn: payload.success,
 				user: {
+					id: payload.student?._id,
+					campus: payload.manager?.campus_id,
 					displayName: payload.name,
 					email: payload.student?.email,
 					picture: payload.picture,
