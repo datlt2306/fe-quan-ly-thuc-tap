@@ -3,7 +3,7 @@ export default function mapExcelData(data) {
 	const mappedExcelData = data.slice(1).map((array, index) =>
 		array.reduce((object, value, i) => {
 			object[keys[i]] = value;
-			return { stt: index + 1, ...object };
+			return object;
 		}, {})
 	);
 	return mappedExcelData;

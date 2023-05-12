@@ -1,28 +1,46 @@
+import { Fragment, useEffect, useMemo, useState } from "react";
 import Button from "@/Core/components/common/Button";
 import PopConfirm from "@/Core/components/common/Popup/PopConfirm";
-import SlideOver from "@/Core/components/common/SlideOver";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
 import {
 	InputColumnFilter,
 	SelectColumnFilter,
 } from "@/Core/components/common/Table/ReactTableFilters";
+import LoadingSpinner from '@/Core/components/common/Loading/LoadingSpinner';
 import { ArrowDownIcon, ArrowUpIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
-import { useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
-
-const Box = tw.div`flex flex-col gap-6`;
-const ButtonList = tw.div`flex items-center gap-2`;
+import { useDeleteCompanyMutation, useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
+import { useGetAllSemestersQuery } from "@/App/providers/apis/semesterApi";
+import { useSelector } from "react-redux";
 
 const CompanyListPage = () => {
+
+	const { data: company, refetch } = useGetAllCompanyQuery({ limit: 1000 }, { refetchOnMountOrArgChange: true });
+
+	const campus = useSelector((state) => state.campus)
+
+	const { data: semester } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
+
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const [tableData, setTableData] = useState([]);
-	const { data } = useGetAllCompanyQuery();
-	console.log(data)
+
+	const [handleDeleteCompany, { isLoading }] = useDeleteCompanyMutation()
+
 	useEffect(() => {
-		setTableData(data?.list);
-	}, [data]);
+		setTableData(company?.list);
+	}, [company]);
+
+	const onDeleteSubmit = async (id) => {
+		const result = await handleDeleteCompany({ id })
+		if (result?.data?.statusCode) {
+			toast.error(result.data.message)
+			return;
+		}
+		refetch()
+		toast.success("Đã xóa doanh nghiệp!")
+	}
 
 	const columnsData = useMemo(
 		() => [
@@ -64,7 +82,7 @@ const CompanyListPage = () => {
 			},
 			{
 				Header: "Ngành",
-				accessor: "majors",
+				accessor: "majors.name",
 				Filter: InputColumnFilter,
 				filterable: true,
 				isSort: true,
@@ -100,24 +118,25 @@ const CompanyListPage = () => {
 			},
 			{
 				Header: "Thao tác",
+				accessor: '_id',
 				canFilter: false,
 				canSort: false,
 				filterable: false,
 				isSort: false,
-				Cell: (
+				Cell: ({ value }) => (
 					<ButtonList>
 						<Button type="button" size="xs" variant="secondary">
-							Chỉnh sửa
+							<Link to={`/cap-nhat-cong-ty/${value}`}>Chỉnh sửa</Link>
 						</Button>
 						<PopConfirm
 							okText="Ok"
 							cancelText="Cancel"
-							title={"Xóa sinh viên"}
-							description={"Bạn muốn xóa sinh viên này ?"}
+							title={"Xóa công ty"}
+							description={"Bạn muốn xóa công ty này ?"}
 							// onCancel={() => toast.info("Cancelled")}
-							onConfirm={() => toast.info("Removed")}>
+							onConfirm={() => onDeleteSubmit(value)}>
 							<Button size="xs" variant="error">
-								Xóa
+								{isLoading ? <LoadingSpinner /> : "Xóa"}
 							</Button>
 						</PopConfirm>
 					</ButtonList>
@@ -131,42 +150,59 @@ const CompanyListPage = () => {
 		<Fragment>
 			<Box>
 				<ButtonList>
-					<Button
-						type="button"
-						variant="primary"
-						size="sm"
-						onClick={() => setSlideOverVisibility(!slideOverVisibility)}>
-						<PlusIcon className="h-3 w-3 text-[inherit]" /> Thêm mới doanh nghiệp
-					</Button>
+					<Container>
+						<Button
+							type="button"
+							variant="primary"
+							size="sm"
+							onClick={() => setSlideOverVisibility(!slideOverVisibility)}>
+							<PlusIcon className="h-3 w-3 text-[inherit]" /> <Link to={'/them-moi-cong-ty'}>Thêm mới doanh nghiệp</Link>
+						</Button>
 
-					<Button as="label" size="sm" htmlFor="file-input">
-						<ArrowUpIcon className="h-3 w-3 text-[inherit]" /> Import file Excel
-						<input
-							type="file"
-							id="file-input"
-							className="hidden"
-							onChange={(e) => handleGetFile(e.target.files[0])}
-						/>
-					</Button>
+						<Button as="label" size="sm" htmlFor="file-input">
+							<ArrowUpIcon className="h-3 w-3 text-[inherit]" /> Import file Excel
+							<input
+								type="file"
+								id="file-input"
+								className="hidden"
+								onChange={(e) => handleGetFile(e.target.files[0])}
+							/>
+						</Button>
 
-					<Button type="button" variant="outline" size="sm">
-						<ArrowDownIcon className="h-3 w-3 text-[inherit]" />
-						Export file Excel
-					</Button>
+						<Button type="button" variant="outline" size="sm">
+							<ArrowDownIcon className="h-3 w-3 text-[inherit]" />
+							Export file Excel
+						</Button>
+					</Container>
+					<Container>
+						<Select onChange={(e) => e.target.value === "all" ? setTableData(company?.list) : setTableData(company?.list.filter(item => item.smester_id === e.target.value))}>
+							<Option value="all">All</Option>
+							{Array.isArray(semester?.listSemesters) && semester?.listSemesters.map((item, index) => (
+								<Option value={item._id} key={index}>{item.name}</Option>
+							))}
+						</Select>
+					</Container>
+
 				</ButtonList>
 
-				<ReactTable
-					columns={columnsData}
-					data={tableData}
-					noDataComponent={
-						<tr>
-							<td>Empty</td>
-						</tr>
-					}
-				/>
+				{tableData ? (
+					<ReactTable
+						columns={columnsData}
+						data={tableData}
+						noDataComponent={<tr><td>Empty</td></tr>}
+					/>
+				) : (
+					<LoadingSpinner />
+				)}
 			</Box>
 		</Fragment>
 	);
 };
 
 export default CompanyListPage;
+
+const Box = tw.div`flex flex-col gap-6`;
+const ButtonList = tw.div`flex justify-between`;
+const Container = tw.div`flex items-center gap-2`;
+const Select = tw.select`block w-full rounded-[4px] border-none duration-300  px-2 py-1.5 outline-none ring-1 ring-gray-300 focus:ring-primary focus:active:ring-primary min-w-[128px] m-0`;
+const Option = tw.option`leading-6`;

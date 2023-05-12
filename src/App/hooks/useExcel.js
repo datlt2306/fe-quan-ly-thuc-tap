@@ -47,8 +47,9 @@ export const useImportFromExcel = () => {
  * @param {Array} data
  * @returns Excel file
  */
-export const useExportToExcel = ({ fileName, data }) => {
-	const handleExport = () => {
+export const useExportToExcel = () => {
+	const [error, setError] = useState(null);
+	const handleExport = ({ fileName, data }) => {
 		try {
 			/* convert state to workbook */
 			data = data.map((row) => row.map((cellValue) => cellValue.toString()));
@@ -58,8 +59,8 @@ export const useExportToExcel = ({ fileName, data }) => {
 			/* generate XLSX file and send to client */
 			return XLSX.writeFile(workbook, fileName + AllowedFileExt.XLSX);
 		} catch (error) {
-			console.log(error.message);
+			setError(error.message);
 		}
 	};
-	return handleExport;
+	return { handleExport, error };
 };

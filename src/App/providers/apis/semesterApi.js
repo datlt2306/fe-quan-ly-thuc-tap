@@ -6,11 +6,11 @@ const semesterApi = createApi({
 	tagTypes: ["Semester"],
 	baseQuery: axiosBaseQuery(),
 	endpoints: (build) => ({
-		getDefaultSemester: build.query({
-			query: (params) => ({ url: "/semester", method: "GET", params }),
+		getAllSemesters: build.query({
+			query: (params) => ({ url: "/smester", method: "GET", params }),
 		}),
 	}),
 });
-export const { useGetDefaultSemesterQuery } = semesterApi;
+export const { useGetAllSemestersQuery } = semesterApi;
 
 export default semesterApi;

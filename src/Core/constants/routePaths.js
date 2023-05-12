@@ -32,6 +32,7 @@ const ManagerPaths = {
 const StaffPaths = {
 	COMPANY_LIST: "/danh-sach-cong-ty",
 	COMPANY_ADD: "/them-moi-cong-ty",
+	COMPANY_UPDATE: "/cap-nhat-cong-ty/:id",
 	STUDENT_LIST: "/danh-sach-dang-ky",
 	REVIEWS: "/review-cv",
 	SEMESTER: "/ky-hoc",

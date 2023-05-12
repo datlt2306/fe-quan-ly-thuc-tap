@@ -6,6 +6,7 @@ const RegistrationPage = lazy(() => import("../pages/StudentPages/RegistrationPa
 const StudentListPage = lazy(() => import("../pages/StaffPages/StudentListPage"));
 const CompanyListPage = lazy(() => import("../pages/StaffPages/CompanyListPage"));
 const CompanyAddPage = lazy(() => import("../pages/StaffPages/CompanyAddPage"));
+const CompanyUpdatePage = lazy(() => import("../pages/StaffPages/CompanyUpdatePage"));
 const SemesterPage = lazy(() => import("../pages/StaffPages/SemesterPage"));
 const StudentSuportPage = lazy(() => import("../pages/StaffPages/StudentSuportPage"));
 
@@ -33,6 +34,14 @@ const staffRoutes = [
 				<CompanyAddPage />
 			</StaffPrivateLayout>
 		),
+	},
+	{
+		path: StaffPaths.COMPANY_UPDATE,
+		element: (
+			<StaffPrivateLayout>
+				<CompanyUpdatePage />
+			</StaffPrivateLayout>
+		)
 	},
 	{
 		path: StaffPaths.REGISTRATION_TIME,
