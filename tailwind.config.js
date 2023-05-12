@@ -19,6 +19,8 @@ export default {
 			warning: "#eab308",
 			"warning-active": "#d97706",
 			disabled: "#9ca3af",
+			"base-content-active": "#1f2937",
+			"base-content": "#4b5563",
 			...colors,
 		},
 		screens: {
@@ -56,9 +58,5 @@ export default {
 			},
 		},
 	},
-	plugins: [
-		require("prettier-plugin-tailwindcss"),
-		require("@tailwindcss/forms"),
-		require("tailwind-scrollbar")({ nocompatible: true }),
-	],
+	plugins: [require("prettier-plugin-tailwindcss"), require("@tailwindcss/forms"), require("tailwind-scrollbar")({ nocompatible: true })],
 };
