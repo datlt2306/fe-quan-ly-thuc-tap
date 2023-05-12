@@ -24,7 +24,6 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
 				value={value || ""}
 				onChange={(e) => {
 					setValue(e.target.value);
-					// setGlobalFilter(e.target.value);
 					onChange(e.target.value);
 				}}
 			/>
@@ -68,7 +67,11 @@ const InputColumnFilter = ({ column: { filterable, filterValue, preFilteredRows,
 	);
 };
 
-const SelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows, id } }) => {
+const SelectColumnFilter = ({
+	column: { filterValue, setFilter, preFilteredRows, id },
+	customOptions,
+}) => {
+
 	const options = useMemo(() => {
 		const options = new Set();
 		preFilteredRows.forEach((row) => {
@@ -103,7 +106,7 @@ const SelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows,
 								<Option value="">All</Option>
 								{options.map((option, i) => (
 									<Option key={i} value={option}>
-										{option}
+										{customOptions[option] || option}
 									</Option>
 								))}
 							</Select>
