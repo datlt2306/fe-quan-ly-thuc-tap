@@ -16,7 +16,7 @@ export const useImportFromExcel = () => {
 	/**
 	 *
 	 * @param {File} file
-	 * @param {(data: Array<{[key:string]: any}>) => void} callback
+	 * @param {(data: Array<{[key:string]: any}>) => Promise<any>} callback
 	 */
 	const handleImportFile = (file, callback) => {
 		try {
@@ -47,19 +47,35 @@ export const useImportFromExcel = () => {
 };
 
 export const useExportToExcel = () => {
-	const [error, setError] = useState(null);
+	const [exportState, setExportState] = useState({
+		isSuccess: false,
+		isError: false,
+	});
 
 	const handleExportFile = ({ fileName, data }) => {
 		try {
+			if (!data.length) {
+				setExportState({
+					isError: true,
+					isSuccess: false,
+				});
+				return;
+			}
 			const worksheet = XLSX.utils.aoa_to_sheet(data);
 			const workbook = XLSX.utils.book_new();
 			XLSX.utils.book_append_sheet(workbook, worksheet, "SheetJS");
 			/* Generate XLSX file and send to client */
+			setExportState({
+				isSuccess: true,
+				isError: false,
+			});
 			return XLSX.writeFile(workbook, fileName + AllowedFileExt.XLSX);
 		} catch (error) {
-			console.log(error);
-			setError(error.message);
+			setExportState({
+				isSuccess: false,
+				isError: true,
+			});
 		}
 	};
-	return { handleExportFile, error };
+	return { handleExportFile, exportState };
 };
