@@ -3,18 +3,13 @@ import {
 	ArchiveBoxXMarkIcon,
 	ArrowDownIcon,
 	ArrowUpIcon,
+	ArrowsUpDownIcon,
 	ChevronDoubleLeftIcon,
 	ChevronDoubleRightIcon,
+	XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { memo, useEffect, useMemo, useReducer } from "react";
-import {
-	useFilters,
-	useGlobalFilter,
-	usePagination,
-	useResizeColumns,
-	useSortBy,
-	useTable,
-} from "react-table";
+import { useFilters, useGlobalFilter, usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
 import tw from "twin.macro";
 import Button from "../Button";
 import ButtonGroup from "../Button/ButtonGroup";
@@ -38,14 +33,7 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
-const ReactTable = ({
-	columns,
-	data,
-	manualPagination,
-	onPageChange: handlePageChange,
-	onPageSizeChange: handlePageSizeChange,
-	loading,
-}) => {
+const ReactTable = ({ columns, data, manualPagination, onPageChange: handlePageChange, onPageSizeChange: handlePageSizeChange, loading }) => {
 	const isEmptyData = useMemo(() => Array.isArray(data) && data.length > 0, [data]);
 	const filterTypes = useMemo(
 		() => ({
@@ -53,9 +41,7 @@ const ReactTable = ({
 			text: (rows, id, filterValue) => {
 				return rows.filter((row) => {
 					const rowValue = row.values[id];
-					return rowValue !== undefined
-						? String(rowValue).toLowerCase().startsWith(String(filterValue).toLowerCase())
-						: true;
+					return rowValue !== undefined ? String(rowValue).toLowerCase().startsWith(String(filterValue).toLowerCase()) : true;
 				});
 			},
 		}),
@@ -81,10 +67,10 @@ const ReactTable = ({
 		setPageSize,
 		// preFilteredRows,
 		// visibleColumns,
-
+		setAllFilters,
 		preGlobalFilteredRows,
 		setGlobalFilter,
-		state: { pageIndex, pageSize, globalFilter },
+		state: { pageIndex, pageSize, globalFilter, filters },
 	} = useTable(
 		{
 			columns,
@@ -99,16 +85,18 @@ const ReactTable = ({
 		usePagination
 		// useResizeColumns
 	);
+	console.log(filters);
 
 	return (
 		<Wrapper>
 			{/* Global search  */}
 			<Header>
-				<GlobalFilter
-					preGlobalFilteredRows={preGlobalFilteredRows}
-					globalFilter={globalFilter}
-					setGlobalFilter={setGlobalFilter}
-				/>
+				<GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+				{!!filters.length && (
+					<Button size="sm" onClick={() => setAllFilters([])}>
+						<XMarkIcon className="h-3.5 w-3.5" /> Xóa lọc
+					</Button>
+				)}
 			</Header>
 
 			{/* Table data */}
@@ -128,12 +116,16 @@ const ReactTable = ({
 															onClick={() => column.toggleSortBy()}
 															{...column.getHeaderProps()}
 															size="xs"
-															variant="ghost"
+															variant={column.isSorted ? "primary" : "ghost"}
 															shape="square">
-															{column.isSortedDesc ? (
-																<ArrowDownIcon className="block h-3.5 w-3.5" />
+															{column.isSorted ? (
+																<ArrowDownIcon
+																	className={classNames("block h-3.5 w-3.5", {
+																		"rotate-180": column.isSortedDesc,
+																	})}
+																/>
 															) : (
-																<ArrowUpIcon className="block h-3.5 w-3.5" />
+																<ArrowsUpDownIcon className="block h-3.5 w-3.5" />
 															)}
 														</Button>
 													)}
@@ -154,11 +146,7 @@ const ReactTable = ({
 								<Table.Row {...row.getRowProps()}>
 									{row.cells.map((cell, index) => (
 										<Table.Cell key={index} {...cell.getCellProps()}>
-											{loading ? (
-												<Skeleton />
-											) : (
-												cell.render("Cell", { className: "text-blue-500" })
-											)}
+											{loading ? <Skeleton /> : cell.render("Cell", { className: "text-blue-500" })}
 										</Table.Cell>
 									))}
 								</Table.Row>
@@ -167,9 +155,7 @@ const ReactTable = ({
 
 						{!data.length && (
 							<Table.Row>
-								<Table.Cell className="text-center text-xl text-disabled">
-									Chưa có dữ liệu
-								</Table.Cell>
+								<Table.Cell className="text-center text-xl text-disabled">Chưa có dữ liệu</Table.Cell>
 							</Table.Row>
 						)}
 					</Table.Body>
@@ -220,7 +206,7 @@ const ReactTable = ({
 
 				<Seperator />
 
-				<span className="font-medium text-gray-800">
+				<span className="font-medium text-base-content-active">
 					Trang {pageIndex + 1}/{pageOptions.length}
 				</span>
 
@@ -233,11 +219,12 @@ const ReactTable = ({
 					<Select
 						id="page-size-select"
 						className="w-full max-w-[128px]"
+						defaultValue={pageSize}
 						onChange={(e) => {
 							setPageSize(e.target.value);
 						}}>
 						{[10, 20, 30, 50, 100].map((page_size, index) => (
-							<Option value={page_size} key={index} selected={page_size === pageSize}>
+							<Option value={page_size} key={index}>
 								{page_size} hàng
 							</Option>
 						))}

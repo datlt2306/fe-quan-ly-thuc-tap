@@ -33,10 +33,7 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
 };
 
 // Default filter component
-const InputColumnFilter = ({
-	column: { filterable, filterValue, preFilteredRows, setFilter },
-	customOptions,
-}) => {
+const InputColumnFilter = ({ column: { filterable, filterValue, preFilteredRows, setFilter } }) => {
 	const count = preFilteredRows.length;
 	return (
 		<Popover className="relative inline-block text-left" as="div">
@@ -60,7 +57,7 @@ const InputColumnFilter = ({
 								value={filterValue || ""}
 								type="search"
 								onChange={(e) => setFilter(e.target.value)}
-								className="w-full"
+								className="w-full text-xs text-base-content"
 								placeholder={`Tìm trong ${count} hàng...`}
 							/>
 						</Popover.Panel>
@@ -71,10 +68,7 @@ const InputColumnFilter = ({
 	);
 };
 
-const SelectColumnFilter = ({
-	column: { filterValue, setFilter, preFilteredRows, id },
-	customOptions,
-}) => {
+const SelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows, id }, customOptions }) => {
 	const options = useMemo(() => {
 		const options = new Set();
 		preFilteredRows.forEach((row) => {
@@ -109,7 +103,7 @@ const SelectColumnFilter = ({
 								<Option value="">All</Option>
 								{options.map((option, i) => (
 									<Option key={i} value={option}>
-										{customOptions[option] || option}
+										{customOptions ? customOptions[option] : option}
 									</Option>
 								))}
 							</Select>
