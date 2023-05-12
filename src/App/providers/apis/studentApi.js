@@ -6,16 +6,19 @@ const studentApi = createApi({
 	baseQuery: axiosBaseQuery(),
 	tagTypes: ["Student"],
 	endpoints: (build) => ({
-		getStudent: build.query({
-			query: (params) => ({ url: "/student", method: "GET", params }),
+		getStudents: build.query({
+			query: (params) => {
+				console.log(params);
+				return { url: "/student", method: "GET", params };
+			},
 			providesTags: ["Student"],
 		}),
-		importStudent: build.mutation({
+		addStudents: build.mutation({
 			query: (payload) => ({ url: "/student", method: "POST", data: payload }),
 			invalidatesTags: ["Student"],
 		}),
 	}),
 });
 
-export const { useGetStudentQuery, useImportStudentMutation } = studentApi;
+export const { useGetStudentsQuery, useAddStudentsMutation } = studentApi;
 export default studentApi;

@@ -15,9 +15,20 @@ export const StudentStatusEnum = {
 	10: "Chưa đăng ký",
 };
 
-export const StudentStatusGroup = {
+/**
+ * @enum
+ */
+export const StudentStatusGroupEnum = {
 	warning: [0, 1, 5, 7, 8],
 	error: [3, 10],
 	info: [2, 4, 6],
 	success: [9],
+};
+
+/**
+ * @enum
+ */
+export const StudentSchoolingStatus = {
+	FAILED_STATE: "Học lại",
+	STUDYING_STATE: "Học đi",
 };

@@ -1,11 +1,21 @@
+import { StudentSchoolingStatus } from "@/Core/constants/studentStatus";
 import { object, string, array } from "yup";
 
 export const newStudentSchema = array(
 	object({
-		name: string().required(),
-		mssv: string().required(),
-		course: string().required(),
-		phoneNumber: string().required(),
-		email: string().email("Email sinh viên không hợp lệ").required("Email là field bắt buộc"),
+		mssv: string().required("Vui lòng nhập đầy đủ mã sinh viên"),
+		name: string().required("Vui lòng nhập đầy đủ tên sinh viên"),
+		course: string().required("Vui lòng nhập đầy đủ khóa nhập học của sinh viên"),
+		majorCode: string().required("Vui lòng nhập đầy đủ mã ngành của sinh viên"),
+		email: string()
+			.email()
+			.matches(/^[\w-\.]+@fpt\.edu\.vn$/, { message: "Email sinh viên không đúng định dạng" })
+			.required("Vui lòng nhập đầy đủ email của sinh viên"),
+		phoneNumber: string()
+			.matches(/^\d{10}$/, { message: "Số điện thoại của sinh viên chưa đúng định dạng" })
+			.required(),
+		statusStudent: string().oneOf(Object.values(StudentSchoolingStatus), "Trạng thái sinh viên không hợp lệ").required(),
+		smester_id: string().required("Vui lòng nhập đầy đủ kỳ học hiện tại của sinh viên"),
+		note: string().optional(),
 	})
 );
