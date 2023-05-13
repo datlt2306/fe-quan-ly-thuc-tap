@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState,useRef } from "react";
 import Button from "@/Core/components/common/Button";
 import PopConfirm from "@/Core/components/common/Popup/PopConfirm";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
@@ -6,21 +6,27 @@ import {
 	InputColumnFilter,
 	SelectColumnFilter,
 } from "@/Core/components/common/Table/ReactTableFilters";
-import LoadingSpinner from '@/Core/components/common/Loading/LoadingSpinner';
+import {LoadingSpinner} from '@/Core/components/common/Loading/LoadingSpinner';
 import { ArrowDownIcon, ArrowUpIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
-import { useDeleteCompanyMutation, useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
+import { useAddCompanyMutation, useDeleteCompanyMutation, useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
 import { useGetAllSemestersQuery } from "@/App/providers/apis/semesterApi";
 import { useSelector } from "react-redux";
+import { useExportToExcel, useImportFromExcel } from "@/App/hooks/useExcel";
+import { columnAccessors } from "./constants";
+import { companyImportExcelSchema } from "@/App/schemas/companySchema";
+import getFileExtension from "@/Core/utils/getFileExtension";
+import { convertToExcelData } from "@/Core/utils/excelDataHandler";
 
 const CompanyListPage = () => {
+
 	// get list company, semester, campus
 	const { data: company, refetch } = useGetAllCompanyQuery({ limit: 1000 }, { refetchOnMountOrArgChange: true });
 	const campus = useSelector((state) => state.campus)
 	const { data: semester } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
-
+	console.log(semester)
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 
 	// set table data
@@ -40,6 +46,89 @@ const CompanyListPage = () => {
 		refetch()
 		toast.success("Đã xóa doanh nghiệp!")
 	}
+
+
+	// handle export, import
+	const [handleImportFile] = useImportFromExcel();
+	const {handleExportFile} = useExportToExcel();
+	const [handleAddCompany] = useAddCompanyMutation();
+	const fileInputRef = useRef(null);
+
+	// Callback function will be executed after import file excel
+	const importExcelDataCallback = (excelData) => {
+		if (!excelData.length) {
+			toast.warn("Vui lòng nhập thông tin đầy đủ !");
+		}
+		if (excelData.length) {
+			const newCompanyList = excelData.map((obj) => ({
+				name: obj[columnAccessors.name],
+				code_request: obj[columnAccessors.code_request],
+				internshipPosition: obj[columnAccessors.internshipPosition],
+				majors: obj[columnAccessors.majors],
+				amount: obj[columnAccessors.amount],
+				address: obj[columnAccessors.address],
+				request: obj[columnAccessors.request],
+				description: obj[columnAccessors.description],
+				benefish: obj[columnAccessors.benefish],
+			}));
+
+			companyImportExcelSchema
+				.validate(newCompanyList)
+				.then((data) => {
+					console.log(data)
+					const response = handleAddCompany(data);
+					toast.promise(response, {
+						success: "Import sinh viên thành công !",
+						error: "Import dữ liệu thất bại",
+						pending: "Đang tải lên dữ liệu ...",
+					});
+					fileInputRef.current.value = null;
+				})
+				.catch((error) => {
+					toast.error(error?.message);
+				});
+		}
+	};
+	
+	// // Get file from device and execute callback to add new companies	
+	const handleImportCompanies = (file) => {
+		const fileExtension = getFileExtension(file);
+		if (fileExtension !== AllowedFileExt.XLSX) {
+			toast.error("File import không hợp lệ");
+			fileInputRef.current.value = null;
+			return;
+		}
+		handleImportFile(file, importExcelDataCallback);
+		fileInputRef.current.value = null; // reset input file after imported
+	};
+	
+	console.log(tableData)
+
+	const handleExportDataToExcel = () => {
+		if (!tableData.length) {
+			toast.warn("Chưa có dữ liệu để xuất file !");
+			return;
+		}
+		const exportedData = convertToExcelData(
+			tableData.map((company, index) => {
+				return {
+					...company,
+					majors: company.majors.name,
+					campus_id: company.campus_id.name,
+					smester_id: semester.listSemesters.find(item => item._id === company.smester_id).name,
+					index: index + 1
+				};
+			}),
+			columnAccessors
+		);
+
+		if (!exportedData) {
+			toast.error("Export dữ liệu thất bại !");
+			return;
+		}
+
+		handleExportFile({ data: exportedData, fileName: "Danh sách doanh nghiệp" });
+	};
 
 	// Define columns of table
 	const columnsData = useMemo(
@@ -165,11 +254,11 @@ const CompanyListPage = () => {
 								type="file"
 								id="file-input"
 								className="hidden"
-								onChange={(e) => handleGetFile(e.target.files[0])}
+								onChange={(e) => handleImportCompanies(e.target.files[0])}
 							/>
 						</Button>
 
-						<Button type="button" variant="outline" size="sm">
+						<Button type="button" variant="outline" size="sm" onClick={handleExportDataToExcel}>
 							<ArrowDownIcon className="h-3 w-3 text-[inherit]" />
 							Export file Excel
 						</Button>

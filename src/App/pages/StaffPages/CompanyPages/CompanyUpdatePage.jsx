@@ -5,10 +5,10 @@ import InputFieldControl from '@/Core/components/common/FormControl/InputFieldCo
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import tw from "twin.macro";
 import Button from '@/Core/components/common/Button';
-import { businessSchema } from '@/App/schemas/businessSchema';
+import { companySchema } from '@/App/schemas/companySchema';
 import { useGetOneCompanyQuery, useUpdateCompanyMutation } from '@/App/providers/apis/businessApi';
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
-import LoadingSpinner from '@/Core/components/common/Loading/LoadingSpinner';
+import {LoadingSpinner} from '@/Core/components/common/Loading/LoadingSpinner';
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -26,7 +26,7 @@ const UpdateBusinessForm = () => {
 
 
     const { handleSubmit, control, reset } = useForm({
-        resolver: yupResolver(businessSchema),
+        resolver: yupResolver(companySchema),
         defaultValues: company
 
     });

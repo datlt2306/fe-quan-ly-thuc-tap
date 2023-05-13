@@ -4,7 +4,7 @@ import tw from "twin.macro";
 
 export const Spinner = tw.div`pointer-events-none animate-spin rounded-full border-[3px] border-gray-100 `;
 
-const LoadingSpinner = ({ size, variant }) => {
+export const LoadingSpinner = ({ size, variant }) => {
 	const loadingStyles = useMemo(
 		() =>
 			classNames({
@@ -24,5 +24,3 @@ const LoadingSpinner = ({ size, variant }) => {
 
 	return <div className={loadingStyles} />;
 };
-
-export default LoadingSpinner
