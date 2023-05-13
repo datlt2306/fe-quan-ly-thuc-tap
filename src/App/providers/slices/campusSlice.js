@@ -3,13 +3,21 @@ import campusApi from "../apis/campusApi";
 
 const campusSlice = createSlice({
 	name: "campus",
-	reducers: {},
-	initialState: [],
+	initialState: {
+		currentCampus: null,
+		campusList: [],
+	},
+	reducers: {
+		getCurrentCampus: (state, { payload }) => {
+			state.currentCampus = payload;
+		},
+	},
 	extraReducers: (build) => {
 		build.addMatcher(campusApi.endpoints.getAllCampus.matchFulfilled, (state, { payload }) => {
-			return payload;
+			state.campusList = payload;
 		});
 	},
 });
 
+export const { getCurrentCampus } = campusSlice.actions;
 export default campusSlice;

@@ -12,6 +12,8 @@ import tw from "twin.macro";
 import BeeImage from "/bee.png";
 import google from "/google.svg";
 import Logo from "/logo.png";
+import { useDispatch } from "react-redux";
+import { getCurrentCampus } from "@/App/providers/slices/campusSlice";
 
 const Screen = tw.div`relative flex h-screen w-full items-center justify-center lg:bg-gray-50`;
 const Box = tw.div`sm:max-w-full md:max-w-full lg:(max-w-xl w-full p-8 shadow-2xl ) mx-auto bg-white rounded-lg`;
@@ -24,6 +26,7 @@ export default function SigninPage() {
 	const [loginInformation, setLoginInformation] = useState(null);
 	const { data } = useGetAllCampusQuery();
 	const [signinMutation, { isLoading }] = useSigninMutation();
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [accessToken, setAccessToken] = useLocalStorage("access_token", null);
 
@@ -57,6 +60,11 @@ export default function SigninPage() {
 				toast.error("Đăng nhập thất bại !");
 				return;
 			}
+			const currentCampus =
+				response.data?.manager?.campus_id || response.data?.student.campus_id || null;
+			dispatch(
+				getCurrentCampus(data?.listCumpus.find((campus) => campus._id === currentCampus))
+			);
 			setAccessToken(`Bearer ${response?.data?.accessToken}`);
 			toast.success("Đăng nhập thành công !");
 			navigate("/");

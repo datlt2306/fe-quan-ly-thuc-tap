@@ -14,9 +14,9 @@ export default function axiosBaseQuery() {
 		} catch (error) {
 			if (error.response) {
 				console.log({
-					data: error.response.data,
-					status: error.response.status,
-					headers: error.response.headers,
+					data: error.response?.data,
+					status: error.response?.status,
+					headers: error.response?.headers,
 				});
 			} else if (error.request) {
 				console.log(error.request);

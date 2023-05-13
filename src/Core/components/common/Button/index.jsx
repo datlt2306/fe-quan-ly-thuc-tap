@@ -31,6 +31,7 @@ ref
 					"btn-secondary": variant === "secondary",
 					"btn-outline": variant === "outline",
 					"btn-ghost": variant === "ghost",
+					"btn-info": variant === "info",
 					"btn-success": variant === "success",
 					"btn-error": variant === "error",
 					"btn-disabled": variant === "disabled",
