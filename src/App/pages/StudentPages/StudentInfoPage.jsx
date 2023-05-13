@@ -11,7 +11,6 @@ import ReactTable from "@/Core/components/common/Table/ReactTable";
 import ModalLoading from "@/Core/components/common/Loading/ModalLoading";
 import tw from "twin.macro";
 import { supportOptionsEnum } from "@/Core/constants/supportOptionsEnum";
-import axiosClient from "@/Core/configs/axiosConfig";
 const ViewReport = lazy(() => import("./Modal/ViewReport"));
 const ViewForm = lazy(() => import("./Modal/ViewForm"));
 const ViewCv = lazy(() => import("./Modal/ViewCv"));

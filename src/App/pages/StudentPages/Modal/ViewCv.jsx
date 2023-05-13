@@ -8,6 +8,8 @@ import { useRequestOfStudentMutation } from "@/App/providers/apis/requestStudent
 import { toast } from "react-toastify";
 import { VerticalList } from "../StudentInfoPage";
 import TextAreaFieldControl from "@/Core/components/common/FormControl/TextAreaFieldControl";
+import tw from "twin.macro";
+const ItemValue=tw.li`font-medium`
 const ViewCv = ({ data, supportOptions, setOpenState }) => {
 	console.log(data)
 	const [open, setOpen] = useState(false);
@@ -51,13 +53,13 @@ const ViewCv = ({ data, supportOptions, setOpenState }) => {
 					{data?.support === 1 ? 	(
 						<p className="pr-1">CV:</p>
 					): data?.support === 0 ? (
-						<>
+						<div className="flex flex-col gap-3">
 							<li>Địa chỉ thực tập:</li>
 							<li>Mã số thuế: </li>
 							<li>Chức vụ người tiếp nhận:</li>
 							<li>SĐT doanh nghiệp:</li>
 							<li>Email người tiếp nhận:</li>
-						</>
+						</div>
 					) : null}
 				</>
 			),
@@ -65,12 +67,12 @@ const ViewCv = ({ data, supportOptions, setOpenState }) => {
 				<>
 					{data?.support === 0 && (
 						<>
-							<li className="font-medium">{data?.nameCompany}</li>
-							<li className="font-medium">{data?.addressCompany}</li>
-							<li className="font-medium">{data?.taxCode}</li>
-							<li className="font-medium">{data?.position}</li>
-							<li className="font-medium">{data?.phoneNumberCompany}</li>
-							<li className="font-medium">{data?.emailEnterprise}</li>
+							<ItemValue>{data?.nameCompany}</ItemValue>
+							<ItemValue>{data?.addressCompany}</ItemValue>
+							<ItemValue>{data?.taxCode}</ItemValue>
+							<ItemValue>{data?.position}</ItemValue>
+							<ItemValue>{data?.phoneNumberCompany}</ItemValue>
+							<ItemValue>{data?.emailEnterprise}</ItemValue>
 						</>
 					)}
 					{data?.support === 1 && (
