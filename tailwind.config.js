@@ -19,6 +19,8 @@ export default {
 			warning: "#eab308",
 			"warning-active": "#d97706",
 			disabled: "#9ca3af",
+			"base-content-active": "#1f2937",
+			"base-content": "#4b5563",
 			...colors,
 		},
 		screens: {
@@ -36,15 +38,25 @@ export default {
 			},
 			xl: { min: "1921px" },
 		},
-		extends: {
+		extend: {
 			fontFamily: {
 				sans: ["Inter var", ...defaultTheme.fontFamily.sans],
 			},
+			animation: {
+				slide: "shimmer 1s ease infinite",
+				// spin: "spin 1.2s ease infinite",
+			},
+			keyframes: {
+				shimmer: {
+					"0%": {
+						transform: "translateX(0%)",
+					},
+					"100%": {
+						transform: "translateX(100%)",
+					},
+				},
+			},
 		},
 	},
-	plugins: [
-		require("prettier-plugin-tailwindcss"),
-		require("@tailwindcss/forms"),
-		require("tailwind-scrollbar")({ nocompatible: true }),
-	],
+	plugins: [require("prettier-plugin-tailwindcss"), require("@tailwindcss/forms"), require("tailwind-scrollbar")({ nocompatible: true })],
 };
