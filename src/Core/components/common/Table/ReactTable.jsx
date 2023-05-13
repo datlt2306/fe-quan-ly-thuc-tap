@@ -85,7 +85,7 @@ const ReactTable = ({ columns, data, noDataComponent }) => {
 			columns,
 			data,
 			defaultColumn,
-			initialState: { pageSize: 6 },
+			// initialState: { pageSize: 10 },
 			filterTypes,
 		},
 		useFilters,
