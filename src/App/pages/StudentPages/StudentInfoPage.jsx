@@ -48,7 +48,6 @@ const StudentInfoPage = () => {
 	const [openState, setOpenState] = useState(false);
 	const [modalContent, setModalContent] = useState(null);
 	const [title, setTitle] = useState("");
-	const [data, setData] = useState([]);
 	const getIntershipStatusStyle = (value) => {
 		let status;
 		Object.keys(StudentStatusGroupEnum).forEach((groupKey) => {
@@ -58,26 +57,16 @@ const StudentInfoPage = () => {
 		});
 		return status;
 	};
-	useEffect(() => {
-		const getStudentById = async () => {
-			try {
-				const studentData = await axiosClient.get(`/student/${user?.id}`);
-				// console.log('student',studentData);
-				setData(studentData);
-			} catch (error) {
-				console.log(error);
-			}
-		};
-		getStudentById();
-	}, []);
-	// const { data, isFetching } = useGetStudentQuery(user.id);
+
+	const { data, isFetching } = useGetStudentQuery(user?.id);
 	const { data: business } = useGetAllCompanyQuery();
+
 	const { data: timeForm } = useGetSetTimeQuery({
 		typeNumber: 1,
 		semester_id: user?.smester_id,
 		campus_id: user?.campus_id,
 	});
-	console.log(business);
+
 	const columnsData = useMemo(
 		() => [
 			{
@@ -136,15 +125,7 @@ const StudentInfoPage = () => {
 		},
 		{
 			label: "Trạng thái sinh viên :",
-			value: (
-				<>
-					{
-						<span className={`text-${getIntershipStatusStyle(data?.statusCheck)}`}>
-							{StudentStatusEnum[data?.statusCheck]}
-						</span>
-					}
-				</>
-			),
+			value: <>{<span className={`text-${getIntershipStatusStyle(data?.statusCheck)}`}>{StudentStatusEnum[data?.statusCheck]}</span>}</>,
 		},
 	];
 
@@ -152,9 +133,7 @@ const StudentInfoPage = () => {
 		{
 			condition: user?.CV,
 			label: "Form Đăng ký Thực Tập",
-			content: (
-				<ViewCv setOpenState={setOpenState} data={data} supportOptions={supportOptionsEnum} />
-			),
+			content: <ViewCv setOpenState={setOpenState} data={data} supportOptions={supportOptionsEnum} />,
 		},
 		{
 			condition: user?.form,
@@ -174,12 +153,14 @@ const StudentInfoPage = () => {
 				<LayoutInfoUser>
 					<VerticalList className="text-gray-500">
 						<Title>Thông Tin Đăng Ký</Title>
-						{dataRegisterInfomation.map((item) => (
-							<li key={item.label} className="flex gap-1 ">
-								{item.label}
-								<Text>{item.value}</Text>
-							</li>
-						))}
+						{isFetching && <div>...Đang tải dữ liệu</div>}
+						{!isFetching &&
+							dataRegisterInfomation.map((item) => (
+								<li key={item.label} className="flex gap-1 ">
+									{item.label}
+									<Text>{item.value}</Text>
+								</li>
+							))}
 					</VerticalList>
 				</LayoutInfoUser>
 
@@ -188,9 +169,7 @@ const StudentInfoPage = () => {
 					<WrapMenu>
 						<Menu>
 							{formSubmittedRoute.map((item) => (
-								<Menu.Item
-									key={item.label}
-									className="w-full  rounded-md p-3 text-start hover:bg-gray-100  hover:text-primary">
+								<Menu.Item key={item.label} className="w-full  rounded-md p-3 text-start hover:bg-gray-100  hover:text-primary">
 									<>
 										{item.condition && (
 											<Button
