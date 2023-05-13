@@ -4,9 +4,9 @@ import StaffPrivateLayout from "../layouts/PrivateLayout/StaffPrivateLayout";
 const ReviewPage = lazy(() => import("../pages/StaffPages/ReviewPage"));
 const RegistrationPage = lazy(() => import("../pages/StudentPages/RegistrationPage"));
 const StudentListPage = lazy(() => import("../pages/StaffPages/StudentListPage"));
-const CompanyListPage = lazy(() => import("../pages/StaffPages/CompanyListPage"));
-const CompanyAddPage = lazy(() => import("../pages/StaffPages/CompanyAddPage"));
-const CompanyUpdatePage = lazy(() => import("../pages/StaffPages/CompanyUpdatePage"));
+const CompanyListPage = lazy(() => import("../pages/StaffPages/CompanyPages/CompanyListPage"));
+const CompanyAddPage = lazy(() => import("../pages/StaffPages/CompanyPages/CompanyAddPage"));
+const CompanyUpdatePage = lazy(() => import("../pages/StaffPages/CompanyPages/CompanyUpdatePage"));
 const SemesterPage = lazy(() => import("../pages/StaffPages/SemesterPage"));
 const StudentSuportPage = lazy(() => import("../pages/StaffPages/StudentSuportPage"));
 

@@ -14,11 +14,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const UpdateBusinessForm = () => {
+    const navigate = useNavigate();
+
+    // get id and get default company
     const { id } = useParams();
     const { data: company } = useGetOneCompanyQuery({ id })
+
+    // get list campus and major
     const { campusList } = useSelector((state) => state.campus)
-    const navigate = useNavigate();
     const { data: major } = useGetAllMajorQuery();
+
+
     const { handleSubmit, control, reset } = useForm({
         resolver: yupResolver(businessSchema),
         defaultValues: company
@@ -29,6 +35,8 @@ const UpdateBusinessForm = () => {
             reset(company);
         }
     }, [company, reset]);
+
+    // handle update company
     const [handleUpdateCompany, { isLoading }] = useUpdateCompanyMutation()
     const onHandleUpdate = async (data) => {
         const result = await handleUpdateCompany({ data, id });

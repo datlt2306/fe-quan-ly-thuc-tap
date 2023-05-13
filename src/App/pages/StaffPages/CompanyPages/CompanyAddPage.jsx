@@ -12,10 +12,15 @@ import LoadingSpinner from '@/Core/components/common/Loading/LoadingSpinner';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
+
 const AddBusinessForm = () => {
-    const { campusList } = useSelector((state) => state.campus)
     const navigate = useNavigate();
+
+    // get list campus and major
+    const { campusList } = useSelector((state) => state.campus)
     const { data: major } = useGetAllMajorQuery();
+    
+    // handle add new company
     const { handleSubmit, control } = useForm({
         resolver: yupResolver(businessSchema)
     });

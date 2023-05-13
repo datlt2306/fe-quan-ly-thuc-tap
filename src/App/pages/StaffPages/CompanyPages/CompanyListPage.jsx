@@ -16,22 +16,21 @@ import { useGetAllSemestersQuery } from "@/App/providers/apis/semesterApi";
 import { useSelector } from "react-redux";
 
 const CompanyListPage = () => {
-
+	// get list company, semester, campus
 	const { data: company, refetch } = useGetAllCompanyQuery({ limit: 1000 }, { refetchOnMountOrArgChange: true });
-
 	const campus = useSelector((state) => state.campus)
-
 	const { data: semester } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
 
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
+
+	// set table data
 	const [tableData, setTableData] = useState([]);
-
-	const [handleDeleteCompany, { isLoading }] = useDeleteCompanyMutation()
-
 	useEffect(() => {
 		setTableData(company?.list);
 	}, [company]);
 
+	// hanle delete company
+	const [handleDeleteCompany, { isLoading }] = useDeleteCompanyMutation()
 	const onDeleteSubmit = async (id) => {
 		const result = await handleDeleteCompany({ id })
 		if (result?.data?.statusCode) {
@@ -42,6 +41,7 @@ const CompanyListPage = () => {
 		toast.success("Đã xóa doanh nghiệp!")
 	}
 
+	// Define columns of table
 	const columnsData = useMemo(
 		() => [
 			{
