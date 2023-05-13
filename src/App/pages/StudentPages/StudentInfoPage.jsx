@@ -4,7 +4,7 @@ import { Menu } from "@headlessui/react";
 import { Suspense, lazy } from "react";
 import { useGetStudentQuery } from "@/App/providers/apis/studentsApi";
 import { useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
-import { StudentStatusEnum, StudentStatusGroup } from "@/Core/constants/studentStatus";
+import { StudentStatusEnum, StudentStatusGroupEnum } from "@/Core/constants/studentStatus";
 import { useGetSetTimeQuery } from "@/App/providers/apis/configTimesApi";
 import Button from "@/Core/components/common/Button";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
@@ -15,7 +15,6 @@ import axiosClient from "@/Core/configs/axiosConfig";
 const ViewReport = lazy(() => import("./Modal/ViewReport"));
 const ViewForm = lazy(() => import("./Modal/ViewForm"));
 const ViewCv = lazy(() => import("./Modal/ViewCv"));
-
 const Modal = lazy(() => import("@/Core/components/common/Modal"));
 
 export const VerticalList = (props) => (
@@ -23,6 +22,25 @@ export const VerticalList = (props) => (
 		{props.children}
 	</ul>
 );
+const Title = tw.h1`mb-5  text-lg font-medium text-primary`;
+const Text = tw.p`font-medium`;
+const WrapMenu = tw.div`mt-8 flex flex-col  gap-3`;
+const RenderNote = ({ label, data }) => (
+	<>
+		<label tw="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{label}</label>
+		<textarea
+			id="message"
+			rows={4}
+			tw="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:(placeholder-gray-400 border-gray-600 bg-gray-700 text-white)"
+			defaultValue={data?.note}
+			disabled
+		/>
+	</>
+);
+const WrapLayoutInfoUser = tw.section`mb-8  grid grid-cols-2 sm:grid-cols-1 `;
+const LayoutInfoUser = tw.div`border-r-2 sm:(border-r-0 border-b-2 pb-4 border-r-0)`;
+const LayoutFormSubmitted = tw.div`ml-8 sm:(pt-4 ml-0)`;
+const LayoutInfoRecruitment = tw.section`border-b-2 py-6 mb-6`;
 
 const StudentInfoPage = () => {
 	const user = useSelector((state) => state.auth?.user);
@@ -33,8 +51,8 @@ const StudentInfoPage = () => {
 	const [data, setData] = useState([]);
 	const getIntershipStatusStyle = (value) => {
 		let status;
-		Object.keys(StudentStatusGroup).forEach((groupKey) => {
-			if (StudentStatusGroup[groupKey].includes(value)) {
+		Object.keys(StudentStatusGroupEnum).forEach((groupKey) => {
+			if (StudentStatusGroupEnum[groupKey].includes(value)) {
 				status = groupKey;
 			}
 		});
@@ -54,8 +72,12 @@ const StudentInfoPage = () => {
 	}, []);
 	// const { data, isFetching } = useGetStudentQuery(user.id);
 	const { data: business } = useGetAllCompanyQuery();
-	const string = `typeNumber=${1}&semester_id=${user?.smester_id}&campus_id=${user?.campus_id}`;
-	const { data: timeForm } = useGetSetTimeQuery(string);
+	const { data: timeForm } = useGetSetTimeQuery({
+		typeNumber: 1,
+		semester_id: user?.smester_id,
+		campus_id: user?.campus_id,
+	});
+	console.log(business);
 	const columnsData = useMemo(
 		() => [
 			{
@@ -116,15 +138,6 @@ const StudentInfoPage = () => {
 			label: "Trạng thái sinh viên :",
 			value: (
 				<>
-					{/* {StudentStatusEnum.map((status, index) =>
-						status.value === data?.statusCheck ? (
-							<span className={status.color}>
-								{status.title}
-							</span>
-						) : (
-							""
-						)
-					)} */}
 					{
 						<span className={`text-${getIntershipStatusStyle(data?.statusCheck)}`}>
 							{StudentStatusEnum[data?.statusCheck]}
@@ -157,22 +170,22 @@ const StudentInfoPage = () => {
 
 	return (
 		<>
-			<section className="mb-8  grid grid-cols-2 sm:grid-cols-1  ">
-				<div tw="border-r-2 sm:(border-r-0 border-b-2 pb-4 border-r-0)  ">
+			<WrapLayoutInfoUser>
+				<LayoutInfoUser>
 					<VerticalList className="text-gray-500">
-						<h1 className="mb-5  text-lg font-medium text-primary">Thông Tin Đăng Ký</h1>
+						<Title>Thông Tin Đăng Ký</Title>
 						{dataRegisterInfomation.map((item) => (
 							<li key={item.label} className="flex gap-1 ">
 								{item.label}
-								<p className="font-medium"> {item.value}</p>
+								<Text>{item.value}</Text>
 							</li>
 						))}
 					</VerticalList>
-				</div>
+				</LayoutInfoUser>
 
-				<div tw="ml-8 sm:(pt-4 ml-0)">
-					<h1 className="mb-5 text-lg font-medium  text-primary">Các Form Đã Nộp</h1>
-					<div className="mt-8 flex flex-col  gap-3 ">
+				<LayoutFormSubmitted>
+					<Title>Các Form Đã Nộp</Title>
+					<WrapMenu>
 						<Menu>
 							{formSubmittedRoute.map((item) => (
 								<Menu.Item
@@ -193,41 +206,24 @@ const StudentInfoPage = () => {
 								</Menu.Item>
 							))}
 						</Menu>
-					</div>
-				</div>
-			</section>
+					</WrapMenu>
+				</LayoutFormSubmitted>
+			</WrapLayoutInfoUser>
 
-			<section className="border-b-2 py-6">
-				<h1 className=" my-2 text-lg font-bold text-primary">Thông tin tuyển dụng</h1>
+			<LayoutInfoRecruitment>
+				<Title>Thông tin tuyển dụng</Title>
 				{timeForm?.time?.startTime <= dateNow && dateNow <= timeForm?.time.endTime ? (
 					<ReactTable columns={columnsData} data={business?.list ?? []} />
 				) : (
-					<p>Chưa có thông tin tuyển dụng</p>
+					<Text>Chưa có thông tin tuyển dụng</Text>
 				)}
-			</section>
-			<section className="mt-3">
-				<div>
-					<label
-						htmlFor="message"
-						className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-						Ghi Chú
-					</label>
-					<textarea
-						id="message"
-						rows={4}
-						className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-						defaultValue={user?.note}
-						disabled
-					/>
-				</div>
-			</section>
+			</LayoutInfoRecruitment>
+
+			<RenderNote label="Ghi chú" data={data} />
+
 			{openState && (
 				<Suspense fallback={<ModalLoading />}>
-					<Modal
-						max_height="650"
-						openState={openState}
-						onOpenStateChange={setOpenState}
-						title={title}>
+					<Modal openState={openState} onOpenStateChange={setOpenState} title={title}>
 						{modalContent}
 					</Modal>
 				</Suspense>
