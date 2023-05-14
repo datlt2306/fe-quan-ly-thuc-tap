@@ -6,7 +6,7 @@ import { requestOfStudentValidator } from "@/App/schemas/requestStudentSchema.js
 import { useState } from "react";
 import { useRequestOfStudentMutation } from "@/App/providers/apis/requestStudentsApi";
 import { toast } from "react-toastify";
-import { VerticalList } from "../StudentInfoPage";
+import { VerticalList } from "..";
 import TextAreaFieldControl from "@/Core/components/common/FormControl/TextAreaFieldControl";
 import tw from "twin.macro";
 const ItemValue=tw.li`font-medium`

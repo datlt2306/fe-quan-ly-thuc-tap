@@ -1,5 +1,5 @@
 import formatDate from "@/Core/utils/dateToTime";
-import { VerticalList } from "../StudentInfoPage";
+import { VerticalList } from "..";
 import Button from "@/Core/components/common/Button";
 const ViewReport = ({data:user}) => {
    const initDataViewReport = [

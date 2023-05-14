@@ -1,4 +1,4 @@
-import { VerticalList } from "../StudentInfoPage";
+import { VerticalList } from "..";
 import { supportOptionsEnum } from "@/Core/constants/supportOptionsEnum";
 import Button from "@/Core/components/common/Button";
 import formatDate from "@/Core/utils/dateToTime";
