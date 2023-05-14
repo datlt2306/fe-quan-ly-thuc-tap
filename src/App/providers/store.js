@@ -18,6 +18,7 @@ import rootReducer from "./rootReducer";
 import authApi from "./apis/authApi";
 import studentApi from "./apis/studentApi";
 import majorApi from "./apis/majorApi";
+import staffListApi from "./apis/staffListApi";
 
 const persistConfig = {
 	key: "root",
@@ -40,6 +41,7 @@ const store = configureStore({
 			businessApi.middleware,
 			studentApi.middleware,
 			majorApi.middleware,
+			staffListApi.middleware,
 		]),
 });
 

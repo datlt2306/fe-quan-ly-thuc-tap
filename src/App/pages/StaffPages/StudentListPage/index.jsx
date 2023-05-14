@@ -37,9 +37,12 @@ const StudentListPage = () => {
 	const [addStudents] = useAddStudentsMutation(); // add students
 	const fileInputRef = useRef(null);
 	const { defaultSemester } = useSelector((state) => state.semester);
-	const [currentSemester, setCurrentSemester] = useState(defaultSemester._id);
-	const { data: studentsListData, status: fetchDataStatus } = useGetStudentsQuery({ semester: currentSemester });
-	const { data: semesterData } = useGetAllSemestersQuery({ campus_id: currentCampus._id }, { refetchOnMountOrArgChange: true });
+	const [currentSemester, setCurrentSemester] = useState(defaultSemester?._id);
+	const { data: studentsListData, status: fetchDataStatus } = useGetStudentsQuery(
+		{ semester: currentSemester },
+		{ refetchOnMountOrArgChange: true }
+	);
+	const { data: semesterData } = useGetAllSemestersQuery({ campus_id: currentCampus?._id }, { refetchOnMountOrArgChange: true });
 	const tableData = useMemo(() => {
 		return Array.isArray(studentsListData) ? studentsListData?.map((student, index) => ({ index: index + 1, ...student })) : [];
 	}, [studentsListData]);
@@ -58,8 +61,8 @@ const StudentListPage = () => {
 				phoneNumber: obj[columnAccessors.phoneNumber],
 				majorCode: obj[columnAccessors.majorCode],
 				statusStudent: obj[columnAccessors.statusStudent],
-				smester_id: defaultSemester._id,
-				campus_id: currentCampus._id,
+				smester_id: defaultSemester?._id,
+				campus_id: currentCampus?._id,
 			}));
 
 			console.log(newStudentList);
@@ -68,8 +71,8 @@ const StudentListPage = () => {
 				.then((data) => {
 					const response = addStudents({
 						data,
-						smester_id: defaultSemester._id,
-						campus_id: currentCampus._id,
+						smester_id: defaultSemester?._id,
+						campus_id: currentCampus?._id,
 					});
 
 					toast.promise(response, {
@@ -96,7 +99,7 @@ const StudentListPage = () => {
 		handleImportFile(file, importExcelDataCallback);
 		fileInputRef.current.value = null; // reset input file after imported
 	};
-	console.log(tableData);
+
 	const handleExportDataToExcel = () => {
 		if (!tableData.length) {
 			toast.warn("Chưa có dữ liệu để xuất file !");
@@ -104,7 +107,6 @@ const StudentListPage = () => {
 		}
 		const exportedData = convertToExcelData(
 			tableData.map((student) => {
-				console.log(StudentStatusEnum[student?.statusCheck]);
 				return {
 					...student,
 					statusCheck: StudentStatusEnum[student?.statusCheck],
@@ -112,12 +114,10 @@ const StudentListPage = () => {
 			}),
 			columnAccessors
 		);
-
 		if (!exportedData) {
 			toast.error("Export dữ liệu thất bại !");
 			return;
 		}
-
 		handleExportFile({ data: exportedData, fileName: "Danh sách sinh viên" });
 	};
 
@@ -270,11 +270,11 @@ const StudentListPage = () => {
 							onChange={(e) => handleImportStudents(e.target.files[0])}
 						/>
 					</Button>
-					<Button type="button" variant="success" size="sm" onClick={handleExportDataToExcel}>
+					<Button variant="success" size="sm" onClick={handleExportDataToExcel}>
 						<DocumentArrowDownIcon className="h-6 w-6 text-[inherit]" />
 						Export file Excel
 					</Button>
-					<Button type="button" variant="secondary" size="sm" onClick={() => handleExportFile(excelSampleData)}>
+					<Button variant="secondary" size="sm" onClick={() => handleExportFile(excelSampleData)}>
 						<ArrowDownTrayIcon className="h-6 w-6 text-[inherit]" />
 						Tải file mẫu
 					</Button>
