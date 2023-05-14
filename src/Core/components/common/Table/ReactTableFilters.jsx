@@ -1,12 +1,12 @@
+import { Popover, Transition } from "@headlessui/react";
+import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Fragment, useMemo, useState } from "react";
 import { useAsyncDebounce } from "react-table";
-import { Input } from "../FormControl/InputFieldControl";
-import { Popover, Transition } from "@headlessui/react";
-import Button from "../Button";
-import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Option, Select } from "../FormControl/SelectFieldControl";
 import "regenerator-runtime/runtime";
-import { FunnelIcon as FunnelIconFill } from "@heroicons/react/20/solid";
+import Button from "../Button";
+import { Input } from "../FormControl/InputFieldControl";
+import { Option, Select } from "../FormControl/SelectFieldControl";
+
 // Table filter global
 const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) => {
 	// const count = preGlobalFilteredRows?.length;
@@ -56,7 +56,7 @@ const InputColumnFilter = ({ column: { filterable, filterValue, preFilteredRows,
 								value={filterValue || ""}
 								type="search"
 								onChange={(e) => setFilter(e.target.value)}
-								className="w-full"
+								className="w-full text-xs text-base-content"
 								placeholder={`Tìm trong ${count} hàng...`}
 							/>
 						</Popover.Panel>
@@ -67,11 +67,7 @@ const InputColumnFilter = ({ column: { filterable, filterValue, preFilteredRows,
 	);
 };
 
-const SelectColumnFilter = ({
-	column: { filterValue, setFilter, preFilteredRows, id },
-	customOptions,
-}) => {
-
+const SelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows, id }, customOptions }) => {
 	const options = useMemo(() => {
 		const options = new Set();
 		preFilteredRows.forEach((row) => {
@@ -106,7 +102,7 @@ const SelectColumnFilter = ({
 								<Option value="">All</Option>
 								{options.map((option, i) => (
 									<Option key={i} value={option}>
-										{customOptions[option] || option}
+										{customOptions ? customOptions[option] : option}
 									</Option>
 								))}
 							</Select>

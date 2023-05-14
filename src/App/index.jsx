@@ -10,6 +10,7 @@ import {
 	InformationCircleIcon,
 	XCircleIcon,
 } from "@heroicons/react/20/solid";
+import { LoadingSpinner } from "@/Core/components/common/Loading/LoadingSpinner";
 
 function App() {
 	return (
@@ -36,7 +37,7 @@ function App() {
 						case "info":
 							return <InformationCircleIcon className="h-8 w-8 text-secondary" />;
 						default:
-							return null;
+							return <LoadingSpinner size="sm" variant="primary" />;
 					}
 				}}
 			/>

@@ -15,7 +15,6 @@ import campusApi from "./apis/campusApi";
 import semesterApi from "./apis/semesterApi";
 import rootReducer from "./rootReducer";
 import authApi from "./apis/authApi";
-import staffListApi from "./apis/staffListApi";
 
 const persistConfig = {
 	key: "root",
@@ -31,7 +30,7 @@ const store = configureStore({
 			serializableCheck: {
 				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
 			},
-		}).concat([semesterApi.middleware, campusApi.middleware, authApi.middleware, staffListApi.middleware]),
+		}).concat([semesterApi.middleware, campusApi.middleware, authApi.middleware]),
 });
 
 export const persistor = persistStore(store); // Save every thing of redux store in localstorage
