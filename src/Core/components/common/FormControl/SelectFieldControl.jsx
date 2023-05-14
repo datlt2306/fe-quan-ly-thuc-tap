@@ -11,10 +11,7 @@ const FormControl = tw.div`flex flex-col gap-2 m-0`;
  * @property {string} name
  * @returns
  */
-const SelectFieldControl = (
-	{ initialValue = "Chọn", control, name, label, options, disabled, rules, ...props },
-	ref
-) => {
+const SelectFieldControl = ({ initialValue = "Chọn", control, name, label, options, disabled, rules, ...props }, ref) => {
 	const id = useId();
 	const localRef = useRef(null);
 	const inputRef = ref || localRef;
