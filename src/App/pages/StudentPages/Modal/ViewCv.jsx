@@ -11,13 +11,14 @@ import TextAreaFieldControl from "@/Core/components/common/FormControl/TextAreaF
 import tw from "twin.macro";
 const ItemValue=tw.li`font-medium`
 const ViewCv = ({ data, supportOptions, setOpenState }) => {
-	console.log(data)
+
 	const [open, setOpen] = useState(false);
 	const [requestOfStudentMutation, { isLoading }] = useRequestOfStudentMutation();
 	const user = useSelector((state) => state.auth?.user);
 	// console.log(user);
 	const { control, handleSubmit, reset } = useForm({
 		resolver: yupResolver(requestOfStudentValidator),
+	
 	});
 	const onSubmit = async ({ description }) => {
 		try {
