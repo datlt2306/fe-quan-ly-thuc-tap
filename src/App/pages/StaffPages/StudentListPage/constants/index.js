@@ -1,19 +1,23 @@
 export const columnAccessors = {
 	index: "STT",
 	name: "Họ tên",
+	mssv: "MSSV",
+	email: "Email",
+	phoneNumber: "Số điện thoại",
 	course: "Khóa nhập học",
+	majorCode: "Mã ngành",
+	support: "Hình thức",
 	statusCheck: "Trạng thái thực tập",
 	statusStudent: "Trạng thái sinh viên",
-	email: "Email",
-	mssv: "MSSV",
-	support: "Hình thức",
-	phoneNumber: "Số điện thoại",
-	CV: "CV",
 	nameCompany: "Công ty thực tập",
-	additionalDate: "Ngày bổ sung",
-	reviewer: "Reviewer",
-	majorCode: "Mã ngành",
-	addedAt: "Ngày bổ sung",
 	position: "Vị trí thực tập",
+	CV: "CV",
+	reviewer: "Reviewer",
+	createdAt: "Ngày bổ sung",
 	note: "Ghi chú",
+};
+
+export const InternSupportType = {
+	0: "Tự tìm công ty",
+	1: "Nhờ nhà trường hỗ trợ",
 };

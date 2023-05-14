@@ -7,27 +7,24 @@ import Button from "@/Core/components/common/Button";
 import { Option, Select } from "@/Core/components/common/FormControl/SelectFieldControl";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
 import { InputColumnFilter, SelectColumnFilter } from "@/Core/components/common/Table/ReactTableFilters";
+import IndeterminateCheckbox from "@/Core/components/common/Table/RowSelectionCheckbox";
 import { AllowedFileExt } from "@/Core/constants/allowedFileType";
 import { StudentSchoolingStatus, StudentStatusEnum, StudentStatusGroupEnum } from "@/Core/constants/studentStatus";
 import { convertToExcelData } from "@/Core/utils/excelDataHandler";
 import formatDate from "@/Core/utils/formatDate";
 import getFileExtension from "@/Core/utils/getFileExtension";
-import { ArrowDownTrayIcon, CalendarDaysIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { useMemo, useRef, useState } from "react";
+import { CalendarDaysIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
-import { columnAccessors } from "./constants";
-import { excelSampleData } from "./mocks";
+import DesktopButtonGroup from "./components/DesktopButtonGroup";
+import MobileDropdownButtonGroup from "./components/MobileDropdownButtonGroup";
+import { InternSupportType, columnAccessors } from "./constants";
 
 const handleGetInternStatusStyle = (value) => {
-	let status;
-	Object.keys(StudentStatusGroupEnum).forEach((groupKey) => {
-		if (StudentStatusGroupEnum[groupKey].includes(value)) {
-			status = groupKey;
-		}
-	});
-	return status;
+	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
+	return style;
 };
 
 const StudentListPage = () => {
@@ -35,17 +32,25 @@ const StudentListPage = () => {
 	const [handleImportFile] = useImportFromExcel();
 	const { handleExportFile } = useExportToExcel();
 	const [addStudents] = useAddStudentsMutation(); // add students
+	const [selectedStudents, setSelectedStudents] = useState([]); // get selected student by checkbox
 	const fileInputRef = useRef(null);
 	const { defaultSemester } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useState(defaultSemester?._id);
-	const { data: studentsListData, status: fetchDataStatus } = useGetStudentsQuery(
-		{ semester: currentSemester },
-		{ refetchOnMountOrArgChange: true }
-	);
+	const { data: studentsListData, isLoading } = useGetStudentsQuery({ semester: currentSemester }, { refetchOnMountOrArgChange: true });
 	const { data: semesterData } = useGetAllSemestersQuery({ campus_id: currentCampus?._id }, { refetchOnMountOrArgChange: true });
+
 	const tableData = useMemo(() => {
-		return Array.isArray(studentsListData) ? studentsListData?.map((student, index) => ({ index: index + 1, ...student })) : [];
-	}, [studentsListData]);
+		return Array.isArray(studentsListData)
+			? studentsListData.map((student, index) => ({
+					...student,
+					index: index + 1,
+					createdAt: formatDate(student.createdAt),
+					statusCheck: StudentStatusEnum[student.statusCheck],
+					support: InternSupportType[student.support],
+					statusStudent: student.statusStudent.trim(),
+			  }))
+			: [];
+	}, [studentsListData, isLoading]);
 
 	// Callback function will be executed after import file excel
 	const importExcelDataCallback = (excelData) => {
@@ -64,7 +69,6 @@ const StudentListPage = () => {
 				smester_id: defaultSemester?._id,
 				campus_id: currentCampus?._id,
 			}));
-
 			console.log(newStudentList);
 			newStudentSchema
 				.validate(newStudentList)
@@ -77,7 +81,7 @@ const StudentListPage = () => {
 
 					toast.promise(response, {
 						success: "Import sinh viên thành công !",
-						error: "Import dữ liệu thất bại",
+						error: "Đã xảy ra lỗi ! Vui lòng kiểm tra lại dữ liệu tải lên !",
 						pending: "Đang tải lên dữ liệu ...",
 					});
 					fileInputRef.current.value = null;
@@ -100,20 +104,13 @@ const StudentListPage = () => {
 		fileInputRef.current.value = null; // reset input file after imported
 	};
 
-	const handleExportDataToExcel = () => {
-		if (!tableData.length) {
+	const handleExportDataToExcel = (data) => {
+		if (!data.length) {
 			toast.warn("Chưa có dữ liệu để xuất file !");
 			return;
 		}
-		const exportedData = convertToExcelData(
-			tableData.map((student) => {
-				return {
-					...student,
-					statusCheck: StudentStatusEnum[student?.statusCheck],
-				};
-			}),
-			columnAccessors
-		);
+
+		const exportedData = convertToExcelData({ data: data, columnKeysAccessor: columnAccessors });
 		if (!exportedData) {
 			toast.error("Export dữ liệu thất bại !");
 			return;
@@ -124,6 +121,11 @@ const StudentListPage = () => {
 	// Define columns of table
 	const columnsData = useMemo(
 		() => [
+			{
+				Header: ({ getToggleAllPageRowsSelectedProps }) => <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />,
+				accessor: "_id",
+				Cell: ({ row }) => <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />,
+			},
 			{
 				Header: columnAccessors.index,
 				accessor: "index",
@@ -171,33 +173,21 @@ const StudentListPage = () => {
 				sortable: true,
 			},
 			{
-				Header: columnAccessors.statusCheck,
-				accessor: "statusCheck",
-				Filter: ({ column: { filterValue, setFilter, preFilteredRows, id } }) => (
-					<SelectColumnFilter column={{ filterValue, setFilter, preFilteredRows, id }} customOptions={StudentStatusEnum} />
-				),
-				filterable: true,
-				Cell: ({ value }) => <Badge variant={handleGetInternStatusStyle(value)}>{StudentStatusEnum[value]}</Badge>,
-			},
-			{
 				Header: columnAccessors.support,
 				accessor: "support",
 				Filter: SelectColumnFilter,
 				filterable: true,
 			},
 			{
-				Header: columnAccessors.statusStudent,
-				accessor: "statusStudent",
-				Filter: SelectColumnFilter,
+				Header: columnAccessors.statusCheck,
+				accessor: "statusCheck",
+				Filter: ({ column: { filterValue, setFilter, preFilteredRows, id } }) => (
+					<SelectColumnFilter column={{ filterValue, setFilter, preFilteredRows, id }} customOptions={StudentStatusEnum} />
+				),
 				filterable: true,
-				Cell: ({ value }) => <Badge variant={value === StudentSchoolingStatus.STUDYING_STATE ? "success" : "error"}>{value}</Badge>,
+				Cell: ({ value }) => <Badge variant={handleGetInternStatusStyle(value)}>{value}</Badge>,
 			},
-			{
-				Header: columnAccessors.position,
-				accessor: "position",
-				Filter: InputColumnFilter,
-				filterable: true,
-			},
+
 			{
 				Header: columnAccessors.nameCompany,
 				accessors: "nameCompany",
@@ -218,32 +208,42 @@ const StudentListPage = () => {
 					),
 			},
 			{
+				Header: columnAccessors.position,
+				accessor: "position",
+				Filter: InputColumnFilter,
+				filterable: true,
+			},
+			{
 				Header: columnAccessors.CV,
 				accessor: "CV",
 				Filter: InputColumnFilter,
 				filterable: false,
 				sortable: false,
-				Cell: ({ value }) =>
-					!!value ? (
-						<Button as="a" href={value} target="_blank" variant="ghost" shape="square" size="sm">
-							<EyeIcon className="h-4 w-4" />
-						</Button>
-					) : (
-						<Button variant="disabled" shape="square" size="sm" disabled={true}>
-							<EyeSlashIcon className="h-4 w-4" />
-						</Button>
-					),
+				Cell: ({ value }) => (
+					<Button as="a" href={value} target="_blank" variant={!!value ? "ghost" : "disabled"} shape="square" size="sm" disabled={!!value}>
+						{!!value ? <EyeIcon className="h-4 w-4" /> : <EyeSlashIcon className="h-4 w-4" />}
+					</Button>
+				),
 			},
 			{
 				Header: columnAccessors.reviewer,
 				accessor: "reviewer",
-			},
-			{
-				Header: columnAccessors.addedAt,
-				accessor: "addedAt",
 				Filter: InputColumnFilter,
 				filterable: true,
-				sortable: true,
+			},
+			{
+				Header: columnAccessors.statusStudent,
+				accessor: "statusStudent",
+				Filter: SelectColumnFilter,
+				filterable: true,
+				Cell: ({ value }) => <Badge variant={value === StudentSchoolingStatus.STUDYING_STATE ? "success" : "error"}>{value}</Badge>,
+			},
+
+			{
+				Header: columnAccessors.createdAt,
+				accessor: "createdAt",
+				Filter: InputColumnFilter,
+				filterable: true,
 				Cell: ({ value }) => <span>{formatDate(value)}</span>,
 			},
 			{
@@ -255,37 +255,23 @@ const StudentListPage = () => {
 		],
 		[]
 	);
-
 	return (
 		<Container>
 			<Box>
-				<ButtonList>
-					<Button as="label" size="sm" htmlFor="file-input" variant="primary">
-						<DocumentArrowUpIcon className="h-6 w-6 text-[inherit]" /> Tải lên file Excel
-						<input
-							ref={fileInputRef}
-							type="file"
-							id="file-input"
-							className="hidden"
-							onChange={(e) => handleImportStudents(e.target.files[0])}
-						/>
-					</Button>
-					<Button variant="success" size="sm" onClick={handleExportDataToExcel}>
-						<DocumentArrowDownIcon className="h-6 w-6 text-[inherit]" />
-						Export file Excel
-					</Button>
-					<Button variant="secondary" size="sm" onClick={() => handleExportFile(excelSampleData)}>
-						<ArrowDownTrayIcon className="h-6 w-6 text-[inherit]" />
-						Tải file mẫu
-					</Button>
-				</ButtonList>
+				<DesktopButtonGroup tableData={tableData} handleExport={handleExportDataToExcel} handleImport={handleImportStudents} ref={fileInputRef} />
+				<MobileDropdownButtonGroup
+					tableData={tableData}
+					handleExport={handleExportDataToExcel}
+					handleImport={handleImportStudents}
+					ref={fileInputRef}
+				/>
 				<SelectBox>
 					<label htmlFor="semester-list" className="inline-flex items-center gap-2 whitespace-nowrap text-base-content">
 						<CalendarDaysIcon className="h-6 w-6" /> Kỳ học
 					</label>
 					<Select
 						id="semester-list"
-						className="capitalize"
+						className="min-w-[12rem] capitalize sm:text-sm"
 						defaultValue={currentSemester}
 						onChange={(e) => {
 							console.log(e.target.value);
@@ -300,15 +286,15 @@ const StudentListPage = () => {
 					</Select>
 				</SelectBox>
 			</Box>
-
-			<ReactTable columns={columnsData} data={tableData} loading={fetchDataStatus.isLoading} />
+			<div className="flex-1">
+				<ReactTable columns={columnsData} data={tableData} loading={isLoading} getSelectedRows={setSelectedStudents} />
+			</div>
 		</Container>
 	);
 };
 
 const Container = tw.div`flex flex-col gap-6 h-full `;
-const Box = tw.div`flex items-center justify-between`;
-const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
-const ButtonList = tw.div`flex items-center gap-2`;
+const Box = tw.div`flex items-center justify-between sm:flex-row-reverse md:flex-row-reverse`;
+const SelectBox = tw.div`flex basis-1/4 items-center gap-2 sm:text-sm`;
 
 export default StudentListPage;

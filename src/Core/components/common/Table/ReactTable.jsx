@@ -2,26 +2,17 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
-import {
-	ArchiveBoxXMarkIcon,
-	ArrowDownIcon,
-	ArrowUpIcon,
-	ArrowsUpDownIcon,
-	ChevronDoubleLeftIcon,
-	ChevronDoubleRightIcon,
-	XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { memo, useEffect, useMemo, useReducer } from "react";
-import { useFilters, useGlobalFilter, usePagination, useResizeColumns, useSortBy, useTable } from "react-table";
+import { ArrowDownIcon, ArrowsUpDownIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import classNames from "classnames";
+import { memo, useEffect, useMemo } from "react";
+import { useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import tw from "twin.macro";
+import { Skeleton } from "../../customs/Skelton";
 import Button from "../Button";
 import ButtonGroup from "../Button/ButtonGroup";
 import { Option, Select } from "../FormControl/SelectFieldControl";
 import Table from "./CoreTable";
 import { GlobalFilter, InputColumnFilter } from "./ReactTableFilters";
-import classNames from "classnames";
-import { LoadingSpinner } from "../Loading/LoadingSpinner";
-import { Skeleton } from "../../customs/Skelton";
 
 /**
  *
@@ -36,7 +27,7 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
-const ReactTable = ({ columns, data, manualPagination, onPageChange: handlePageChange, onPageSizeChange: handlePageSizeChange, loading }) => {
+const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading }) => {
 	const isEmptyData = useMemo(() => Array.isArray(data) && data.length > 0, [data]);
 	const filterTypes = useMemo(
 		() => ({
@@ -68,12 +59,13 @@ const ReactTable = ({ columns, data, manualPagination, onPageChange: handlePageC
 		pageOptions,
 		gotoPage,
 		setPageSize,
-		// preFilteredRows,
-		// visibleColumns,
+		selectedFlatRows,
 		setAllFilters,
 		preGlobalFilteredRows,
 		setGlobalFilter,
-		state: { pageIndex, pageSize, globalFilter, filters },
+		state: { pageIndex, pageSize, globalFilter, filters, selectedRowIds },
+		// preFilteredRows,
+		// visibleColumns,
 	} = useTable(
 		{
 			columns,
@@ -85,9 +77,13 @@ const ReactTable = ({ columns, data, manualPagination, onPageChange: handlePageC
 		useFilters,
 		useGlobalFilter,
 		useSortBy,
-		usePagination
-		// useResizeColumns
+		usePagination,
+		useRowSelect
 	);
+
+	useEffect(() => {
+		if (getSelectedRows) getSelectedRows(selectedFlatRows.map((d) => d.original));
+	}, [selectedFlatRows]);
 
 	return (
 		<Wrapper>
@@ -104,7 +100,7 @@ const ReactTable = ({ columns, data, manualPagination, onPageChange: handlePageC
 			{/* Table data */}
 			<Body isEmpty={isEmptyData}>
 				<Table {...getTableProps()}>
-					<Table.Header>
+					<Table.Header sticky={true}>
 						{headerGroups.map((headerGroup) => (
 							<Table.Row {...headerGroup.getHeaderGroupProps()}>
 								{headerGroup.headers.map((column) => {
@@ -112,7 +108,7 @@ const ReactTable = ({ columns, data, manualPagination, onPageChange: handlePageC
 										<Table.Cell as="th" {...column.getHeaderProps()}>
 											<div className="flex h-12 items-center justify-between gap-6">
 												{column.render("Header")}
-												<div className="flex items-center gap-[2px]">
+												<div className="flex items-center gap-px">
 													{column.sortable && column.canSort && (
 														<Button
 															onClick={() => column.toggleSortBy()}
@@ -148,7 +144,7 @@ const ReactTable = ({ columns, data, manualPagination, onPageChange: handlePageC
 								<Table.Row {...row.getRowProps()}>
 									{row.cells.map((cell, index) => (
 										<Table.Cell key={index} {...cell.getCellProps()}>
-											{loading ? <Skeleton /> : cell.render("Cell", { className: "text-blue-500" })}
+											{cell.render("Cell", { className: "text-blue-500" })}
 										</Table.Cell>
 									))}
 								</Table.Row>
@@ -206,9 +202,9 @@ const ReactTable = ({ columns, data, manualPagination, onPageChange: handlePageC
 					</ButtonGroup.Item>
 				</ButtonGroup>
 
-				<Seperator />
+				<Seperator className="sm:hidden" />
 
-				<span className="font-medium text-base-content-active">
+				<span className="font-medium text-base-content-active sm:hidden">
 					Trang {pageIndex + 1}/{pageOptions.length}
 				</span>
 
@@ -251,7 +247,7 @@ const Header = ({ children, ...props }) => (
 const Body = ({ children, isEmpty, ...props }) => (
 	<div
 		{...props}
-		className={classNames("h-full max-h-[400px] overflow-x-auto overflow-y-auto overscroll-x-auto", {
+		className={classNames("relative overflow-x-auto overscroll-x-auto", {
 			"pb-10 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200": isEmpty,
 			"scrollbar-none": !isEmpty,
 		})}>
@@ -263,6 +259,6 @@ const Footer = ({ children, ...props }) => (
 		{children}
 	</div>
 );
-const Seperator = tw.hr`h-6 min-h-full w-px bg-gray-200`;
+const Seperator = tw.hr`h-6 min-h-full w-px bg-gray-300 `;
 
 export default memo(ReactTable);
