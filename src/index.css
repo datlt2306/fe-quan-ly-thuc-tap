@@ -11,7 +11,7 @@
 		@apply divide-x divide-gray-200;
 	}
 	.table th {
-		@apply whitespace-nowrap py-3.5 pl-4 pr-3 text-left !text-sm font-semibold text-gray-700 first-letter:uppercase sm:pl-0;
+		@apply whitespace-nowrap p-3 text-left !text-sm font-semibold text-base-content-active first-letter:uppercase sm:pl-0;
 	}
 	.table tbody {
 		@apply divide-y divide-gray-200;
@@ -43,13 +43,13 @@
 		@apply bg-error text-white hover:bg-error-active;
 	}
 	.btn-ghost {
-		@apply bg-transparent text-gray-600 hover:bg-gray-100 focus:active:bg-gray-200;
+		@apply bg-transparent text-gray-600 !shadow-none hover:bg-gray-100 focus:active:bg-gray-200;
 	}
 	.btn-outline {
 		@apply rounded-[inherit] border bg-transparent text-gray-600 !shadow-none ring-inset ring-[1] ring-gray-300 hover:bg-gray-100 focus:active:bg-gray-200;
 	}
 	.btn-disabled {
-		@apply bg-gray-200 text-gray-400 !shadow-none ring-1 ring-inset ring-gray-300;
+		@apply bg-gray-200 text-gray-400 !shadow-none;
 	}
 	.btn-xs {
 		@apply px-2 py-1 text-xs;
