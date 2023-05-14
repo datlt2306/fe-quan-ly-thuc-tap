@@ -16,6 +16,7 @@ import semesterApi from "./apis/semesterApi";
 import rootReducer from "./rootReducer";
 import authApi from "./apis/authApi";
 import studentApi from "./apis/studentApi";
+import staffListApi from "./apis/staffListApi";
 
 const persistConfig = {
 	key: "root",
@@ -36,6 +37,7 @@ const store = configureStore({
 			campusApi.middleware,
 			semesterApi.middleware,
 			studentApi.middleware,
+			staffListApi.middleware,
 		]),
 });
 
