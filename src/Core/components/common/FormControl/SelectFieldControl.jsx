@@ -33,6 +33,7 @@ const SelectFieldControl = (
 		<FormControl>
 			{label && <label htmlFor={id}>{label}</label>}
 			<Select
+			{...props}
 				onChange={(event) => {
 					field.onChange(event);
 					if (props.onChange) {
@@ -49,7 +50,7 @@ const SelectFieldControl = (
 				<Option value="">{initialValue}</Option>
 				{Array.isArray(options) &&
 					options.map((option, index) => (
-						<Option value={option?.value} key={index} selected={option.value === field.value}>
+						<Option value={option?.value} key={index}>
 							{option?.label}
 						</Option>
 					))}
