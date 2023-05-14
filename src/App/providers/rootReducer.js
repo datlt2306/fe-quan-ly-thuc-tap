@@ -6,6 +6,8 @@ import campusSlice from "./slices/campusSlice";
 import staffListApi from "./apis/staffListApi";
 import studentApi from "./apis/studentApi";
 import semesterSlice from "./slices/semesterSlice";
+import businessApi from "./apis/businessApi";
+import majorApi from "./apis/majorApi";
 
 const rootReducer = combineReducers({
 	// Auth reducers
@@ -13,10 +15,14 @@ const rootReducer = combineReducers({
 	// Semester reducers
 	[semesterApi.reducerPath]: semesterApi.reducer,
 	[semesterSlice.name]: semesterSlice.reducer,
+	// Business reducers
+	[businessApi.reducerPath]: businessApi.reducer,
 	// Campus reducers
 	[campusApi.reducerPath]: campusApi.reducer,
 	[campusSlice.name]: campusSlice.reducer,
 	[studentApi.reducerPath]: studentApi.reducer,
+	//major reducer
+	[majorApi.reducerPath]: majorApi.reducer,
 	[staffListApi.reducerPath]: staffListApi.reducer,
 });
 
