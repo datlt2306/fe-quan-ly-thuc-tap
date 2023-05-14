@@ -25,6 +25,8 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
 				onChange={(e) => {
 					setValue(e.target.value);
 					onChange(e.target.value.trim());
+					onChange(e.target.value);
+
 				}}
 			/>
 		</div>
