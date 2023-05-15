@@ -13,14 +13,14 @@ import {
 	SelectColumnFilter,
 } from "@/Core/components/common/Table/ReactTableFilters";
 import { RoleStaffEnum } from "@/Core/constants/roleStaff";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { yupResolver } from '@hookform/resolvers/yup';
 import tw from "twin.macro";
 import { staffDataValidator } from "@/App/schemas/staffSchema";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGetAllCampusQuery } from "@/App/providers/apis/campusApi";
 
 const Box = tw.div`flex flex-col gap-6`;
@@ -142,11 +142,12 @@ const tableData = useMemo(() => {
 				Cell:({value}) => (
 					<ButtonList>
 						<Button 
-							type="button" 
+							as={Link}
 							size="xs" 
-							variant="secondary" 
+							// variant="info" 
 							onClick={() => {onOpenUpdate(value)}}>
-							Chỉnh sửa
+							<PencilSquareIcon className="w-4 h-4"/>
+							Chỉnh sửa 
 						</Button>
 						<PopConfirm
 							okText="Ok"
@@ -156,6 +157,7 @@ const tableData = useMemo(() => {
 							onConfirm={() => onDeleteSubmit(value)}
 						>
 							<Button size="xs" variant="error">
+								<XMarkIcon className="w-4 h-4"/>
 								Xóa
 							</Button>
 						</PopConfirm>
