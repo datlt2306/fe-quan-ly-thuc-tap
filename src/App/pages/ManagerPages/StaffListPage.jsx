@@ -141,7 +141,6 @@ const tableData = useMemo(() => {
 				Cell:({value}) => (
 					<ButtonList>
 						<Button 
-							// as={Link}
 							size="xs" 
 							variant="default" 
 							shape="square"
