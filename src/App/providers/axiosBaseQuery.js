@@ -12,21 +12,10 @@ export default function axiosBaseQuery() {
 			});
 			return { data: response };
 		} catch (error) {
-			if (error.response) {
-				console.log({
-					data: error.response?.data,
-					status: error.response?.status,
-					headers: error.response?.headers,
-				});
-			} else if (error.request) {
-				console.log(error.request);
-			} else {
-				console.log(error.message);
-			}
-			console.log(error.config);
 			return {
-				status: error.response?.status || 500,
+				status: error.response?.status,
 				data: error.response?.data || error.message,
+				error: !!error,
 			};
 		}
 	};
