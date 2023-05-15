@@ -28,7 +28,6 @@ const ButtonList = tw.div`flex items-center gap-2`;
 
 const StaffListPage = () => {
 	const { data: managers, refetch} = useGetAllStaffQuery();
-	const { data: campus} = useGetAllCampusQuery();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
@@ -80,13 +79,13 @@ const tableData = useMemo(() => {
 		toast.success("Xóa nhân viên thành công!")
 	}
 
-	const filterRole =  Array.isArray(managers) && managers
+	const filterRole =  Array.isArray(managers?.list) && managers?.list
 		.filter((item, index, self) => self.findIndex(t => t.role === item.role) === index )
 		.map((item)=> ({value:String(item?.role),label:item?.role == 1 ? "Nhân viên" : "Quản lý"} ))
 
 	const onOpenUpdate = (data) => {
 		reset()
-		const selectedUser = managers && managers.find(item => item?._id === data);
+		const selectedUser = managers?.list && managers?.list?.find(item => item?._id === data);
 		if (selectedUser) {
 			setUser(selectedUser);
 			setModal(!modal);
