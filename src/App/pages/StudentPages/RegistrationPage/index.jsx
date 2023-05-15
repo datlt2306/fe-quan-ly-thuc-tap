@@ -8,8 +8,8 @@ import { RegistrationType } from "./constants/RegistrationType";
 import { useState, useCallback, useTransition } from "react";
 import { toast } from "react-toastify";
 
-const FormSchoolSupport = lazy(() => import("./Form/formSchoolSupport"));
-const FormSelfFinding = lazy(() => import("./Form/FormSelfFinding"));
+const FormSchoolSupport = lazy(() => import("./form/FormSchoolSupport"));
+const FormSelfFinding = lazy(() => import("./components/FormSelfFinding"));
 
 export const Layout = tw.div`grid grid-cols-12 gap-7 sm:gap-4 items-center my-4 `;
 
@@ -19,6 +19,7 @@ const FormSignUpCol = tw.div`col-span-8 flex items-center gap-4   sm:(col-span-1
 
 const LabelLayout = tw.label`inline-flex items-center`;
 const TitleForm = tw.span`ml-2 font-medium`;
+
 const labelItems = [
 	{
 		label: "Nhờ nhà trường hỗ trợ",
@@ -40,7 +41,7 @@ const RegistrationPage = () => {
 	const handleChangeForm = (value) => {
 		setSelectedOption(value);
 	};
-
+	
 	const handleFormSchoolSupport = async (data) => {
 		const file = data.upload;
 		const isPDF = file.type === "application/pdf";
@@ -48,8 +49,11 @@ const RegistrationPage = () => {
 			toast.error(`Vui lòng chọn file PDF`);
 			return;
 		}
+
 	};
-	const handleFormSelfFinding = async (data) => {};
+	const handleFormSelfFinding = async (data) => {
+		
+	};
 	const sharedFields = useCallback((control) => {
 		return [
 			{

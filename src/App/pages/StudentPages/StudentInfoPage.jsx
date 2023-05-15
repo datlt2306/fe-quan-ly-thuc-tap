@@ -26,6 +26,7 @@ export const VerticalList = (props) => (
 
 const StudentInfoPage = () => {
 	const user = useSelector((state) => state.auth?.user);
+	console.log(user);
 	const [dateNow] = useState(Date.now());
 	const [openState, setOpenState] = useState(false);
 	const [modalContent, setModalContent] = useState(null);

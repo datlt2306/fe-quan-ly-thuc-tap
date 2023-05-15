@@ -3,12 +3,11 @@ import InputFieldControl from "@/Core/components/common/FormControl/InputFieldCo
 import { formSignUpSelfFindingSchema } from "@/App/schemas/formSignUpInterShipSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "@/Core/components/common/Button";
-import FormRow from "../components/FormRow";
-import { selfFindingDefaultValues } from "../Fields/formFields";
+import FormRow from "./FormRow";
 const FormSelfFinding = ({ fields, onSubmit }) => {
 	const { control, handleSubmit } = useForm({
 		resolver: yupResolver(formSignUpSelfFindingSchema),
-		defaultValues: selfFindingDefaultValues,
+		defaultValues: formSignUpSelfFindingSchema.getDefault(),
 	});
 
 	

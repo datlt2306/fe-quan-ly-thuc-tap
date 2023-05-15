@@ -5,14 +5,11 @@ import { formSignUpSchoolSupportSchema } from "@/App/schemas/formSignUpInterShip
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "@/Core/components/common/Button";
 import FormRow from "../components/FormRow";
-import { schoolSupportDefaultValues } from "../Fields/formFields";
-import { useState, useEffect } from "react";
 const FormSchoolSupport = ({ fields, onSubmit }) => {
 	const { control, handleSubmit } = useForm({
 		resolver: yupResolver(formSignUpSchoolSupportSchema),
-		defaultValues: schoolSupportDefaultValues,
+		defaultValues: formSignUpSchoolSupportSchema.getDefault(),
 	});
-
 	const formSchoolSupport = [
 		...fields(control),
 		{
