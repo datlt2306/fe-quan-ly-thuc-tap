@@ -1,30 +1,19 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-key */
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
-import {
-	ArchiveBoxXMarkIcon,
-	ArrowDownIcon,
-	ArrowUpIcon,
-	ChevronDoubleLeftIcon,
-	ChevronDoubleRightIcon,
-} from "@heroicons/react/24/outline";
-import { memo, useMemo } from "react";
-import {
-	useFilters,
-	useGlobalFilter,
-	usePagination,
-	useResizeColumns,
-	useSortBy,
-	useTable,
-} from "react-table";
+import { ArrowDownIcon, ArrowsUpDownIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import classNames from "classnames";
+import { memo, useEffect, useMemo } from "react";
+import { useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import tw from "twin.macro";
+import { Skeleton } from "../../customs/Skelton";
 import Button from "../Button";
 import ButtonGroup from "../Button/ButtonGroup";
-import { Select } from "../FormControl/SelectFieldControl";
+import { Option, Select } from "../FormControl/SelectFieldControl";
 import Table from "./CoreTable";
 import { GlobalFilter, InputColumnFilter } from "./ReactTableFilters";
-import classNames from "classnames";
 
-// Styled components
-const Seperator = tw.hr`h-6 min-h-full w-px bg-gray-200`;
 /**
  *
  * @param {Array} columns
@@ -38,7 +27,7 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
-const ReactTable = ({ columns, data, noDataComponent }) => {
+const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading }) => {
 	const isEmptyData = useMemo(() => Array.isArray(data) && data.length > 0, [data]);
 	const filterTypes = useMemo(
 		() => ({
@@ -46,15 +35,14 @@ const ReactTable = ({ columns, data, noDataComponent }) => {
 			text: (rows, id, filterValue) => {
 				return rows.filter((row) => {
 					const rowValue = row.values[id];
-					return rowValue !== undefined
-						? String(rowValue).toLowerCase().startsWith(String(filterValue).toLowerCase())
-						: true;
+					return rowValue !== undefined ? String(rowValue).toLowerCase().startsWith(String(filterValue).toLowerCase()) : true;
 				});
 			},
 		}),
 		[]
 	);
 	const defaultColumn = useMemo(() => ({ Filter: InputColumnFilter }), []);
+
 	const {
 		// Default react table props
 		getTableProps,
@@ -71,46 +59,48 @@ const ReactTable = ({ columns, data, noDataComponent }) => {
 		pageOptions,
 		gotoPage,
 		setPageSize,
-		preFilteredRows,
-		visibleColumns,
-
+		selectedFlatRows,
+		setAllFilters,
 		preGlobalFilteredRows,
 		setGlobalFilter,
-		state: { pageIndex, pageSize, globalFilter },
+		state: { pageIndex, pageSize, globalFilter, filters, selectedRowIds },
+		// preFilteredRows,
+		// visibleColumns,
 	} = useTable(
 		{
 			columns,
 			data,
 			defaultColumn,
-			initialState: { pageSize: 6 },
+			manualPagination,
 			filterTypes,
 		},
 		useFilters,
 		useGlobalFilter,
 		useSortBy,
-		usePagination
-		// useResizeColumns
+		usePagination,
+		useRowSelect
 	);
+
+	useEffect(() => {
+		if (getSelectedRows) getSelectedRows(selectedFlatRows.map((d) => d.original));
+	}, [selectedFlatRows]);
+
 	return (
-		<div>
+		<Wrapper>
 			{/* Global search  */}
-			<div className="flex items-center justify-between bg-gray-50 p-4">
-				<GlobalFilter
-					preGlobalFilteredRows={preGlobalFilteredRows}
-					globalFilter={globalFilter}
-					setGlobalFilter={setGlobalFilter}
-				/>
-			</div>
+			<Header>
+				<GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+				{!!filters.length && (
+					<Button size="sm" onClick={() => setAllFilters([])}>
+						<XMarkIcon className="h-3.5 w-3.5" /> Xóa lọc
+					</Button>
+				)}
+			</Header>
 
 			{/* Table data */}
-			<div
-				className={classNames("overflow-x-auto overscroll-x-auto", {
-					"pb-10 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200":
-						isEmptyData,
-					"scrollbar-none": !isEmptyData,
-				})}>
+			<Body isEmpty={isEmptyData}>
 				<Table {...getTableProps()}>
-					<Table.Header>
+					<Table.Header sticky={true}>
 						{headerGroups.map((headerGroup) => (
 							<Table.Row {...headerGroup.getHeaderGroupProps()}>
 								{headerGroup.headers.map((column) => {
@@ -118,18 +108,22 @@ const ReactTable = ({ columns, data, noDataComponent }) => {
 										<Table.Cell as="th" {...column.getHeaderProps()}>
 											<div className="flex h-12 items-center justify-between gap-6">
 												{column.render("Header")}
-												<div className="flex items-center gap-[2px]">
-													{column.canSort && (
+												<div className="flex items-center gap-px">
+													{column.sortable && column.canSort && (
 														<Button
 															onClick={() => column.toggleSortBy()}
 															{...column.getHeaderProps()}
 															size="xs"
-															variant="ghost"
+															variant={column.isSorted ? "primary" : "ghost"}
 															shape="square">
-															{column.isSortedDesc ? (
-																<ArrowDownIcon className="block h-3.5 w-3.5" />
+															{column.isSorted ? (
+																<ArrowDownIcon
+																	className={classNames("block h-3.5 w-3.5", {
+																		"-rotate-180": column.isSortedDesc,
+																	})}
+																/>
 															) : (
-																<ArrowUpIcon className="block h-3.5 w-3.5" />
+																<ArrowsUpDownIcon className="block h-3.5 w-3.5" />
 															)}
 														</Button>
 													)}
@@ -156,24 +150,25 @@ const ReactTable = ({ columns, data, noDataComponent }) => {
 								</Table.Row>
 							);
 						})}
+
 						{!data.length && (
 							<Table.Row>
-								<Table.Cell className="text-center text-xl text-disabled">
-									Chưa có dữ liệu
-								</Table.Cell>
+								<Table.Cell className="text-center text-xl text-disabled">Chưa có dữ liệu</Table.Cell>
 							</Table.Row>
 						)}
 					</Table.Body>
 				</Table>
-			</div>
+			</Body>
 
 			{/* Pagination */}
-			<div className="flex w-full items-center gap-6 bg-gray-50 p-3">
+			<Footer>
 				<ButtonGroup>
 					<ButtonGroup.Item
 						variant={canPreviousPage ? "outline" : "disabled"}
 						shape="square"
-						onClick={() => gotoPage(0)}
+						onClick={() => {
+							gotoPage(0);
+						}}
 						disabled={!canPreviousPage}>
 						<ChevronDoubleLeftIcon className="h-4 w-4" aria-hidden="true" />
 					</ButtonGroup.Item>
@@ -181,29 +176,35 @@ const ReactTable = ({ columns, data, noDataComponent }) => {
 					<ButtonGroup.Item
 						variant={canPreviousPage ? "outline" : "disabled"}
 						shape="square"
-						onClick={() => previousPage()}
+						onClick={() => {
+							previousPage();
+						}}
 						disabled={!canPreviousPage}>
 						<ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
 					</ButtonGroup.Item>
 					<ButtonGroup.Item
 						variant={canNextPage ? "outline" : "disabled"}
 						shape="square"
-						onClick={() => nextPage()}
+						onClick={() => {
+							nextPage();
+						}}
 						disabled={!canNextPage}>
 						<ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
 					</ButtonGroup.Item>
 					<ButtonGroup.Item
 						variant={canNextPage ? "outline" : "disabled"}
 						shape="square"
-						onClick={() => gotoPage(pageCount - 1)}
+						onClick={() => {
+							gotoPage(pageCount - 1);
+						}}
 						disabled={!canNextPage}>
 						<ChevronDoubleRightIcon className="h-4 w-4" aria-hidden="true" />
 					</ButtonGroup.Item>
 				</ButtonGroup>
 
-				<Seperator />
+				<Seperator className="sm:hidden" />
 
-				<span className="font-medium text-gray-800">
+				<span className="font-medium text-base-content-active sm:hidden">
 					Trang {pageIndex + 1}/{pageOptions.length}
 				</span>
 
@@ -216,17 +217,48 @@ const ReactTable = ({ columns, data, noDataComponent }) => {
 					<Select
 						id="page-size-select"
 						className="w-full max-w-[128px]"
-						onChange={(e) => setPageSize(e.target.value)}>
+						defaultValue={pageSize}
+						onChange={(e) => {
+							setPageSize(e.target.value);
+						}}>
 						{[10, 20, 30, 50, 100].map((page_size, index) => (
-							<option value={page_size} key={index}>
+							<Option value={page_size} key={index}>
 								{page_size} hàng
-							</option>
+							</Option>
 						))}
 					</Select>
 				</div>
-			</div>
-		</div>
+			</Footer>
+		</Wrapper>
 	);
 };
+
+// Styled components
+const Wrapper = ({ children, ...props }) => (
+	<div {...props} tw="flex flex-col items-stretch">
+		{children}
+	</div>
+);
+const Header = ({ children, ...props }) => (
+	<div {...props} tw="flex items-center justify-between bg-gray-50 p-4">
+		{children}
+	</div>
+);
+const Body = ({ children, isEmpty, ...props }) => (
+	<div
+		{...props}
+		className={classNames("relative overflow-x-auto overscroll-x-auto", {
+			"pb-10 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200": isEmpty,
+			"scrollbar-none": !isEmpty,
+		})}>
+		{children}
+	</div>
+);
+const Footer = ({ children, ...props }) => (
+	<div {...props} tw="flex w-full items-center gap-6 bg-gray-50 p-3">
+		{children}
+	</div>
+);
+const Seperator = tw.hr`h-6 min-h-full w-px bg-gray-300 `;
 
 export default memo(ReactTable);

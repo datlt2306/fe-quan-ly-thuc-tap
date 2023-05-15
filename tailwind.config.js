@@ -7,12 +7,20 @@ export default {
 	theme: {
 		colors: {
 			primary: "#fb923c",
-			secondary: "#0ea5e9",
+			"primary-active": "#f97316",
+			secondary: "#38bdf8",
+			"secondary-active": "#0ea5e9",
 			info: "#22d3ee",
+			"info-active": "#06b6d4",
 			error: "#f43f5e",
-			success: "#10b981",
-			warning: "#f59e0b",
+			"error-active": "#e11d48",
+			success: "#34d399",
+			"success-active": "#10b981",
+			warning: "#eab308",
+			"warning-active": "#d97706",
 			disabled: "#9ca3af",
+			"base-content-active": "#1f2937",
+			"base-content": "#4b5563",
 			...colors,
 		},
 		screens: {
@@ -30,15 +38,25 @@ export default {
 			},
 			xl: { min: "1921px" },
 		},
-		extends: {
+		extend: {
 			fontFamily: {
 				sans: ["Inter var", ...defaultTheme.fontFamily.sans],
 			},
+			animation: {
+				slide: "shimmer 1s ease infinite",
+				// spin: "spin 1.2s ease infinite",
+			},
+			keyframes: {
+				shimmer: {
+					"0%": {
+						transform: "translateX(0%)",
+					},
+					"100%": {
+						transform: "translateX(100%)",
+					},
+				},
+			},
 		},
 	},
-	plugins: [
-		require("prettier-plugin-tailwindcss"),
-		require("@tailwindcss/forms"),
-		require("tailwind-scrollbar")({ nocompatible: true }),
-	],
+	plugins: [require("prettier-plugin-tailwindcss"), require("@tailwindcss/forms"), require("tailwind-scrollbar")({ nocompatible: true })],
 };
