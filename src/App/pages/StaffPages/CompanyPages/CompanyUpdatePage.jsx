@@ -8,26 +8,24 @@ import Button from '@/Core/components/common/Button';
 import { companySchema } from '@/App/schemas/companySchema';
 import { useGetOneCompanyQuery, useUpdateCompanyMutation } from '@/App/providers/apis/businessApi';
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
-import {LoadingSpinner} from '@/Core/components/common/Loading/LoadingSpinner';
+import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-// import { useSelector } from "react-redux";
 
 const UpdateBusinessForm = () => {
     const navigate = useNavigate();
 
     // get id and get default company
     const { id } = useParams();
-    const { data: company } = useGetOneCompanyQuery({ id }, {refetchOnMountOrArgChange: true})
-    
+    const { data: company } = useGetOneCompanyQuery({ id }, { refetchOnMountOrArgChange: true })
+
     // check id
-    if(company?.statusCode) {
+    if (company?.statusCode) {
         toast.error("Doanh nghiệp không tồn tại!")
         navigate('/danh-sach-cong-ty')
     }
 
     // get list campus and major
-    // const { campusList } = useSelector((state) => state.campus)
     const { data: major } = useGetAllMajorQuery();
 
     const { handleSubmit, control, reset } = useForm({
@@ -63,13 +61,19 @@ const UpdateBusinessForm = () => {
 
                 <InputFieldControl
                     control={control}
-                    name="code_request"
+                    name="tax_code"
+                    label="Mã Số Thuế"
+                />
+
+                <InputFieldControl
+                    control={control}
+                    name="business_code"
                     label="Mã Doanh Nghiệp"
                 />
 
                 <InputFieldControl
                     control={control}
-                    name="internshipPosition"
+                    name="internship_position"
                     label="Vị Trí Thực Tập"
                 />
 
@@ -79,9 +83,7 @@ const UpdateBusinessForm = () => {
                     label="Số Lượng"
                 />
 
-                {/* <SelectFieldControl name='campus_id' control={control} label="Cơ sở" options={Array.isArray(campusList?.listCumpus) && campusList?.listCumpus.map(item => ({ value: item._id, label: item.name }))} /> */}
-
-                <SelectFieldControl name='majors' control={control} label="Ngành" options={Array.isArray(major) && major.map(item => ({ value: item._id, label: item.name }))} />
+                <SelectFieldControl name='major' control={control} label="Ngành" options={Array.isArray(major) && major.map(item => ({ value: item._id, label: item.name }))} />
 
 
                 <InputFieldControl
@@ -92,7 +94,7 @@ const UpdateBusinessForm = () => {
 
                 <InputFieldControl
                     control={control}
-                    name="request"
+                    name="requirement"
                     label="Yêu Cầu"
                 />
 
@@ -104,12 +106,12 @@ const UpdateBusinessForm = () => {
 
                 <InputFieldControl
                     control={control}
-                    name="benefish"
+                    name="benefit"
                     label="Quyền Lợi"
                 />
             </Grid>
             <Container>
-                <Button variant="primary" type="submit">{isLoading ? <LoadingSpinner /> : "Submit"}</Button>
+                <Button variant="primary" type="submit">{isLoading ? <LoadingSpinner /> : "Cập nhật"}</Button>
             </Container>
         </Form>
     );

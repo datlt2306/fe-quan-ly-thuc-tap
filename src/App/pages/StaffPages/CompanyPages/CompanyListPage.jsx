@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState, useRef } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 import Button from "@/Core/components/common/Button";
 import PopConfirm from "@/Core/components/common/Popup/PopConfirm";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
@@ -7,7 +7,7 @@ import {
 	SelectColumnFilter,
 } from "@/Core/components/common/Table/ReactTableFilters";
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
-import { ArrowDownTrayIcon, PlusIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
+import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, CalendarDaysIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
@@ -24,12 +24,15 @@ import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 
 const CompanyListPage = () => {
 
-	// get list company, semester, campus, majors
-	const { data: major } = useGetAllMajorQuery(null, {refetchOnMountOrArgChange: true});
-	const { data: company, refetch } = useGetAllCompanyQuery({ limit: 1000 }, { refetchOnMountOrArgChange: true });
+	// get list company, semester, campus, major
+	const { data: majors } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
 	const campus = useSelector((state) => state.campus)
 	const { data: semester } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
-	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
+	const [selectedSemesterId, setSelectedSemesterId] = useState(semester?.defaultSemester?._id);
+	const { data: company } = useGetAllCompanyQuery({ limit: 1000, semester_id: selectedSemesterId }, { refetchOnMountOrArgChange: true });
+	const handleChangeSemester = (id) => {
+		setSelectedSemesterId(id);
+	}
 
 	// set table data
 	const [tableData, setTableData] = useState([]);
@@ -45,7 +48,6 @@ const CompanyListPage = () => {
 			toast.error(result.data.message)
 			return;
 		}
-		refetch()
 		toast.success("Đã xóa doanh nghiệp!")
 	}
 
@@ -64,23 +66,22 @@ const CompanyListPage = () => {
 		if (excelData.length) {
 			const newCompanyList = excelData.map((obj) => ({
 				name: obj[columnAccessors.name],
-				code_request: obj[columnAccessors.code_request],
-				internshipPosition: obj[columnAccessors.internshipPosition],
-				majors: obj[columnAccessors.majors],
+				business_code: obj[columnAccessors.business_code],
+				tax_code: obj[columnAccessors.tax_code],
+				internship_position: obj[columnAccessors.internship_position],
+				major: obj[columnAccessors.major],
 				amount: obj[columnAccessors.amount],
 				address: obj[columnAccessors.address],
-				request: obj[columnAccessors.request],
+				requirement: obj[columnAccessors.requirement],
 				description: obj[columnAccessors.description],
-				benefish: obj[columnAccessors.benefish],
+				benefit: obj[columnAccessors.benefit],
 			}));
-			console.log(newCompanyList)
 			newCompanyList.forEach(async (item) => {
-				const result = await handleAddCompany({...item, majors: major?.find(majorItem => majorItem.majorCode === item.majors)?._id});
+				const result = await handleAddCompany({ ...item, major: majors?.find((majorItem) => majorItem.majorCode == item.major)?._id });
 				if (result?.data?.statusCode) {
 					toast.error(result.data.message)
 					return;
 				}
-				refetch()
 				toast.success("Thêm doanh nghiệp mới thành công!")
 			})
 			fileInputRef.current.value = null;
@@ -107,9 +108,9 @@ const CompanyListPage = () => {
 			tableData.map((company, index) => {
 				return {
 					...company,
-					majors: company.majors.name,
+					major: company.major.name,
 					campus_id: company.campus_id.name,
-					smester_id: semester.listSemesters.find(item => item._id === company.smester_id).name,
+					semester_id: semester.listSemesters.find(item => item._id === company.semester_id).name,
 					index: index + 1
 				};
 			}),
@@ -127,20 +128,28 @@ const CompanyListPage = () => {
 	// Define columns of table
 	const columnsData = [
 		{
-			Header: "STT",
+			Header: columnAccessors.index,
 			accessor: "STT",
 			Cell: ({ row }) => <span className="font-medium">{row.index + 1}</span>,
 		},
 		{
-			Header: "Mã Doanh Nghiệp",
-			accessor: "code_request",
+			Header: columnAccessors.business_code,
+			accessor: "business_code",
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
 			Cell: ({ value }) => <span className="font-medium uppercase">{value}</span>,
 		},
 		{
-			Header: "Tên Doanh Nghiệp",
+			Header: columnAccessors.tax_code,
+			accessor: "tax_code",
+			Filter: InputColumnFilter,
+			filterable: true,
+			sortable: true,
+			Cell: ({ value }) => <span className="font-medium uppercase">{value}</span>,
+		},
+		{
+			Header: columnAccessors.name,
 			accessor: "name",
 			Filter: InputColumnFilter,
 			filterable: true,
@@ -150,49 +159,49 @@ const CompanyListPage = () => {
 			Cell: ({ value }) => <span className="capitalize">{value}</span>,
 		},
 		{
-			Header: "Vị trí thực tập",
-			accessor: "internshipPosition",
+			Header: columnAccessors.internship_position,
+			accessor: "internship_position",
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
 		},
 		{
-			Header: "Số lượng",
+			Header: columnAccessors.amount,
 			accessor: "amount",
 			Filter: SelectColumnFilter,
 			sortable: true,
 		},
 		{
-			Header: "Ngành",
-			accessor: "majors.name",
+			Header: columnAccessors.major,
+			accessor: "major.name",
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
 		},
 
 		{
-			Header: "Yêu Cầu",
-			accessor: "request",
+			Header: columnAccessors.requirement,
+			accessor: "requirement",
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
 		},
 		{
-			Header: "Chi tiết",
+			Header: columnAccessors.description,
 			accessor: "description",
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
 		},
 		{
-			Header: "Quyền lợi",
-			accessor: "benefish",
+			Header: columnAccessors.benefit,
+			accessor: "benefit",
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
 		},
 		{
-			Header: "Địa chỉ",
+			Header: columnAccessors.address,
 			accessor: "address",
 			Filter: InputColumnFilter,
 			filterable: true,
@@ -207,8 +216,8 @@ const CompanyListPage = () => {
 			isSort: false,
 			Cell: ({ value }) => (
 				<ButtonList>
-					<Button type="button" size="xs" variant="secondary">
-						<Link to={`/cap-nhat-cong-ty/${value}`}>Chỉnh sửa</Link>
+					<Button as={Link} to={`/cap-nhat-cong-ty/${value}`} type="button" size="sm" shape="square" variant="default">
+						<PencilSquareIcon className="w-5 h-5" />
 					</Button>
 					<PopConfirm
 						okText="Ok"
@@ -217,8 +226,8 @@ const CompanyListPage = () => {
 						description={"Bạn muốn xóa công ty này ?"}
 						// onCancel={() => toast.info("Cancelled")}
 						onConfirm={() => onDeleteSubmit(value)}>
-						<Button size="xs" variant="error">
-							{isLoading ? <LoadingSpinner /> : "Xóa"}
+						<Button size="sm" variant="error" shape="square">
+							{isLoading ? <LoadingSpinner /> : <TrashIcon className="w-5 h-5" />}
 						</Button>
 					</PopConfirm>
 				</ButtonList>
@@ -231,21 +240,8 @@ const CompanyListPage = () => {
 			<Box>
 				<ButtonList>
 					<Container>
-						<Button
-							type="button"
-							variant="primary"
-							size="sm"
-							onClick={() => setSlideOverVisibility(!slideOverVisibility)}>
-							<PlusIcon className="h-3 w-3 text-[inherit]" /> <Link to={'/them-moi-cong-ty'}>Thêm mới doanh nghiệp</Link>
-						</Button>
-
-						<Button type="button" variant="success" size="sm" onClick={handleExportDataToExcel}>
-							<DocumentArrowDownIcon className="h-6 w-6 text-[inherit]" />
-							Export file Excel
-						</Button>
-
-						<Button as="label" size="sm" htmlFor="file-input" variant="secondary">
-							<DocumentArrowUpIcon className="h-6 w-6 text-[inherit]" /> Import file Excel
+						<Button as="label" size="sm" htmlFor="file-input" variant="primary">
+							<DocumentArrowUpIcon className="h-6 w-6 text-[inherit]" /> Tải lên file Excel
 							<input
 								ref={fileInputRef}
 								type="file"
@@ -253,6 +249,11 @@ const CompanyListPage = () => {
 								className="hidden"
 								onChange={(e) => handleImportCompanies(e.target.files[0])}
 							/>
+						</Button>
+
+						<Button type="button" variant="success" size="sm" onClick={handleExportDataToExcel}>
+							<DocumentArrowDownIcon className="h-6 w-6 text-[inherit]" />
+							Export file Excel
 						</Button>
 
 						<Button type="button" variant="secondary" size="sm" onClick={() => handleExportFile(excelSampleData)}>
@@ -264,8 +265,7 @@ const CompanyListPage = () => {
 						<label htmlFor="semester-list" className="inline-flex items-center gap-2 whitespace-nowrap text-base-content">
 							<CalendarDaysIcon className="h-6 w-6" /> Kỳ học
 						</label>
-						<Select onChange={(e) => e.target.value === "all" ? setTableData(company?.list) : setTableData(company?.list.filter(item => item.smester_id === e.target.value))}>
-							<Option value="all">All</Option>
+						<Select onChange={(e) => handleChangeSemester(e.target.value)} defaultValue={semester?.defaultSemester?._id}>
 							{Array.isArray(semester?.listSemesters) && semester?.listSemesters.map((item, index) => (
 								<Option value={item._id} key={index}>{item.name}</Option>
 							))}
@@ -293,5 +293,5 @@ export default CompanyListPage;
 const Box = tw.div`flex flex-col gap-6`;
 const ButtonList = tw.div`flex justify-between`;
 const Container = tw.div`flex items-center gap-2`;
-const Select = tw.select`block w-full rounded-[4px] border-none duration-300  px-2 py-1.5 outline-none ring-1 ring-gray-300 focus:ring-primary focus:active:ring-primary min-w-[128px] m-0`;
+const Select = tw.select`block w-full rounded-[4px] border-none duration-300  px-2 py-1.5 outline-none ring-1 ring-gray-300 focus:ring-primary focus:active:ring-primary min-w-[196px] m-0`;
 const Option = tw.option`leading-6`;

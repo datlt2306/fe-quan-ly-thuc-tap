@@ -11,14 +11,12 @@ import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-// import { useSelector } from 'react-redux';
 
 const AddBusinessForm = () => {
     const navigate = useNavigate();
 
     // get list campus and major
-    // const { campusList } = useSelector((state) => state.campus)
-    const { data: major } = useGetAllMajorQuery(null, {refetchOnMountOrArgChange: true});
+    const { data: major } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
     // handle add new company
     const { handleSubmit, control } = useForm({
         resolver: yupResolver(companySchema)
@@ -46,13 +44,19 @@ const AddBusinessForm = () => {
 
                 <InputFieldControl
                     control={control}
-                    name="code_request"
+                    name="tax_code"
+                    label="Mã Số Thuế"
+                />
+
+                <InputFieldControl
+                    control={control}
+                    name="business_code"
                     label="Mã Doanh Nghiệp"
                 />
 
                 <InputFieldControl
                     control={control}
-                    name="internshipPosition"
+                    name="internship_position"
                     label="Vị Trí Thực Tập"
                 />
 
@@ -62,9 +66,7 @@ const AddBusinessForm = () => {
                     label="Số Lượng"
                 />
 
-                {/* <SelectFieldControl name='campus_id' control={control} label="Cơ sở" options={Array.isArray(campusList?.listCumpus) && campusList?.listCumpus.map(item => ({ value: item._id, label: item.name }))} /> */}
-
-                <SelectFieldControl name='majors' control={control} label="Ngành" options={Array.isArray(major) && major.map(item => ({ value: item._id, label: item.name }))} />
+                <SelectFieldControl name='major' control={control} label="Ngành" options={Array.isArray(major) && major.map(item => ({ value: item._id, label: item.name }))} />
 
                 <InputFieldControl
                     control={control}
@@ -75,7 +77,7 @@ const AddBusinessForm = () => {
                 <InputFieldControl
 
                     control={control}
-                    name="request"
+                    name="requirement"
                     label="Yêu Cầu"
                 />
 
@@ -87,12 +89,12 @@ const AddBusinessForm = () => {
 
                 <InputFieldControl
                     control={control}
-                    name="benefish"
+                    name="benefit"
                     label="Quyền Lợi"
                 />
             </Grid>
             <Container>
-                <Button variant="primary" type="submit">{isLoading ? <LoadingSpinner /> : "Submit"}</Button>
+                <Button variant="primary" type="submit">{isLoading ? <LoadingSpinner /> : "Thêm mới"}</Button>
             </Container>
         </Form>
     );

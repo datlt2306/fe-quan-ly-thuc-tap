@@ -21,7 +21,7 @@ export default function Breadcrumbs({ navigation }) {
 				</li>
 				{navigation.map((page) => {
 					return (
-						pathname === page.path && (
+						pathname === page.path ? (
 							<li key={page.label}>
 								<div className="flex items-center">
 									<ChevronRightIcon
@@ -36,6 +36,27 @@ export default function Breadcrumbs({ navigation }) {
 									</Link>
 								</div>
 							</li>
+						) : (
+							page?.children?.map((item, index) => {
+								return (
+									pathname === item.path && (
+										<li key={item.label}>
+											<div className="flex items-center">
+												<ChevronRightIcon
+													className="h-5 w-5 flex-shrink-0 text-gray-400"
+													aria-hidden="true"
+												/>
+												<Link
+													to={item.path}
+													className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
+													aria-current={pathname === item.path ? "page" : undefined}>
+													{item.label}
+												</Link>
+											</div>
+										</li>
+									)
+								)
+							})
 						)
 					);
 				})}

@@ -1,14 +1,15 @@
 export const columnAccessors = {
 	index: "STT",
 	name: "Tên doanh nghiệp",
-	code_request: "Mã doanh nghiệp",
-	internshipPosition: "Vị trí thực tập",
-	majors: "Ngành",
+	business_code: "Mã tuyển dụng",
+	internship_position: "Vị trí tuyển dụng",
+	tax_code: "Mã số thuế",
+	major: "Ngành",
 	amount: "Số lượng",
-	address: "Địa chỉ",
-	smester_id: "Kỳ học",
+	address: "Địa chỉ doanh nghiệp",
+	semester_id: "Kỳ học",
 	campus_id: "Cơ sở",
-	request: "Yêu Cầu",
-	description: "Chi tiết",
-    benefish: "Quyền lợi"
+	requirement: "Yêu cầu ứng viên",
+	description: "Mô tả",
+    benefit: "Quyền lợi"
 };

@@ -1,27 +1,14 @@
-import { object, string, number, array } from "yup";
+import { object, string, number } from "yup";
 
 export const companySchema = object({
-    name: string().required(),
-    internshipPosition: string().required(),
-    majors: string().required(),
-    amount: number().required().positive().integer(),
+    name: string().required("Vui lòng nhập đầy đủ tên doanh nghiệp"),
+    tax_code: string().required("Vui lòng nhập đầy đủ mã số thuế"),
+    internship_position: string().required("Vui lòng nhập đầy đủ vị trí thực tập"),
+    major: string().required("Vui lòng chọn ngành"),
+    amount: number().required("Vui lòng nhập số lượng").positive().integer(),
     address: string(),
-    code_request: string(),
-    request: string(),
+    business_code: string().required("Vui lòng nhập đầy đủ mã doanh nghiệp"),
+    requirement: string(),
     description: string(),
-    benefish: string(),
-});
-
-export const companyImportExcelSchema = array(
-    object({
-        name: string().required(),
-        internshipPosition: string().required(),
-        majors: string().required(),
-        amount: number().required().positive().integer(),
-        address: string(),
-        code_request: string().required(),
-        request: string(),
-        description: string(),
-        benefish: string(),
-    })
-)
+    benefit: string(),
+})
