@@ -194,27 +194,28 @@ const tableData = useMemo(() => {
 				onOpenStateChange={setModal}
 				title={"Sửa nhân viên"}>
 				{user && (
-    <Form onSubmit={handleSubmit(onUpdateSubmit)}>
-      <InputFieldControl
-        name="name"
-        control={control}
-        label="Tên nhân viên"
-        defaultValue={user.name}
-      />
-      <InputFieldControl
-        name="email"
-        control={control}
-        label="Email nhân viên"
-        defaultValue={user.email}
-      />
-      <SelectFieldControl
-        label="Quyền hạn nhân viên"
-        control={control} 
-        name="role"
-        options={filterRole}
-      />
-      <Button type="submit" size="sm" variant="primary">Lưu</Button>
-    </Form>
+				<Form onSubmit={handleSubmit(onUpdateSubmit)}>
+					<InputFieldControl
+					name="name"
+					control={control}
+					label="Tên nhân viên"
+					defaultValue={user.name}
+					/>
+					<InputFieldControl
+					name="email"
+					control={control}
+					label="Email nhân viên"
+					defaultValue={user.email}
+					/>
+					<SelectFieldControl
+					label="Quyền hạn nhân viên"
+					control={control} 
+					name="role"
+					options={filterRole}
+					defaultValue={user.role}
+					/>
+					<Button type="submit" size="sm" variant="primary">Lưu</Button>
+				</Form>
   )}
 			</Modal>
 			<Box>
