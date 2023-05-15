@@ -22,6 +22,8 @@ import tw from "twin.macro";
 import { staffDataValidator } from "@/App/schemas/staffSchema";
 import { Link, useNavigate } from "react-router-dom";
 import { useGetAllCampusQuery } from "@/App/providers/apis/campusApi";
+import { TrashIcon } from "@heroicons/react/20/solid";
+import ModalLoading from "@/Core/components/common/Loading/ModalLoading";
 
 const Box = tw.div`flex flex-col gap-6`;
 const ButtonList = tw.div`flex items-center gap-2`;
@@ -35,36 +37,33 @@ const StaffListPage = () => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(staffDataValidator)
 	});
-	console.log(managers);
 
 const tableData = useMemo(() => {
 	return Array.isArray(managers?.list) ? managers?.list?.map((user,index)=> ({...user, index:index+1})): []
 },[managers])
 
 	const [handleAddNewStaff, addingStatus] = useAddStaffMutation()
-
 	const [handleUpdateStaff, updatingStatus] = useUpdateStaffMutation()
-
 	const [handleRemoveStaff, removeStatus] = useDeleteStaffMutation()
 
 	const onAddSubmit = async (data) => {
+		setSlideOverVisibility(!slideOverVisibility)
 		const result = await handleAddNewStaff(data)
 		if (result?.data?.statusCode) {
-			toast.error("Thêm nhân viên không thành công!")
-			return;
-		}
-		setSlideOverVisibility(!slideOverVisibility)
+				toast.error("Thêm nhân viên không thành công!")
+				return
+			}
 		refetch()
 		toast.success("Thêm nhân viên thành công!")
 	}
 
 	const onUpdateSubmit = async (data) => {
+		setModal(!modal)
 		const result = await handleUpdateStaff({id: user._id, payload: data})
 		if (result?.data?.statusCode) {
 			toast.error("Sửa nhân viên không thành công!")
 			return;
 		}
-		setModal(!modal)
 		refetch()
 		toast.success("Sửa nhân viên thành công!")
 	}
@@ -142,12 +141,12 @@ const tableData = useMemo(() => {
 				Cell:({value}) => (
 					<ButtonList>
 						<Button 
-							as={Link}
+							// as={Link}
 							size="xs" 
-							// variant="info" 
+							variant="default" 
+							shape="square"
 							onClick={() => {onOpenUpdate(value)}}>
 							<PencilSquareIcon className="w-4 h-4"/>
-							Chỉnh sửa 
 						</Button>
 						<PopConfirm
 							okText="Ok"
@@ -156,9 +155,8 @@ const tableData = useMemo(() => {
 							description={"Bạn muốn xóa nhân viên này ?"}
 							onConfirm={() => onDeleteSubmit(value)}
 						>
-							<Button size="xs" variant="error">
-								<XMarkIcon className="w-4 h-4"/>
-								Xóa
+							<Button size="xs" variant="error" shape="square">
+								<TrashIcon className="w-4 h-4"/>
 							</Button>
 						</PopConfirm>
 					</ButtonList>
@@ -169,6 +167,7 @@ const tableData = useMemo(() => {
 
 	return (
 		<Fragment>
+			{(removeStatus.isLoading || addingStatus.isLoading || updatingStatus.isLoading) && <ModalLoading />}
 			<SlideOver
 				open={slideOverVisibility}
 				onOpen={setSlideOverVisibility}
@@ -204,20 +203,20 @@ const tableData = useMemo(() => {
 					name="name"
 					control={control}
 					label="Tên nhân viên"
-					defaultValue={user.name}
+					defaultValue={user?.name}
 					/>
 					<InputFieldControl
 					name="email"
 					control={control}
 					label="Email nhân viên"
-					defaultValue={user.email}
+					defaultValue={user?.email}
 					/>
 					<SelectFieldControl
 					label="Quyền hạn nhân viên"
 					control={control} 
 					name="role"
 					options={filterRole}
-					defaultValue={user.role}
+					defaultValue={user?.role}
 					/>
 					<Button type="submit" size="sm" variant="primary">Lưu</Button>
 				</Form>
