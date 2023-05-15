@@ -1,10 +1,15 @@
 import tw from "twin.macro";
+import { lazy, Suspense } from "react";
+
+import ModalLoading from "@/Core/components/common/Loading/ModalLoading";
 import InputFieldControl from "@/Core/components/common/FormControl/InputFieldControl";
 import SelectFieldControl from "@/Core/components/common/FormControl/SelectFieldControl";
-import { useState } from "react";
+import { RegistrationType } from "./constants/RegistrationType";
+import { useState, useCallback, useTransition } from "react";
+import { toast } from "react-toastify";
 
-import FormSchoolSupport from "./Form/formSchoolSupport";
-import FormSelfFinding from "./Form/FormSelfFinding";
+const FormSchoolSupport = lazy(() => import("./Form/formSchoolSupport"));
+const FormSelfFinding = lazy(() => import("./Form/FormSelfFinding"));
 
 export const Layout = tw.div`grid grid-cols-12 gap-7 sm:gap-4 items-center my-4 `;
 
@@ -14,30 +19,38 @@ const FormSignUpCol = tw.div`col-span-8 flex items-center gap-4   sm:(col-span-1
 
 const LabelLayout = tw.label`inline-flex items-center`;
 const TitleForm = tw.span`ml-2 font-medium`;
-
-const RegistrationType = {
-	SelfFinding: 0,
-	SchoolSupport: 1,
-};
+const labelItems = [
+	{
+		label: "Nhờ nhà trường hỗ trợ",
+		value: RegistrationType.SchoolSupport,
+	},
+	{
+		label: "Tự tìm nơi thực tập",
+		value: RegistrationType.SelfFinding,
+	},
+];
+const options = [
+	{ value: "option1", label: "Option 1" },
+	{ value: "option2", label: "Option 2" },
+	{ value: "option3", label: "Option 3" },
+];
 
 const RegistrationPage = () => {
 	const [selectedOption, setSelectedOption] = useState(null);
-	const options = [
-		{ value: "option1", label: "Option 1" },
-		{ value: "option2", label: "Option 2" },
-		{ value: "option3", label: "Option 3" },
-	];
-	const labelItem = [
-		{
-			label: "Nhờ nhà trường hỗ trợ",
-			value: RegistrationType.SchoolSupport,
-		},
-		{
-			label: "Tự tìm nơi thực tập",
-			value: RegistrationType.SelfFinding,
-		},
-	];
-	const sharedFields = (control) => {
+	const handleChangeForm = (value) => {
+		setSelectedOption(value);
+	};
+
+	const handleFormSchoolSupport = async (data) => {
+		const file = data.upload;
+		const isPDF = file.type === "application/pdf";
+		if (!isPDF) {
+			toast.error(`Vui lòng chọn file PDF`);
+			return;
+		}
+	};
+	const handleFormSelfFinding = async (data) => {};
+	const sharedFields = useCallback((control) => {
 		return [
 			{
 				label: "Mã sinh viên",
@@ -109,24 +122,15 @@ const RegistrationPage = () => {
 				),
 			},
 		];
-	};
-	const handleChangeForm = (value) => {
-		setSelectedOption(value);
-	};
+	}, []);
 
-	const handleFormSchoolSupport = async (data) => {
-		console.log(data);
-	};
-	const handleFormSelfFinding = async (data) => {
-		console.log(data);
-	};
 	return (
 		<>
 			<div className="mb-5">Thời gian đăng ký còn lại</div>
 			<Layout>
 				<RegistrationTypeCol>Kiểu đăng ký</RegistrationTypeCol>
 				<FormSignUpCol>
-					{labelItem.map((item, index) => (
+					{labelItems.map((item, index) => (
 						<LabelLayout key={index}>
 							<input
 								type="radio"
@@ -139,12 +143,14 @@ const RegistrationPage = () => {
 					))}
 				</FormSignUpCol>
 			</Layout>
-			{selectedOption == RegistrationType.SelfFinding && (
-				<FormSelfFinding fields={sharedFields} onSubmit={handleFormSelfFinding} />
-			)}
-			{selectedOption == RegistrationType.SchoolSupport && (
-				<FormSchoolSupport fields={sharedFields} onSubmit={handleFormSchoolSupport} />
-			)}
+			<Suspense fallback={<ModalLoading />}>
+				{selectedOption == RegistrationType.SchoolSupport && (
+					<FormSchoolSupport fields={sharedFields} onSubmit={handleFormSchoolSupport} />
+				)}
+				{selectedOption == RegistrationType.SelfFinding && (
+					<FormSelfFinding fields={sharedFields} onSubmit={handleFormSelfFinding} />
+				)}
+			</Suspense>
 		</>
 	);
 };

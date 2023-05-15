@@ -10,6 +10,8 @@ const FormSelfFinding = ({ fields, onSubmit }) => {
 		resolver: yupResolver(formSignUpSelfFindingSchema),
 		defaultValues: selfFindingDefaultValues,
 	});
+
+	
 	const formSelfFinding = [
 		...fields(control),
 		{
@@ -83,7 +85,7 @@ const FormSelfFinding = ({ fields, onSubmit }) => {
 	];
 	return (
 		<>
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form onSubmit={handleSubmit(onSubmit)} className="h-[700px]">
 				{formSelfFinding.map((row, index) => (
 					<FormRow key={index} label={row.label} note={row.note}>
 						{row.content}

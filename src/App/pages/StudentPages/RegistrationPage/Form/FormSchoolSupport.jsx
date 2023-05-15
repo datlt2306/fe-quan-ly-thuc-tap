@@ -1,12 +1,14 @@
 import { useForm } from "react-hook-form";
 import InputFieldControl from "@/Core/components/common/FormControl/InputFieldControl";
+import FileUploadFieldControl from "@/Core/components/common/FormControl/FileUploadFieldControl";
 import { formSignUpSchoolSupportSchema } from "@/App/schemas/formSignUpInterShipSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "@/Core/components/common/Button";
 import FormRow from "../components/FormRow";
 import { schoolSupportDefaultValues } from "../Fields/formFields";
+import { useState, useEffect } from "react";
 const FormSchoolSupport = ({ fields, onSubmit }) => {
-	const { control, handleSubmit, reset } = useForm({
+	const { control, handleSubmit } = useForm({
 		resolver: yupResolver(formSignUpSchoolSupportSchema),
 		defaultValues: schoolSupportDefaultValues,
 	});
@@ -17,12 +19,7 @@ const FormSchoolSupport = ({ fields, onSubmit }) => {
 			label: "Upload CV(PDF)",
 			note: true,
 			content: (
-				<InputFieldControl
-					className="w-96 sm:w-full"
-					type="file"
-					control={control}
-					name="upload"
-				/>
+				<FileUploadFieldControl className="w-96 sm:w-full" control={control} name="upload" /> 
 			),
 		},
 		{
@@ -35,7 +32,7 @@ const FormSchoolSupport = ({ fields, onSubmit }) => {
 	];
 	return (
 		<>
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form onSubmit={handleSubmit(onSubmit)} className="h-[700px]">
 				{formSchoolSupport.map((row, index) => (
 					<FormRow key={index} label={row.label} note={row.note}>
 						{row.content}
