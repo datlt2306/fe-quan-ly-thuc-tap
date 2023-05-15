@@ -6,12 +6,14 @@ import { useGetOneStudentQuery } from "@/App/providers/apis/studentApi";
 import { useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
 import { StudentStatusEnum, StudentStatusGroupEnum } from "@/Core/constants/studentStatus";
 import { useGetSetTimeQuery } from "@/App/providers/apis/configTimesApi";
+import { useGetAllMajorQuery } from "@/App/providers/apis/majorApi";
+
 import Button from "@/Core/components/common/Button";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
 import ModalLoading from "@/Core/components/common/Loading/ModalLoading";
 import tw from "twin.macro";
 import { supportOptionsEnum } from "@/Core/constants/supportOptionsEnum";
-import { VariableIcon } from "@heroicons/react/20/solid";
+import { useEffect } from "react";
 const ViewReport = lazy(() => import("./components/ViewReport"));
 const ViewForm = lazy(() => import("./components/ViewForm"));
 const ViewCv = lazy(() => import("./components/ViewCv"));
@@ -26,20 +28,20 @@ export const VerticalList = (props) => (
 const StudentInfoPage = () => {
 	const user = useSelector((state) => state.auth?.user);
 	const [dateNow] = useState(Date.now());
+	const [nameMajor, setNameMajor] = useState(null);
 	const [openState, setOpenState] = useState(false);
 	const [modalContent, setModalContent] = useState(null);
 	const [title, setTitle] = useState("");
 
 	const handleGetInternStatusStyle = (value) => {
-		let style=null;
+		let style = null;
 		const checkstyle = Object.entries(StudentStatusGroupEnum).map(([k, v]) => {
-			const findItem=v.find(item=>StudentStatusEnum[value]==item)	
-			if(findItem){
-				style=k
+			const findItem = v.find((item) => StudentStatusEnum[value] == item);
+			if (findItem) {
+				style = k;
 				return;
 			}
 		});
-		console.log(style);
 		return style;
 	};
 
@@ -50,45 +52,49 @@ const StudentInfoPage = () => {
 		semester_id: user?.smester_id,
 		campus_id: user?.campus_id,
 	});
+	const { data: allMajor } = useGetAllMajorQuery();
 
+	useEffect(() => {
+		const findMajor = allMajor?.find((item) => item?.majorCode == user?.majorCode);
+		setNameMajor(findMajor?.name);
+	}, [allMajor, user?.majorCode]);
 	const columnsData = useMemo(
 		() => [
 			{
 				Header: "Mã",
-				accessor: "code_request",
+				accessor: "business_code",
 			},
 			{
 				Header: "Tên doanh nghiệp",
 				accessor: "name",
 			},
 			{
-				Header: "Chuyên ngành",
-				accessor: "major",
-			},
-			{
 				Header: "Vị trí TT",
-				accessor: "internshipPosition",
-			},
-			{
-				Header: "Yêu cầu",
-				accessor: "request",
-			},
-			{
-				Header: "Quyền lợi",
-				accessor: "benefish",
+				accessor: "internship_position",
 			},
 			{
 				Header: "Số lượng",
 				accessor: "amount",
 			},
 			{
+				Header: "Yêu cầu",
+				accessor: "requirement",
+			},
+			{
+				Header: "Quyền lợi",
+				accessor: "benefit",
+			},
+			{
+				Header: "Chuyên ngành",
+				accessor: "major.name",
+			},
+			{
+				Header: "Mô tả",
+				accessor: "description",
+			},
+			{
 				Header: "Địa chỉ",
 				accessor: "address",
-			},
-
-			{
-				Header: "Chi tiết",
-				accessor: "description",
 			},
 		],
 		[]
@@ -96,7 +102,7 @@ const StudentInfoPage = () => {
 	const dataRegisterInfomation = [
 		{ label: "Họ và tên :", value: data?.name },
 		{ label: "Khóa học :", value: data?.course },
-		{ label: "Ngành học :", value: data?.majors?.name },
+		{ label: "Ngành học :", value: nameMajor },
 
 		{ label: "Email :", value: data?.email },
 		{
@@ -130,7 +136,6 @@ const StudentInfoPage = () => {
 			content: <ViewReport data={data} />,
 		},
 	];
-
 	return (
 		<>
 			<WrapLayoutInfoUser>
@@ -176,7 +181,15 @@ const StudentInfoPage = () => {
 			<LayoutInfoRecruitment>
 				<Title>Thông tin tuyển dụng</Title>
 				{timeForm?.time?.startTime <= dateNow && dateNow <= timeForm?.time.endTime ? (
-					<ReactTable columns={columnsData} data={business?.list ?? []} />
+					<ReactTable
+						noDataComponent={
+							<tr>
+								<td>Empty</td>
+							</tr>
+						}
+						columns={columnsData}
+						data={business?.list ?? []}
+					/>
 				) : (
 					<Text>Chưa có thông tin tuyển dụng</Text>
 				)}

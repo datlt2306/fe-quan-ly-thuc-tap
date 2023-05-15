@@ -30,7 +30,6 @@ const rootReducer = combineReducers({
 	[configTimesApi.reducerPath]: configTimesApi.reducer,
 	[requestStudentsApi.reducerPath]: requestStudentsApi.reducer,
 	[campusSlice.name]: campusSlice.reducer,
-	[studentApi.reducerPath]: studentApi.reducer,
 	//major reducer
 	[majorApi.reducerPath]: majorApi.reducer,
 	[staffListApi.reducerPath]: staffListApi.reducer,
