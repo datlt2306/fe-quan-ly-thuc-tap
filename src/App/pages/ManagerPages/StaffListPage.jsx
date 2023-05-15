@@ -21,12 +21,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import tw from "twin.macro";
 import { staffDataValidator } from "@/App/schemas/staffSchema";
 import { useNavigate } from "react-router-dom";
+import { useGetAllCampusQuery } from "@/App/providers/apis/campusApi";
 
 const Box = tw.div`flex flex-col gap-6`;
 const ButtonList = tw.div`flex items-center gap-2`;
 
 const StaffListPage = () => {
 	const { data: managers, refetch} = useGetAllStaffQuery();
+	const { data: campus} = useGetAllCampusQuery();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
@@ -34,9 +36,10 @@ const StaffListPage = () => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(staffDataValidator)
 	});
+	console.log(managers);
 
 const tableData = useMemo(() => {
-	return Array.isArray(managers) ? managers.map((user,index)=> ({...user, index:index+1})): []
+	return Array.isArray(managers?.list) ? managers?.list?.map((user,index)=> ({...user, index:index+1})): []
 },[managers])
 
 	const [handleAddNewStaff, addingStatus] = useAddStaffMutation()
@@ -128,6 +131,7 @@ const tableData = useMemo(() => {
 				Filter: InputColumnFilter,
 				filterable: true,
 				isSort: true,
+				Cell: ({value}) => (value.name)
 			},
 			{
 				Header: "Thao tác",
