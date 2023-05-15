@@ -13,8 +13,8 @@ export const newStudentSchema = array(
 			.required("Vui lòng nhập đầy đủ email của sinh viên"),
 		phoneNumber: string()
 			.matches(/^\d{10}$/, { message: "Số điện thoại của sinh viên chưa đúng định dạng" })
-			.required(),
-		statusStudent: string().oneOf(Object.values(StudentSchoolingStatus), "Trạng thái sinh viên không hợp lệ").required(),
+			.required("Vui lòng nhập đầy đủ số điện thoại của sinh viên"),
+		statusStudent: string().required("Vui lòng nhập đầy đủ trạng thái sinh viên"),
 		smester_id: string().required("Vui lòng nhập đầy đủ kỳ học hiện tại của sinh viên"),
 		note: string().optional(),
 	})

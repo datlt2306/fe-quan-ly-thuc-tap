@@ -12,6 +12,7 @@ export default function axiosBaseQuery() {
 			});
 			return { data: response };
 		} catch (error) {
+			console.log(error)
 			if (error.response) {
 				console.log({
 					data: error.response?.data,
@@ -25,7 +26,7 @@ export default function axiosBaseQuery() {
 			}
 			console.log(error.config);
 			return {
-				status: error.response?.status,
+				status: error.response?.status || 500,
 				data: error.response?.data || error.message,
 			};
 		}

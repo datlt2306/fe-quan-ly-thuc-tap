@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Menu } from "@headlessui/react";
 import { Suspense, lazy } from "react";
-import { useGetStudentQuery } from "@/App/providers/apis/studentsApi";
+import { useGetOneStudentQuery } from "@/App/providers/apis/studentApi";
 import { useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
 import { StudentStatusEnum, StudentStatusGroupEnum } from "@/Core/constants/studentStatus";
 import { useGetSetTimeQuery } from "@/App/providers/apis/configTimesApi";
@@ -11,9 +11,10 @@ import ReactTable from "@/Core/components/common/Table/ReactTable";
 import ModalLoading from "@/Core/components/common/Loading/ModalLoading";
 import tw from "twin.macro";
 import { supportOptionsEnum } from "@/Core/constants/supportOptionsEnum";
-const ViewReport = lazy(() => import("./Modal/ViewReport"));
-const ViewForm = lazy(() => import("./Modal/ViewForm"));
-const ViewCv = lazy(() => import("./Modal/ViewCv"));
+import { VariableIcon } from "@heroicons/react/20/solid";
+const ViewReport = lazy(() => import("./components/ViewReport"));
+const ViewForm = lazy(() => import("./components/ViewForm"));
+const ViewCv = lazy(() => import("./components/ViewCv"));
 const Modal = lazy(() => import("@/Core/components/common/Modal"));
 
 export const VerticalList = (props) => (
@@ -21,25 +22,6 @@ export const VerticalList = (props) => (
 		{props.children}
 	</ul>
 );
-const Title = tw.h1`mb-5  text-lg font-medium text-primary`;
-const Text = tw.p`font-medium`;
-const WrapMenu = tw.div`mt-8 flex flex-col  gap-3`;
-const RenderNote = ({ label, data }) => (
-	<>
-		<label tw="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{label}</label>
-		<textarea
-			id="message"
-			rows={4}
-			tw="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:(placeholder-gray-400 border-gray-600 bg-gray-700 text-white)"
-			defaultValue={data?.note}
-			disabled
-		/>
-	</>
-);
-const WrapLayoutInfoUser = tw.section`mb-8  grid grid-cols-2 sm:grid-cols-1 `;
-const LayoutInfoUser = tw.div`border-r-2 sm:(border-r-0 border-b-2 pb-4 border-r-0)`;
-const LayoutFormSubmitted = tw.div`ml-8 sm:(pt-4 ml-0)`;
-const LayoutInfoRecruitment = tw.section`border-b-2 py-6 mb-6`;
 
 const StudentInfoPage = () => {
 	const user = useSelector((state) => state.auth?.user);
@@ -47,19 +29,22 @@ const StudentInfoPage = () => {
 	const [openState, setOpenState] = useState(false);
 	const [modalContent, setModalContent] = useState(null);
 	const [title, setTitle] = useState("");
-	const getIntershipStatusStyle = (value) => {
-		let status;
-		Object.keys(StudentStatusGroupEnum).forEach((groupKey) => {
-			if (StudentStatusGroupEnum[groupKey].includes(value)) {
-				status = groupKey;
+
+	const handleGetInternStatusStyle = (value) => {
+		let style=null;
+		const checkstyle = Object.entries(StudentStatusGroupEnum).map(([k, v]) => {
+			const findItem=v.find(item=>StudentStatusEnum[value]==item)	
+			if(findItem){
+				style=k
+				return;
 			}
 		});
-		return status;
+		console.log(style);
+		return style;
 	};
 
-	const { data, isFetching } = useGetStudentQuery(user?.id);
+	const { data, isFetching } = useGetOneStudentQuery(user?.id);
 	const { data: business } = useGetAllCompanyQuery();
-
 	const { data: timeForm } = useGetSetTimeQuery({
 		typeNumber: 1,
 		semester_id: user?.smester_id,
@@ -124,7 +109,7 @@ const StudentInfoPage = () => {
 		},
 		{
 			label: "Trạng thái sinh viên :",
-			value: <>{<span className={`text-${getIntershipStatusStyle(data?.statusCheck)}`}>{StudentStatusEnum[data?.statusCheck]}</span>}</>,
+			value: <>{<span className={`text-${handleGetInternStatusStyle(data?.statusCheck)}`}>{StudentStatusEnum[data?.statusCheck]}</span>}</>,
 		},
 	];
 
@@ -209,5 +194,23 @@ const StudentInfoPage = () => {
 		</>
 	);
 };
-
+const Title = tw.h1`mb-5  text-lg font-medium text-primary`;
+const Text = tw.p`font-medium`;
+const WrapMenu = tw.div`mt-8 flex flex-col  gap-3`;
+const RenderNote = ({ label, data }) => (
+	<>
+		<label tw="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{label}</label>
+		<textarea
+			id="message"
+			rows={4}
+			tw="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:(placeholder-gray-400 border-gray-600 bg-gray-700 text-white)"
+			defaultValue={data?.note}
+			disabled
+		/>
+	</>
+);
+const WrapLayoutInfoUser = tw.section`mb-8  grid grid-cols-2 sm:grid-cols-1 `;
+const LayoutInfoUser = tw.div`border-r-2 sm:(border-r-0 border-b-2 pb-4 border-r-0)`;
+const LayoutFormSubmitted = tw.div`ml-8 sm:(pt-4 ml-0)`;
+const LayoutInfoRecruitment = tw.section`border-b-2 py-6 mb-6`;
 export default StudentInfoPage;

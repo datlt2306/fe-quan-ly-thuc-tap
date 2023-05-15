@@ -3,13 +3,14 @@ import authSlice from "./slices/authSlice";
 import semesterApi from "./apis/semesterApi";
 import campusApi from "./apis/campusApi";
 import campusSlice from "./slices/campusSlice";
-import studentsApi from "./apis/studentsApi";
+import studentApi from "./apis/studentApi";
 import businessApi from "./apis/businessApi";
 import configTimesApi from "./apis/configTimesApi";
 import authApi from "./apis/authApi";
 import requestStudentsApi from "./apis/requestStudentsApi";
-import studentApi from "./apis/studentApi";
+import staffListApi from "./apis/staffListApi";
 import semesterSlice from "./slices/semesterSlice";
+import majorApi from "./apis/majorApi";
 
 const rootReducer = combineReducers({
 	// Auth reducers
@@ -20,15 +21,19 @@ const rootReducer = combineReducers({
 	// Semester reducers
 	[semesterApi.reducerPath]: semesterApi.reducer,
 	[semesterSlice.name]: semesterSlice.reducer,
+	// Business reducers
+	[businessApi.reducerPath]: businessApi.reducer,
 	// Campus reducers
 	[campusApi.reducerPath]: campusApi.reducer,
-	[studentsApi.reducerPath]: studentsApi.reducer,
+	[studentApi.reducerPath]: studentApi.reducer,
 	[businessApi.reducerPath]: businessApi.reducer,
 	[configTimesApi.reducerPath]: configTimesApi.reducer,
 	[requestStudentsApi.reducerPath]: requestStudentsApi.reducer,
 	[campusSlice.name]: campusSlice.reducer,
-	// Student reducers
 	[studentApi.reducerPath]: studentApi.reducer,
+	//major reducer
+	[majorApi.reducerPath]: majorApi.reducer,
+	[staffListApi.reducerPath]: staffListApi.reducer,
 });
 
 export default rootReducer;

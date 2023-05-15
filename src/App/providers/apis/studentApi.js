@@ -7,11 +7,16 @@ const studentApi = createApi({
 	tagTypes: ["Student"],
 	endpoints: (build) => ({
 		getStudents: build.query({
-			query: (params) => {
-				console.log(params);
-				return { url: "/student", method: "GET", params };
-			},
+			query: (params) => ({ url: "/student", method: "GET", params }),
 			providesTags: ["Student"],
+		}),
+		getOneStudent: build.query({
+			query: (id) => {
+				return { url: `/student/${id}`, method: "GET" };
+			},
+		
+
+			providesTags: ['Students'],
 		}),
 		addStudents: build.mutation({
 			query: (payload) => ({ url: "/student", method: "POST", data: payload }),
@@ -20,5 +25,5 @@ const studentApi = createApi({
 	}),
 });
 
-export const { useGetStudentsQuery, useAddStudentsMutation } = studentApi;
+export const { useGetStudentsQuery,useGetOneStudentQuery, useAddStudentsMutation } = studentApi;
 export default studentApi;

@@ -11,7 +11,7 @@ const Header = ({ sticky, children, ...props }) => (
 	<thead
 		{...props}
 		className={classNames({
-			"[&>*]:(sticky top-0)": sticky,
+			"sticky top-0 z-20 bg-inherit": sticky,
 		})}>
 		{children}
 	</thead>
