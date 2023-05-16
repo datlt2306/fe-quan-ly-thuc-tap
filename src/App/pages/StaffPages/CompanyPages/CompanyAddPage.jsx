@@ -13,10 +13,12 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const AddBusinessForm = () => {
+
 	const navigate = useNavigate();
 
     // get list campus and major
     const { data: major } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
+    
     // handle add new company
     const { handleSubmit, control } = useForm({
         resolver: yupResolver(companySchema)

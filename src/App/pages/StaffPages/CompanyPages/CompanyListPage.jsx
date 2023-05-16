@@ -27,12 +27,17 @@ import { Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
 
 const CompanyListPage = () => {
+
+	// css mobile
 	const menuItemClasses = () =>
 		classNames({
 			"flex items-center gap-2 p-2 hover:bg-gray-100 duration-300 whitespace-nowrap select-none cursor-pointer text-base-content text-sm": true,
 		});
+
+	// state modal
 	const [modal, setModal] = useState(false)
 	const [dataModal, setDataModal] = useState({});
+
 	// get list company, semester, campus, major
 	const { data: majors } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
 	const campus = useSelector((state) => state.campus)
@@ -59,7 +64,6 @@ const CompanyListPage = () => {
 		}
 		toast.success("Đã xóa doanh nghiệp!")
 	}
-
 
 	// handle export, import
 	const [handleImportFile] = useImportFromExcel();

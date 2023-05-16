@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputFieldControl from "@/Core/components/common/FormControl/InputFieldControl";
@@ -13,20 +13,23 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 
 const UpdateBusinessForm = () => {
+
     const navigate = useNavigate();
 
     // get id and get default company
     const { id } = useParams();
     const { data: company } = useGetOneCompanyQuery({ id }, { refetchOnMountOrArgChange: true })
+
     // check id
     if (company?.statusCode) {
         toast.error("Doanh nghiệp không tồn tại!")
         navigate('/danh-sach-cong-ty')
     }
 
-    // get list campus and major
+    // get major
     const { data: major } = useGetAllMajorQuery();
 
+    // set default value and form control
     const { handleSubmit, control, reset } = useForm({
         resolver: yupResolver(companySchema),
     });
