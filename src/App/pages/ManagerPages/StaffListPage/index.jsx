@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
+import { lazy,Suspense } from "react";
 import { useAddStaffMutation, useDeleteStaffMutation, useGetAllStaffQuery, useUpdateStaffMutation } from "@/App/providers/apis/staffListApi";
 import Button from "@/Core/components/common/Button";
 import InputFieldControl from "@/Core/components/common/FormControl/InputFieldControl";
@@ -13,7 +14,7 @@ import {
 	SelectColumnFilter,
 } from "@/Core/components/common/Table/ReactTableFilters";
 import { RoleStaffEnum } from "@/Core/constants/roleStaff";
-import { PencilSquareIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, PlusIcon, UserPlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -24,49 +25,28 @@ import { Link, useNavigate } from "react-router-dom";
 import { useGetAllCampusQuery } from "@/App/providers/apis/campusApi";
 import { TrashIcon } from "@heroicons/react/20/solid";
 import ModalLoading from "@/Core/components/common/Loading/ModalLoading";
+import { LoadingSpinner } from "@/Core/components/common/Loading/LoadingSpinner";
+import AddStaffModal from "./components/UpdateStaffModal";
+import UpdateStaffModal from "./components/UpdateStaffModal";
+import AddStaffSlideOver from "./components/AddStaffSlideOver";
 
 const Box = tw.div`flex flex-col gap-6`;
-const ButtonList = tw.div`flex items-center gap-2`;
+const ButtonList = tw.div`flex items-center gap-2 justify-end`;
 
 const StaffListPage = () => {
-	const { data: managers, refetch} = useGetAllStaffQuery();
-	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
-	const navigate = useNavigate();
-	const [user, setUser] = useState({});
+	const { data: managers} = useGetAllStaffQuery();
 	const [modal, setModal] = useState(false)
-	const { handleSubmit, control, reset } = useForm({
+	const [user, setUser] = useState()
+	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
+	const {reset} = useForm({
 		resolver: yupResolver(staffDataValidator)
 	});
 
-const tableData = useMemo(() => {
-	return Array.isArray(managers?.list) ? managers?.list?.map((user,index)=> ({...user, index:index+1})): []
-},[managers])
+	const tableData = useMemo(() => {
+		return Array.isArray(managers?.list) ? managers?.list?.map((user,index)=> ({...user, index:index+1})): []
+	},[managers])
 
-	const [handleAddNewStaff, addingStatus] = useAddStaffMutation()
-	const [handleUpdateStaff, updatingStatus] = useUpdateStaffMutation()
 	const [handleRemoveStaff, removeStatus] = useDeleteStaffMutation()
-
-	const onAddSubmit = async (data) => {
-		setSlideOverVisibility(!slideOverVisibility)
-		const result = await handleAddNewStaff(data)
-		if (result?.data?.statusCode) {
-				toast.error("Thêm nhân viên không thành công!")
-				return
-			}
-		refetch()
-		toast.success("Thêm nhân viên thành công!")
-	}
-
-	const onUpdateSubmit = async (data) => {
-		setModal(!modal)
-		const result = await handleUpdateStaff({id: user._id, payload: data})
-		if (result?.data?.statusCode) {
-			toast.error("Sửa nhân viên không thành công!")
-			return;
-		}
-		refetch()
-		toast.success("Sửa nhân viên thành công!")
-	}
 
 	const onDeleteSubmit = async (id) => {
 		const result = await handleRemoveStaff(id)
@@ -74,22 +54,17 @@ const tableData = useMemo(() => {
 			toast.error("Xóa không thành công!")
 			return;
 		}
-		refetch()
 		toast.success("Xóa nhân viên thành công!")
 	}
 
-	const filterRole =  Array.isArray(managers?.list) && managers?.list
-		.filter((item, index, self) => self.findIndex(t => t.role === item.role) === index )
-		.map((item)=> ({value:String(item?.role),label:item?.role == 1 ? "Nhân viên" : "Quản lý"} ))
-
 	const onOpenUpdate = (data) => {
-		reset()
 		const selectedUser = managers?.list && managers?.list?.find(item => item?._id === data);
 		if (selectedUser) {
-			setUser(selectedUser);
+			setUser(selectedUser)
 			setModal(!modal);
 		}
 	}
+	
 	const columnsData = useMemo(
 		() => [
 			{
@@ -144,8 +119,10 @@ const tableData = useMemo(() => {
 							size="xs" 
 							variant="default" 
 							shape="square"
-							onClick={() => {onOpenUpdate(value)}}>
-							<PencilSquareIcon className="w-4 h-4"/>
+							onClick={() => {
+								onOpenUpdate(value)}}
+							>
+								<PencilSquareIcon className="w-4 h-4"/>
 						</Button>
 						<PopConfirm
 							okText="Ok"
@@ -166,62 +143,21 @@ const tableData = useMemo(() => {
 
 	return (
 		<Fragment>
-			{(removeStatus.isLoading || addingStatus.isLoading || updatingStatus.isLoading) && <ModalLoading />}
-			<SlideOver
+			<AddStaffSlideOver
 				open={slideOverVisibility}
 				onOpen={setSlideOverVisibility}
-				panelTitle={"Thêm nhân viên"}>
-				{/* Add student form */}
-				<Form onSubmit={handleSubmit(onAddSubmit)}>
-					<InputFieldControl
-						name="name"
-						control={control}
-						label="Tên nhân viên"
-					/>
-					<InputFieldControl
-						name="email"
-						control={control}
-						label="Email nhân viên"
-					/>
-					<SelectFieldControl
-						label="Quyền hạn nhân viên"
-						control={control} 
-						name="role"
-						options={filterRole}
-					/>
-					<Button type="submit" size="sm" variant="primary">Thêm</Button>
-				</Form>
-			</SlideOver>
-			<Modal
-				openState={modal} 
+				panelTitle={"Thêm nhân viên"}
+			/>
+
+			<UpdateStaffModal 
+				openState={modal}
 				onOpenStateChange={setModal}
-				title={"Sửa nhân viên"}>
-				{user && (
-				<Form onSubmit={handleSubmit(onUpdateSubmit)}>
-					<InputFieldControl
-					name="name"
-					control={control}
-					label="Tên nhân viên"
-					defaultValue={user?.name}
-					/>
-					<InputFieldControl
-					name="email"
-					control={control}
-					label="Email nhân viên"
-					defaultValue={user?.email}
-					/>
-					<SelectFieldControl
-					label="Quyền hạn nhân viên"
-					control={control} 
-					name="role"
-					options={filterRole}
-					defaultValue={user?.role}
-					/>
-					<Button type="submit" size="sm" variant="primary">Lưu</Button>
-				</Form>
-  )}
-			</Modal>
+				title={"Sửa nhân viên"}
+				userData={user} 
+			/>
+		
 			<Box>
+
 				<ButtonList>
 					<Button
 						type="button"
@@ -231,7 +167,7 @@ const tableData = useMemo(() => {
 							reset()
 							setSlideOverVisibility(!slideOverVisibility)
 						}}>
-						<PlusIcon className="h-3 w-3 text-[inherit]" /> Thêm nhân viên
+						<UserPlusIcon className="h-4 w-4 text-[inherit] " /> Thêm nhân viên
 					</Button>
 				</ButtonList>
 
@@ -243,9 +179,6 @@ const tableData = useMemo(() => {
 		</Fragment>
 	);
 };
-
-const Form  = tw.form`flex flex-col gap-6`
-
 
 export default StaffListPage;
 
