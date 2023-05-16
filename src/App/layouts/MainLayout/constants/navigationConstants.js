@@ -47,9 +47,27 @@ export const staffNavigation = [
 		icon: UserGroupIcon,
 	},
 	{
-		label: "Danh sách công ty",
-		path: StaffPaths.COMPANY_LIST,
-		icon: ClipboardDocumentIcon,
+		label: "Công ty",
+		icon: BuildingOffice2Icon,
+		children: [
+			{
+				label: "Danh sách công ty",
+				path: StaffPaths.COMPANY_LIST,
+				icon: ClipboardDocumentIcon,
+				show: true
+			},
+			{
+				label: "Thêm mới công ty",
+				path: StaffPaths.COMPANY_ADD,
+				icon: PlusIcon,
+				show: true
+			},
+			{
+				label: "Cập nhật công ty",
+				path: StaffPaths.COMPANY_UPDATE,
+				icon: UserGroupIcon,
+			},
+		]
 	},
 	{
 		label: "Reviews",
