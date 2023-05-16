@@ -7,10 +7,7 @@ const studentApi = createApi({
 	tagTypes: ["Student"],
 	endpoints: (build) => ({
 		getStudents: build.query({
-			query: (params) => {
-				console.log(params);
-				return { url: "/student", method: "GET", params };
-			},
+			query: (params) => ({ url: "/student", method: "GET", params }),
 			providesTags: ["Student"],
 		}),
 		addStudents: build.mutation({
