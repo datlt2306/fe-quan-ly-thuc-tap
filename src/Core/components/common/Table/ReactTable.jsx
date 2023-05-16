@@ -164,7 +164,7 @@ const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading 
 			<Footer>
 				<ButtonGroup>
 					<ButtonGroup.Item
-						variant={canPreviousPage ? "outline" : "disabled"}
+						variant={canPreviousPage ? "default" : "disabled"}
 						shape="square"
 						onClick={() => {
 							gotoPage(0);
@@ -174,7 +174,7 @@ const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading 
 					</ButtonGroup.Item>
 
 					<ButtonGroup.Item
-						variant={canPreviousPage ? "outline" : "disabled"}
+						variant={canPreviousPage ? "default" : "disabled"}
 						shape="square"
 						onClick={() => {
 							previousPage();
@@ -183,7 +183,7 @@ const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading 
 						<ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
 					</ButtonGroup.Item>
 					<ButtonGroup.Item
-						variant={canNextPage ? "outline" : "disabled"}
+						variant={canNextPage ? "default" : "disabled"}
 						shape="square"
 						onClick={() => {
 							nextPage();
@@ -192,7 +192,7 @@ const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading 
 						<ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
 					</ButtonGroup.Item>
 					<ButtonGroup.Item
-						variant={canNextPage ? "outline" : "disabled"}
+						variant={canNextPage ? "default" : "disabled"}
 						shape="square"
 						onClick={() => {
 							gotoPage(pageCount - 1);

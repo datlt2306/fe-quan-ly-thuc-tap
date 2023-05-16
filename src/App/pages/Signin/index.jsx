@@ -39,7 +39,7 @@ export default function SigninPage() {
 
 			setLoginInformation({
 				smester_id: defaultSemester.result?._id,
-				cumpusId: defaultSemester.result?.campus_id,
+				campus_id: defaultSemester.result?.campus_id,
 			});
 
 			setAllowToLogin(!!campus);
@@ -60,11 +60,8 @@ export default function SigninPage() {
 				toast.error("Đăng nhập thất bại !");
 				return;
 			}
-			const currentCampus =
-				response.data?.manager?.campus_id || response.data?.student.campus_id || null;
-			dispatch(
-				getCurrentCampus(data?.listCumpus.find((campus) => campus._id === currentCampus))
-			);
+			const currentCampus = response.data?.manager?.campus_id || response.data?.student.campus_id || null;
+			dispatch(getCurrentCampus(data?.listCampus.find((campus) => campus._id === currentCampus)));
 			setAccessToken(`Bearer ${response?.data?.accessToken}`);
 			toast.success("Đăng nhập thành công !");
 			navigate("/");
@@ -80,8 +77,8 @@ export default function SigninPage() {
 				<Form>
 					<Select onChange={(e) => handleSelectCampus(e.target.value)}>
 						<Option>Chọn cơ sở</Option>
-						{Array.isArray(data?.listCumpus) &&
-							data?.listCumpus?.map((camp) => (
+						{Array.isArray(data?.listCampus) &&
+							data?.listCampus?.map((camp) => (
 								<Option key={camp?._id} value={camp?._id}>
 									{camp?.name}
 								</Option>
@@ -93,9 +90,7 @@ export default function SigninPage() {
 							"pointer-events-none select-none opacity-50": !isAllowToLoggin,
 						})}>
 						<GoogleLogin
-							onSuccess={(credentialResponse) =>
-								signinCallback(credentialResponse?.credential)
-							}
+							onSuccess={(credentialResponse) => signinCallback(credentialResponse?.credential)}
 							logo_alignment="center"
 							theme={isAllowToLoggin ? "filled_blue" : "outline"}
 							size="large"

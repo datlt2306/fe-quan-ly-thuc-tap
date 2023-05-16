@@ -12,6 +12,7 @@ export default function axiosBaseQuery() {
 			});
 			return { data: response };
 		} catch (error) {
+<<<<<<< HEAD
 			console.log(error)
 			if (error.response) {
 				console.log({
@@ -25,9 +26,12 @@ export default function axiosBaseQuery() {
 				console.log(error.message);
 			}
 			console.log(error.config);
+=======
+>>>>>>> 173e148e45d597adb98a7dfa84f25605b971f259
 			return {
-				status: error.response?.status || 500,
+				status: error.response?.status,
 				data: error.response?.data || error.message,
+				error: !!error,
 			};
 		}
 	};

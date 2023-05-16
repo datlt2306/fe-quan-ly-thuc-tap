@@ -2,11 +2,8 @@ import { Fragment, useEffect, useMemo, useState, useRef } from "react";
 import Button from "@/Core/components/common/Button";
 import PopConfirm from "@/Core/components/common/Popup/PopConfirm";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
-import {
-	InputColumnFilter,
-	SelectColumnFilter,
-} from "@/Core/components/common/Table/ReactTableFilters";
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
+import { InputColumnFilter, SelectColumnFilter } from "@/Core/components/common/Table/ReactTableFilters";
+import { LoadingSpinner } from "@/Core/components/common/Loading/LoadingSpinner";
 import { ArrowDownTrayIcon, PlusIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,14 +17,13 @@ import getFileExtension from "@/Core/utils/getFileExtension";
 import { convertToExcelData } from "@/Core/utils/excelDataHandler";
 import { excelSampleData } from "./mocks";
 import { AllowedFileExt } from "@/Core/constants/allowedFileType";
-import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
+import { useGetAllMajorQuery } from "@/App/providers/apis/majorApi";
 
 const CompanyListPage = () => {
-
 	// get list company, semester, campus, majors
-	const { data: major } = useGetAllMajorQuery(null, {refetchOnMountOrArgChange: true});
+	const { data: major } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
 	const { data: company, refetch } = useGetAllCompanyQuery({ limit: 1000 }, { refetchOnMountOrArgChange: true });
-	const campus = useSelector((state) => state.campus)
+	const campus = useSelector((state) => state.campus);
 	const { data: semester } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 
@@ -38,17 +34,16 @@ const CompanyListPage = () => {
 	}, [company]);
 
 	// hanle delete company
-	const [handleDeleteCompany, { isLoading }] = useDeleteCompanyMutation()
+	const [handleDeleteCompany, { isLoading }] = useDeleteCompanyMutation();
 	const onDeleteSubmit = async (id) => {
-		const result = await handleDeleteCompany({ id })
+		const result = await handleDeleteCompany({ id });
 		if (result?.data?.statusCode) {
-			toast.error(result.data.message)
+			toast.error(result.data.message);
 			return;
 		}
-		refetch()
-		toast.success("Đã xóa doanh nghiệp!")
-	}
-
+		refetch();
+		toast.success("Đã xóa doanh nghiệp!");
+	};
 
 	// handle export, import
 	const [handleImportFile] = useImportFromExcel();
@@ -73,21 +68,21 @@ const CompanyListPage = () => {
 				description: obj[columnAccessors.description],
 				benefish: obj[columnAccessors.benefish],
 			}));
-			console.log(newCompanyList)
+			console.log(newCompanyList);
 			newCompanyList.forEach(async (item) => {
-				const result = await handleAddCompany({...item, majors: major?.find(majorItem => majorItem.majorCode === item.majors)?._id});
+				const result = await handleAddCompany({ ...item, majors: major?.find((majorItem) => majorItem.majorCode === item.majors)?._id });
 				if (result?.data?.statusCode) {
-					toast.error(result.data.message)
+					toast.error(result.data.message);
 					return;
 				}
-				refetch()
-				toast.success("Thêm doanh nghiệp mới thành công!")
-			})
+				refetch();
+				toast.success("Thêm doanh nghiệp mới thành công!");
+			});
 			fileInputRef.current.value = null;
 		}
 	};
 
-	// // Get file from device and execute callback to add new companies	
+	// // Get file from device and execute callback to add new companies
 	const handleImportCompanies = (file) => {
 		const fileExtension = getFileExtension(file);
 		if (fileExtension !== AllowedFileExt.XLSX) {
@@ -109,8 +104,8 @@ const CompanyListPage = () => {
 					...company,
 					majors: company.majors.name,
 					campus_id: company.campus_id.name,
-					smester_id: semester.listSemesters.find(item => item._id === company.smester_id).name,
-					index: index + 1
+					smester_id: semester.listSemesters.find((item) => item._id === company.smester_id).name,
+					index: index + 1,
 				};
 			}),
 			columnAccessors
@@ -200,7 +195,7 @@ const CompanyListPage = () => {
 		},
 		{
 			Header: "Thao tác",
-			accessor: '_id',
+			accessor: "_id",
 			canFilter: false,
 			canSort: false,
 			filterable: false,
@@ -224,19 +219,15 @@ const CompanyListPage = () => {
 				</ButtonList>
 			),
 		},
-	]
+	];
 
 	return (
 		<Fragment>
 			<Box>
 				<ButtonList>
 					<Container>
-						<Button
-							type="button"
-							variant="primary"
-							size="sm"
-							onClick={() => setSlideOverVisibility(!slideOverVisibility)}>
-							<PlusIcon className="h-3 w-3 text-[inherit]" /> <Link to={'/them-moi-cong-ty'}>Thêm mới doanh nghiệp</Link>
+						<Button type="button" variant="primary" size="sm" onClick={() => setSlideOverVisibility(!slideOverVisibility)}>
+							<PlusIcon className="h-3 w-3 text-[inherit]" /> <Link to={"/them-moi-cong-ty"}>Thêm mới doanh nghiệp</Link>
 						</Button>
 
 						<Button type="button" variant="success" size="sm" onClick={handleExportDataToExcel}>
@@ -264,21 +255,32 @@ const CompanyListPage = () => {
 						<label htmlFor="semester-list" className="inline-flex items-center gap-2 whitespace-nowrap text-base-content">
 							<CalendarDaysIcon className="h-6 w-6" /> Kỳ học
 						</label>
-						<Select onChange={(e) => e.target.value === "all" ? setTableData(company?.list) : setTableData(company?.list.filter(item => item.smester_id === e.target.value))}>
+						<Select
+							onChange={(e) =>
+								e.target.value === "all"
+									? setTableData(company?.list)
+									: setTableData(company?.list.filter((item) => item.smester_id === e.target.value))
+							}>
 							<Option value="all">All</Option>
-							{Array.isArray(semester?.listSemesters) && semester?.listSemesters.map((item, index) => (
-								<Option value={item._id} key={index}>{item.name}</Option>
-							))}
+							{Array.isArray(semester?.listSemesters) &&
+								semester?.listSemesters.map((item, index) => (
+									<Option value={item._id} key={index}>
+										{item.name}
+									</Option>
+								))}
 						</Select>
 					</Container>
-
 				</ButtonList>
 
 				{tableData ? (
 					<ReactTable
 						columns={columnsData}
 						data={tableData}
-						noDataComponent={<tr><td>Empty</td></tr>}
+						noDataComponent={
+							<tr>
+								<td>Empty</td>
+							</tr>
+						}
 					/>
 				) : (
 					<LoadingSpinner />
@@ -288,10 +290,10 @@ const CompanyListPage = () => {
 	);
 };
 
-export default CompanyListPage;
-
 const Box = tw.div`flex flex-col gap-6`;
 const ButtonList = tw.div`flex justify-between`;
 const Container = tw.div`flex items-center gap-2`;
 const Select = tw.select`block w-full rounded-[4px] border-none duration-300  px-2 py-1.5 outline-none ring-1 ring-gray-300 focus:ring-primary focus:active:ring-primary min-w-[128px] m-0`;
 const Option = tw.option`leading-6`;
+
+export default CompanyListPage;

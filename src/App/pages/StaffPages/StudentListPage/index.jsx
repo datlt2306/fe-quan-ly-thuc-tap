@@ -14,13 +14,14 @@ import { convertToExcelData } from "@/Core/utils/excelDataHandler";
 import formatDate from "@/Core/utils/formatDate";
 import getFileExtension from "@/Core/utils/getFileExtension";
 import { CalendarDaysIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
 import DesktopButtonGroup from "./components/DesktopButtonGroup";
 import MobileDropdownButtonGroup from "./components/MobileDropdownButtonGroup";
 import { InternSupportType, columnAccessors } from "./constants";
+import { XMarkIcon } from "@heroicons/react/20/solid";
 
 const handleGetInternStatusStyle = (value) => {
 	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
@@ -34,6 +35,7 @@ const StudentListPage = () => {
 	const [addStudents] = useAddStudentsMutation(); // add students
 	const [selectedStudents, setSelectedStudents] = useState([]); // get selected student by checkbox
 	const fileInputRef = useRef(null);
+	const toastId = useRef(null);
 	const { defaultSemester } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useState(defaultSemester?._id);
 	const { data: studentsListData, isLoading } = useGetStudentsQuery({ semester: currentSemester }, { refetchOnMountOrArgChange: true });
@@ -53,7 +55,7 @@ const StudentListPage = () => {
 	}, [studentsListData, isLoading]);
 
 	// Callback function will be executed after import file excel
-	const importExcelDataCallback = (excelData) => {
+	const importExcelDataCallback = async (excelData) => {
 		if (!excelData.length) {
 			toast.warn("Vui lòng nhập thông tin đầy đủ !");
 		}
@@ -69,26 +71,47 @@ const StudentListPage = () => {
 				smester_id: defaultSemester?._id,
 				campus_id: currentCampus?._id,
 			}));
-			console.log(newStudentList);
-			newStudentSchema
-				.validate(newStudentList)
-				.then((data) => {
-					const response = addStudents({
-						data,
-						smester_id: defaultSemester?._id,
-						campus_id: currentCampus?._id,
-					});
+			try {
+				toastId.current = toast.loading("Đang tải lên dữ liệu ...");
+				const payload = await newStudentSchema.validate(newStudentList);
 
-					toast.promise(response, {
-						success: "Import sinh viên thành công !",
-						error: "Đã xảy ra lỗi ! Vui lòng kiểm tra lại dữ liệu tải lên !",
-						pending: "Đang tải lên dữ liệu ...",
+				const { error } = await addStudents({
+					data: payload,
+					smester_id: defaultSemester?._id,
+					campus_id: currentCampus?._id,
+				});
+
+				if (error) {
+					toast.update(toastId.current, {
+						type: "error",
+						render: error.message || "Đã có lỗi xảy ra !",
+						isLoading: false,
+						closeButton: true,
+						autoClose: 2000,
 					});
 					fileInputRef.current.value = null;
-				})
-				.catch((error) => {
-					toast.error(error?.message);
+					return;
+				}
+
+				toast.update(toastId.current, {
+					type: "success",
+					render: "Tải lên dữ liệu thành công!",
+					isLoading: false,
+					closeButton: true,
+					autoClose: 2000,
 				});
+
+				fileInputRef.current.value = null;
+			} catch (error) {
+				toast.update(toastId.current, {
+					type: "error",
+					render: error.message,
+					isLoading: false,
+					closeButton: true,
+					autoClose: 2000,
+				});
+				fileInputRef.current.value = null;
+			}
 		}
 	};
 
