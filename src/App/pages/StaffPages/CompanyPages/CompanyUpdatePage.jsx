@@ -32,14 +32,24 @@ const UpdateBusinessForm = () => {
     });
     useEffect(() => {
         if (company) {
-            reset({ name: company.name, internship_position: company.internship_position, major: company.major, amount: company.amount, address: company.address, semester_id: company.semester_id, campus_id: company.campus_id, tax_code: company.tax_code, business_code: company.business_code, requirement: company.requirement, description: company.description, benefit: company.benefit });
+            reset({
+                name: company.name,
+                internship_position: company.internship_position,
+                major: company.major,
+                amount: company.amount,
+                address: company.address,
+                tax_code: company.tax_code,
+                business_code: company.business_code,
+                requirement: company.requirement,
+                description: company.description,
+                benefit: company.benefit
+            });
         }
     }, [company, reset]);
 
     // handle update company
     const [handleUpdateCompany, { isLoading }] = useUpdateCompanyMutation()
     const onHandleUpdate = async (data) => {
-        console.log(data)
         const result = await handleUpdateCompany({ data, id });
         if (result?.data?.statusCode) {
             toast.error(result.data.message)
@@ -82,7 +92,7 @@ const UpdateBusinessForm = () => {
                     label="Số Lượng"
                 />
 
-                <SelectFieldControl name='major' control={control} label="Ngành" options={Array.isArray(major) && major.map(item => ({ value: item._id, label: item.name }))} />
+                <SelectFieldControl defaultValue={company?.major} name='major' control={control} label="Ngành" options={Array.isArray(major) && major.map(item => ({ value: item._id, label: item.name }))} />
 
                 <InputFieldControl control={control} name="address" label="Địa Chỉ" />
 
@@ -112,9 +122,8 @@ const UpdateBusinessForm = () => {
 };
 
 const Form = tw.form`px-8`;
-const Grid = tw.div`grid grid-cols-2 gap-6 m-0`;
+const Grid = tw.div`grid grid-cols-2 gap-6 m-0 sm:grid-cols-1`;
 const Container = tw.div`self-center mt-8`;
 const Title = tw.div`mb-8 text-primary text-xl font-bold`;
 
 export default UpdateBusinessForm;
-

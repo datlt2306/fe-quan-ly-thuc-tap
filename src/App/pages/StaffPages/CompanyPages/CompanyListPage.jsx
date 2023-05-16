@@ -7,7 +7,7 @@ import {
 	SelectColumnFilter,
 } from "@/Core/components/common/Table/ReactTableFilters";
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
-import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, CalendarDaysIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, CalendarDaysIcon, PencilSquareIcon, TrashIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
@@ -22,9 +22,17 @@ import { excelSampleData } from "./mocks";
 import { AllowedFileExt } from "@/Core/constants/allowedFileType";
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { companyArraySchema } from "@/App/schemas/companySchema";
+import Modal from "@/Core/components/common/Modal";
+import { Menu, Transition } from "@headlessui/react";
+import classNames from "classnames";
 
 const CompanyListPage = () => {
-
+	const menuItemClasses = () =>
+		classNames({
+			"flex items-center gap-2 p-2 hover:bg-gray-100 duration-300 whitespace-nowrap select-none cursor-pointer text-base-content text-sm": true,
+		});
+	const [modal, setModal] = useState(false)
+	const [dataModal, setDataModal] = useState({});
 	// get list company, semester, campus, major
 	const { data: majors } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
 	const campus = useSelector((state) => state.campus)
@@ -58,6 +66,7 @@ const CompanyListPage = () => {
 	const { handleExportFile } = useExportToExcel();
 	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
 	const fileInputRef = useRef(null);
+	const fileInputRefMobile = useRef(null);
 
 	// Callback function will be executed after import file excel
 	const importExcelDataCallback = (excelData) => {
@@ -82,7 +91,6 @@ const CompanyListPage = () => {
 				.validate(newData)
 				.then(async (data) => {
 					const response = await handleAddArrayCompany(data);
-					console.log(response)
 					if (response?.error) {
 						toast.error("Import công ty thất bại")
 					} else {
@@ -107,22 +115,37 @@ const CompanyListPage = () => {
 		handleImportFile(file, importExcelDataCallback);
 		fileInputRef.current.value = null; // reset input file after imported
 	};
+
+	const handleImportCompaniesMobile = (file) => {
+		const fileExtension = getFileExtension(file);
+		if (fileExtension !== AllowedFileExt.XLSX) {
+			toast.error("File import không hợp lệ");
+			fileInputRefMobile.current.value = null;
+			return;
+		}
+		handleImportFile(file, importExcelDataCallback);
+		fileInputRefMobile.current.value = null; // reset input file after imported
+	};
+
 	const handleExportDataToExcel = () => {
 		if (!tableData.length) {
 			toast.warn("Chưa có dữ liệu để xuất file !");
 			return;
 		}
+		const newData = tableData.map((company, index) => {
+			return {
+				...company,
+				major: company.major.name,
+				campus_id: campus?.campusList?.listCampus?.find(item => item._id === company.campus_id).name,
+				semester_id: semester.listSemesters.find(item => item._id === company.semester_id).name,
+				index: index + 1
+			};
+		})
 		const exportedData = convertToExcelData(
-			tableData.map((company, index) => {
-				return {
-					...company,
-					major: company.major.name,
-					campus_id: company.campus_id.name,
-					semester_id: semester.listSemesters.find(item => item._id === company.semester_id).name,
-					index: index + 1
-				};
-			}),
-			columnAccessors
+			{
+				data: newData,
+				columnKeysAccessor: columnAccessors
+			}
 		);
 
 		if (!exportedData) {
@@ -201,7 +224,7 @@ const CompanyListPage = () => {
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
-			Cell: ({ value }) => <div className="max-w-xs w-full overflow-hidden">
+			Cell: ({ value }) => <div className="max-w- w-full overflow-hidden">
 				<p className="whitespace-normal overflow-ellipsis">
 					{value}
 				</p>
@@ -213,11 +236,11 @@ const CompanyListPage = () => {
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
-			Cell: ({ value }) => <div className="max-w-xs w-full overflow-hidden">
-				<p className="whitespace-normal overflow-ellipsis">
-					{value}
-				</p>
-			</div>,
+			Cell: ({ value }) => <Button variant="ghost" size="sm" className="font-normal" onClick={() => {
+				setDataModal({ data: value, title: columnAccessors.requirement })
+				setModal(!modal)
+			}}>Chi tiết</Button>
+			,
 		},
 		{
 			Header: columnAccessors.description,
@@ -225,12 +248,12 @@ const CompanyListPage = () => {
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
-			Cell: ({ value }) =>
-			<div className="max-w-xs w-full overflow-hidden">
-				<p className="whitespace-normal overflow-ellipsis">
-					{value}
-				</p>
-			</div>,
+			Cell: ({ value }) => <Button variant="ghost" size="sm" className="font-normal" onClick={() => {
+				setDataModal({ data: value, title: columnAccessors.description })
+				setModal(!modal)
+			}}>Chi tiết</Button>
+			,
+
 		},
 		{
 			Header: columnAccessors.benefit,
@@ -238,11 +261,11 @@ const CompanyListPage = () => {
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
-			Cell: ({ value }) => <div className="max-w-xs w-full overflow-hidden">
-				<p className="whitespace-normal overflow-ellipsis">
-					{value}
-				</p>
-			</div>,
+			Cell: ({ value }) => <Button variant="ghost" size="sm" className="font-normal" onClick={() => {
+				setDataModal({ data: value, title: columnAccessors.benefit })
+				setModal(!modal)
+			}}>Chi tiết</Button>
+			,
 		},
 		{
 			Header: "Thao tác",
@@ -252,7 +275,7 @@ const CompanyListPage = () => {
 			filterable: false,
 			isSort: false,
 			Cell: ({ value }) => (
-				<ButtonList>
+				<ActionList>
 					<Button as={Link} to={`/cap-nhat-cong-ty/${value}`} type="button" size="sm" shape="square" variant="default">
 						<PencilSquareIcon className="w-5 h-5" />
 					</Button>
@@ -267,7 +290,7 @@ const CompanyListPage = () => {
 							{isLoading ? <LoadingSpinner /> : <TrashIcon className="w-5 h-5" />}
 						</Button>
 					</PopConfirm>
-				</ButtonList>
+				</ActionList>
 			),
 		},
 	]
@@ -312,9 +335,61 @@ const CompanyListPage = () => {
 							))}
 						</Select>
 					</Container>
-
 				</ButtonList>
-
+				<MobileButtonList>
+					<Container>
+						<label htmlFor="semester-list" className="inline-flex items-center gap-2 whitespace-nowrap text-base-content">
+							<CalendarDaysIcon className="h-6 w-6" /> Kỳ học
+						</label>
+						<Select onChange={(e) => handleChangeSemester(e.target.value)} defaultValue={semester?.defaultSemester?._id}>
+							{Array.isArray(semester?.listSemesters) && semester?.listSemesters.map((item, index) => (
+								<Option value={item._id} key={index}>{item.name}</Option>
+							))}
+						</Select>
+					</Container>
+					<Container>
+						<Menu as="div" >
+							<Menu.Button as={Fragment}>
+								<Button variant="ghost" size="sm" shape="square">
+									<EllipsisHorizontalIcon className="h-6 w-6" />
+								</Button>
+							</Menu.Button>
+							<Transition
+								as={Fragment}
+								enter="transition ease-out duration-200"
+								enterFrom="opacity-0 translate-x-1"
+								enterTo="opacity-100 translate-y-0"
+								leave="transition ease-in duration-150"
+								leaveFrom="opacity-100 translate-y-0"
+								leaveTo="opacity-0 translate-x-1">
+								<Menu.Items className="absolute right-0 top-0 z-50 mr-12 flex flex-col rounded-md bg-white shadow">
+									<Menu.Item as="label" htmlFor="file-input" className={menuItemClasses()}>
+										<DocumentArrowUpIcon className="h-5 w-5 text-[inherit]" /> Tải lên file Excel
+										{
+											selectedSemesterId === semester?.defaultSemester?._id && (
+												<input
+													ref={fileInputRefMobile}
+													type="file"
+													id="file-input"
+													className="hidden"
+													onChange={(e) => handleImportCompaniesMobile(e.target.files[0])}
+												/>
+											)
+										}
+									</Menu.Item>
+									<Menu.Item as="button" className={menuItemClasses()} onClick={handleExportDataToExcel}>
+										<DocumentArrowDownIcon className="h-5 w-5 text-[inherit]" />
+										Export file Excel
+									</Menu.Item>
+									<Menu.Item as="button" className={menuItemClasses()} onClick={() => handleExportFile(excelSampleData)}>
+										<ArrowDownTrayIcon className="h-5 w-5 text-[inherit]" />
+										Tải file mẫu
+									</Menu.Item>
+								</Menu.Items>
+							</Transition>
+						</Menu>
+					</Container>
+				</MobileButtonList>
 				{tableData ? (
 					<ReactTable
 						columns={columnsData}
@@ -325,15 +400,19 @@ const CompanyListPage = () => {
 					<LoadingSpinner />
 				)}
 			</Box>
+			<Modal openState={modal} onOpenStateChange={setModal} title={dataModal?.title}>
+				<p className="text-gray-500">{dataModal?.data}</p>
+			</Modal>
 		</Fragment>
 	);
 };
 
 const Box = tw.div`flex flex-col gap-6`;
-const ButtonList = tw.div`flex justify-between`;
+const ButtonList = tw.div`flex justify-between sm:hidden`;
+const ActionList = tw.div`flex justify-between`;
 const Container = tw.div`flex items-center gap-2`;
 const Select = tw.select`capitalize block w-full rounded-[4px] border-none duration-300  px-2 py-1.5 outline-none ring-1 ring-gray-300 focus:ring-primary focus:active:ring-primary min-w-[196px] m-0`;
 const Option = tw.option`leading-6 capitalize`;
+const MobileButtonList = tw.div`flex justify-between relative sm:flex md:hidden lg:hidden xl:hidden`
 
 export default CompanyListPage;
-

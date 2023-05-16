@@ -43,7 +43,7 @@ const SelectFieldControl = ({ initialValue = "Chọn", control, name, label, opt
 				id={id}
 				name={name}
 				disabled={disabled}
-				defaultValue={field.value}>
+				value={field.value}>
 				<Option value="">{initialValue}</Option>
 				{Array.isArray(options) &&
 					options.map((option, index) => (

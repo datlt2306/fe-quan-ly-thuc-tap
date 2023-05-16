@@ -109,7 +109,7 @@ const AddBusinessForm = () => {
 };
 
 const Form = tw.form`px-8`;
-const Grid = tw.div`grid grid-cols-2 gap-6 m-0`;
+const Grid = tw.div`grid grid-cols-2 gap-6 m-0 sm:grid-cols-1`;
 const Container = tw.div`self-center mt-8`;
 const Title = tw.div`mb-8 text-primary text-xl font-bold`;
 
