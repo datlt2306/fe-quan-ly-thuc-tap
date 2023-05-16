@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const DefaultPage = () => {
 	const user = useSelector((state) => state.auth?.user);
-
+	console.log(user.role);
 	switch (user.role) {
 		case UserRoleEnum.STUDENT:
 			return <Navigate to={StudentPaths.STUDENT_INFO} replace={true} />;
