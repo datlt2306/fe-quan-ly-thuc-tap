@@ -107,7 +107,7 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 																			as={Menu.Items}>
 																			{item.children.map((child, index) => {
 																				return (
-																					<Menu.Item
+																					child?.show === true && (<Menu.Item
 																						key={index}
 																						className="py-2 pl-10 pr-2 transition-[height_350ms_ease-in-out_transform] duration-300 hover:bg-gray-100 focus:active:bg-gray-100">
 																						<NavLink
@@ -118,7 +118,7 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 																							<child.icon className="h-3 w-3 text-gray-500" />{" "}
 																							{child.label}
 																						</NavLink>
-																					</Menu.Item>
+																					</Menu.Item>)
 																				);
 																			})}
 																		</Disclosure.Panel>

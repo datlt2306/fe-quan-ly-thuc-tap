@@ -38,8 +38,8 @@ export default function SigninPage() {
 			});
 
 			setLoginInformation({
-				smester_id: defaultSemester.result?._id,
-				cumpusId: defaultSemester.result?.campus_id,
+				semester_id: defaultSemester.result?._id,
+				campus_id: defaultSemester.result?.campus_id,
 			});
 
 			setAllowToLogin(!!campus);
@@ -64,7 +64,7 @@ export default function SigninPage() {
 			const currentCampus =
 				response.data?.manager?.campus_id || response.data?.student.campus_id || null;
 			dispatch(
-				getCurrentCampus(data?.listCumpus.find((campus) => campus._id === currentCampus))
+				getCurrentCampus(data?.listCampus.find((campus) => campus._id === currentCampus))
 			);
 			setAccessToken(`Bearer ${response?.data?.accessToken}`);
 			toast.success("Đăng nhập thành công !");
@@ -81,8 +81,8 @@ export default function SigninPage() {
 				<Form>
 					<Select onChange={(e) => handleSelectCampus(e.target.value)}>
 						<Option>Chọn cơ sở</Option>
-						{Array.isArray(data?.listCumpus) &&
-							data?.listCumpus?.map((camp) => (
+						{Array.isArray(data?.listCampus) &&
+							data?.listCampus?.map((camp) => (
 								<Option key={camp?._id} value={camp?._id}>
 									{camp?.name}
 								</Option>

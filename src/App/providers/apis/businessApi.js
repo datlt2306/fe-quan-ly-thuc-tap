@@ -17,6 +17,10 @@ const businessApi = createApi({
 			query: (payload) => ({url: '/business/new', method: "POST", data: payload}),
 			invalidatesTags:['Business']
 		}),
+		addArrayCompany: build.mutation({
+			query: (payload) => ({url: '/business', method: "POST", data: payload}),
+			invalidatesTags:['Business']
+		}),
 		updateCompany: build.mutation({
 			query: (payload) => ({url: `/business/${payload.id}`, method: "PATCH", data: payload.data}),
 			invalidatesTags:['Business']
@@ -28,6 +32,6 @@ const businessApi = createApi({
 	}),
 });
 
-export const { useGetAllCompanyQuery, useAddCompanyMutation, useDeleteCompanyMutation, useUpdateCompanyMutation, useGetOneCompanyQuery } = businessApi;
+export const { useGetAllCompanyQuery, useAddCompanyMutation, useDeleteCompanyMutation, useUpdateCompanyMutation, useGetOneCompanyQuery, useAddArrayCompanyMutation } = businessApi;
 
 export default businessApi;

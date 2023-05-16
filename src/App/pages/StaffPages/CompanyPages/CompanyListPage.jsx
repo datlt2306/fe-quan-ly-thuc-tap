@@ -11,7 +11,7 @@ import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, Calendar
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
-import { useAddCompanyMutation, useDeleteCompanyMutation, useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
+import { useAddArrayCompanyMutation, useAddCompanyMutation, useDeleteCompanyMutation, useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
 import { useGetAllSemestersQuery } from "@/App/providers/apis/semesterApi";
 import { useSelector } from "react-redux";
 import { useExportToExcel, useImportFromExcel } from "@/App/hooks/useExcel";
@@ -21,6 +21,7 @@ import { convertToExcelData } from "@/Core/utils/excelDataHandler";
 import { excelSampleData } from "./mocks";
 import { AllowedFileExt } from "@/Core/constants/allowedFileType";
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
+import { companyArraySchema } from "@/App/schemas/companySchema";
 
 const CompanyListPage = () => {
 
@@ -55,7 +56,7 @@ const CompanyListPage = () => {
 	// handle export, import
 	const [handleImportFile] = useImportFromExcel();
 	const { handleExportFile } = useExportToExcel();
-	const [handleAddCompany] = useAddCompanyMutation();
+	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
 	const fileInputRef = useRef(null);
 
 	// Callback function will be executed after import file excel
@@ -76,15 +77,21 @@ const CompanyListPage = () => {
 				description: obj[columnAccessors.description],
 				benefit: obj[columnAccessors.benefit],
 			}));
-			newCompanyList.forEach(async (item) => {
-				const result = await handleAddCompany({ ...item, major: majors?.find((majorItem) => majorItem.majorCode == item.major)?._id });
-				if (result?.data?.statusCode) {
-					toast.error(result.data.message)
-					return;
-				}
-				toast.success("Thêm doanh nghiệp mới thành công!")
-			})
-			fileInputRef.current.value = null;
+			const newData = newCompanyList?.map(item => ({ ...item, major: majors?.find(majorItem => majorItem.majorCode === item.major)?._id }))
+			companyArraySchema
+				.validate(newData)
+				.then(async (data) => {
+					const response = await handleAddArrayCompany(data);
+					if (response?.data?.statusCode) {
+						toast.error(response?.data?.message)
+					} else {
+						toast.success("Import sinh viên thành công")
+					}
+					fileInputRef.current.value = null;
+				})
+				.catch((error) => {
+					toast.error(error?.message);
+				});
 		}
 	};
 
@@ -156,7 +163,11 @@ const CompanyListPage = () => {
 			sortable: true,
 			canSort: true,
 			canFilter: true,
-			Cell: ({ value }) => <span className="capitalize">{value}</span>,
+			Cell: ({ value }) => <div className="max-w-xs w-full overflow-hidden">
+				<p className="whitespace-normal overflow-ellipsis">
+					{value}
+				</p>
+			</div>,
 		},
 		{
 			Header: columnAccessors.internship_position,
@@ -164,6 +175,11 @@ const CompanyListPage = () => {
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
+			Cell: ({ value }) => <div className="max-w-xs w-full overflow-hidden">
+				<p className="whitespace-normal overflow-ellipsis">
+					{value}
+				</p>
+			</div>,
 		},
 		{
 			Header: columnAccessors.amount,
@@ -178,13 +194,29 @@ const CompanyListPage = () => {
 			filterable: true,
 			sortable: true,
 		},
-
+		{
+			Header: columnAccessors.address,
+			accessor: "address",
+			Filter: InputColumnFilter,
+			filterable: true,
+			sortable: true,
+			Cell: ({ value }) => <div className="max-w-xs w-full overflow-hidden">
+				<p className="whitespace-normal overflow-ellipsis">
+					{value}
+				</p>
+			</div>,
+		},
 		{
 			Header: columnAccessors.requirement,
 			accessor: "requirement",
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
+			Cell: ({ value }) => <div className="max-w-xs w-full overflow-hidden">
+				<p className="whitespace-normal overflow-ellipsis">
+					{value}
+				</p>
+			</div>,
 		},
 		{
 			Header: columnAccessors.description,
@@ -192,6 +224,12 @@ const CompanyListPage = () => {
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
+			Cell: ({ value }) =>
+			<div className="max-w-xs w-full overflow-hidden">
+				<p className="whitespace-normal overflow-ellipsis">
+					{value}
+				</p>
+			</div>,
 		},
 		{
 			Header: columnAccessors.benefit,
@@ -199,13 +237,11 @@ const CompanyListPage = () => {
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
-		},
-		{
-			Header: columnAccessors.address,
-			accessor: "address",
-			Filter: InputColumnFilter,
-			filterable: true,
-			sortable: true,
+			Cell: ({ value }) => <div className="max-w-xs w-full overflow-hidden">
+				<p className="whitespace-normal overflow-ellipsis">
+					{value}
+				</p>
+			</div>,
 		},
 		{
 			Header: "Thao tác",
@@ -240,15 +276,19 @@ const CompanyListPage = () => {
 			<Box>
 				<ButtonList>
 					<Container>
-						<Button as="label" size="sm" htmlFor="file-input" variant="primary">
+						<Button as="label" size="sm" htmlFor="file-input" variant={selectedSemesterId === semester?.defaultSemester?._id ? "primary" : "disabled"}>
 							<DocumentArrowUpIcon className="h-6 w-6 text-[inherit]" /> Tải lên file Excel
-							<input
-								ref={fileInputRef}
-								type="file"
-								id="file-input"
-								className="hidden"
-								onChange={(e) => handleImportCompanies(e.target.files[0])}
-							/>
+							{
+								selectedSemesterId === semester?.defaultSemester?._id && (
+									<input
+										ref={fileInputRef}
+										type="file"
+										id="file-input"
+										className="hidden"
+										onChange={(e) => handleImportCompanies(e.target.files[0])}
+									/>
+								)
+							}
 						</Button>
 
 						<Button type="button" variant="success" size="sm" onClick={handleExportDataToExcel}>
@@ -288,10 +328,11 @@ const CompanyListPage = () => {
 	);
 };
 
-export default CompanyListPage;
-
 const Box = tw.div`flex flex-col gap-6`;
 const ButtonList = tw.div`flex justify-between`;
 const Container = tw.div`flex items-center gap-2`;
-const Select = tw.select`block w-full rounded-[4px] border-none duration-300  px-2 py-1.5 outline-none ring-1 ring-gray-300 focus:ring-primary focus:active:ring-primary min-w-[196px] m-0`;
-const Option = tw.option`leading-6`;
+const Select = tw.select`capitalize block w-full rounded-[4px] border-none duration-300  px-2 py-1.5 outline-none ring-1 ring-gray-300 focus:ring-primary focus:active:ring-primary min-w-[196px] m-0`;
+const Option = tw.option`leading-6 capitalize`;
+
+export default CompanyListPage;
+

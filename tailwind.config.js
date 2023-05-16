@@ -58,5 +58,5 @@ export default {
 			},
 		},
 	},
-	plugins: [require("prettier-plugin-tailwindcss"), require("@tailwindcss/forms"), require("tailwind-scrollbar")({ nocompatible: true })],
+	plugins: [require("prettier-plugin-tailwindcss"), require("@tailwindcss/forms"), require("tailwind-scrollbar")({ nocompatible: true }), require("@tailwindcss/line-clamp")],
 };
