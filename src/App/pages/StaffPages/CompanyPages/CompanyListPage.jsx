@@ -11,7 +11,7 @@ import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, Calendar
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
-import { useAddArrayCompanyMutation, useAddCompanyMutation, useDeleteCompanyMutation, useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
+import { useAddArrayCompanyMutation, useDeleteCompanyMutation, useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
 import { useGetAllSemestersQuery } from "@/App/providers/apis/semesterApi";
 import { useSelector } from "react-redux";
 import { useExportToExcel, useImportFromExcel } from "@/App/hooks/useExcel";
@@ -82,10 +82,11 @@ const CompanyListPage = () => {
 				.validate(newData)
 				.then(async (data) => {
 					const response = await handleAddArrayCompany(data);
-					if (response?.data?.statusCode) {
-						toast.error(response?.data?.message)
+					console.log(response)
+					if (response?.error) {
+						toast.error("Import công ty thất bại")
 					} else {
-						toast.success("Import sinh viên thành công")
+						toast.success("Import công ty thành công")
 					}
 					fileInputRef.current.value = null;
 				})

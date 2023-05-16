@@ -12,7 +12,7 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
 	// const count = preGlobalFilteredRows?.length;
 	const [value, setValue] = useState(globalFilter);
 	const onChange = useAsyncDebounce((value) => {
-		setGlobalFilter(value || "");
+		setGlobalFilter(value.trim() || "");
 	}, 300);
 	return (
 		<div className="relative">
@@ -24,7 +24,9 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
 				value={value || ""}
 				onChange={(e) => {
 					setValue(e.target.value);
+					onChange(e.target.value.trim());
 					onChange(e.target.value);
+
 				}}
 			/>
 		</div>

@@ -1,19 +1,19 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
-import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import InputFieldControl from "@/Core/components/common/FormControl/InputFieldControl";
+import SelectFieldControl from "@/Core/components/common/FormControl/SelectFieldControl";
 import tw from "twin.macro";
-import Button from '@/Core/components/common/Button';
-import { companySchema } from '@/App/schemas/companySchema';
-import { useAddCompanyMutation } from '@/App/providers/apis/businessApi';
-import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
+import Button from "@/Core/components/common/Button";
+import { companySchema } from "@/App/schemas/companySchema";
+import { useAddCompanyMutation } from "@/App/providers/apis/businessApi";
+import { useGetAllMajorQuery } from "@/App/providers/apis/majorApi";
+import { LoadingSpinner } from "@/Core/components/common/Loading/LoadingSpinner";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const AddBusinessForm = () => {
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 
     // get list campus and major
     const { data: major } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });

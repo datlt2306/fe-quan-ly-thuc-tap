@@ -19,10 +19,10 @@ export const StudentStatusEnum = {
  * @enum
  */
 export const StudentStatusGroupEnum = {
-	warning: [0, 1, 5, 7, 8],
-	error: [3, 10],
-	info: [2, 4, 6],
-	success: [9],
+	warning: ["Chờ kiểm tra CV", "Sửa lại CV", "Sửa biên bản", "Sửa báo cáo"],
+	error: ["Không đủ điều kiện", "Chưa đăng ký"],
+	info: ["Nhận CV", "Đã nộp biên bản", "Đang thực tập", "Đã nộp báo cáo"],
+	success: ["Hoàn thành"],
 };
 
 /**

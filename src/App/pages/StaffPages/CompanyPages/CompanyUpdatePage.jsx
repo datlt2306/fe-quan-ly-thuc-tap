@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
-import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import InputFieldControl from "@/Core/components/common/FormControl/InputFieldControl";
+import SelectFieldControl from "@/Core/components/common/FormControl/SelectFieldControl";
 import tw from "twin.macro";
 import Button from '@/Core/components/common/Button';
 import { companySchema } from '@/App/schemas/companySchema';
@@ -84,12 +84,7 @@ const UpdateBusinessForm = () => {
 
                 <SelectFieldControl name='major' control={control} label="Ngành" options={Array.isArray(major) && major.map(item => ({ value: item._id, label: item.name }))} />
 
-
-                <InputFieldControl
-                    control={control}
-                    name="address"
-                    label="Địa Chỉ"
-                />
+                <InputFieldControl control={control} name="address" label="Địa Chỉ" />
 
                 <InputFieldControl
                     control={control}
