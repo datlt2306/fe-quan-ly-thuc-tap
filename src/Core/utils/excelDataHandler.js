@@ -14,22 +14,15 @@ export const mapExcelData = (data) => {
 	return mappedExcelData;
 };
 
-export const convertToExcelData = (data, columnKeyMatchers) => {
-	console.log(data);
-	const columnNames = Object.values(columnKeyMatchers);
-
+export const convertToExcelData = ({ data, columnKeysAccessor }) => {
+	const columnNames = Object.values(columnKeysAccessor);
 	const filteredData = data.map((item) => {
 		const filteredItem = {};
 		columnNames.forEach((columnName) => {
-			const key = Object.keys(columnKeyMatchers).find((k) => columnKeyMatchers[k] === columnName);
+			const key = Object.keys(columnKeysAccessor).find((k) => columnKeysAccessor[k] === columnName);
 			filteredItem[columnName] = item[key];
 		});
 		return filteredItem;
 	});
-	return [
-		Object.keys(filteredData[0]),
-		...filteredData.map((row) => {
-			return Object.values(row);
-		}),
-	];
+	return filteredData;
 };
