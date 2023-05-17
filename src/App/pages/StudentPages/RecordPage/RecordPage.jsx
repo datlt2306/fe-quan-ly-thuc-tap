@@ -27,10 +27,9 @@ const RecordPage = () => {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			RecordPage
-			<InputFieldControl name="nameCompany" control={control} label="Tên doanh nghiệp" />
-			<label htmlFor="form">Upload biên bản (Image, PDF hoặc Docx)</label>
-			<InputFieldControl control={control} type="file" name="form" onChange={handleFileChange} />
-			<InputFieldControl name="date" control={control} label="Ngày" type="date" />
+			<InputFieldControl name="nameCompany" control={control} label="Tên doanh nghiệp: " />
+			<InputFieldControl control={control} type="file" name="form" onChange={handleFileChange} label="Upload biên bản (Image, PDF hoặc Docx):"/>
+			<InputFieldControl name="date" control={control} type="date" label="Thời gian bắt đầu thực tập: "/>
 			<Button variant="primary" type="submit">
 				Submit
 			</Button>
