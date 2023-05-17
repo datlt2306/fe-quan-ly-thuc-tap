@@ -18,7 +18,7 @@ const TextareaFieldControl = forwardRef(({ control, name, label, disabled, rules
   });
 
   const textareaRef = useRef(null);
-  const id = useRef(useId());
+  const id = useId();
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -37,10 +37,10 @@ const TextareaFieldControl = forwardRef(({ control, name, label, disabled, rules
 
   return (
     <FormControl>
-      {label && <label htmlFor={id.current}>{label}</label>}
+      {label && <label htmlFor={id}>{label}</label>}
       <TextArea
         {...props}
-        id={id.current}
+        id={id}
         onChange={onChange}
         onBlur={onBlur}
         value={value}
