@@ -1,40 +1,75 @@
 import React, { useState } from "react";
-import InputFieldControl from "@/Core/components/common/FormControl/InputFieldControl";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Button from "@/Core/components/common/Button";
-import { recordSchema } from "@/App/schemas/recordSchema";
-import { useSelector } from "react-redux";
-const RecordPage = () => {
-	const {user} = useSelector((state) => state.auth)
-	console.log(user)
-	const { handleSubmit, control } = useForm({
-		resolver: yupResolver(recordSchema),
-	});
 
-	const [selectedFile, setSelectedFile] = useState(null);
+const DOCXUploadPreview = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [textContent, setTextContent] = useState("");
 
-	const onSubmit = (data) => {
-		console.log(data)
-		const file = selectedFile;
-	};
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
 
-	const handleFileChange = (event) => {
-		const file = event.target.files[0];
-		setSelectedFile(file);
-	};
+    if (file) {
+      readDocxFile(file);
+    } else {
+      setTextContent("");
+    }
+  };
 
-	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
-			RecordPage
-			<InputFieldControl name="nameCompany" control={control} label="Tên doanh nghiệp: " />
-			<InputFieldControl control={control} type="file" name="form" onChange={handleFileChange} label="Upload biên bản (Image, PDF hoặc Docx):"/>
-			<InputFieldControl name="date" control={control} type="date" label="Thời gian bắt đầu thực tập: "/>
-			<Button variant="primary" type="submit">
-				Submit
-			</Button>
-		</form>
-	);
+  const readDocxFile = (file) => {
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const arrayBuffer = event.target.result;
+      const buffer = new Uint8Array(arrayBuffer);
+      const docText = parseDocx(buffer);
+      setTextContent(docText);
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  const parseDocx = (buffer) => {
+    const zip = new JSZip();
+    const docx = zip.loadAsync(buffer);
+
+    return docx
+      .then((zip) => {
+        const content = zip.file("word/document.xml").async("string");
+        return content;
+      })
+      .then((content) => {
+        const doc = new DOMParser().parseFromString(content, "text/xml");
+        const paragraphs = doc.getElementsByTagName("w:p");
+        let text = "";
+        for (let i = 0; i < paragraphs.length; i++) {
+          const paragraph = paragraphs[i];
+          const texts = paragraph.getElementsByTagName("w:t");
+          for (let j = 0; j < texts.length; j++) {
+            const textNode = texts[j].textContent;
+            text += textNode + " ";
+          }
+          text += "\n";
+        }
+        return text;
+      })
+      .catch((error) => {
+        console.error(error);
+        return "";
+      });
+  };
+
+  const renderPreview = () => {
+    if (textContent) {
+      return <pre>{textContent}</pre>;
+    } else {
+      return <div>No file selected.</div>;
+    }
+  };
+
+  return (
+    <div>
+      <input type="file" accept=".docx" onChange={handleFileChange} />
+      {renderPreview()}
+    </div>
+  );
 };
 
-export default RecordPage;
+export default DOCXUploadPreview;
