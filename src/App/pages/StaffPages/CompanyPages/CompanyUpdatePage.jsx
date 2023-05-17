@@ -11,6 +11,8 @@ import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+import TextAreaFieldControl from "@/Core/components/common/FormControl/TextAreaFieldControl";
+import { StaffPaths } from "@/Core/constants/routePaths";
 
 const UpdateBusinessForm = () => {
 
@@ -19,12 +21,6 @@ const UpdateBusinessForm = () => {
     // get id and get default company
     const { id } = useParams();
     const { data: company } = useGetOneCompanyQuery({ id }, { refetchOnMountOrArgChange: true })
-
-    // check id
-    if (company?.statusCode) {
-        toast.error("Doanh nghiệp không tồn tại!")
-        navigate('/danh-sach-cong-ty')
-    }
 
     // get major
     const { data: major } = useGetAllMajorQuery();
@@ -54,12 +50,12 @@ const UpdateBusinessForm = () => {
     const [handleUpdateCompany, { isLoading }] = useUpdateCompanyMutation()
     const onHandleUpdate = async (data) => {
         const result = await handleUpdateCompany({ data, id });
-        if (result?.data?.statusCode) {
-            toast.error(result.data.message)
+        if (result?.error) {
+            toast.error("Cập nhật thất bại")
             return;
         }
         toast.success("Cập nhật doanh nghiệp mới thành công!")
-        navigate('/danh-sach-cong-ty')
+        navigate(StaffPaths.COMPANY_LIST)
     }
     return (
         <Form onSubmit={handleSubmit(onHandleUpdate)}>
@@ -99,19 +95,19 @@ const UpdateBusinessForm = () => {
 
                 <InputFieldControl control={control} name="address" label="Địa Chỉ" />
 
-                <InputFieldControl
+                <TextAreaFieldControl
                     control={control}
                     name="requirement"
                     label="Yêu Cầu"
                 />
 
-                <InputFieldControl
+                <TextAreaFieldControl
                     control={control}
                     name="description"
                     label="Chi Tiết"
                 />
 
-                <InputFieldControl
+                <TextAreaFieldControl
                     control={control}
                     name="benefit"
                     label="Quyền Lợi"

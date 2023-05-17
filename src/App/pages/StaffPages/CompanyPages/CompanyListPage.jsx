@@ -6,7 +6,6 @@ import {
 	InputColumnFilter,
 	SelectColumnFilter,
 } from "@/Core/components/common/Table/ReactTableFilters";
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, CalendarDaysIcon, PencilSquareIcon, TrashIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -25,6 +24,7 @@ import { companyArraySchema } from "@/App/schemas/companySchema";
 import Modal from "@/Core/components/common/Modal";
 import { Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
+import { StaffPaths } from "@/Core/constants/routePaths";
 
 const CompanyListPage = () => {
 
@@ -45,7 +45,7 @@ const CompanyListPage = () => {
 	const campus = useSelector((state) => state.campus)
 	const { data: semester } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
 	const [selectedSemesterId, setSelectedSemesterId] = useState(semester?.defaultSemester?._id);
-	const { data: company } = useGetAllCompanyQuery({ limit: 1000, semester_id: selectedSemesterId }, { refetchOnMountOrArgChange: true });
+	const { data: company, isLoading: companyLoading } = useGetAllCompanyQuery({ limit: 1000, semester_id: selectedSemesterId }, { refetchOnMountOrArgChange: true });
 	const handleChangeSemester = (id) => {
 		setSelectedSemesterId(id);
 	}
@@ -57,7 +57,7 @@ const CompanyListPage = () => {
 	}, [company]);
 
 	// hanle delete company
-	const [handleDeleteCompany, { isLoading }] = useDeleteCompanyMutation()
+	const [handleDeleteCompany] = useDeleteCompanyMutation()
 	const onDeleteSubmit = async (id) => {
 		toastId.current = toast.loading("Đang xóa công ty")
 		const result = await handleDeleteCompany({ id })
@@ -166,12 +166,10 @@ const CompanyListPage = () => {
 				columnKeysAccessor: columnAccessors
 			}
 		);
-
 		if (!exportedData) {
 			toast.error("Export dữ liệu thất bại !");
 			return;
 		}
-
 		handleExportFile({ data: exportedData, fileName: "Danh sách doanh nghiệp" });
 	};
 
@@ -295,8 +293,8 @@ const CompanyListPage = () => {
 			isSort: false,
 			Cell: ({ value }) => (
 				<ActionList>
-					<Button as={Link} to={`/cap-nhat-cong-ty/${value}`} type="button" size="sm" shape="square" variant="default">
-						<PencilSquareIcon className="w-5 h-5" />
+					<Button as={Link} to={StaffPaths.COMPANY_UPDATE.replace(":id", value)} type="button" size="sm" shape="square" variant="default">
+						<PencilSquareIcon className="h-5 w-5" />
 					</Button>
 					<PopConfirm
 						okText="Ok"
@@ -409,14 +407,12 @@ const CompanyListPage = () => {
 						</Menu>
 					</Container>
 				</MobileButtonList>
-				{tableData ? (
+				{tableData && (
 					<ReactTable
 						columns={columnsData}
 						data={tableData}
-						noDataComponent={<tr><td>Empty</td></tr>}
+						loading={companyLoading}
 					/>
-				) : (
-					<LoadingSpinner />
 				)}
 			</Box>
 			<Modal openState={modal} onOpenStateChange={setModal} title={dataModal?.title}>

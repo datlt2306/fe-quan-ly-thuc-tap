@@ -11,6 +11,8 @@ import { useGetAllMajorQuery } from "@/App/providers/apis/majorApi";
 import { LoadingSpinner } from "@/Core/components/common/Loading/LoadingSpinner";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import TextAreaFieldControl from "@/Core/components/common/FormControl/TextAreaFieldControl";
+import { StaffPaths } from "@/Core/constants/routePaths";
 
 const AddBusinessForm = () => {
 
@@ -26,12 +28,13 @@ const AddBusinessForm = () => {
     const [handleAddCompany, { isLoading }] = useAddCompanyMutation()
     const onSubmit = async (data) => {
         const result = await handleAddCompany(data);
-        if (result?.data?.statusCode) {
-            toast.error(result.data.message)
+        if (result?.error) {
+            console.log(result)
+            toast.error("Thêm mới thất bại")
             return;
         }
         toast.success("Thêm doanh nghiệp mới thành công!")
-        navigate('/danh-sach-cong-ty')
+        navigate(StaffPaths.COMPANY_LIST)
     }
 
     return (
@@ -82,21 +85,21 @@ const AddBusinessForm = () => {
                     placeholder="Hà Nội ..."
                 />
 
-                <InputFieldControl
+                <TextAreaFieldControl
                     control={control}
                     name="requirement"
                     label="Yêu Cầu"
                     placeholder="Sinh viên đi thực tập ..."
                 />
 
-                <InputFieldControl
+                <TextAreaFieldControl
                     control={control}
                     name="description"
                     label="Mô tả"
                     placeholder="Trách nghiệm, nhiệt tình ..."
                 />
 
-                <InputFieldControl
+                <TextAreaFieldControl
                     control={control}
                     name="benefit"
                     label="Quyền Lợi"
