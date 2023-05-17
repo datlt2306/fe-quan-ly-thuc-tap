@@ -11,7 +11,7 @@ import { useGetAllMajorQuery } from "@/App/providers/apis/majorApi";
 import { LoadingSpinner } from "@/Core/components/common/Loading/LoadingSpinner";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import TextAreaFieldControl from "@/Core/components/common/FormControl/TextAreaFieldControl";
+import TextAreaFieldControl from "@/Core/components/common/FormControl/TextareaFieldControl";
 import { StaffPaths } from "@/Core/constants/routePaths";
 
 const AddBusinessForm = () => {

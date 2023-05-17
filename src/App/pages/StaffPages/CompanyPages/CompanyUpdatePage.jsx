@@ -11,7 +11,7 @@ import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import TextAreaFieldControl from "@/Core/components/common/FormControl/TextAreaFieldControl";
+import TextareaFieldControl from "@/Core/components/common/FormControl/TextareaFieldControl";
 import { StaffPaths } from "@/Core/constants/routePaths";
 
 const UpdateBusinessForm = () => {
@@ -95,19 +95,19 @@ const UpdateBusinessForm = () => {
 
                 <InputFieldControl control={control} name="address" label="Địa Chỉ" />
 
-                <TextAreaFieldControl
+                <TextareaFieldControl
                     control={control}
                     name="requirement"
                     label="Yêu Cầu"
                 />
 
-                <TextAreaFieldControl
+                <TextareaFieldControl
                     control={control}
                     name="description"
                     label="Chi Tiết"
                 />
 
-                <TextAreaFieldControl
+                <TextareaFieldControl
                     control={control}
                     name="benefit"
                     label="Quyền Lợi"
