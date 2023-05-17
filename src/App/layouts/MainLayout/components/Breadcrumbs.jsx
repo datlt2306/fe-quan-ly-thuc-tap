@@ -4,7 +4,6 @@ import tw from "twin.macro";
 
 export default function Breadcrumbs({ navigation }) {
 	const { pathname } = useLocation();
-
 	return (
 		<NavBreadcrumbs>
 			<List>
