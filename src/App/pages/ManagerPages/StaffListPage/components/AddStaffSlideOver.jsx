@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useAddStaffMutation, useGetAllStaffQuery } from "@/App/providers/apis/staffListApi";
+import { useAddStaffMutation } from "@/App/providers/apis/staffListApi";
 import { staffDataValidator } from "@/App/schemas/staffSchema";
 import Button from "@/Core/components/common/Button";
 import InputFieldControl from "@/Core/components/common/FormControl/InputFieldControl";
@@ -14,13 +14,12 @@ import { toast } from "react-toastify";
 import tw from "twin.macro";
 
 const AddStaffSlideOver = ({ onOpen, open }) => {
-	const { data: managers } = useGetAllStaffQuery();
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(staffDataValidator),
 		defaultValue: staffDataValidator.getDefault(),
 	});
 
-	const [handleAddNewStaff, addingStatus] = useAddStaffMutation();
+	const [handleAddNewStaff, { isLoading }] = useAddStaffMutation();
 
 	const onAddSubmit = async (data) => {
 		const result = await handleAddNewStaff(data);
@@ -45,10 +44,10 @@ const AddStaffSlideOver = ({ onOpen, open }) => {
 					label="Quyền hạn nhân viên"
 					control={control}
 					name="role"
-					options={Object.keys(RoleStaffEnum).map((role) => ({ label: RoleStaffEnum[role], value: role }))}
+					options={Object.keys(RoleStaffEnum).map((role) => ({ label: RoleStaffEnum[role], value: role.toString() }))}
 				/>
-				<Button type="submit" variant="primary">
-					{addingStatus.isLoading && <LoadingSpinner size="sm" variant="primary" />}
+				<Button type="submit" variant="primary" size="md" disabled={isLoading}>
+					{isLoading && <LoadingSpinner size="sm" variant="primary" />}
 					Thêm
 				</Button>
 			</Form>
