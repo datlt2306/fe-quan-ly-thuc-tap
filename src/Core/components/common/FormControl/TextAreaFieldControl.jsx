@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useId, useRef } from "react";
 import { useController } from "react-hook-form";
 import tw from "twin.macro";
 
-const TextArea = tw.textarea`block w-full rounded-md border-0 duration-300 px-2.5 py-1.5 text-gray-900 outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`;
+const Textarea = tw.textarea`block w-full rounded-md border-0 duration-300 px-2.5 py-1.5 text-gray-900 outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`;
 const FormControl = tw.div`flex flex-col gap-2 m-0`;
 
 const TextareaFieldControl = forwardRef(({ control, name, label, disabled, rules, ...props }, ref) => {
@@ -38,7 +38,7 @@ const TextareaFieldControl = forwardRef(({ control, name, label, disabled, rules
   return (
     <FormControl>
       {label && <label htmlFor={id}>{label}</label>}
-      <TextArea
+      <Textarea
         {...props}
         id={id}
         onChange={onChange}
