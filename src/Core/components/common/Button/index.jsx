@@ -8,12 +8,12 @@ import { useEffect, useLayoutEffect, useMemo, useState,forwardRef} from "react";
  * @returns Tailwind styled Button component
  */
 const Button = ({
+	variant,
+	children,
 	size = "md",
-	variant = "outline",
 	shape = undefined,
 	className = "",
 	as: Element = "button", // Polymorphic component, display as other tag
-	children,
 	...props
 },
 ref
@@ -25,12 +25,13 @@ ref
 				{
 					// default
 					btn: true,
-					"btn-outline btn-md": !variant && !size && !shape,
+
 					// variant
 					"btn-primary": variant === "primary",
 					"btn-secondary": variant === "secondary",
 					"btn-outline": variant === "outline",
 					"btn-ghost": variant === "ghost",
+					"btn-info": variant === "info",
 					"btn-success": variant === "success",
 					"btn-error": variant === "error",
 					"btn-disabled": variant === "disabled",

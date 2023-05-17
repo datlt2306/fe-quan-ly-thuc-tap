@@ -4,12 +4,8 @@ import AppRoutes from "./routers";
 import { BrowserRouter } from "react-router-dom";
 import { Fragment } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import {
-	CheckCircleIcon,
-	ExclamationTriangleIcon,
-	InformationCircleIcon,
-	XCircleIcon,
-} from "@heroicons/react/20/solid";
+import { CheckCircleIcon, ExclamationTriangleIcon, InformationCircleIcon, XCircleIcon } from "@heroicons/react/20/solid";
+import { LoadingSpinner } from "@/Core/components/common/Loading/LoadingSpinner";
 
 function App() {
 	return (
@@ -35,8 +31,10 @@ function App() {
 							return <XCircleIcon className="h-8 w-8 text-error" />;
 						case "info":
 							return <InformationCircleIcon className="h-8 w-8 text-secondary" />;
+						case "loading":
+							return <LoadingSpinner size="sm" variant="primary" />;
 						default:
-							return null;
+							return <LoadingSpinner size="sm" variant="primary" />;
 					}
 				}}
 			/>

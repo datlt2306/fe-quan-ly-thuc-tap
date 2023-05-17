@@ -1,5 +1,5 @@
 import { forwardRef, useId, useRef } from "react";
-import { Controller, useController } from "react-hook-form";
+import { useController } from "react-hook-form";
 import tw from "twin.macro";
 
 export const Select = tw.select`block w-full rounded-[4px] border-none duration-300  px-2 py-1.5 outline-none ring-1 ring-gray-300 focus:ring-primary focus:active:ring-primary min-w-[128px] m-0`;
@@ -11,10 +11,7 @@ const FormControl = tw.div`flex flex-col gap-2 m-0`;
  * @property {string} name
  * @returns
  */
-const SelectFieldControl = (
-	{ initialValue = "Chọn", control, name, label, options, disabled, rules, ...props },
-	ref
-) => {
+const SelectFieldControl = ({ initialValue = "Chọn", control, name, label, options, disabled, rules, ...props }, ref) => {
 	const id = useId();
 	const localRef = useRef(null);
 	const inputRef = ref || localRef;
@@ -46,7 +43,8 @@ const SelectFieldControl = (
 				}}
 				id={id}
 				name={name}
-				disabled={disabled}>
+				disabled={disabled}
+				value={field.value}>
 				<Option value="">{initialValue}</Option>
 				{Array.isArray(options) &&
 					options.map((option, index) => (

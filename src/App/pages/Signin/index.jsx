@@ -1,22 +1,21 @@
 import useLocalStorage from "@/App/hooks/useLocalstorage";
 import { useSigninMutation } from "@/App/providers/apis/authApi";
 import { useGetAllCampusQuery } from "@/App/providers/apis/campusApi";
+import { getCurrentCampus } from "@/App/providers/slices/campusSlice";
 import { Option, Select } from "@/Core/components/common/FormControl/SelectFieldControl";
 import axiosClient from "@/Core/configs/axiosConfig";
 import { GoogleLogin } from "@react-oauth/google";
 import classNames from "classnames";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
-import BeeImage from "/bee.png";
-import google from "/google.svg";
 import Logo from "/logo.png";
 
 const Screen = tw.div`relative flex h-screen w-full items-center justify-center lg:bg-gray-50`;
 const Box = tw.div`sm:max-w-full md:max-w-full lg:(max-w-xl w-full p-8 shadow-2xl ) mx-auto bg-white rounded-lg`;
 const Image = tw.img`mx-auto max-w-full object-cover mb-10`;
-const ImageDecorator = tw.img`absolute bottom-0 right-2 max-w-full object-cover invisible lg:visible`;
 const Form = tw.div`flex items-center justify-center flex-col gap-3 w-full min-w-fit`;
 
 export default function SigninPage() {
@@ -24,6 +23,7 @@ export default function SigninPage() {
 	const [loginInformation, setLoginInformation] = useState(null);
 	const { data } = useGetAllCampusQuery();
 	const [signinMutation, { isLoading }] = useSigninMutation();
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [accessToken, setAccessToken] = useLocalStorage("access_token", null);
 
@@ -36,7 +36,7 @@ export default function SigninPage() {
 
 			setLoginInformation({
 				smester_id: defaultSemester.result?._id,
-				cumpusId: defaultSemester.result?.campus_id,
+				campus_id: defaultSemester.result?.campus_id,
 			});
 
 			setAllowToLogin(!!campus);
@@ -57,6 +57,8 @@ export default function SigninPage() {
 				toast.error("Đăng nhập thất bại !");
 				return;
 			}
+			const currentCampus = response.data?.manager?.campus_id || response.data?.student.campus_id || null;
+			dispatch(getCurrentCampus(data?.listCampus.find((campus) => campus._id === currentCampus)));
 			setAccessToken(`Bearer ${response?.data?.accessToken}`);
 			toast.success("Đăng nhập thành công !");
 			navigate("/");
@@ -72,8 +74,8 @@ export default function SigninPage() {
 				<Form>
 					<Select onChange={(e) => handleSelectCampus(e.target.value)}>
 						<Option>Chọn cơ sở</Option>
-						{Array.isArray(data?.listCumpus) &&
-							data?.listCumpus?.map((camp) => (
+						{Array.isArray(data?.listCampus) &&
+							data?.listCampus?.map((camp) => (
 								<Option key={camp?._id} value={camp?._id}>
 									{camp?.name}
 								</Option>
@@ -85,9 +87,7 @@ export default function SigninPage() {
 							"pointer-events-none select-none opacity-50": !isAllowToLoggin,
 						})}>
 						<GoogleLogin
-							onSuccess={(credentialResponse) =>
-								signinCallback(credentialResponse?.credential)
-							}
+							onSuccess={(credentialResponse) => signinCallback(credentialResponse?.credential)}
 							logo_alignment="center"
 							theme={isAllowToLoggin ? "filled_blue" : "outline"}
 							size="large"
@@ -96,7 +96,9 @@ export default function SigninPage() {
 					</div>
 				</Form>
 			</Box>
-			<ImageDecorator src={BeeImage} className="" />
+			<Footer>© 2020 FPT Polytechic College, Inc. All rights reserved.</Footer>
 		</Screen>
 	);
 }
+
+const Footer = tw.small`absolute bottom-4 text-center text-gray-500`;

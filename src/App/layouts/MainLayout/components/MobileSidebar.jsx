@@ -1,11 +1,6 @@
 import Button from "@/Core/components/common/Button";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import {
-	ChevronDownIcon,
-	ChevronUpIcon,
-	XCircleIcon,
-	XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronDownIcon, ChevronUpIcon, XCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
@@ -25,10 +20,7 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 
 	return (
 		<Transition.Root show={isOpen} as={Fragment}>
-			<Dialog
-				as="div"
-				className="relative z-50 lg:hidden"
-				onClose={() => handleShowSlideOver(!isOpen)}>
+			<Dialog as="div" className="relative z-50 lg:hidden" onClose={() => handleShowSlideOver(!isOpen)}>
 				<Transition.Child
 					as={Fragment}
 					enter="transition-opacity ease-linear duration-300"
@@ -75,7 +67,7 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 									<Menu>
 										{navigation.map((item) =>
 											!!item.children ? (
-												<Menu.Item key={item.label} className="rounded-md">
+												<Menu.Item key={item.name} className="rounded-md">
 													<Disclosure as="div">
 														{({ open }) => {
 															return (
@@ -86,7 +78,7 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 																		}`}>
 																		<span className="flex flex-1 items-center gap-2 text-gray-500">
 																			<item.icon className="h-6 w-6" />
-																			{item.label}
+																			{item.name}
 																		</span>
 
 																		<ChevronDownIcon
@@ -102,23 +94,18 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 																		leave="transition duration-[300ms] transform"
 																		leaveFrom="opacity-100 translate-y-0 max-h-none"
 																		leaveTo="opacity-0 -translate-y-2 max-h-0">
-																		<Disclosure.Panel
-																			className="z-0 bg-gray-50 "
-																			as={Menu.Items}>
+																		<Disclosure.Panel className="z-0 bg-gray-50 " as={Menu.Items}>
 																			{item.children.map((child, index) => {
 																				return (
-																					<Menu.Item
-																						key={index}
-																						className="py-2 pl-10 pr-2 transition-[height_350ms_ease-in-out_transform] duration-300 hover:bg-gray-100 focus:active:bg-gray-100">
-																						<NavLink
-																							to={child.path}
-																							className={({ isActive }) =>
-																								navlinkClasses(isActive)
-																							}>
-																							<child.icon className="h-3 w-3 text-gray-500" />{" "}
-																							{child.label}
-																						</NavLink>
-																					</Menu.Item>
+																					child?.show === true && (
+																						<Menu.Item
+																							key={index}
+																							className="py-2 pl-10 pr-2 transition-[height_350ms_ease-in-out_transform] duration-300 hover:bg-gray-100 focus:active:bg-gray-100">
+																							<NavLink to={child.path} className={({ isActive }) => navlinkClasses(isActive)}>
+																								<child.icon className="h-5 w-5 text-gray-500" /> {child.name}
+																							</NavLink>
+																						</Menu.Item>
+																					)
 																				);
 																			})}
 																		</Disclosure.Panel>
@@ -129,15 +116,10 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 													</Disclosure>
 												</Menu.Item>
 											) : (
-												<Menu.Item key={item.label} className="rounded-md">
-													<NavLink
-														to={item.path}
-														className={({ isActive }) => navlinkClasses(isActive)}>
-														<item.icon
-															className="h-6 w-6 shrink-0 text-[inherit]"
-															aria-hidden="true"
-														/>
-														{item.label}
+												<Menu.Item key={item.name} className="rounded-md">
+													<NavLink to={item.path} className={({ isActive }) => navlinkClasses(isActive)}>
+														<item.icon className="h-6 w-6 shrink-0 text-[inherit]" aria-hidden="true" />
+														{item.name}
 													</NavLink>
 												</Menu.Item>
 											)

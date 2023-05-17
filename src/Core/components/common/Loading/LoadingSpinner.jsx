@@ -9,8 +9,8 @@ export const LoadingSpinner = ({ size, variant }) => {
 		() =>
 			classNames({
 				loading: true,
-				"loading-primary": !variant,
-				"loading-md": !size,
+				"loading-primary loading-md": !variant && !size,
+
 				// size
 				"loading-sm": size === "sm",
 				"loading-md": size === "md",
