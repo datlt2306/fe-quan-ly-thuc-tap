@@ -30,7 +30,7 @@ export default function Breadcrumbs({ navigation }) {
 
 					return page.children?.map((item) => {
 						return (
-							matchPath(item.path, pathname) !== null && (
+							!!matchPath(item.path, pathname) && (
 								<List.Item key={item.name}>
 									<Center>
 										<ChevronRightIcon className="h-5 w-5 flex-shrink-0 text-gray-400" />
