@@ -38,6 +38,8 @@ const CompanyListPage = () => {
 	const [modal, setModal] = useState(false)
 	const [dataModal, setDataModal] = useState({});
 
+	const toastId = useRef(null)
+
 	// get list company, semester, campus, major
 	const { data: majors } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
 	const campus = useSelector((state) => state.campus)
@@ -57,12 +59,25 @@ const CompanyListPage = () => {
 	// hanle delete company
 	const [handleDeleteCompany, { isLoading }] = useDeleteCompanyMutation()
 	const onDeleteSubmit = async (id) => {
+		toastId.current = toast.loading("Đang xóa công ty")
 		const result = await handleDeleteCompany({ id })
-		if (result?.data?.statusCode) {
-			toast.error(result.data.message)
+		if (result?.error) {
+			toast.update(toastId.current, {
+				type: "error",
+				render: error.message || "Đã có lỗi xảy ra !",
+				isLoading: false,
+				closeButton: true,
+				autoClose: 2000,
+			})
 			return;
 		}
-		toast.success("Đã xóa doanh nghiệp!")
+		toast.update(toastId.current, {
+			type: "success",
+			render: "Đã xóa thành công doanh nghiệp!",
+			isLoading: false,
+			closeButton: true,
+			autoClose: 2000,
+		})
 	}
 
 	// handle export, import
@@ -291,7 +306,7 @@ const CompanyListPage = () => {
 						// onCancel={() => toast.info("Cancelled")}
 						onConfirm={() => onDeleteSubmit(value)}>
 						<Button size="sm" variant="error" shape="square">
-							{isLoading ? <LoadingSpinner /> : <TrashIcon className="w-5 h-5" />}
+							<TrashIcon className="w-5 h-5" />
 						</Button>
 					</PopConfirm>
 				</ActionList>

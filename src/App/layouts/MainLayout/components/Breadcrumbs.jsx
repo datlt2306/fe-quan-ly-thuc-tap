@@ -8,6 +8,7 @@ const pages = [
 
 export default function Breadcrumbs({ navigation }) {
 	const { pathname } = useLocation();
+	console.log(pathname)
 	return (
 		<nav className="flex sm:hidden" aria-label="Breadcrumb">
 			<ol role="list" className="flex items-center space-x-4">
@@ -38,23 +39,21 @@ export default function Breadcrumbs({ navigation }) {
 							</li>
 						) : (
 							page?.children?.map((item, index) => {
-								return (
-									pathname === item.path && (
-										<li key={item.label}>
-											<div className="flex items-center">
-												<ChevronRightIcon
-													className="h-5 w-5 flex-shrink-0 text-gray-400"
-													aria-hidden="true"
-												/>
-												<Link
-													to={item.path}
-													className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
-													aria-current={pathname === item.path ? "page" : undefined}>
-													{item.label}
-												</Link>
-											</div>
-										</li>
-									)
+								return pathname.split("/")[1] === item.path.split("/")[1] && (
+									<li key={item.label}>
+										<div className="flex items-center">
+											<ChevronRightIcon
+												className="h-5 w-5 flex-shrink-0 text-gray-400"
+												aria-hidden="true"
+											/>
+											<Link
+												to={item.path}
+												className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
+												aria-current={pathname === item.path ? "page" : undefined}>
+												{item.label}
+											</Link>
+										</div>
+									</li>
 								)
 							})
 						)
