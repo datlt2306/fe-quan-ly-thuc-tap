@@ -12,12 +12,12 @@ export const columnAccessors = {
 	nameCompany: "Công ty thực tập",
 	position: "Vị trí thực tập",
 	CV: "CV",
+	report: "Báo cáo TT",
+	form: "Biên bản TT",
+	resultScore: "Điểm kết quả",
+	attitudePoint: "Điểm thái độ",
+	timeOfIntern: "Thời gian thực tập",
 	reviewer: "Reviewer",
 	createdAt: "Ngày bổ sung",
 	note: "Ghi chú",
-};
-
-export const InternSupportType = {
-	0: "Tự tìm công ty",
-	1: "Nhờ nhà trường hỗ trợ",
 };

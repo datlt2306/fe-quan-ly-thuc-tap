@@ -7,7 +7,6 @@ import classNames from "classnames";
 import { memo, useEffect, useMemo } from "react";
 import { useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import tw from "twin.macro";
-import { Skeleton } from "../../customs/Skelton";
 import Button from "../Button";
 import ButtonGroup from "../Button/ButtonGroup";
 import { Option, Select } from "../FormControl/SelectFieldControl";
@@ -138,23 +137,23 @@ const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading 
 					</Table.Header>
 
 					<Table.Body {...getTableBodyProps()}>
-						{page.map((row) => {
-							prepareRow(row);
-							return (
-								<Table.Row {...row.getRowProps()}>
-									{row.cells.map((cell, index) => (
-										<Table.Cell key={index} {...cell.getCellProps()}>
-											{cell.render("Cell", { className: "text-blue-500" })}
-										</Table.Cell>
-									))}
-								</Table.Row>
-							);
-						})}
-
-						{!data.length && (
-							<Table.Row>
-								<Table.Cell className="text-center text-xl text-disabled">Chưa có dữ liệu</Table.Cell>
-							</Table.Row>
+						{loading ? (
+							<Table.Pending />
+						) : !!data.length ? (
+							page.map((row) => {
+								prepareRow(row);
+								return (
+									<Table.Row {...row.getRowProps()}>
+										{row.cells.map((cell, index) => (
+											<Table.Cell key={index} {...cell.getCellProps()}>
+												{cell.render("Cell", { className: "text-blue-500" })}
+											</Table.Cell>
+										))}
+									</Table.Row>
+								);
+							})
+						) : (
+							<Table.Empty />
 						)}
 					</Table.Body>
 				</Table>
@@ -221,7 +220,7 @@ const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading 
 						onChange={(e) => {
 							setPageSize(e.target.value);
 						}}>
-						{[10, 20, 30, 50, 100].map((page_size, index) => (
+						{[10, 20, 30, 50].map((page_size, index) => (
 							<Option value={page_size} key={index}>
 								{page_size} hàng
 							</Option>

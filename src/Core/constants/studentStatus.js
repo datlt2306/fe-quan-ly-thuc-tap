@@ -13,6 +13,7 @@ export const StudentStatusEnum = {
 	8: "Sửa báo cáo",
 	9: "Hoàn thành",
 	10: "Chưa đăng ký",
+	11: "Đã đăng ký",
 };
 
 /**
@@ -21,7 +22,7 @@ export const StudentStatusEnum = {
 export const StudentStatusGroupEnum = {
 	warning: ["Chờ kiểm tra CV", "Sửa lại CV", "Sửa biên bản", "Sửa báo cáo"],
 	error: ["Không đủ điều kiện", "Chưa đăng ký"],
-	info: ["Nhận CV", "Đã nộp biên bản", "Đang thực tập", "Đã nộp báo cáo"],
+	info: ["Nhận CV", "Đã nộp biên bản", "Đang thực tập", "Đã nộp báo cáo", "Đã đăng ký"],
 	success: ["Hoàn thành"],
 };
 
@@ -29,6 +30,16 @@ export const StudentStatusGroupEnum = {
  * @enum
  */
 export const StudentSchoolingStatus = {
-	FAILED_STATE: "Học lại",
-	STUDYING_STATE: "Học đi",
+	CHO: "Chờ xếp lớp",
+	HDI: "Học đi",
+	HL: "Học lại",
+	TN: "Tốt nghiệp",
+};
+
+/**
+ * @enum
+ */
+export const InternSupportType = {
+	0: "Tự tìm công ty",
+	1: "Nhờ nhà trường hỗ trợ",
 };

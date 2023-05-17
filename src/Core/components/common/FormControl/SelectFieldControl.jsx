@@ -1,5 +1,5 @@
 import { forwardRef, useId, useRef } from "react";
-import { Controller, useController } from "react-hook-form";
+import { useController } from "react-hook-form";
 import tw from "twin.macro";
 
 export const Select = tw.select`block w-full rounded-[4px] border-none duration-300  px-2 py-1.5 outline-none ring-1 ring-gray-300 focus:ring-primary focus:active:ring-primary min-w-[128px] m-0`;
