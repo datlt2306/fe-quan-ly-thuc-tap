@@ -1,75 +1,39 @@
-import React, { useState } from "react";
+import { recordSchema } from '@/App/schemas/recordSchema'
+import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl'
+import { yupResolver } from '@hookform/resolvers/yup'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
+import tw from 'twin.macro'
 
-const DOCXUploadPreview = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [textContent, setTextContent] = useState("");
+const RecordPage = () => {
+  const {user} = useSelector((state) => state.auth)
+  const {handleSubmit, control} = useForm({
+    resolver: yupResolver(recordSchema)
+  })
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-
-    if (file) {
-      readDocxFile(file);
-    } else {
-      setTextContent("");
-    }
-  };
-
-  const readDocxFile = (file) => {
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      const arrayBuffer = event.target.result;
-      const buffer = new Uint8Array(arrayBuffer);
-      const docText = parseDocx(buffer);
-      setTextContent(docText);
-    };
-    reader.readAsArrayBuffer(file);
-  };
-
-  const parseDocx = (buffer) => {
-    const zip = new JSZip();
-    const docx = zip.loadAsync(buffer);
-
-    return docx
-      .then((zip) => {
-        const content = zip.file("word/document.xml").async("string");
-        return content;
-      })
-      .then((content) => {
-        const doc = new DOMParser().parseFromString(content, "text/xml");
-        const paragraphs = doc.getElementsByTagName("w:p");
-        let text = "";
-        for (let i = 0; i < paragraphs.length; i++) {
-          const paragraph = paragraphs[i];
-          const texts = paragraph.getElementsByTagName("w:t");
-          for (let j = 0; j < texts.length; j++) {
-            const textNode = texts[j].textContent;
-            text += textNode + " ";
-          }
-          text += "\n";
-        }
-        return text;
-      })
-      .catch((error) => {
-        console.error(error);
-        return "";
-      });
-  };
-
-  const renderPreview = () => {
-    if (textContent) {
-      return <pre>{textContent}</pre>;
-    } else {
-      return <div>No file selected.</div>;
-    }
-  };
-
+  const onSubmit = (value) => {
+    console.log(value)
+  }
   return (
-    <div>
-      <input type="file" accept=".docx" onChange={handleFileChange} />
-      {renderPreview()}
-    </div>
-  );
-};
+    <Container>
+      <Title>Nộp biên bản</Title>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Info>Mã sinh viên: <Span>{user && user?.mssv}</Span></Info>
+        <Info>Họ và tên: <Span>{user && user?.displayName}</Span></Info>
+        <InputFieldControl label="Tên doanh nghiệp" control={control} name="companyName"/>
+        
+        <InputFieldControl label="Thời gian bắt đầu thực tập" control={control} name="date" type="date"/>
+        <InputFieldControl label="Upload biên bản (Image, PDF hoặc Docx)" control={control} name="file" type="file"/>
+      </Form>
+    </Container>
+  )
+}
 
-export default DOCXUploadPreview;
+const Form = tw.form`grid gap-8`
+const Title = tw.div`mb-8 text-primary text-xl font-bold`;
+const Container = tw.div`container mx-auto w-[512px]`
+const Info = tw.div``
+const Span = tw.span`font-bold`
+
+export default RecordPage
