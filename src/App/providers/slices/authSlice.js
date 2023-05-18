@@ -23,8 +23,12 @@ const authSlice = createSlice({
 				return {
 					isSignedIn: payload.success,
 					user: {
+<<<<<<<<< Temporary merge branch 1
 						id: payload.manager?._id,
 						campus: payload.manager?.campus_id,
+=========
+						id:payload.manager?._id,
+>>>>>>>>> Temporary merge branch 2
 						displayName: payload.name,
 						email: payload.manager?.email,
 						picture: payload.picture,
@@ -35,8 +39,12 @@ const authSlice = createSlice({
 			return {
 				isSignedIn: payload.success,
 				user: {
+<<<<<<<<< Temporary merge branch 1
 					id: payload.student?._id,
 					campus: payload.manager?.campus_id,
+=========
+					id:payload.student?._id,
+>>>>>>>>> Temporary merge branch 2
 					displayName: payload.name,
 					email: payload.student?.email,
 					picture: payload.picture,

@@ -26,7 +26,6 @@ const rootReducer = combineReducers({
 	// Campus reducers
 	[campusApi.reducerPath]: campusApi.reducer,
 	[studentApi.reducerPath]: studentApi.reducer,
-	[businessApi.reducerPath]: businessApi.reducer,
 	[configTimesApi.reducerPath]: configTimesApi.reducer,
 	[requestStudentsApi.reducerPath]: requestStudentsApi.reducer,
 	[campusSlice.name]: campusSlice.reducer,
@@ -38,6 +37,12 @@ const rootReducer = combineReducers({
 	[registerInternAPI.reducerPath]: registerInternAPI.reducer,
 
 	
+	[businessApi.reducerPath]: businessApi.reducer,
+	[configTimesApi.reducerPath]: configTimesApi.reducer,
+	[campusSlice.name]: campusSlice.reducer,
+	//major reducer
+	[majorApi.reducerPath]: majorApi.reducer,
+	[staffListApi.reducerPath]: staffListApi.reducer,
 });
 
 export default rootReducer;
