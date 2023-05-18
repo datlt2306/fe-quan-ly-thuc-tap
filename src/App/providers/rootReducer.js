@@ -8,6 +8,7 @@ import studentApi from "./apis/studentApi";
 import semesterSlice from "./slices/semesterSlice";
 import businessApi from "./apis/businessApi";
 import majorApi from "./apis/majorApi";
+import reportApi from "./apis/reportApi";
 
 const rootReducer = combineReducers({
 	// Auth reducers
@@ -24,6 +25,8 @@ const rootReducer = combineReducers({
 	//major reducer
 	[majorApi.reducerPath]: majorApi.reducer,
 	[staffListApi.reducerPath]: staffListApi.reducer,
+	// report reducer
+	[reportApi.reducerPath]: reportApi.reducer
 });
 
 export default rootReducer;
