@@ -139,7 +139,7 @@ const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading 
 					<Table.Body {...getTableBodyProps()}>
 						{loading ? (
 							<Table.Pending />
-						) : !!data.length ? (
+						) : data.length ? (
 							page.map((row) => {
 								prepareRow(row);
 								return (

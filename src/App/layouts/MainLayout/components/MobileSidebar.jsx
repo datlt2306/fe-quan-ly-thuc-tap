@@ -66,7 +66,7 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 								<Navigation>
 									<Menu>
 										{navigation.map((item) =>
-											!!item.children ? (
+											item.children ? (
 												<Menu.Item key={item.name} className="rounded-md">
 													<Disclosure as="div">
 														{({ open }) => {
