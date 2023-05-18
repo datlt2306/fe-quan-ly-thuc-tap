@@ -12,3 +12,4 @@ const ModalLoading = () => {
 };
 
 export default ModalLoading;
+

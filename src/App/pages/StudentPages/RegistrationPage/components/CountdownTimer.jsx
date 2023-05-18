@@ -6,8 +6,8 @@ import ExpiredNotice from "./ExpiredNotice";
 
 const ShowCounter = ({ days, hours, minutes, seconds }) => {
 	return (
-		<div className="show-counter">
-			<div className="countdown-link gap-3">
+		<div className="flex">
+			<div className="flex gap-3">
 				<div>Thời gian đăng ký còn lại</div>
 				<DateTimeDisplay value={days} type={"Days"} isDanger={days <= 3} />
 				<p>:</p>
