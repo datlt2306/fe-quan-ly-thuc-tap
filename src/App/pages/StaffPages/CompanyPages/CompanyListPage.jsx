@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import Button from "@/Core/components/common/Button";
 import PopConfirm from "@/Core/components/common/Popup/PopConfirm";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
@@ -7,7 +7,7 @@ import {
 	SelectColumnFilter,
 } from "@/Core/components/common/Table/ReactTableFilters";
 import { Option, Select } from "@/Core/components/common/FormControl/SelectFieldControl";
-import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, CalendarDaysIcon, PencilSquareIcon, TrashIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
+import { CalendarDaysIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
@@ -38,11 +38,18 @@ const CompanyListPage = () => {
 	const { data: majors } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
 	const campus = useSelector((state) => state.campus)
 	const { data: semester } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
-	const [selectedSemesterId, setSelectedSemesterId] = useState(semester?.defaultSemester?._id);
+	const { defaultSemester } = useSelector((state) => state.semester);
+	const [selectedSemesterId, setSelectedSemesterId] = useState(defaultSemester?._id);
 	const { data: company, isLoading: companyLoading } = useGetAllCompanyQuery({ limit: 1000, semester_id: selectedSemesterId }, { refetchOnMountOrArgChange: true });
+
+	useEffect(() => { setSelectedSemesterId(defaultSemester?._id) }, [defaultSemester])
+
 	const handleChangeSemester = (id) => {
 		setSelectedSemesterId(id);
 	}
+	useEffect(() => {
+		setSelectedSemesterId(defaultSemester?._id);
+	 }, [defaultSemester]);
 
 	// set table data
 	const [tableData, setTableData] = useState([]);
@@ -79,7 +86,6 @@ const CompanyListPage = () => {
 	const { handleExportFile } = useExportToExcel();
 	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
 	const fileInputRef = useRef(null);
-	const fileInputRefMobile = useRef(null);
 
 	// Callback function will be executed after import file excel
 	const importExcelDataCallback = (excelData) => {
@@ -302,9 +308,9 @@ const CompanyListPage = () => {
 					<label htmlFor="semester-list" className="inline-flex items-center gap-2 whitespace-nowrap text-base-content">
 						<CalendarDaysIcon className="h-6 w-6" /> Kỳ học
 					</label>
-					<Select className="min-w-[12rem] capitalize sm:text-sm" onChange={(e) => handleChangeSemester(e.target.value)} defaultValue={semester?.defaultSemester?._id}>
+					<Select className="min-w-[12rem] capitalize sm:text-sm" onChange={(e) => handleChangeSemester(e.target.value)}>
 						{Array.isArray(semester?.listSemesters) && semester?.listSemesters.map((item, index) => (
-							<Option value={item._id} key={index}>{item.name}</Option>
+							<Option value={item._id} key={index} selected={selectedSemesterId === item._id}>{item.name}</Option>
 						))}
 					</Select>
 				</SelectBox>
