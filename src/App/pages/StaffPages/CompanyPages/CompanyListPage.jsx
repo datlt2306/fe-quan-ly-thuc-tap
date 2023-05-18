@@ -79,7 +79,6 @@ const CompanyListPage = () => {
 	const { handleExportFile } = useExportToExcel();
 	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
 	const fileInputRef = useRef(null);
-	const fileInputRefMobile = useRef(null);
 
 	// Callback function will be executed after import file excel
 	const importExcelDataCallback = (excelData) => {
@@ -109,11 +108,11 @@ const CompanyListPage = () => {
 					} else {
 						toast.success("Import công ty thành công")
 					}
-					fileInputRef.current.value = null;
 				})
 				.catch((error) => {
 					toast.error(error?.message);
 				});
+			
 		}
 	};
 
