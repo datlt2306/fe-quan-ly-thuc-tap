@@ -86,6 +86,7 @@ const CompanyListPage = () => {
 	const { handleExportFile } = useExportToExcel();
 	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
 	const fileInputRef = useRef(null);
+	const fileInputRefMobile = useRef(null);
 
 	// Callback function will be executed after import file excel
 	const importExcelDataCallback = (excelData) => {
