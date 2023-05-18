@@ -7,11 +7,7 @@ const configTimesApi = createApi({
 	endpoints: (build) => ({
 		getSetTime: build.query({
 			query: (queryString) => {
-				const { typeNumber, semester_id,campus_id } = queryString;
-				return { url: `/settime`, method: "GET",params:{
-					typeNumber,semester_id,campus_id
-
-				} };
+				return { url: `/settime/byNumber`, method: "GET",params:queryString };
 			},
 		}),
 	}),

@@ -3,7 +3,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import { Fragment, forwardRef, useRef } from "react";
-import { studentListSampleData } from "../mocks";
+import { excelSampleData } from "../mocks";
 import { useExportToExcel } from "@/App/hooks/useExcel";
 
 const MobileDropdownButtonGroup = ({ tableData, handleImport, handleExport, canImport }, ref) => {
@@ -48,7 +48,7 @@ const MobileDropdownButtonGroup = ({ tableData, handleImport, handleExport, canI
 						<DocumentArrowDownIcon className="h-5 w-5 text-[inherit]" />
 						Export file Excel
 					</Menu.Item>
-					<Menu.Item as="button" className={getMenuItemClassNames()} onClick={() => handleExportFile(studentListSampleData)}>
+					<Menu.Item as="button" className={getMenuItemClassNames()} onClick={() => handleExportFile(excelSampleData)}>
 						<ArrowDownTrayIcon className="h-5 w-5 text-[inherit]" />
 						Tải file mẫu
 					</Menu.Item>

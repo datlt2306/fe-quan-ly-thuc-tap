@@ -25,7 +25,7 @@ export default {
 		},
 		screens: {
 			sm: {
-				min: "375px",
+				min: "320px",
 				max: "767px",
 			},
 			md: {
@@ -57,5 +57,5 @@ export default {
 			},
 		},
 	},
-	plugins: [require("prettier-plugin-tailwindcss"), require("@tailwindcss/forms"), require("tailwind-scrollbar")({ nocompatible: true })],
+	plugins: [require("prettier-plugin-tailwindcss"), require("@tailwindcss/forms"), require("tailwind-scrollbar")({ nocompatible: true }), require("@tailwindcss/line-clamp")],
 };

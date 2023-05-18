@@ -7,9 +7,8 @@ import Button from "@/Core/components/common/Button";
 import { Option, Select } from "@/Core/components/common/FormControl/SelectFieldControl";
 import ReactTable from "@/Core/components/common/Table/ReactTable";
 import { InputColumnFilter, SelectColumnFilter } from "@/Core/components/common/Table/ReactTableFilters";
-import IndeterminateCheckbox from "@/Core/components/common/Table/RowSelectionCheckbox";
 import { AllowedFileExt } from "@/Core/constants/allowedFileType";
-import { StudentSchoolingStatus, StudentStatusEnum, StudentStatusGroupEnum } from "@/Core/constants/studentStatus";
+import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from "@/Core/constants/studentStatus";
 import { convertToExcelData } from "@/Core/utils/excelDataHandler";
 import formatDate from "@/Core/utils/formatDate";
 import getFileExtension from "@/Core/utils/getFileExtension";
@@ -20,8 +19,7 @@ import { toast } from "react-toastify";
 import tw from "twin.macro";
 import DesktopButtonGroup from "./components/DesktopButtonGroup";
 import MobileDropdownButtonGroup from "./components/MobileDropdownButtonGroup";
-import { InternSupportType, columnAccessors } from "./constants";
-import { XMarkIcon } from "@heroicons/react/20/solid";
+import { columnAccessors } from "./constants";
 
 const handleGetInternStatusStyle = (value) => {
 	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
@@ -33,12 +31,11 @@ const StudentListPage = () => {
 	const [handleImportFile] = useImportFromExcel();
 	const { handleExportFile } = useExportToExcel();
 	const [addStudents] = useAddStudentsMutation(); // add students
-	const [selectedStudents, setSelectedStudents] = useState([]); // get selected student by checkbox
 	const fileInputRef = useRef(null);
 	const toastId = useRef(null);
 	const { defaultSemester } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useState(defaultSemester?._id);
-	const { data: studentsListData, isLoading } = useGetStudentsQuery({ semester: currentSemester }, { refetchOnMountOrArgChange: true });
+	const { data: studentsListData, isLoading, isError } = useGetStudentsQuery({ semester: currentSemester }, { refetchOnMountOrArgChange: true });
 	const { data: semesterData } = useGetAllSemestersQuery({ campus_id: currentCampus?._id }, { refetchOnMountOrArgChange: true });
 
 	const tableData = useMemo(() => {
@@ -127,12 +124,12 @@ const StudentListPage = () => {
 		fileInputRef.current.value = null; // reset input file after imported
 	};
 
+	// Export data from table to excel file
 	const handleExportDataToExcel = (data) => {
 		if (!data.length) {
 			toast.warn("Chưa có dữ liệu để xuất file !");
 			return;
 		}
-
 		const exportedData = convertToExcelData({ data: data, columnKeysAccessor: columnAccessors });
 		if (!exportedData) {
 			toast.error("Export dữ liệu thất bại !");
@@ -144,11 +141,6 @@ const StudentListPage = () => {
 	// Define columns of table
 	const columnsData = useMemo(
 		() => [
-			{
-				Header: ({ getToggleAllPageRowsSelectedProps }) => <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />,
-				accessor: "_id",
-				Cell: ({ row }) => <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />,
-			},
 			{
 				Header: columnAccessors.index,
 				accessor: "index",
@@ -187,13 +179,6 @@ const StudentListPage = () => {
 				accessor: "email",
 				Filter: InputColumnFilter,
 				filterable: true,
-			},
-			{
-				Header: columnAccessors.course,
-				accessor: "course",
-				Filter: SelectColumnFilter,
-				filterable: true,
-				sortable: true,
 			},
 			{
 				Header: columnAccessors.support,
@@ -249,6 +234,16 @@ const StudentListPage = () => {
 				),
 			},
 			{
+				Header: columnAccessors.report,
+				accessor: "report",
+				Cell: ({ value }) => !!value && <Badge variant="info">Đã nộp</Badge>,
+			},
+			{
+				Header: columnAccessors.form,
+				accessor: "form",
+				Cell: ({ value }) => !!value && <Badge variant="info">Đã nộp</Badge>,
+			},
+			{
 				Header: columnAccessors.reviewer,
 				accessor: "reviewer",
 				Filter: InputColumnFilter,
@@ -259,7 +254,7 @@ const StudentListPage = () => {
 				accessor: "statusStudent",
 				Filter: SelectColumnFilter,
 				filterable: true,
-				Cell: ({ value }) => <Badge variant={value === StudentSchoolingStatus.STUDYING_STATE ? "success" : "error"}>{value}</Badge>,
+				Cell: ({ value }) => <span className="font-semibold">{value}</span>,
 			},
 
 			{
@@ -278,18 +273,15 @@ const StudentListPage = () => {
 		],
 		[]
 	);
+
 	return (
 		<Container>
 			<Box>
-				<DesktopButtonGroup tableData={tableData} handleExport={handleExportDataToExcel} handleImport={handleImportStudents} ref={fileInputRef} />
-				<MobileDropdownButtonGroup
-					tableData={tableData}
-					handleExport={handleExportDataToExcel}
-					handleImport={handleImportStudents}
-					ref={fileInputRef}
-				/>
 				<SelectBox>
-					<label htmlFor="semester-list" className="inline-flex items-center gap-2 whitespace-nowrap text-base-content">
+					<label
+						htmlFor="semester-list"
+						aria-label="semester-list"
+						className="inline-flex select-none items-center gap-2 whitespace-nowrap text-base-content">
 						<CalendarDaysIcon className="h-6 w-6" /> Kỳ học
 					</label>
 					<Select
@@ -308,16 +300,29 @@ const StudentListPage = () => {
 							))}
 					</Select>
 				</SelectBox>
+				<DesktopButtonGroup
+					tableData={tableData}
+					handleExport={handleExportDataToExcel}
+					handleImport={handleImportStudents}
+					canImport={currentSemester === defaultSemester?._id}
+					ref={fileInputRef}
+				/>
+				<MobileDropdownButtonGroup
+					tableData={tableData}
+					handleExport={handleExportDataToExcel}
+					handleImport={handleImportStudents}
+					canImport={currentSemester === defaultSemester?._id}
+					ref={fileInputRef}
+				/>
 			</Box>
-			<div className="flex-1">
-				<ReactTable columns={columnsData} data={tableData} loading={isLoading} getSelectedRows={setSelectedStudents} />
-			</div>
+
+			<ReactTable columns={columnsData} data={tableData} loading={isLoading} />
 		</Container>
 	);
 };
 
 const Container = tw.div`flex flex-col gap-6 h-full `;
-const Box = tw.div`flex items-center justify-between sm:flex-row-reverse md:flex-row-reverse`;
-const SelectBox = tw.div`flex basis-1/4 items-center gap-2 sm:text-sm`;
+const Box = tw.div`flex items-center justify-between lg:flex-row-reverse`;
+const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
 
 export default StudentListPage;

@@ -49,9 +49,8 @@ const StudentInfoPage = () => {
 	const { data: business } = useGetAllCompanyQuery();
 	const { data: timeForm } = useGetSetTimeQuery({
 		typeNumber: 1,
-		semester_id: user?.smester_id,
 		campus_id: user?.campus_id,
-	});
+	},{refetchOnMountOrArgChange:true});
 	const { data: allMajor } = useGetAllMajorQuery();
 
 	useEffect(() => {
@@ -142,8 +141,7 @@ const StudentInfoPage = () => {
 				<LayoutInfoUser>
 					<VerticalList className="text-gray-500">
 						<Title>Thông Tin Đăng Ký</Title>
-						{isFetching && <div>...Đang tải dữ liệu</div>}
-						{!isFetching &&
+						{
 							dataRegisterInfomation.map((item) => (
 								<li key={item.label} className="flex gap-1 ">
 									{item.label}

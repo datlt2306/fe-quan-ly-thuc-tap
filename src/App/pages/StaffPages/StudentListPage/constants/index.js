@@ -10,14 +10,15 @@ export const columnAccessors = {
 	statusCheck: "Trạng thái thực tập",
 	statusStudent: "Trạng thái sinh viên",
 	nameCompany: "Công ty thực tập",
+	addressCompany: "Địa chỉ công ty",
+	taxCode: "Mã số thuế",
 	position: "Vị trí thực tập",
 	CV: "CV",
+	report: "Báo cáo TT",
+	form: "Biên bản TT",
+	resultScore: "Điểm kết quả",
+	attitudePoint: "Điểm thái độ",
 	reviewer: "Reviewer",
 	createdAt: "Ngày bổ sung",
 	note: "Ghi chú",
-};
-
-export const InternSupportType = {
-	0: "Tự tìm công ty",
-	1: "Nhờ nhà trường hỗ trợ",
 };

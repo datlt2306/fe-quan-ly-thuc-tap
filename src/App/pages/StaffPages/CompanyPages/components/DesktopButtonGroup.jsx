@@ -2,7 +2,7 @@ import Button from "@/Core/components/common/Button";
 
 import React, { forwardRef, useRef } from "react";
 import tw from "twin.macro";
-import { studentListSampleData } from "../mocks";
+import { excelSampleData } from "../mocks";
 import { useExportToExcel } from "@/App/hooks/useExcel";
 import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 
@@ -30,7 +30,7 @@ const DesktopButtonGroup = ({ tableData, handleImport, handleExport, canImport }
 				<DocumentArrowDownIcon className="h-5 w-5 text-[inherit]" />
 				Export file Excel
 			</Button>
-			<Button variant="secondary" size="sm" onClick={() => handleExportFile(studentListSampleData)}>
+			<Button variant="secondary" size="sm" onClick={() => handleExportFile(excelSampleData)}>
 				<ArrowDownTrayIcon className="h-5 w-5 text-[inherit]" />
 				Tải file mẫu
 			</Button>
