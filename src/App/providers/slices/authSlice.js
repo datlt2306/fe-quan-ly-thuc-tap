@@ -19,12 +19,12 @@ const authSlice = createSlice({
 	initialState: initialState,
 	extraReducers: (build) => {
 		build.addMatcher(authApi.endpoints.signin.matchFulfilled, (state, { payload }) => {
+			console.log('payload',payload)
 			if (payload.isAdmin) {
 				return {
 					isSignedIn: payload.success,
 					user: {
-						id: payload.manager?._id,
-						campus: payload.manager?.campus_id,
+						id:payload.manager?._id,
 						displayName: payload.name,
 						email: payload.manager?.email,
 						picture: payload.picture,
@@ -35,8 +35,7 @@ const authSlice = createSlice({
 			return {
 				isSignedIn: payload.success,
 				user: {
-					id: payload.student?._id,
-					campus: payload.manager?.campus_id,
+					id:payload.student?._id,
 					displayName: payload.name,
 					email: payload.student?.email,
 					picture: payload.picture,

@@ -19,3 +19,4 @@ export const newStudentSchema = array(
 		note: string().optional(),
 	})
 );
+

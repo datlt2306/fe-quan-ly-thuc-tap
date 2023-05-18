@@ -13,9 +13,11 @@ import {
 // APIs
 import campusApi from "./apis/campusApi";
 import semesterApi from "./apis/semesterApi";
-import businessApi from "./apis/businessApi";
 import rootReducer from "./rootReducer";
 import authApi from "./apis/authApi";
+import businessApi from "./apis/businessApi";
+import configTimesApi from "./apis/configTimesApi";
+import requestStudentsApi from "./apis/requestStudentsApi";
 import studentApi from "./apis/studentApi";
 import majorApi from "./apis/majorApi";
 import staffListApi from "./apis/staffListApi";
@@ -35,6 +37,12 @@ const store = configureStore({
 				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
 			},
 		}).concat([
+			semesterApi.middleware,
+			campusApi.middleware,
+			authApi.middleware,
+			businessApi.middleware,
+			configTimesApi.middleware,
+			requestStudentsApi.middleware,
 			authApi.middleware,
 			campusApi.middleware,
 			semesterApi.middleware,
