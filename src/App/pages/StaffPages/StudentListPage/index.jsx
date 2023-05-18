@@ -8,26 +8,22 @@ import { Option, Select } from "@/Core/components/common/FormControl/SelectField
 import ReactTable from "@/Core/components/common/Table/ReactTable";
 import { InputColumnFilter, SelectColumnFilter } from "@/Core/components/common/Table/ReactTableFilters";
 import { AllowedFileExt } from "@/Core/constants/allowedFileType";
-import { StudentSchoolingStatus, StudentStatusEnum, StudentStatusGroupEnum } from "@/Core/constants/studentStatus";
+import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from "@/Core/constants/studentStatus";
 import { convertToExcelData } from "@/Core/utils/excelDataHandler";
 import formatDate from "@/Core/utils/formatDate";
 import getFileExtension from "@/Core/utils/getFileExtension";
-import { ArrowDownTrayIcon, CalendarDaysIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { CalendarDaysIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import tw from "twin.macro";
+import DesktopButtonGroup from "./components/DesktopButtonGroup";
+import MobileDropdownButtonGroup from "./components/MobileDropdownButtonGroup";
 import { columnAccessors } from "./constants";
-import { excelSampleData } from "./mocks";
 
 const handleGetInternStatusStyle = (value) => {
-	let status;
-	Object.keys(StudentStatusGroupEnum).forEach((groupKey) => {
-		if (StudentStatusGroupEnum[groupKey].includes(value)) {
-			status = groupKey;
-		}
-	});
-	return status;
+	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
+	return style;
 };
 
 const StudentListPage = () => {
@@ -36,19 +32,27 @@ const StudentListPage = () => {
 	const { handleExportFile } = useExportToExcel();
 	const [addStudents] = useAddStudentsMutation(); // add students
 	const fileInputRef = useRef(null);
+	const toastId = useRef(null);
 	const { defaultSemester } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useState(defaultSemester?._id);
-	const { data: studentsListData, status: fetchDataStatus } = useGetStudentsQuery(
-		{ semester: currentSemester },
-		{ refetchOnMountOrArgChange: true }
-	);
+	const { data: studentsListData, isLoading, isError } = useGetStudentsQuery({ semester: currentSemester }, { refetchOnMountOrArgChange: true });
 	const { data: semesterData } = useGetAllSemestersQuery({ campus_id: currentCampus?._id }, { refetchOnMountOrArgChange: true });
+
 	const tableData = useMemo(() => {
-		return Array.isArray(studentsListData) ? studentsListData?.map((student, index) => ({ index: index + 1, ...student })) : [];
-	}, [studentsListData]);
+		return Array.isArray(studentsListData)
+			? studentsListData.map((student, index) => ({
+					...student,
+					index: index + 1,
+					createdAt: formatDate(student.createdAt),
+					statusCheck: StudentStatusEnum[student.statusCheck],
+					support: InternSupportType[student.support],
+					statusStudent: student.statusStudent.trim(),
+			  }))
+			: [];
+	}, [studentsListData, isLoading]);
 
 	// Callback function will be executed after import file excel
-	const importExcelDataCallback = (excelData) => {
+	const importExcelDataCallback = async (excelData) => {
 		if (!excelData.length) {
 			toast.warn("Vui lòng nhập thông tin đầy đủ !");
 		}
@@ -64,27 +68,47 @@ const StudentListPage = () => {
 				smester_id: defaultSemester?._id,
 				campus_id: currentCampus?._id,
 			}));
+			try {
+				toastId.current = toast.loading("Đang tải lên dữ liệu ...");
+				const payload = await newStudentSchema.validate(newStudentList);
 
-			console.log(newStudentList);
-			newStudentSchema
-				.validate(newStudentList)
-				.then((data) => {
-					const response = addStudents({
-						data,
-						smester_id: defaultSemester?._id,
-						campus_id: currentCampus?._id,
-					});
+				const { error } = await addStudents({
+					data: payload,
+					smester_id: defaultSemester?._id,
+					campus_id: currentCampus?._id,
+				});
 
-					toast.promise(response, {
-						success: "Import sinh viên thành công !",
-						error: "Import dữ liệu thất bại",
-						pending: "Đang tải lên dữ liệu ...",
+				if (error) {
+					toast.update(toastId.current, {
+						type: "error",
+						render: error.message || "Đã có lỗi xảy ra !",
+						isLoading: false,
+						closeButton: true,
+						autoClose: 2000,
 					});
 					fileInputRef.current.value = null;
-				})
-				.catch((error) => {
-					toast.error(error?.message);
+					return;
+				}
+
+				toast.update(toastId.current, {
+					type: "success",
+					render: "Tải lên dữ liệu thành công!",
+					isLoading: false,
+					closeButton: true,
+					autoClose: 2000,
 				});
+
+				fileInputRef.current.value = null;
+			} catch (error) {
+				toast.update(toastId.current, {
+					type: "error",
+					render: error.message,
+					isLoading: false,
+					closeButton: true,
+					autoClose: 2000,
+				});
+				fileInputRef.current.value = null;
+			}
 		}
 	};
 
@@ -100,20 +124,13 @@ const StudentListPage = () => {
 		fileInputRef.current.value = null; // reset input file after imported
 	};
 
-	const handleExportDataToExcel = () => {
-		if (!tableData.length) {
+	// Export data from table to excel file
+	const handleExportDataToExcel = (data) => {
+		if (!data.length) {
 			toast.warn("Chưa có dữ liệu để xuất file !");
 			return;
 		}
-		const exportedData = convertToExcelData(
-			tableData.map((student) => {
-				return {
-					...student,
-					statusCheck: StudentStatusEnum[student?.statusCheck],
-				};
-			}),
-			columnAccessors
-		);
+		const exportedData = convertToExcelData({ data: data, columnKeysAccessor: columnAccessors });
 		if (!exportedData) {
 			toast.error("Export dữ liệu thất bại !");
 			return;
@@ -164,11 +181,10 @@ const StudentListPage = () => {
 				filterable: true,
 			},
 			{
-				Header: columnAccessors.course,
-				accessor: "course",
+				Header: columnAccessors.support,
+				accessor: "support",
 				Filter: SelectColumnFilter,
 				filterable: true,
-				sortable: true,
 			},
 			{
 				Header: columnAccessors.statusCheck,
@@ -177,27 +193,9 @@ const StudentListPage = () => {
 					<SelectColumnFilter column={{ filterValue, setFilter, preFilteredRows, id }} customOptions={StudentStatusEnum} />
 				),
 				filterable: true,
-				Cell: ({ value }) => <Badge variant={handleGetInternStatusStyle(value)}>{StudentStatusEnum[value]}</Badge>,
+				Cell: ({ value }) => <Badge variant={handleGetInternStatusStyle(value)}>{value}</Badge>,
 			},
-			{
-				Header: columnAccessors.support,
-				accessor: "support",
-				Filter: SelectColumnFilter,
-				filterable: true,
-			},
-			{
-				Header: columnAccessors.statusStudent,
-				accessor: "statusStudent",
-				Filter: SelectColumnFilter,
-				filterable: true,
-				Cell: ({ value }) => <Badge variant={value === StudentSchoolingStatus.STUDYING_STATE ? "success" : "error"}>{value}</Badge>,
-			},
-			{
-				Header: columnAccessors.position,
-				accessor: "position",
-				Filter: InputColumnFilter,
-				filterable: true,
-			},
+
 			{
 				Header: columnAccessors.nameCompany,
 				accessors: "nameCompany",
@@ -218,32 +216,52 @@ const StudentListPage = () => {
 					),
 			},
 			{
+				Header: columnAccessors.position,
+				accessor: "position",
+				Filter: InputColumnFilter,
+				filterable: true,
+			},
+			{
 				Header: columnAccessors.CV,
 				accessor: "CV",
 				Filter: InputColumnFilter,
 				filterable: false,
 				sortable: false,
-				Cell: ({ value }) =>
-					!!value ? (
-						<Button as="a" href={value} target="_blank" variant="ghost" shape="square" size="sm">
-							<EyeIcon className="h-4 w-4" />
-						</Button>
-					) : (
-						<Button variant="disabled" shape="square" size="sm" disabled={true}>
-							<EyeSlashIcon className="h-4 w-4" />
-						</Button>
-					),
+				Cell: ({ value }) => (
+					<Button as="a" href={value} target="_blank" variant={!!value ? "ghost" : "disabled"} shape="square" size="sm" disabled={!!value}>
+						{!!value ? <EyeIcon className="h-4 w-4" /> : <EyeSlashIcon className="h-4 w-4" />}
+					</Button>
+				),
+			},
+			{
+				Header: columnAccessors.report,
+				accessor: "report",
+				Cell: ({ value }) => !!value && <Badge variant="info">Đã nộp</Badge>,
+			},
+			{
+				Header: columnAccessors.form,
+				accessor: "form",
+				Cell: ({ value }) => !!value && <Badge variant="info">Đã nộp</Badge>,
 			},
 			{
 				Header: columnAccessors.reviewer,
 				accessor: "reviewer",
-			},
-			{
-				Header: columnAccessors.addedAt,
-				accessor: "addedAt",
 				Filter: InputColumnFilter,
 				filterable: true,
-				sortable: true,
+			},
+			{
+				Header: columnAccessors.statusStudent,
+				accessor: "statusStudent",
+				Filter: SelectColumnFilter,
+				filterable: true,
+				Cell: ({ value }) => <span className="font-semibold">{value}</span>,
+			},
+
+			{
+				Header: columnAccessors.createdAt,
+				accessor: "createdAt",
+				Filter: InputColumnFilter,
+				filterable: true,
 				Cell: ({ value }) => <span>{formatDate(value)}</span>,
 			},
 			{
@@ -259,33 +277,16 @@ const StudentListPage = () => {
 	return (
 		<Container>
 			<Box>
-				<ButtonList>
-					<Button as="label" size="sm" htmlFor="file-input" variant="primary">
-						<DocumentArrowUpIcon className="h-6 w-6 text-[inherit]" /> Tải lên file Excel
-						<input
-							ref={fileInputRef}
-							type="file"
-							id="file-input"
-							className="hidden"
-							onChange={(e) => handleImportStudents(e.target.files[0])}
-						/>
-					</Button>
-					<Button variant="success" size="sm" onClick={handleExportDataToExcel}>
-						<DocumentArrowDownIcon className="h-6 w-6 text-[inherit]" />
-						Export file Excel
-					</Button>
-					<Button variant="secondary" size="sm" onClick={() => handleExportFile(excelSampleData)}>
-						<ArrowDownTrayIcon className="h-6 w-6 text-[inherit]" />
-						Tải file mẫu
-					</Button>
-				</ButtonList>
 				<SelectBox>
-					<label htmlFor="semester-list" className="inline-flex items-center gap-2 whitespace-nowrap text-base-content">
+					<label
+						htmlFor="semester-list"
+						aria-label="semester-list"
+						className="inline-flex select-none items-center gap-2 whitespace-nowrap text-base-content">
 						<CalendarDaysIcon className="h-6 w-6" /> Kỳ học
 					</label>
 					<Select
 						id="semester-list"
-						className="capitalize"
+						className="min-w-[12rem] capitalize sm:text-sm"
 						defaultValue={currentSemester}
 						onChange={(e) => {
 							console.log(e.target.value);
@@ -299,16 +300,29 @@ const StudentListPage = () => {
 							))}
 					</Select>
 				</SelectBox>
+				<DesktopButtonGroup
+					tableData={tableData}
+					handleExport={handleExportDataToExcel}
+					handleImport={handleImportStudents}
+					canImport={currentSemester === defaultSemester?._id}
+					ref={fileInputRef}
+				/>
+				<MobileDropdownButtonGroup
+					tableData={tableData}
+					handleExport={handleExportDataToExcel}
+					handleImport={handleImportStudents}
+					canImport={currentSemester === defaultSemester?._id}
+					ref={fileInputRef}
+				/>
 			</Box>
 
-			<ReactTable columns={columnsData} data={tableData} loading={fetchDataStatus.isLoading} />
+			<ReactTable columns={columnsData} data={tableData} loading={isLoading} />
 		</Container>
 	);
 };
 
 const Container = tw.div`flex flex-col gap-6 h-full `;
-const Box = tw.div`flex items-center justify-between`;
+const Box = tw.div`flex items-center justify-between lg:flex-row-reverse`;
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
-const ButtonList = tw.div`flex items-center gap-2`;
 
 export default StudentListPage;

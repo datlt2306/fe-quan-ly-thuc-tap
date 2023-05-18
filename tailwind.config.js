@@ -25,7 +25,7 @@ export default {
 		},
 		screens: {
 			sm: {
-				min: "375px",
+				min: "320px",
 				max: "767px",
 			},
 			md: {
@@ -44,7 +44,6 @@ export default {
 			},
 			animation: {
 				slide: "shimmer 1s ease infinite",
-				// spin: "spin 1.2s ease infinite",
 			},
 			keyframes: {
 				shimmer: {
@@ -58,5 +57,5 @@ export default {
 			},
 		},
 	},
-	plugins: [require("prettier-plugin-tailwindcss"), require("@tailwindcss/forms"), require("tailwind-scrollbar")({ nocompatible: true })],
+	plugins: [require("prettier-plugin-tailwindcss"), require("@tailwindcss/forms"), require("tailwind-scrollbar")({ nocompatible: true }), require("@tailwindcss/line-clamp")],
 };

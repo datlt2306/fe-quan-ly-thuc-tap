@@ -7,7 +7,7 @@ const campusApi = createApi({
 	tagTypes: ["Campus"],
 	endpoints: (build) => ({
 		getAllCampus: build.query({
-			query: (params) => ({ url: "/cumpus", method: "GET", params }),
+			query: (params) => ({ url: "/campus", method: "GET", params }),
 			providesTags: ["Campus"],
 		}),
 	}),

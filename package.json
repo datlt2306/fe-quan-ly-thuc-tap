@@ -23,7 +23,6 @@
 		"dotenv": "^16.0.3",
 		"moment": "^2.29.4",
 		"nprogress": "^0.2.0",
-		"prop-types": "^15.8.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-hook-form": "^7.43.9",
@@ -38,6 +37,7 @@
 		"yup": "^1.1.1"
 	},
 	"devDependencies": {
+		"@tailwindcss/line-clamp": "^0.4.4",
 		"@types/react": "^18.0.28",
 		"@types/react-dom": "^18.0.11",
 		"@vitejs/plugin-react": "^4.0.0-beta.0",

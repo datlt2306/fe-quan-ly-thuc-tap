@@ -1,6 +1,5 @@
-import { ArchiveBoxXMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import tw from "twin.macro";
+import { LoadingSpinner } from "../Loading/LoadingSpinner";
 
 const Table = ({ children, ...props }) => (
 	<table {...props} className="table w-full">
@@ -11,7 +10,7 @@ const Header = ({ sticky, children, ...props }) => (
 	<thead
 		{...props}
 		className={classNames({
-			"[&>*]:(sticky top-0)": sticky,
+			"sticky top-0 z-20 bg-inherit": sticky,
 		})}>
 		{children}
 	</thead>
@@ -24,19 +23,27 @@ const Cell = ({ as: Element = "td", children, ...props }) => {
 };
 
 const Empty = () => (
-	<tr>
-		<td align="center" colSpan="70%" className="select-none py-6 text-center">
-			<div className="flex items-center gap-3 text-disabled">
-				<ArchiveBoxXMarkIcon className="h-10 w-10 text-center" />
-				Không có dữ liệu
-			</div>
-		</td>
-	</tr>
+	<Table.Row>
+		<Cell colSpan="100%">
+			<span className="select-none text-lg text-disabled">Không có dữ liệu</span>
+		</Cell>
+	</Table.Row>
 );
+
+const PendingRow = () => (
+	<Table.Row>
+		<Table.Cell className="flex items-center gap-2 text-center text-lg text-disabled">
+			<LoadingSpinner size="sm" variant="primary" /> Đang tải dữ liệu
+		</Table.Cell>
+	</Table.Row>
+);
+
 Table.Header = Header;
 Table.Body = Body;
 Table.Row = Row;
 Table.Footer = Footer;
 Table.Cell = Cell;
 Table.Empty = Empty;
+Table.Pending = PendingRow;
+
 export default Table;
