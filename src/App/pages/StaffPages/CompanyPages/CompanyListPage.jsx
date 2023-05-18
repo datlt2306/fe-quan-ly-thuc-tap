@@ -79,6 +79,7 @@ const CompanyListPage = () => {
 	const { handleExportFile } = useExportToExcel();
 	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
 	const fileInputRef = useRef(null);
+	const fileInputRefMobile = useRef(null);
 
 	// Callback function will be executed after import file excel
 	const importExcelDataCallback = (excelData) => {
@@ -122,10 +123,12 @@ const CompanyListPage = () => {
 		if (fileExtension !== AllowedFileExt.XLSX) {
 			toast.error("File import không hợp lệ");
 			fileInputRef.current.value = null;
+			fileInputRefMobile.current.value = null;
 			return;
 		}
 		handleImportFile(file, importExcelDataCallback);
 		fileInputRef.current.value = null; // reset input file after imported
+		fileInputRefMobile.current.value = null; // reset input file after imported
 	};
 
 	const handleExportDataToExcel = () => {
@@ -319,7 +322,7 @@ const CompanyListPage = () => {
 					handleExport={handleExportDataToExcel}
 					handleImport={handleImportCompanies}
 					canImport={selectedSemesterId === semester?.defaultSemester?._id}
-					ref={fileInputRef}
+					ref={fileInputRefMobile}
 				/>
 			</Box>
 			{tableData && <ReactTable columns={columnsData} data={tableData} loading={companyLoading} />}
