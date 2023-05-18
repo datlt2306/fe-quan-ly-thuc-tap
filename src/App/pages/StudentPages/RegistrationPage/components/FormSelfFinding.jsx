@@ -14,6 +14,18 @@ const FormSelfFinding = ({ fields, onSubmit }) => {
 	const formSelfFinding = [
 		...fields(control),
 		{
+			label: "Đơn vị thực tập",
+			note: true,
+			content: (
+				<InputFieldControl
+					className="w-96 sm:w-full"
+					control={control}
+					name="nameCompany"
+					placeholder="Đơn vị thực tập/Tên doanh nghiệp"
+				/>
+			),
+		},
+		{
 			label: "Địa chỉ thực tập",
 			note: true,
 			content: (
@@ -76,7 +88,7 @@ const FormSelfFinding = ({ fields, onSubmit }) => {
 
 		{
 			content: (
-				<Button type="submit" className="mt-5 bg-secondary text-white">
+				<Button type="submit" className="mt-5 bg-primary text-white">
 					Đăng ký
 				</Button>
 			),

@@ -2,9 +2,8 @@ import * as yup from "yup";
 
 const sharedFieldSchema = {
 	address: yup.string().required("Vui lòng nhập địa chỉ của bạn").default(""),
-	business: yup.string().required("Vui lòng chọn doanh nghiệp").default(""),
 	dream: yup.string().required("Vui lòng nhập vị trí thực tập").default(""),
-	narrow: yup.string().required("Vui lòng chọn chuyên ngành").default(""),
+	major: yup.string().required("Vui lòng chọn chuyên ngành").default(""),
 	phoneNumber: yup
 		.string()
 		.required("Vui lòng nhập  số điện thoại")
@@ -13,13 +12,16 @@ const sharedFieldSchema = {
 
 export const formSignUpSchoolSupportSchema = yup.object().shape({
 	...sharedFieldSchema,
-	upload: yup.mixed().default("").test("required", "CV không được để trống", (value) => {
+	business: yup.string().required("Vui lòng chọn doanh nghiệp").default(""),
+	CV: yup.mixed().default("").test("required", "CV không được để trống", (value) => {
 		return value;
 	}),
 });
 
 export const formSignUpSelfFindingSchema = yup.object().shape({
 	...sharedFieldSchema,
+	nameCompany:yup.string()
+		.required("Vui lòng nhập tên công ty").default(""),
 	taxCode: yup
 		.string()
 		.required("Vui lòng nhập Mã số thuế").default("")

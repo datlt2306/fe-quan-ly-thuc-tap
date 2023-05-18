@@ -7,14 +7,17 @@ const registerInternAPI = createApi({
    baseQuery: axiosBaseQuery(),
    tagTypes: ["registerIntern"],
    endpoints: (build) => ({
-      upload: build.mutation({
-         query: (payload) => ({ url: "/intern/support", method: "PATCH" , data:payload}),
-         invalidatesTags: ["providesTags"],
+      uploadCv: build.mutation({
+         query: (payload) =>{
+            return { url: "/intern/support", method: "PATCH" , data:payload}
+         }
+          ,
+         invalidatesTags: ["registerIntern"],
       }),
    }),
 });
 
-export const { useUploadMutation } = registerInternAPI;
+export const { useUploadCvMutation } = registerInternAPI;
 
 export default registerInternAPI;
 

@@ -1,22 +1,14 @@
-import React, { memo, useEffect, useState } from "react";
-import DateTimeDisplay from "./DateTimeDisplay ";
 import useCountdown from "@/App/hooks/useCountdown";
-import "./style/CountDownStyle.css";
-const ExpiredNotice = () => {
-	return (
-		<div className="expired-notice">
-			<span>Expired!!!</span>
-			<p>Please select a future date and time.</p>
-		</div>
-	);
-};
+import { memo, useEffect } from "react";
+import DateTimeDisplay from "./DateTimeDisplay ";
+// import "./style/CountDownStyle.css";
+import ExpiredNotice from "./ExpiredNotice";
 
 const ShowCounter = ({ days, hours, minutes, seconds }) => {
 	return (
 		<div className="show-counter">
 			<div className="countdown-link gap-3">
 				<div>Thời gian đăng ký còn lại</div>
-
 				<DateTimeDisplay value={days} type={"Days"} isDanger={days <= 3} />
 				<p>:</p>
 				<DateTimeDisplay value={hours} type={"Hours"} isDanger={false} />

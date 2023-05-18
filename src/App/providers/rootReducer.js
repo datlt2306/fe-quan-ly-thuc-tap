@@ -11,11 +11,11 @@ import staffListApi from "./apis/staffListApi";
 import studentApi from "./apis/studentApi";
 import semesterSlice from "./slices/semesterSlice";
 import majorApi from "./apis/majorApi";
+import registerInternAPI from "./apis/registerInternAPI";
 
 const rootReducer = combineReducers({
 	// Auth reducers
 	[authSlice.name]: authSlice.reducer,
-	[campusSlice.name]: campusSlice.reducer,
 	
 	[authApi.reducerPath]: authApi.reducer,
 	// Semester reducers
@@ -32,6 +32,11 @@ const rootReducer = combineReducers({
 	//major reducer
 	[majorApi.reducerPath]: majorApi.reducer,
 	[staffListApi.reducerPath]: staffListApi.reducer,
+	//upload drive
+	
+	[registerInternAPI.reducerPath]: registerInternAPI.reducer,
+
+	
 });
 
 export default rootReducer;
