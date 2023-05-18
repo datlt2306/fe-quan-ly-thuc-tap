@@ -71,6 +71,7 @@ const AddBusinessForm = () => {
                         name="amount"
                         label="Số Lượng"
                         placeholder="Số ..."
+                        type="number"
                     />
                     <SelectFieldControl name='major' control={control} label="Ngành" options={Array.isArray(major) && major.map(item => ({ value: item._id, label: item.name }))} />
                     <InputFieldControl
