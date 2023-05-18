@@ -9,7 +9,7 @@ const ViewForm = ({data:user}) => {
 			label: "Kiểu đăng ký:",
 			value: user?.support ? supportOptionsEnum[+user?.support] : null,
 		},
-		{ label: "Mã sinh viký:", value: user?.mssv },
+		{ label: "Mã sinh viên:", value: user?.mssv },
 		{ label: "Họ tên:", value: user?.name },
 		{ label: "Email:", value: user?.email },
 		{ label: "Số điện thoại:", value: user?.phoneNumber },
