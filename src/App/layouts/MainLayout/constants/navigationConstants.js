@@ -19,22 +19,22 @@ import {
 
 export const studentNavigation = [
 	{
-		label: "Thông tin sinh viên",
+		name: "Thông tin sinh viên",
 		path: StudentPaths.STUDENT_INFO,
 		icon: UserIcon,
 	},
 	{
-		label: "Đăng ký thực tập",
+		name: "Đăng ký thực tập",
 		path: StudentPaths.REGISTRATION,
 		icon: PlusIcon,
 	},
 	{
-		label: "Báo cáo",
+		name: "Báo cáo",
 		path: StudentPaths.REPORT,
 		icon: DocumentChartBarIcon,
 	},
 	{
-		label: "Biên bản",
+		name: "Biên bản",
 		path: StudentPaths.RECORD,
 		icon: DocumentTextIcon,
 	},
@@ -42,32 +42,50 @@ export const studentNavigation = [
 
 export const staffNavigation = [
 	{
-		label: "Danh sách sinh viên",
+		name: "Danh sách sinh viên",
 		path: StaffPaths.STUDENT_LIST,
 		icon: UserGroupIcon,
 	},
 	{
-		label: "Danh sách công ty",
-		path: StaffPaths.COMPANY_LIST,
-		icon: ClipboardDocumentIcon,
+		name: "Công ty",
+		icon: BuildingOffice2Icon,
+		children: [
+			{
+				name: "Danh sách công ty",
+				path: StaffPaths.COMPANY_LIST,
+				icon: ClipboardDocumentIcon,
+				show: true,
+			},
+			{
+				name: "Thêm mới công ty",
+				path: StaffPaths.COMPANY_ADD,
+				icon: PlusIcon,
+				show: true,
+			},
+			{
+				name: "Cập nhật công ty",
+				path: StaffPaths.COMPANY_UPDATE,
+				icon: UserGroupIcon,
+			},
+		],
 	},
 	{
-		label: "Reviews",
+		name: "Reviews",
 		path: StaffPaths.REVIEWS,
 		icon: ClipboardDocumentCheckIcon,
 	},
 	{
-		label: "Kì học",
+		name: "Kì học",
 		icon: CalendarDaysIcon,
 		path: StaffPaths.SEMESTER,
 	},
 	{
-		label: "Thời gian đăng kí",
+		name: "Thời gian đăng kí",
 		path: StaffPaths.REGISTRATION_TIME,
 		icon: ClockIcon,
 	},
 	{
-		label: "Yêu cầu từ sinh viên",
+		name: "Yêu cầu từ sinh viên",
 		path: StaffPaths.STUDENT_REQUESTS,
 		icon: EnvelopeOpenIcon,
 	},
@@ -75,22 +93,22 @@ export const staffNavigation = [
 
 export const managerNavigation = [
 	{
-		label: "Danh sách nhân viên",
+		name: "Danh sách nhân viên",
 		path: ManagerPaths.STAFF_LIST,
 		icon: UserGroupIcon,
 	},
 	{
-		label: "Danh sách cơ sở",
+		name: "Danh sách cơ sở",
 		path: ManagerPaths.CAMPUS,
 		icon: BuildingOffice2Icon,
 	},
 	{
-		label: "Ngành học",
+		name: "Ngành học",
 		path: ManagerPaths.MAJOR,
 		icon: AcademicCapIcon,
 	},
 	{
-		label: "Ngành hẹp",
+		name: "Ngành hẹp",
 		path: ManagerPaths.SPECIALIZATION,
 		icon: BookOpenIcon,
 	},
