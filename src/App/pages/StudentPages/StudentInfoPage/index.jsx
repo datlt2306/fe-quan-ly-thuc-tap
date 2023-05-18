@@ -49,14 +49,14 @@ const StudentInfoPage = () => {
 	const { data: business } = useGetAllCompanyQuery();
 	const { data: timeForm } = useGetSetTimeQuery({
 		typeNumber: 1,
-		campus_id: user?.campus_id,
+		campus_id: data?.campus_id,
 	},{refetchOnMountOrArgChange:true});
 	const { data: allMajor } = useGetAllMajorQuery();
 
 	useEffect(() => {
-		const findMajor = allMajor?.find((item) => item?.majorCode == user?.majorCode);
+		const findMajor = allMajor?.find((item) => item?.majorCode == data?.majorCode);
 		setNameMajor(findMajor?.name);
-	}, [allMajor, user?.majorCode]);
+	}, [allMajor, data?.majorCode]);
 	const columnsData = useMemo(
 		() => [
 			{
@@ -120,17 +120,17 @@ const StudentInfoPage = () => {
 
 	const formSubmittedRoute = [
 		{
-			condition: user?.CV,
+			condition: data?.CV,
 			label: "Form Đăng ký Thực Tập",
 			content: <ViewCv setOpenState={setOpenState} data={data} supportOptions={supportOptionsEnum} />,
 		},
 		{
-			condition: user?.form,
+			condition: data?.form,
 			label: "Form Biên Bản",
 			content: <ViewForm data={data} />,
 		},
 		{
-			condition: user?.report,
+			condition: data?.report,
 			label: "Form Báo Cáo",
 			content: <ViewReport data={data} />,
 		},
