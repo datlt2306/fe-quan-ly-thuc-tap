@@ -204,7 +204,6 @@ const CompanyListPage = () => {
 			accessor: "internship_position",
 			Filter: InputColumnFilter,
 			filterable: true,
-			sortable: true,
 			Cell: ({ value }) => <div className="max-w-xs w-full overflow-hidden">
 				<p className="whitespace-normal overflow-ellipsis">
 					{value}
@@ -220,7 +219,7 @@ const CompanyListPage = () => {
 		{
 			Header: columnAccessors.major,
 			accessor: "major.name",
-			Filter: InputColumnFilter,
+			Filter: SelectColumnFilter,
 			filterable: true,
 			sortable: true,
 		},
@@ -229,7 +228,6 @@ const CompanyListPage = () => {
 			accessor: "address",
 			Filter: InputColumnFilter,
 			filterable: true,
-			sortable: true,
 			Cell: ({ value }) => <div className="max-w- w-full overflow-hidden">
 				<p className="whitespace-normal overflow-ellipsis">
 					{value}
@@ -240,8 +238,6 @@ const CompanyListPage = () => {
 			Header: columnAccessors.requirement,
 			accessor: "requirement",
 			Filter: InputColumnFilter,
-			filterable: true,
-			sortable: true,
 			Cell: ({ value }) => <Button variant="ghost" size="sm" className="font-normal" onClick={() => {
 				setDataModal({ data: value, title: columnAccessors.requirement })
 				setModal(!modal)
@@ -252,8 +248,6 @@ const CompanyListPage = () => {
 			Header: columnAccessors.description,
 			accessor: "description",
 			Filter: InputColumnFilter,
-			filterable: true,
-			sortable: true,
 			Cell: ({ value }) => <Button variant="ghost" size="sm" className="font-normal" onClick={() => {
 				setDataModal({ data: value, title: columnAccessors.description })
 				setModal(!modal)
@@ -265,8 +259,6 @@ const CompanyListPage = () => {
 			Header: columnAccessors.benefit,
 			accessor: "benefit",
 			Filter: InputColumnFilter,
-			filterable: true,
-			sortable: true,
 			Cell: ({ value }) => <Button variant="ghost" size="sm" className="font-normal" onClick={() => {
 				setDataModal({ data: value, title: columnAccessors.benefit })
 				setModal(!modal)
