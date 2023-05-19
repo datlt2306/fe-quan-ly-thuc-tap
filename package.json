@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "vite --open",
 		"build": "vite build",
-		"lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+		"lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0 --fix",
 		"preview": "vite preview"
 	},
 	"dependencies": {
@@ -31,7 +31,6 @@
 		"react-table": "^7.8.0",
 		"react-toastify": "^9.1.2",
 		"redux-persist": "^6.0.0",
-		"styled-components": "^5.3.10",
 		"tailwind-scrollbar": "^3.0.0",
 		"xlsx": "^0.18.5",
 		"yup": "^1.1.1"
