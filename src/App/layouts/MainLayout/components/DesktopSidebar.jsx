@@ -46,11 +46,11 @@ const DesktopSidebar = ({ navigation }) => {
 													</Disclosure.Button>
 													<Transition
 														enter="transition duration-500 transform"
-														enterFrom="opacity-0 -translate-y-4 max=h-0"
+														enterFrom="opacity-0 -translate-y-4 max-h-0"
 														enterTo="opacity-100 translate-y-0 max-h-none"
 														leave="transition duration-200 transform"
 														leaveFrom="translate-y-0 max-h-none"
-														leaveTo="opacity-0 -translate-y-4 max-h-0">
+														leaveTo="opacity-0 -translate-y-2 max-h-0">
 														<Disclosure.Panel className="z-0 bg-gray-50 " as={Menu.Items}>
 															{item.children.map((child, index) => {
 																return (
