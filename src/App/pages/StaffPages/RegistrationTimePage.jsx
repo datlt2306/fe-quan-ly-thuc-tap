@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const RegistrationTimePage = () => {
 	return <div>RegistrationTimePage</div>;

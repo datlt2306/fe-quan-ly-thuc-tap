@@ -1,8 +1,3 @@
-import * as XLSX from "xlsx";
-import { AllowedFileExt } from "../constants/allowedFileType";
-import { toast } from "react-toastify";
-import getFileExtension from "./getFileExtension";
-
 export const mapExcelData = (data) => {
 	const keys = data[0];
 	const mappedExcelData = data.slice(1).map((array, index) =>

@@ -8,7 +8,6 @@ export default defineConfig({
 		alias: [
 			{
 				find: "@",
-				// eslint-disable-next-line no-undef
 				replacement: path.resolve(__dirname, "src"),
 			},
 		],
