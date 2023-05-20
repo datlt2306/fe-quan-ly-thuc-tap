@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import authApi from "../apis/authApi";
-import { UserRoleEnum } from "@/App/constants/userRoles";
-import useLocalStorage from "@/App/hooks/useLocalstorage";
+import { createSlice } from '@reduxjs/toolkit';
+import authApi from '../apis/authApi';
+import { UserRoleEnum } from '@/App/constants/userRoles';
+import useLocalStorage from '@/App/hooks/useLocalstorage';
 
 const initialState = {
 	isSignedIn: false,
@@ -24,7 +24,7 @@ const authSlice = createSlice({
 				return {
 					isSignedIn: payload.success,
 					user: {
-						id:payload.manager?._id,
+						id: payload.manager?._id,
 						displayName: payload.name,
 						email: payload.manager?.email,
 						picture: payload.picture,
@@ -35,12 +35,12 @@ const authSlice = createSlice({
 			return {
 				isSignedIn: payload.success,
 				user: {
-					id:payload.student?._id,
+					id: payload.student?._id,
 					displayName: payload.name,
 					email: payload.student?.email,
 					picture: payload.picture,
-					role: UserRoleEnum.STUDENT,
-				},
+					role: UserRoleEnum.STUDENT
+				}
 			};
 		});
 	}
