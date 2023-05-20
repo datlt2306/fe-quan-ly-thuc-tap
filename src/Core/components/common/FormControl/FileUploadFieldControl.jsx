@@ -22,14 +22,14 @@ const FileUploadFieldControl = ({ control, name, label, disabled, rules }) => {
 
    return (
       <FormControl>
-         <div className="relative">
+         <div className="relative ">
+			{label && <div className="font-medium text-base-content">{label}</div>}
             <Label htmlFor="file-upload">
                <ArrowUpTrayIcon height={20} />
                <span>Chọn tệp</span>
             </Label>
             <Input id="file-upload" type="file"  onChange={handleChange} disabled={disabled} />
-
-      
+         
          </div>
 
          {error && <small className="font-medium text-error">{error?.message}</small>}

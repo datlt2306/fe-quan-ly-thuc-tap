@@ -9,13 +9,13 @@ const ShowCounter = ({ days, hours, minutes, seconds }) => {
 		<div className="flex">
 			<div className="flex gap-3">
 				<div>Thời gian đăng ký còn lại</div>
-				<DateTimeDisplay value={days} type={"Days"} isDanger={days <= 3} />
+				<DateTimeDisplay value={days} type={"Ngày"}  />
 				<p>:</p>
-				<DateTimeDisplay value={hours} type={"Hours"} isDanger={false} />
+				<DateTimeDisplay value={hours} type={"Giờ"}  />
 				<p>:</p>
-				<DateTimeDisplay value={minutes} type={"Mins"} isDanger={false} />
+				<DateTimeDisplay value={minutes} type={"Phút"}  />
 				<p>:</p>
-				<DateTimeDisplay value={seconds} type={"Seconds"} isDanger={false} />
+				<DateTimeDisplay value={seconds} type={"Giây"}  />
 			</div>
 		</div>
 	);
