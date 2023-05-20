@@ -1,8 +1,7 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import axiosBaseQuery from '../axiosBaseQuery';
-
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../axiosBaseQuery";
 const configTimesApi = createApi({
-	reducerPath: 'timesApi',
+	reducerPath: "timesApi",
 	baseQuery: axiosBaseQuery(),
 	endpoints: (build) => ({
 		getSetTime: build.query({
