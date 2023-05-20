@@ -2,8 +2,7 @@
 	"printWidth": 150,
 	"useTabs": true,
 	"bracketSameLine": true,
-	"jsxSingleQuote": true,
-	"singleQuote": true,
-	"tabWidth": 3,
-	"trailingComma": "none"
+	"jsxSingleQuote": false,
+	"singleQuote": false,
+	"tabWidth": 3
 }

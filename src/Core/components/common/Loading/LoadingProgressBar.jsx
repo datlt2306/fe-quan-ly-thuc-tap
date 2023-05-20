@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import nProgress from 'nprogress';
-import './styles/nprogress.css';
+import React, { useEffect } from "react";
+import nProgress from "nprogress";
+import "./styles/nprogress.css";
 
 const LoadingProgressBar = () => {
 	nProgress.configure({
-		showSpinner: false
+		showSpinner: false,
 	});
 	useEffect(() => {
 		nProgress.start(0);

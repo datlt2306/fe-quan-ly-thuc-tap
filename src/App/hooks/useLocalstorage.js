@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import isJSON from '@/Core/utils/checkJsonType';
+import { useState } from "react";
+import isJSON from "@/Core/utils/checkJsonType";
 // Hook
 export default function useLocalStorage(key, initialValue) {
 	const [storedValue, setStoredValue] = useState(() => {

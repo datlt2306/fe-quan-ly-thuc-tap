@@ -1,33 +1,33 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import axiosBaseQuery from '../axiosBaseQuery';
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../axiosBaseQuery";
 
 const staffListApi = createApi({
-	reducerPath: 'manager',
+	reducerPath: "manager",
 	baseQuery: axiosBaseQuery(),
 	endpoints: (build) => ({
 		getAllStaff: build.query({
-			query: () => ({ url: '/manager', method: 'GET' }),
-			providesTags: ['Manager']
+			query: () => ({ url: "/manager", method: "GET" }),
+			providesTags: ["Manager"],
 		}),
 		updateStaff: build.mutation({
-			query: ({ id, payload }) => {
-				return { url: '/manager/' + id, method: 'PATCH', data: payload };
+			query: ({id,payload}) => {
+				return {url:'/manager/'+ id, method:"PATCH", data:payload}
 			},
-			invalidatesTags: ['Manager']
+			invalidatesTags: ["Manager"]
 		}),
 		addStaff: build.mutation({
 			query: (payload) => {
-				return { url: '/manager', method: 'POST', data: payload };
+				return {url:'/manager', method:"POST", data:payload}
 			},
-			invalidatesTags: ['Manager']
+			invalidatesTags: ["Manager"]
 		}),
 		deleteStaff: build.mutation({
 			query: (id) => {
-				return { url: '/manager/' + id, method: 'DELETE' };
+				return {url:'/manager/'+ id, method:"DELETE"}
 			},
-			invalidatesTags: ['Manager']
+			invalidatesTags: ["Manager"]
 		})
-	})
+	}),
 });
 
 export const { useGetAllStaffQuery, useUpdateStaffMutation, useAddStaffMutation, useDeleteStaffMutation } = staffListApi;
