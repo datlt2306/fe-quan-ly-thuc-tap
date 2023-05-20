@@ -1,21 +1,22 @@
+/* eslint-disable react/prop-types */
 import { VerticalList } from '..';
 
 import Button from '@/Core/components/common/Button';
 import { InternSupportType } from '@/App/constants/studentStatus';
 import formatDate from '@/Core/utils/formatDate';
 
-const ViewForm = ({ data: user }) => {
+const ViewForm = ({ data: user,nameMajor }) => {
 	const dataViewForm = [
 		{
 			label: 'Kiểu đăng ký:',
-			value: user?.support ? InternSupportType[+user?.support] : null
+			value: InternSupportType[+user?.support] ?? null
 		},
 		{ label: 'Mã sinh viên:', value: user?.mssv },
 		{ label: 'Họ tên:', value: user?.name },
 		{ label: 'Email:', value: user?.email },
 		{ label: 'Số điện thoại:', value: user?.phoneNumber },
 		{ label: 'Địa chỉ:', value: user?.address },
-		{ label: 'Chuyên ngành:', value: user?.narrow?.name },
+		{ label: 'Chuyên ngành:', value: nameMajor },
 		{ label: 'Vị trí thực tập:', value: user?.dream },
 		{ label: 'Ngày bắt đầu:', value: formatDate(user?.internshipTime) },
 		{
