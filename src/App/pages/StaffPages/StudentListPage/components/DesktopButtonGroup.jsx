@@ -1,10 +1,10 @@
-import Button from "@/Core/components/common/Button";
+import Button from '@/Core/components/common/Button';
 
-import React, { forwardRef, useRef } from "react";
-import tw from "twin.macro";
-import { studentListSampleData } from "../mocks";
-import { useExportToExcel } from "@/App/hooks/useExcel";
-import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon } from "@heroicons/react/24/outline";
+import React, { forwardRef, useRef } from 'react';
+import tw from 'twin.macro';
+import { studentListSampleData } from '../mocks';
+import { useExportToExcel } from '@/App/hooks/useExcel';
+import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon } from '@heroicons/react/24/outline';
 
 const DesktopButtonGroup = ({ tableData, handleImport, handleExport, canImport }, ref) => {
 	const localRef = useRef(null);
@@ -13,25 +13,25 @@ const DesktopButtonGroup = ({ tableData, handleImport, handleExport, canImport }
 
 	return (
 		<ButtonList>
-			<Button as="label" size="sm" htmlFor="file-input" variant={canImport ? "primary" : "disabled"}>
-				<DocumentArrowUpIcon className="h-5 w-5 text-[inherit]" /> Tải lên file Excel
+			<Button as='label' size='sm' htmlFor='file-input' variant={canImport ? 'primary' : 'disabled'}>
+				<DocumentArrowUpIcon className='h-5 w-5 text-[inherit]' /> Tải lên file Excel
 				<input
 					ref={fileInputRef}
-					type="file"
-					id="file-input"
-					className="hidden"
+					type='file'
+					id='file-input'
+					className='hidden'
 					onChange={(e) => {
 						handleImport(e.target.files[0]);
 					}}
 					disabled={!canImport}
 				/>
 			</Button>
-			<Button variant="success" size="sm" onClick={() => handleExport(tableData)}>
-				<DocumentArrowDownIcon className="h-5 w-5 text-[inherit]" />
+			<Button variant='success' size='sm' onClick={() => handleExport(tableData)}>
+				<DocumentArrowDownIcon className='h-5 w-5 text-[inherit]' />
 				Export file Excel
 			</Button>
-			<Button variant="secondary" size="sm" onClick={() => handleExportFile(studentListSampleData)}>
-				<ArrowDownTrayIcon className="h-5 w-5 text-[inherit]" />
+			<Button variant='secondary' size='sm' onClick={() => handleExportFile(studentListSampleData)}>
+				<ArrowDownTrayIcon className='h-5 w-5 text-[inherit]' />
 				Tải file mẫu
 			</Button>
 		</ButtonList>

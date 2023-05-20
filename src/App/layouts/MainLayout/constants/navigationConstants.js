@@ -1,4 +1,4 @@
-import { ManagerPaths, StaffPaths, StudentPaths } from "@/Core/constants/routePaths";
+import { ManagerPaths, StaffPaths, StudentPaths } from '@/Core/constants/routePaths';
 import {
 	AcademicCapIcon,
 	BookOpenIcon,
@@ -14,102 +14,102 @@ import {
 	PlusIcon,
 	PlusSmallIcon,
 	UserGroupIcon,
-	UserIcon,
-} from "@heroicons/react/24/outline";
+	UserIcon
+} from '@heroicons/react/24/outline';
 
 export const studentNavigation = [
 	{
-		name: "Thông tin sinh viên",
+		name: 'Thông tin sinh viên',
 		path: StudentPaths.STUDENT_INFO,
-		icon: UserIcon,
+		icon: UserIcon
 	},
 	{
-		name: "Đăng ký thực tập",
+		name: 'Đăng ký thực tập',
 		path: StudentPaths.REGISTRATION,
-		icon: PlusIcon,
+		icon: PlusIcon
 	},
 	{
-		name: "Báo cáo",
+		name: 'Báo cáo',
 		path: StudentPaths.REPORT,
-		icon: DocumentChartBarIcon,
+		icon: DocumentChartBarIcon
 	},
 	{
-		name: "Biên bản",
+		name: 'Biên bản',
 		path: StudentPaths.RECORD,
-		icon: DocumentTextIcon,
-	},
+		icon: DocumentTextIcon
+	}
 ];
 
 export const staffNavigation = [
 	{
-		name: "Danh sách sinh viên",
+		name: 'Danh sách sinh viên',
 		path: StaffPaths.STUDENT_LIST,
-		icon: UserGroupIcon,
+		icon: UserGroupIcon
 	},
 	{
-		name: "Công ty",
+		name: 'Công ty',
 		icon: BuildingOffice2Icon,
 		children: [
 			{
-				name: "Danh sách công ty",
+				name: 'Danh sách công ty',
 				path: StaffPaths.COMPANY_LIST,
 				icon: ClipboardDocumentIcon,
-				show: true,
+				show: true
 			},
 			{
-				name: "Thêm mới công ty",
+				name: 'Thêm mới công ty',
 				path: StaffPaths.COMPANY_ADD,
 				icon: PlusIcon,
-				show: true,
+				show: true
 			},
 			{
-				name: "Cập nhật công ty",
+				name: 'Cập nhật công ty',
 				path: StaffPaths.COMPANY_UPDATE,
-				icon: UserGroupIcon,
-			},
-		],
+				icon: UserGroupIcon
+			}
+		]
 	},
 	{
-		name: "Reviews",
+		name: 'Reviews',
 		path: StaffPaths.REVIEWS,
-		icon: ClipboardDocumentCheckIcon,
+		icon: ClipboardDocumentCheckIcon
 	},
 	{
-		name: "Kì học",
+		name: 'Kì học',
 		icon: CalendarDaysIcon,
-		path: StaffPaths.SEMESTER,
+		path: StaffPaths.SEMESTER
 	},
 	{
-		name: "Thời gian đăng kí",
+		name: 'Thời gian đăng kí',
 		path: StaffPaths.REGISTRATION_TIME,
-		icon: ClockIcon,
+		icon: ClockIcon
 	},
 	{
-		name: "Yêu cầu từ sinh viên",
+		name: 'Yêu cầu từ sinh viên',
 		path: StaffPaths.STUDENT_REQUESTS,
-		icon: EnvelopeOpenIcon,
-	},
+		icon: EnvelopeOpenIcon
+	}
 ];
 
 export const managerNavigation = [
 	{
-		name: "Danh sách nhân viên",
+		name: 'Danh sách nhân viên',
 		path: ManagerPaths.STAFF_LIST,
-		icon: UserGroupIcon,
+		icon: UserGroupIcon
 	},
 	{
-		name: "Danh sách cơ sở",
+		name: 'Danh sách cơ sở',
 		path: ManagerPaths.CAMPUS,
-		icon: BuildingOffice2Icon,
+		icon: BuildingOffice2Icon
 	},
 	{
-		name: "Ngành học",
+		name: 'Ngành học',
 		path: ManagerPaths.MAJOR,
-		icon: AcademicCapIcon,
+		icon: AcademicCapIcon
 	},
 	{
-		name: "Ngành hẹp",
+		name: 'Ngành hẹp',
 		path: ManagerPaths.SPECIALIZATION,
-		icon: BookOpenIcon,
-	},
+		icon: BookOpenIcon
+	}
 ];

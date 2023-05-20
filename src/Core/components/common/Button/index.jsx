@@ -1,5 +1,5 @@
-import classNames from "classnames";
-import { useEffect, useLayoutEffect, useMemo, useState,forwardRef} from "react";
+import classNames from 'classnames';
+import { useEffect, useLayoutEffect, useMemo, useState, forwardRef } from 'react';
 
 /**
  * @param {string} size
@@ -7,17 +7,17 @@ import { useEffect, useLayoutEffect, useMemo, useState,forwardRef} from "react";
  * @param {any} children
  * @returns Tailwind styled Button component
  */
-const Button = ({
-	variant,
-	children,
-	size = "md",
-	shape = undefined,
-	className = "",
-	as: Element = "button", // Polymorphic component, display as other tag
-	...props
-},
-ref
-
+const Button = (
+	{
+		variant,
+		children,
+		size = 'md',
+		shape = undefined,
+		className = '',
+		as: Element = 'button', // Polymorphic component, display as other tag
+		...props
+	},
+	ref
 ) => {
 	const buttonStyles = useMemo(
 		() =>
@@ -27,23 +27,23 @@ ref
 					btn: true,
 
 					// variant
-					"btn-primary": variant === "primary",
-					"btn-secondary": variant === "secondary",
-					"btn-outline": variant === "outline",
-					"btn-ghost": variant === "ghost",
-					"btn-info": variant === "info",
-					"btn-success": variant === "success",
-					"btn-error": variant === "error",
-					"btn-disabled": variant === "disabled",
+					'btn-primary': variant === 'primary',
+					'btn-secondary': variant === 'secondary',
+					'btn-outline': variant === 'outline',
+					'btn-ghost': variant === 'ghost',
+					'btn-info': variant === 'info',
+					'btn-success': variant === 'success',
+					'btn-error': variant === 'error',
+					'btn-disabled': variant === 'disabled',
 					// shape
-					"btn-square": shape === "square",
-					"btn-circle": shape === "circle",
-					"btn-pill": shape === "pill",
+					'btn-square': shape === 'square',
+					'btn-circle': shape === 'circle',
+					'btn-pill': shape === 'pill',
 					// size
-					"btn-xs": size === "xs",
-					"btn-sm": size === "sm",
-					"btn-md": size === "md",
-					"btn-lg": size === "lg",
+					'btn-xs': size === 'xs',
+					'btn-sm': size === 'sm',
+					'btn-md': size === 'md',
+					'btn-lg': size === 'lg'
 				},
 				// others
 				className
