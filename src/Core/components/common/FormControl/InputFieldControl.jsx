@@ -1,20 +1,20 @@
-import { forwardRef, useId, useRef } from "react";
-import { useController } from "react-hook-form";
-import tw from "twin.macro";
+import { forwardRef, useId, useRef } from 'react';
+import { useController } from 'react-hook-form';
+import tw from 'twin.macro';
 
 export const Input = tw.input`block w-full rounded-md border-0 duration-300 px-2.5 py-1.5 text-gray-900 outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`;
-const FormControl = tw.div`flex flex-col gap-2 m-0`;
-// eslint-disable-next-line
-const InputFieldControl = ({ control, name, label, disabled, rules, type = "text", ...props }, ref) => {
+const FormControl = tw.div`flex flex-col gap-1 m-0`;
+
+const InputFieldControl = ({ control, name, label, disabled, rules, type = 'text', ...props }, ref) => {
 	const {
 		field,
-		fieldState: { error },
+		fieldState: { error }
 	} = useController({
 		name,
 		control,
 		rules,
 		defaultValue: props.value,
-		...props,
+		...props
 	});
 
 	const id = useId();
@@ -23,7 +23,11 @@ const InputFieldControl = ({ control, name, label, disabled, rules, type = "text
 
 	return (
 		<FormControl>
-			{label && <label htmlFor={id}>{label}</label>}
+			{label && (
+				<label className='font-medium text-base-content' htmlFor={id}>
+					{label}
+				</label>
+			)}
 			<Input
 				{...props}
 				id={id}
@@ -41,7 +45,7 @@ const InputFieldControl = ({ control, name, label, disabled, rules, type = "text
 					inputRef.current = e;
 				}}
 			/>
-			{error && <small className="font-medium text-error">{error?.message}</small>}
+			{error && <small className='font-medium text-error'>{error?.message}</small>}
 		</FormControl>
 	);
 };

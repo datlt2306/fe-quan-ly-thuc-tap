@@ -1,16 +1,16 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import axiosBaseQuery from "../axiosBaseQuery";
+import { createApi } from '@reduxjs/toolkit/query/react';
+import axiosBaseQuery from '../axiosBaseQuery';
 
 const majorApi = createApi({
-	reducerPath: "majorApi",
+	reducerPath: 'majorApi',
 	baseQuery: axiosBaseQuery(),
-	tagTypes: ["Major"],
+	tagTypes: ['Major'],
 	endpoints: (build) => ({
 		getAllMajor: build.query({
-			query: (params) => ({ url: "/major", method: "GET" , params}),
-			providesTags: ["Major"],
-		}),
-	}),
+			query: (params) => ({ url: '/major', method: 'GET', params }),
+			providesTags: ['Major']
+		})
+	})
 });
 
 export const { useGetAllMajorQuery } = majorApi;
