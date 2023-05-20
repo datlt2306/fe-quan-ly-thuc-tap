@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import formatDate from '@/Core/utils/formatDate';
 import { VerticalList } from '..';
 import Button from '@/Core/components/common/Button';

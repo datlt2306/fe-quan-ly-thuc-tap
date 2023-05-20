@@ -1,14 +1,10 @@
 import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from '@/App/constants/studentStatus';
-import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
-import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 import Button from '@/Core/components/common/Button';
-import ModalLoading from '@/Core/components/common/Loading/ModalLoading';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
-import { InterSupportType } from '@/Core/constants/InterSupportType';
+import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 import { Menu } from '@headlessui/react';
-import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 
@@ -25,80 +21,21 @@ export const VerticalList = (props) => (
 
 const StudentInfoPage = () => {
 	const user = useSelector((state) => state.auth?.user);
-	const [dateNow] = useState(Date.now());
 	const [nameMajor, setNameMajor] = useState(null);
 	const [openState, setOpenState] = useState(false);
 	const [modalContent, setModalContent] = useState(null);
 	const [title, setTitle] = useState('');
 
-	const handleGetInternStatusStyle = (value) => {
-		let style = null;
-		const checkstyle = Object.entries(StudentStatusGroupEnum).map(([k, v]) => {
-			const findItem = v.find((item) => StudentStatusEnum[value] == item);
-			if (findItem) {
-				style = k;
-				return;
-			}
-		});
-		return style;
-	};
-
-	const { data, isFetching } = useGetOneStudentQuery(user?.id);
-	const { data: business } = useGetAllCompanyQuery();
-	const { data: timeForm } = useGetSetTimeQuery(
-		{
-			typeNumber: 1,
-			campus_id: data?.campus_id
-		},
-		{ refetchOnMountOrArgChange: true }
-	);
+	const { data, isFetching } = useGetOneStudentQuery(user?.id, {
+		refetchOnMountOrArgChange: true
+	});
 	const { data: allMajor } = useGetAllMajorQuery();
 
 	useEffect(() => {
 		const findMajor = allMajor?.find((item) => item?.majorCode == data?.majorCode);
 		setNameMajor(findMajor?.name);
 	}, [allMajor, data?.majorCode]);
-	const columnsData = useMemo(
-		() => [
-			{
-				Header: 'Mã',
-				accessor: 'business_code'
-			},
-			{
-				Header: 'Tên doanh nghiệp',
-				accessor: 'name'
-			},
-			{
-				Header: 'Vị trí TT',
-				accessor: 'internship_position'
-			},
-			{
-				Header: 'Số lượng',
-				accessor: 'amount'
-			},
-			{
-				Header: 'Yêu cầu',
-				accessor: 'requirement'
-			},
-			{
-				Header: 'Quyền lợi',
-				accessor: 'benefit'
-			},
-			{
-				Header: 'Chuyên ngành',
-				accessor: 'major.name'
-			},
-			{
-				Header: 'Mô tả',
-				accessor: 'description'
-			},
-			{
-				Header: 'Địa chỉ',
-				accessor: 'address'
-			}
-		],
-		[]
-	);
+
 	const dataRegisterInfomation = [
 		{ label: 'Họ và tên :', value: data?.name },
 		{ label: 'Khóa học :', value: data?.course },
@@ -107,11 +44,11 @@ const StudentInfoPage = () => {
 		{ label: 'Email :', value: data?.email },
 		{
 			label: 'Lựa chọn :',
-			value: data?.support ? InternSupportType[data?.support] : null
+			value: data?.support ? InternSupportType[data?.support] : 'Chưa có thông tin'
 		},
 		{
 			label: 'Công ty đã chọn :',
-			value: data?.support === 1 ? data?.business?.name : data?.nameCompany
+			value: data?.support === 1 ? data?.business?.name : data?.support === 0 ? data?.nameCompany : 'Chưa có thông tin'
 		},
 		{
 			label: 'Trạng thái sinh viên :',
@@ -123,17 +60,17 @@ const StudentInfoPage = () => {
 		{
 			condition: data?.CV,
 			label: 'Form Đăng ký Thực Tập',
-			content: <ViewCv setOpenState={setOpenState} data={data} supportOptions={InterSupportType} />
+			content: <ViewCv setOpenState={setOpenState} data={data} nameMajor={nameMajor} />
 		},
 		{
 			condition: data?.form,
 			label: 'Form Biên Bản',
-			content: <ViewForm data={data} />
+			content: <ViewForm data={data} nameMajor={nameMajor} />
 		},
 		{
 			condition: data?.report,
 			label: 'Form Báo Cáo',
-			content: <ViewReport data={data} />
+			content: <ViewReport data={data} nameMajor={nameMajor} />
 		}
 	];
 	return (
@@ -155,6 +92,7 @@ const StudentInfoPage = () => {
 					<Title>Các Form Đã Nộp</Title>
 					<WrapMenu>
 						<Menu>
+							{!(data?.CV || data?.form || data?.report) && <div className='font-medium'>Chưa có form nào được nộp</div>}
 							{formSubmittedRoute.map((item) => (
 								<Menu.Item key={item.label} className='w-full  rounded-md p-3 text-start hover:bg-gray-100  hover:text-primary'>
 									<>
@@ -176,27 +114,10 @@ const StudentInfoPage = () => {
 				</LayoutFormSubmitted>
 			</WrapLayoutInfoUser>
 
-			<LayoutInfoRecruitment>
-				<Title>Thông tin tuyển dụng</Title>
-				{timeForm?.time?.startTime <= dateNow && dateNow <= timeForm?.time.endTime ? (
-					<ReactTable
-						noDataComponent={
-							<tr>
-								<td>Empty</td>
-							</tr>
-						}
-						columns={columnsData}
-						data={business?.list ?? []}
-					/>
-				) : (
-					<Text>Chưa có thông tin tuyển dụng</Text>
-				)}
-			</LayoutInfoRecruitment>
-
 			<RenderNote label='Ghi chú' data={data} />
 
 			{openState && (
-				<Suspense fallback={<ModalLoading />}>
+				<Suspense fallback={<LoadingProgressBar />}>
 					<Modal openState={openState} onOpenStateChange={setOpenState} title={title}>
 						{modalContent}
 					</Modal>
@@ -220,8 +141,18 @@ const RenderNote = ({ label, data }) => (
 		/>
 	</>
 );
+const handleGetInternStatusStyle = (value) => {
+	let style = null;
+	const checkstyle = Object.entries(StudentStatusGroupEnum).map(([k, v]) => {
+		const findItem = v.find((item) => StudentStatusEnum[value] == item);
+		if (findItem) {
+			style = k;
+			return;
+		}
+	});
+	return style;
+};
 const WrapLayoutInfoUser = tw.section`mb-8  grid grid-cols-2 sm:grid-cols-1 `;
 const LayoutInfoUser = tw.div`border-r-2 sm:(border-r-0 border-b-2 pb-4 border-r-0)`;
 const LayoutFormSubmitted = tw.div`ml-8 sm:(pt-4 ml-0)`;
-const LayoutInfoRecruitment = tw.section`border-b-2 py-6 mb-6`;
 export default StudentInfoPage;
