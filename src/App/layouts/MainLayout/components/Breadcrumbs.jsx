@@ -1,6 +1,6 @@
-import { ChevronRightIcon, HomeIcon } from "@heroicons/react/20/solid";
-import { Link, matchPath, useLocation } from "react-router-dom";
-import tw from "twin.macro";
+import { ChevronRightIcon, HomeIcon } from '@heroicons/react/20/solid';
+import { Link, matchPath, useLocation } from 'react-router-dom';
+import tw from 'twin.macro';
 
 export default function Breadcrumbs({ navigation }) {
 	const { pathname } = useLocation();
@@ -9,8 +9,8 @@ export default function Breadcrumbs({ navigation }) {
 			<List>
 				<List.Item>
 					<Center>
-						<BreadCrumbLink to="/">
-							<HomeIcon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+						<BreadCrumbLink to='/'>
+							<HomeIcon className='h-5 w-5 flex-shrink-0' aria-hidden='true' />
 						</BreadCrumbLink>
 					</Center>
 				</List.Item>
@@ -20,7 +20,7 @@ export default function Breadcrumbs({ navigation }) {
 							!!matchPath(page.path, pathname) && (
 								<List.Item key={page.name}>
 									<Center>
-										<ChevronRightIcon className="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+										<ChevronRightIcon className='h-5 w-5 flex-shrink-0 text-gray-400' aria-hidden='true' />
 										<BreadCrumbLink to={page.path}>{page.name}</BreadCrumbLink>
 									</Center>
 								</List.Item>
@@ -32,7 +32,7 @@ export default function Breadcrumbs({ navigation }) {
 							!!matchPath(item.path, pathname) && (
 								<List.Item key={item.name}>
 									<Center>
-										<ChevronRightIcon className="h-5 w-5 flex-shrink-0 text-gray-400" />
+										<ChevronRightIcon className='h-5 w-5 flex-shrink-0 text-gray-400' />
 										<BreadCrumbLink to={item.path}>{item.name}</BreadCrumbLink>
 									</Center>
 								</List.Item>

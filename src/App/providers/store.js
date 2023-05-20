@@ -1,15 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage";
-import {
-	FLUSH,
-	PAUSE,
-	PERSIST,
-	persistReducer,
-	persistStore,
-	PURGE,
-	REGISTER,
-	REHYDRATE,
-} from "redux-persist";
+import { configureStore } from '@reduxjs/toolkit';
+import storage from 'redux-persist/lib/storage';
+import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
 // APIs
 import campusApi from "./apis/campusApi";
 import semesterApi from "./apis/semesterApi";
@@ -21,11 +12,10 @@ import requestStudentsApi from "./apis/requestStudentsApi";
 import studentApi from "./apis/studentApi";
 import majorApi from "./apis/majorApi";
 import staffListApi from "./apis/staffListApi";
-import registerInternAPI from "./apis/registerInternAPI";
 
 const persistConfig = {
-	key: "root",
-	storage,
+	key: 'root',
+	storage
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer); // Provide a way to combine redux's root reducer
@@ -35,8 +25,8 @@ const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
 			serializableCheck: {
-				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-			},
+				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+			}
 		}).concat([
 			semesterApi.middleware,
 			campusApi.middleware,
@@ -51,9 +41,6 @@ const store = configureStore({
 			studentApi.middleware,
 			majorApi.middleware,
 			staffListApi.middleware,
-			configTimesApi.middleware,
-			requestStudentsApi.middleware,
-			registerInternAPI.middleware
 		]),
 });
 

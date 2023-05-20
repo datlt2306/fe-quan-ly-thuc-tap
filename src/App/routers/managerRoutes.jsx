@@ -1,11 +1,11 @@
-import { ManagerPaths } from "@/Core/constants/routePaths";
-import { lazy } from "react";
-import ManagerPrivateLayout from "../layouts/PrivateLayout/ManagerPrivateLayout";
+import { ManagerPaths } from '@/Core/constants/routePaths';
+import { lazy } from 'react';
+import ManagerPrivateLayout from '../layouts/PrivateLayout/ManagerPrivateLayout';
 
-const StaffListPage = lazy(() => import("../pages/ManagerPages/StaffListPage"));
-const CampusListPage = lazy(() => import("../pages/ManagerPages/CampusListPage"));
-const MajorListPage = lazy(() => import("../pages/ManagerPages/MajorListPage"));
-const SpecializationPage = lazy(() => import("../pages/ManagerPages/SpecializationPage"));
+const StaffListPage = lazy(() => import('../pages/ManagerPages/StaffListPage'));
+const CampusListPage = lazy(() => import('../pages/ManagerPages/CampusListPage'));
+const MajorListPage = lazy(() => import('../pages/ManagerPages/MajorListPage'));
+const SpecializationPage = lazy(() => import('../pages/ManagerPages/SpecializationPage'));
 
 const managerRoutes = [
 	{
@@ -14,7 +14,7 @@ const managerRoutes = [
 			<ManagerPrivateLayout>
 				<StaffListPage />
 			</ManagerPrivateLayout>
-		),
+		)
 	},
 	{
 		path: ManagerPaths.CAMPUS,
@@ -22,7 +22,7 @@ const managerRoutes = [
 			<ManagerPrivateLayout>
 				<CampusListPage />
 			</ManagerPrivateLayout>
-		),
+		)
 	},
 	{
 		path: ManagerPaths.MAJOR,
@@ -30,7 +30,7 @@ const managerRoutes = [
 			<ManagerPrivateLayout>
 				<MajorListPage />
 			</ManagerPrivateLayout>
-		),
+		)
 	},
 	{
 		path: ManagerPaths.SPECIALIZATION,
@@ -38,8 +38,8 @@ const managerRoutes = [
 			<ManagerPrivateLayout>
 				<SpecializationPage />
 			</ManagerPrivateLayout>
-		),
-	},
+		)
+	}
 ];
 
 export default managerRoutes;

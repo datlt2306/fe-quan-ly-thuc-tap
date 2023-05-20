@@ -1,6 +1,6 @@
-import { forwardRef, useId, useRef } from "react";
-import { useController } from "react-hook-form";
-import tw from "twin.macro";
+import { forwardRef, useId, useRef } from 'react';
+import { useController } from 'react-hook-form';
+import tw from 'twin.macro';
 
 const FormControl = tw.div`flex items-center gap-6`;
 
@@ -12,10 +12,10 @@ export const Checkbox = forwardRef(({ onChange: handleChange, ...props }, ref) =
 			{...props}
 			onChange={(e) => handleChange(e)}
 			ref={checkboxRef}
-			aria-describedby="comments-description"
-			name="comments"
-			type="checkbox"
-			tw="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary duration-100"
+			aria-describedby='comments-description'
+			name='comments'
+			type='checkbox'
+			tw='h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary duration-100'
 		/>
 	);
 });
@@ -23,13 +23,13 @@ export const Checkbox = forwardRef(({ onChange: handleChange, ...props }, ref) =
 const CheckboxFieldControl = ({ control, name, label, rules, checked, disabled, ...props }, ref) => {
 	const {
 		field,
-		fieldState: { error },
+		fieldState: { error }
 	} = useController({
 		name,
 		control,
 		rules,
 		checked,
-		...props,
+		...props
 	});
 	const id = useId();
 	const localRef = useRef(null);
@@ -53,7 +53,7 @@ const CheckboxFieldControl = ({ control, name, label, rules, checked, disabled, 
 				name={name}
 				disabled={disabled}
 			/>
-			{error && <small className="font-medium text-error">{error.message}</small>}
+			{error && <small className='font-medium text-error'>{error.message}</small>}
 		</FormControl>
 	);
 };
