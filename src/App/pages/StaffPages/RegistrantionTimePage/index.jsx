@@ -20,11 +20,11 @@ const RegistrantionTimePage = () => {
 	const formType = [
 		{
 			typeNumber: 0,
-			typeName: 'Form đăng ký nhờ nhà trường hỗ trợ'
+			typeName: 'Form đăng ký sinh viên tự tìm'
 		},
 		{
 			typeNumber: 1,
-			typeName: 'Form đăng ký sinh viên tự tìm'
+			typeName: 'Form đăng ký nhờ nhà trường hỗ trợ'
 		},
 		{
 			typeNumber: 2,
