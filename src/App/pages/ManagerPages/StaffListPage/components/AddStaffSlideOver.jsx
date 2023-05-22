@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { RoleStaffEnum } from '@/App/constants/userRoles';
 import { useAddStaffMutation } from '@/App/providers/apis/staffListApi';
 import { staffDataValidator } from '@/App/schemas/staffSchema';
 import Button from '@/Core/components/common/Button';
@@ -6,7 +7,7 @@ import InputFieldControl from '@/Core/components/common/FormControl/InputFieldCo
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import SlideOver from '@/Core/components/common/SlideOver';
-import { RoleStaffEnum } from '@/App/constants/roleStaff';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';

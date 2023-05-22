@@ -6,7 +6,7 @@ import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
-import { RoleStaffEnum } from '@/App/constants/roleStaff';
+
 import { PencilSquareIcon, TrashIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Fragment, useMemo, useState } from 'react';
@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import AddStaffSlideOver from './components/AddStaffSlideOver';
 import UpdateStaffModal from './components/UpdateStaffModal';
+import { RoleStaffEnum } from '@/App/constants/userRoles';
 
 const Box = tw.div`flex flex-col gap-6`;
 const ButtonList = tw.div`flex items-center gap-2`;
@@ -29,7 +30,9 @@ const StaffListPage = () => {
 	});
 
 	const tableData = useMemo(() => {
-		return Array.isArray(managers?.list) ? managers?.list?.map((user, index) => ({ ...user, index: index + 1 })) : [];
+		return Array.isArray(managers?.list)
+			? managers?.list?.map((user, index) => ({ ...user, index: index + 1, role: RoleStaffEnum[user?.role] }))
+			: [];
 	}, [managers]);
 
 	const [handleRemoveStaff, removeStatus] = useDeleteStaffMutation();
@@ -62,31 +65,28 @@ const StaffListPage = () => {
 				accessor: 'name',
 				Filter: InputColumnFilter,
 				filterable: true,
-				isSort: true
+				sortable: true
 			},
 			{
 				Header: 'Email nhân viên',
 				accessor: 'email',
 				Filter: InputColumnFilter,
 				filterable: true,
-				isSort: true
+				sortable: true
 			},
 			{
 				Header: 'Quyền Hạn nhân viên',
 				accessor: 'role',
-				Filter: ({ column: { filterValue, setFilter, preFilteredRows, id } }) => (
-					<SelectColumnFilter column={{ filterValue, setFilter, preFilteredRows, id }} customOptions={RoleStaffEnum} />
-				),
+				Filter: SelectColumnFilter,
 				filterable: true,
-				isSort: true,
-				Cell: ({ value }) => (value == 1 ? 'Nhân viên' : 'Quản lý')
+				sortable: true
 			},
 			{
 				Header: 'Cơ sở đang làm việc',
 				accessor: 'campus_id',
 				Filter: InputColumnFilter,
 				filterable: true,
-				isSort: true,
+				sortable: true,
 				Cell: ({ value }) => value.name
 			},
 			{
@@ -95,16 +95,10 @@ const StaffListPage = () => {
 				canFilter: false,
 				canSort: false,
 				filterable: false,
-				isSort: false,
+				sortable: false,
 				Cell: ({ value }) => (
 					<ButtonList>
-						<Button
-							size='xs'
-							variant='default'
-							shape='square'
-							onClick={() => {
-								onOpenUpdate(value);
-							}}>
+						<Button size='xs' variant='default' shape='square' onClick={() => onOpenUpdate(value)}>
 							<PencilSquareIcon className='h-4 w-4' />
 						</Button>
 						<PopConfirm
@@ -140,7 +134,7 @@ const StaffListPage = () => {
 							reset();
 							setSlideOverVisibility(!slideOverVisibility);
 						}}>
-						<UserPlusIcon className='h-4 w-4 text-[inherit] ' /> Thêm nhân viên
+						<UserPlusIcon className='h-4 w-4 text-[inherit]' /> Thêm nhân viên
 					</Button>
 				</ButtonList>
 
