@@ -12,6 +12,7 @@ import ButtonGroup from '../Button/ButtonGroup';
 import { Option, Select } from '../FormControl/SelectFieldControl';
 import Table from './CoreTable';
 import { GlobalFilter, InputColumnFilter } from './ReactTableFilters';
+import Text from '../Text/Text';
 
 /**
  *
@@ -26,7 +27,7 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
-const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading }) => {
+const ReactTable = ({ columns, data, manualPagination, onGetSelectedRows: handleGetSelectedRows, loading }) => {
 	const isEmptyData = useMemo(() => Array.isArray(data) && data.length > 0, [data]);
 	const filterTypes = useMemo(
 		() => ({
@@ -81,7 +82,7 @@ const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading 
 	);
 
 	useEffect(() => {
-		if (getSelectedRows) getSelectedRows(selectedFlatRows.map((d) => d.original));
+		if (handleGetSelectedRows) handleGetSelectedRows(selectedFlatRows.map((d) => d.original));
 	}, [selectedFlatRows]);
 
 	return (
@@ -161,72 +162,72 @@ const ReactTable = ({ columns, data, manualPagination, getSelectedRows, loading 
 
 			{/* Pagination */}
 			<Footer>
-				<ButtonGroup>
-					<ButtonGroup.Item
-						variant={canPreviousPage ? 'default' : 'disabled'}
-						shape='square'
-						onClick={() => {
-							gotoPage(0);
-						}}
-						disabled={!canPreviousPage}>
-						<ChevronDoubleLeftIcon className='h-4 w-4' aria-hidden='true' />
-					</ButtonGroup.Item>
+				<Footer.Item>
+					<ButtonGroup>
+						<ButtonGroup.Item
+							variant={canPreviousPage ? 'ghost' : 'disabled'}
+							shape='square'
+							onClick={() => {
+								gotoPage(0);
+							}}
+							disabled={!canPreviousPage}>
+							<ChevronDoubleLeftIcon className='h-4 w-4' aria-hidden='true' />
+						</ButtonGroup.Item>
 
-					<ButtonGroup.Item
-						variant={canPreviousPage ? 'default' : 'disabled'}
-						shape='square'
-						onClick={() => {
-							previousPage();
-						}}
-						disabled={!canPreviousPage}>
-						<ChevronLeftIcon className='h-4 w-4' aria-hidden='true' />
-					</ButtonGroup.Item>
-					<ButtonGroup.Item
-						variant={canNextPage ? 'default' : 'disabled'}
-						shape='square'
-						onClick={() => {
-							nextPage();
-						}}
-						disabled={!canNextPage}>
-						<ChevronRightIcon className='h-4 w-4' aria-hidden='true' />
-					</ButtonGroup.Item>
-					<ButtonGroup.Item
-						variant={canNextPage ? 'default' : 'disabled'}
-						shape='square'
-						onClick={() => {
-							gotoPage(pageCount - 1);
-						}}
-						disabled={!canNextPage}>
-						<ChevronDoubleRightIcon className='h-4 w-4' aria-hidden='true' />
-					</ButtonGroup.Item>
-				</ButtonGroup>
+						<ButtonGroup.Item
+							variant={canPreviousPage ? 'ghost' : 'disabled'}
+							shape='square'
+							onClick={() => {
+								previousPage();
+							}}
+							disabled={!canPreviousPage}>
+							<ChevronLeftIcon className='h-4 w-4' aria-hidden='true' />
+						</ButtonGroup.Item>
+						<ButtonGroup.Item
+							variant={canNextPage ? 'ghost' : 'disabled'}
+							shape='square'
+							onClick={() => {
+								nextPage();
+							}}
+							disabled={!canNextPage}>
+							<ChevronRightIcon className='h-4 w-4' aria-hidden='true' />
+						</ButtonGroup.Item>
+						<ButtonGroup.Item
+							variant={canNextPage ? 'ghost' : 'disabled'}
+							shape='square'
+							onClick={() => {
+								gotoPage(pageCount - 1);
+							}}
+							disabled={!canNextPage}>
+							<ChevronDoubleRightIcon className='h-4 w-4' aria-hidden='true' />
+						</ButtonGroup.Item>
+					</ButtonGroup>
+				</Footer.Item>
 
-				<Seperator className='sm:hidden' />
+				<Footer.Item className='inline-flex items-center text-center'>
+					<Text as='span' className='font-medium text-base-content-active sm:hidden'>
+						Trang {pageIndex + 1}/{pageOptions.length}
+					</Text>
+				</Footer.Item>
 
-				<span className='font-medium text-base-content-active sm:hidden'>
-					Trang {pageIndex + 1}/{pageOptions.length}
-				</span>
-
-				<Seperator />
-
-				<div className='flex items-center gap-2'>
-					<label htmlFor='page-size-select' className='whitespace-nowrap'>
+				<Footer.Item>
+					<label htmlFor='page-size-select' className='flex items-center gap-2 whitespace-nowrap'>
 						Hiển thị
+						<Select
+							id='page-size-select'
+							className='w-full max-w-[128px]'
+							defaultValue={pageSize}
+							onChange={(e) => {
+								setPageSize(e.target.value);
+							}}>
+							{[10, 20, 30, 50].map((page_size, index) => (
+								<Option value={page_size} key={index}>
+									{page_size} hàng
+								</Option>
+							))}
+						</Select>
 					</label>
-					<Select
-						id='page-size-select'
-						className='w-full max-w-[128px]'
-						defaultValue={pageSize}
-						onChange={(e) => {
-							setPageSize(e.target.value);
-						}}>
-						{[10, 20, 30, 50].map((page_size, index) => (
-							<Option value={page_size} key={index}>
-								{page_size} hàng
-							</Option>
-						))}
-					</Select>
-				</div>
+				</Footer.Item>
 			</Footer>
 		</Wrapper>
 	);
@@ -254,10 +255,14 @@ const Body = ({ children, isEmpty, ...props }) => (
 	</div>
 );
 const Footer = ({ children, ...props }) => (
-	<div {...props} tw='flex w-full items-center gap-6 bg-gray-50 p-3'>
+	<div {...props} tw='flex w-full items-stretch bg-gray-50 p-3 divide-x divide-gray-300 [&>:first-child]:!pl-0 [&>:last-child]:!pr-0'>
 		{children}
 	</div>
 );
-const Seperator = tw.hr`h-6 min-h-full w-px bg-gray-300 `;
+Footer.Item = ({ ...props }) => (
+	<div {...props} className={classNames('px-6', props.className)}>
+		{props.children}
+	</div>
+);
 
 export default memo(ReactTable);
