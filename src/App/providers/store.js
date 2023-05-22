@@ -16,7 +16,8 @@ import registerInternApi from './apis/internRegistrationApi';
 
 const persistConfig = {
 	key: 'root',
-	storage
+	storage,
+	whitelist: ['auth', 'campus']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer); // Provide a way to combine redux's root reducer

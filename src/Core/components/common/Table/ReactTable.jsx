@@ -2,7 +2,13 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
-import { ArrowDownIcon, ArrowsUpDownIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import {
+	ArrowDownIcon,
+	ArrowsUpDownIcon,
+	ChevronDoubleLeftIcon,
+	ChevronDoubleRightIcon,
+	XMarkIcon
+} from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { memo, useEffect, useMemo } from 'react';
 import { useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from 'react-table';
@@ -35,7 +41,9 @@ const ReactTable = ({ columns, data, manualPagination, onGetSelectedRows: handle
 			text: (rows, id, filterValue) => {
 				return rows.filter((row) => {
 					const rowValue = row.values[id];
-					return rowValue !== undefined ? String(rowValue).toLowerCase().startsWith(String(filterValue).toLowerCase()) : true;
+					return rowValue !== undefined
+						? String(rowValue).toLowerCase().startsWith(String(filterValue).toLowerCase())
+						: true;
 				});
 			}
 		}),
@@ -89,7 +97,11 @@ const ReactTable = ({ columns, data, manualPagination, onGetSelectedRows: handle
 		<Wrapper>
 			{/* Global search  */}
 			<Header>
-				<GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+				<GlobalFilter
+					preGlobalFilteredRows={preGlobalFilteredRows}
+					globalFilter={globalFilter}
+					setGlobalFilter={setGlobalFilter}
+				/>
 				{!!filters.length && (
 					<Button size='sm' onClick={() => setAllFilters([])}>
 						<XMarkIcon className='h-3.5 w-3.5' /> Xóa lọc
@@ -103,43 +115,41 @@ const ReactTable = ({ columns, data, manualPagination, onGetSelectedRows: handle
 					<Table.Header sticky={true}>
 						{headerGroups.map((headerGroup) => (
 							<Table.Row {...headerGroup.getHeaderGroupProps()}>
-								{headerGroup.headers.map((column) => {
-									return (
-										<Table.Cell as='th' {...column.getHeaderProps()}>
-											<div className='flex h-12 items-center justify-between gap-6'>
-												{column.render('Header')}
-												<div className='flex items-center gap-px'>
-													{column.sortable && column.canSort && (
-														<Button
-															onClick={() => column.toggleSortBy()}
-															{...column.getHeaderProps()}
-															size='xs'
-															variant={column.isSorted ? 'primary' : 'ghost'}
-															shape='square'>
-															{column.isSorted ? (
-																<ArrowDownIcon
-																	className={classNames('block h-3.5 w-3.5', {
-																		'-rotate-180': column.isSortedDesc
-																	})}
-																/>
-															) : (
-																<ArrowsUpDownIcon className='block h-3.5 w-3.5' />
-															)}
-														</Button>
-													)}
-													{column.filterable && column.render('Filter')}
-												</div>
-											</div>
-										</Table.Cell>
-									);
-								})}
+								{headerGroup.headers.map((column) => (
+									<Table.Cell as='th' {...column.getHeaderProps()}>
+										<HeaderCell>
+											{column.render('Header')}
+											<HeaderCell.Actions>
+												{column.sortable && column.canSort && (
+													<Button
+														onClick={() => column.toggleSortBy()}
+														{...column.getHeaderProps()}
+														size='xs'
+														variant={column.isSorted ? 'primary' : 'ghost'}
+														shape='square'>
+														{column.isSorted ? (
+															<ArrowDownIcon
+																className={classNames('block h-3.5 w-3.5', {
+																	'-rotate-180': column.isSortedDesc
+																})}
+															/>
+														) : (
+															<ArrowsUpDownIcon className='block h-3.5 w-3.5' />
+														)}
+													</Button>
+												)}
+												{column.filterable && column.render('Filter')}
+											</HeaderCell.Actions>
+										</HeaderCell>
+									</Table.Cell>
+								))}
 							</Table.Row>
 						))}
 					</Table.Header>
 
 					<Table.Body {...getTableBodyProps()}>
 						{loading ? (
-							<Table.Pending />
+							<Table.Pending numOfCols={columns.length} />
 						) : data.length ? (
 							page.map((row) => {
 								prepareRow(row);
@@ -244,6 +254,8 @@ const Header = ({ children, ...props }) => (
 		{children}
 	</div>
 );
+const HeaderCell = tw.div`flex h-12 items-center justify-between gap-6`;
+HeaderCell.Actions = tw.div`flex items-center gap-px`;
 const Body = ({ children, isEmpty, ...props }) => (
 	<div
 		{...props}
@@ -255,7 +267,9 @@ const Body = ({ children, isEmpty, ...props }) => (
 	</div>
 );
 const Footer = ({ children, ...props }) => (
-	<div {...props} tw='flex w-full items-stretch bg-gray-50 p-3 divide-x divide-gray-300 [&>:first-child]:!pl-0 [&>:last-child]:!pr-0'>
+	<div
+		{...props}
+		tw='flex w-full items-stretch bg-gray-50 p-3 divide-x divide-gray-300 [&>:first-child]:!pl-0 [&>:last-child]:!pr-0'>
 		{children}
 	</div>
 );

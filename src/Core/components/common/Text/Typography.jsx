@@ -1,7 +1,14 @@
 import classNames from 'classnames';
 import React, { useMemo } from 'react';
 
-const Typography = ({ fontWeight = 'medium', textAlign = 'left', verticalAlign = 'middle', level = 1, color = 'default', ...props }) => {
+const Typography = ({
+	fontWeight = 'medium',
+	textAlign = 'left',
+	verticalAlign = 'middle',
+	level = 1,
+	color = 'default',
+	...props
+}) => {
 	const Variant = useMemo(() => {
 		switch (level) {
 			case 1:
@@ -21,7 +28,7 @@ const Typography = ({ fontWeight = 'medium', textAlign = 'left', verticalAlign =
 		}
 	}, [level]);
 	const styles = useMemo(() =>
-		classNames({
+		classNames(props.className, {
 			'font-medium': fontWeight.includes('medium'),
 			'font-semibold': fontWeight.includes('semibold'),
 			'font-bold': fontWeight.includes('bold'),
