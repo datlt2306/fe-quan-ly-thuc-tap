@@ -6,15 +6,12 @@ const reportApi = createApi({
 	baseQuery: axiosBaseQuery(),
 	tagTypes: ['Report'],
 	endpoints: (build) => ({
-		uploadFormFile: build.mutation({
-			query: (payload) => ({ url: '/drive/upload', method: 'POST', data: payload })
-		}),
 		uploadForm: build.mutation({
 			query: (payload) => ({ url: '/form', method: 'PATCH', data: payload })
 		})
 	})
 });
 
-export const { useUploadFormFileMutation, useUploadFormMutation } = reportApi;
+export const { useUploadFormMutation } = reportApi;
 
 export default reportApi;

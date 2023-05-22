@@ -1,4 +1,4 @@
-import { useUploadFormFileMutation, useUploadFormMutation } from '@/App/providers/apis/reportApi';
+import { useUploadFormMutation } from '@/App/providers/apis/reportApi';
 import { recordSchema } from '@/App/schemas/recordSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
@@ -17,7 +17,6 @@ const RecordPage = () => {
 	const [selectFile, setSelectFile] = useState(null);
 	const [validateFile, setValidateFile] = useState('');
 
-	const [handleUpload] = useUploadFormFileMutation();
 	const [handleSubmitForm] = useUploadFormMutation();
 
 	const fileInputRef = useRef(null);
@@ -48,20 +47,16 @@ const RecordPage = () => {
 	const onSubmit = async (value) => {
 		const formData = new FormData();
 		formData.append('file', selectFile);
-		const result_upload = await handleUpload(formData);
-		console.log(result_upload.data.url);
-		const data_upload = {
-			nameCompany: value.nameCompany,
-			internshipTime: value.date,
-			form: result_upload?.data?.url,
-			mssv: user.mssv,
-			email: user.email,
-			_id: user.id
-		};
-		console.log(data_upload);
-		const result = await handleSubmitForm(data_upload);
+		formData.append('nameCompany', value.nameCompany);
+		formData.append('internshipTime', value.date);
+		formData.append('mssv', user.mssv);
+		formData.append('email', user.email);
+		formData.append('_id', user.id);
+		formData.append('typeNumber', 0);
+		console.log(formData)
+		const result = await handleSubmitForm(formData);
 		console.log(result);
-		navigate('/');
+		// navigate('/');
 	};
 	return (
 		<Container>
