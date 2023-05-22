@@ -237,7 +237,7 @@ const StudentListPage = () => {
 						shape='square'
 						size='sm'
 						disabled={!!value}>
-						{!!value ? <EyeIcon className='h-4 w-4' /> : <EyeSlashIcon className='h-4 w-4' />}
+						{value ? <EyeIcon className='h-4 w-4' /> : <EyeSlashIcon className='h-4 w-4' />}
 					</Button>
 				)
 			},
