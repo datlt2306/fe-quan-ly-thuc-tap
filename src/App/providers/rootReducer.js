@@ -4,7 +4,7 @@ import businessApi from './apis/businessApi';
 import campusApi from './apis/campusApi';
 import configTimesApi from './apis/configTimesApi';
 import majorApi from './apis/majorApi';
-import registerInternApi from './apis/registerInternApi';
+
 import requestStudentsApi from './apis/requestStudentsApi';
 import semesterApi from './apis/semesterApi';
 import staffListApi from './apis/staffListApi';
@@ -12,6 +12,7 @@ import studentApi from './apis/studentApi';
 import authSlice from './slices/authSlice';
 import campusSlice from './slices/campusSlice';
 import semesterSlice from './slices/semesterSlice';
+import registerInternApi from './apis/registerInternApi';
 
 const rootReducer = combineReducers({
 	[authSlice.name]: authSlice.reducer,

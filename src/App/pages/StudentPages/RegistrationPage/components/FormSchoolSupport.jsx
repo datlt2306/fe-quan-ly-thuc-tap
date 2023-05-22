@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useUploadCvMutation } from '@/App/providers/apis/registerInternApi';
+
 import { formSignUpSchoolSupportSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import FileUploadFieldControl from '@/Core/components/common/FormControl/FileUploadFieldControl';
@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import FormRow from '../components/FormRow';
 import { WrapButton } from './FormSelfFinding';
+import { useUploadCvMutation } from '@/App/providers/apis/registerInternApi';
 
 const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 	const navigate = useNavigate();
