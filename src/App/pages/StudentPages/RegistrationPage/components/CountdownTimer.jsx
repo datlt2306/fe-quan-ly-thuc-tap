@@ -1,21 +1,21 @@
-import useCountdown from "@/App/hooks/useCountdown";
-import { memo, useEffect } from "react";
-import DateTimeDisplay from "./DateTimeDisplay ";
+import useCountdown from '@/App/hooks/useCountdown';
+import { memo, useEffect } from 'react';
+import DateTimeDisplay from './DateTimeDisplay ';
 // import "./style/CountDownStyle.css";
-import ExpiredNotice from "./ExpiredNotice";
+import ExpiredNotice from './ExpiredNotice';
 
 const ShowCounter = ({ days, hours, minutes, seconds }) => {
 	return (
-		<div className="flex">
-			<div className="flex gap-3">
+		<div className='flex'>
+			<div className='flex gap-3'>
 				<div>Thời gian đăng ký còn lại</div>
-				<DateTimeDisplay value={days} type={"Ngày"}  />
+				<DateTimeDisplay value={days} type={'Ngày'} />
 				<p>:</p>
-				<DateTimeDisplay value={hours} type={"Giờ"}  />
+				<DateTimeDisplay value={hours} type={'Giờ'} />
 				<p>:</p>
-				<DateTimeDisplay value={minutes} type={"Phút"}  />
+				<DateTimeDisplay value={minutes} type={'Phút'} />
 				<p>:</p>
-				<DateTimeDisplay value={seconds} type={"Giây"}  />
+				<DateTimeDisplay value={seconds} type={'Giây'} />
 			</div>
 		</div>
 	);

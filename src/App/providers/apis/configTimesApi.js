@@ -1,7 +1,7 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import axiosBaseQuery from "../axiosBaseQuery";
+import { createApi } from '@reduxjs/toolkit/query/react';
+import axiosBaseQuery from '../axiosBaseQuery';
 const configTimesApi = createApi({
-	reducerPath: "timesApi",
+	reducerPath: 'timesApi',
 	baseQuery: axiosBaseQuery(),
 	tagTypes: 'Times',
 	endpoints: (build) => ({
@@ -11,12 +11,12 @@ const configTimesApi = createApi({
 			}
 		}),
 		getAllSetTime: build.query({
-			query: (params) => ({url: '/settime', method: "GET", params}),
-			providesTags: ["Times"]
+			query: (params) => ({ url: '/settime', method: 'GET', params }),
+			providesTags: ['Times']
 		}),
 		putSetTime: build.mutation({
-			query: (payload) => ({url: `/settime`, method: "PUT", data: payload}),
-			invalidatesTags: ["Times"]
+			query: (payload) => ({ url: `/settime`, method: 'PUT', data: payload }),
+			invalidatesTags: ['Times']
 		})
 	})
 });

@@ -18,17 +18,16 @@ import { toast } from 'react-toastify';
 import { TimesConfig } from '@/App/constants/timesConfig';
 
 const RegistrantionTimePage = () => {
-
 	const convertTime = (date) => {
-		if (typeof date !== "string") return "";
-		return date ? moment(date.substring(0, 10), 'YYYY-MM-DD').format('DD/MM/YYYY') : "";
-	}
+		if (typeof date !== 'string') return '';
+		return date ? moment(date.substring(0, 10), 'YYYY-MM-DD').format('DD/MM/YYYY') : '';
+	};
 
 	const convertTimeStamp = (date) => {
-		return date ? moment(date).format('DD/MM/YYYY') : ""
-	}
+		return date ? moment(date).format('DD/MM/YYYY') : '';
+	};
 
-	const [handleSetTime] = usePutSetTimeMutation()
+	const [handleSetTime] = usePutSetTimeMutation();
 	const campus = useSelector((state) => state.campus);
 	const { data: semester } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
 	const { defaultSemester } = useSelector((state) => state.semester);
@@ -54,9 +53,9 @@ const RegistrantionTimePage = () => {
 		} else {
 			setModalData(form);
 			reset({
-				startTime: moment(form.startTime).format("YYYY-MM-DD"),
-				endTime: moment(form.endTime).format("YYYY-MM-DD")
-			})
+				startTime: moment(form.startTime).format('YYYY-MM-DD'),
+				endTime: moment(form.endTime).format('YYYY-MM-DD')
+			});
 		}
 		setModal(!modal);
 	};
@@ -66,13 +65,24 @@ const RegistrantionTimePage = () => {
 	});
 
 	const onSubmit = async (value) => {
-		const result = modalData._id ?
-			await handleSetTime({ _id: modalData._id, typeName: modalData.typeName, typeNumber: modalData.typeNumber, startTime: moment(value.startTime).valueOf(), endTime: moment(value.endTime).valueOf() }) :
-			await handleSetTime({ typeName: modalData.typeName, typeNumber: modalData.typeNumber, startTime: moment(value.startTime).valueOf(), endTime: moment(value.endTime).valueOf() })
+		const result = modalData._id
+			? await handleSetTime({
+					_id: modalData._id,
+					typeName: modalData.typeName,
+					typeNumber: modalData.typeNumber,
+					startTime: moment(value.startTime).valueOf(),
+					endTime: moment(value.endTime).valueOf()
+			  })
+			: await handleSetTime({
+					typeName: modalData.typeName,
+					typeNumber: modalData.typeNumber,
+					startTime: moment(value.startTime).valueOf(),
+					endTime: moment(value.endTime).valueOf()
+			  });
 		if (result.error) {
-			toast.error(`Cập nhật ${modalData.typeName} thất bại!`)
+			toast.error(`Cập nhật ${modalData.typeName} thất bại!`);
 		} else {
-			toast.success(`Cập nhật ${modalData.typeName} thành công!`)
+			toast.success(`Cập nhật ${modalData.typeName} thành công!`);
 		}
 		setModal(!modal);
 	};
@@ -118,14 +128,25 @@ const RegistrantionTimePage = () => {
 								<Table.Cell>{item.typeName}</Table.Cell>
 								<Table.Cell>{tableData && convertTimeStamp(tableData?.find((i) => i.typeNumber === item.typeNumber)?.startTime)}</Table.Cell>
 								<Table.Cell>{tableData && convertTimeStamp(tableData?.find((i) => i.typeNumber === item.typeNumber)?.endTime)}</Table.Cell>
-								<Table.Cell>{tableData && <CompareDate start={(tableData?.find((i) => i.typeNumber === item.typeNumber)?.startTime)} end={(tableData?.find((i) => i.typeNumber === item.typeNumber)?.endTime)} />}</Table.Cell>
+								<Table.Cell>
+									{tableData && (
+										<CompareDate
+											start={tableData?.find((i) => i.typeNumber === item.typeNumber)?.startTime}
+											end={tableData?.find((i) => i.typeNumber === item.typeNumber)?.endTime}
+										/>
+									)}
+								</Table.Cell>
 								<Table.Cell>
 									<Button
 										disabled={selectedSemester?._id !== defaultSemester?._id}
-										size="sm"
-										variant={selectedSemester?._id !== defaultSemester?._id ? "disabled" : "success"}
-										onClick={() => handleClick(tableData.find((i) => i.typeNumber === item.typeNumber), { typeName: item.typeName, typeNumber: item.typeNumber })}
-									>
+										size='sm'
+										variant={selectedSemester?._id !== defaultSemester?._id ? 'disabled' : 'success'}
+										onClick={() =>
+											handleClick(
+												tableData.find((i) => i.typeNumber === item.typeNumber),
+												{ typeName: item.typeName, typeNumber: item.typeNumber }
+											)
+										}>
 										Cập nhật
 									</Button>
 								</Table.Cell>
@@ -135,9 +156,11 @@ const RegistrantionTimePage = () => {
 			</Table>
 			<Modal openState={modal} onOpenStateChange={setModal}>
 				<Form onSubmit={handleSubmit(onSubmit)}>
-					<InputFieldControl type="date" control={control} name='startTime' label='Start date' />
-					<InputFieldControl type="date" control={control} name='endTime' label='End date' />
-					<Button type="submit" variant="primary">Đặt thời gian</Button>
+					<InputFieldControl type='date' control={control} name='startTime' label='Start date' />
+					<InputFieldControl type='date' control={control} name='endTime' label='End date' />
+					<Button type='submit' variant='primary'>
+						Đặt thời gian
+					</Button>
 				</Form>
 			</Modal>
 		</div>
@@ -149,6 +172,6 @@ const Flex = tw.div`flex justify-between mb-8`;
 const Item = tw.div``;
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
 const Span = tw.span`font-semibold`;
-const Form = tw.form`grid gap-6`
+const Form = tw.form`grid gap-6`;
 
 export default RegistrantionTimePage;
