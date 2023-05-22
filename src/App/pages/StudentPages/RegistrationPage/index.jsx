@@ -8,7 +8,7 @@ import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgress
 import { useCallback, useState } from 'react';
 import CountdownTimer from './components/CountdownTimer';
 import ExpiredNotice from './components/ExpiredNotice';
-import { RegistrationType } from './constants/RegistrationType';
+
 
 import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
 import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
@@ -48,9 +48,7 @@ const RegistrationPage = () => {
 	//xử lý nếu nhân viên mở thêm form đăng ký
 	useEffect(() => {
 		if (student?.listTimeForm && student?.listTimeForm.length > 0) {
-			const checkTimeStudent = student?.listTimeForm.find(
-				(item) => item.typeNumber == RegistrationType.SelfFinding || item.typeNumber == RegistrationType.SchoolSupport
-			);
+			const checkTimeStudent = student?.listTimeForm.find((item) => item.typeNumber == 0 || item.typeNumber == 1);
 			setDeadLine(checkTimeStudent);
 		}
 	}, [times, selectedOption, student?.listTimeForm]);
