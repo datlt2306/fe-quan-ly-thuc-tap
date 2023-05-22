@@ -50,7 +50,7 @@ const StudentListPage = () => {
 			  }))
 			: [];
 	}, [studentsListData, isLoading]);
-
+	console.log(tableData);
 	// Callback function will be executed after import file excel
 	const importExcelDataCallback = async (excelData) => {
 		if (!excelData.length) {
@@ -228,8 +228,16 @@ const StudentListPage = () => {
 				filterable: false,
 				sortable: false,
 				Cell: ({ value }) => (
-					<Button as='a' href={value} target='_blank' variant={value ? 'ghost' : 'disabled'} shape='square' size='sm' disabled={!!value}>
-						{value ? <EyeIcon className='h-4 w-4' /> : <EyeSlashIcon className='h-4 w-4' />}
+					<Button
+						as='a'
+						href={value}
+						className='p-1'
+						target='_blank'
+						variant={value ? 'ghost' : 'disabled'}
+						shape='square'
+						size='sm'
+						disabled={!!value}>
+						{!!value ? <EyeIcon className='h-4 w-4' /> : <EyeSlashIcon className='h-4 w-4' />}
 					</Button>
 				)
 			},

@@ -1,42 +1,32 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import authSlice from './slices/authSlice';
-import semesterApi from './apis/semesterApi';
-import campusApi from './apis/campusApi';
-import campusSlice from './slices/campusSlice';
-import studentApi from './apis/studentApi';
-import businessApi from './apis/businessApi';
-import configTimesApi from './apis/configTimesApi';
 import authApi from './apis/authApi';
-import requestStudentsApi from './apis/requestStudentsApi';
-import staffListApi from './apis/staffListApi';
-import semesterSlice from './slices/semesterSlice';
+import businessApi from './apis/businessApi';
+import campusApi from './apis/campusApi';
+import configTimesApi from './apis/configTimesApi';
 import majorApi from './apis/majorApi';
-import registerInternAPI from './apis/registerInternAPI';
+import registerInternApi from './apis/registerInternApi';
+import requestStudentsApi from './apis/requestStudentsApi';
+import semesterApi from './apis/semesterApi';
+import staffListApi from './apis/staffListApi';
+import studentApi from './apis/studentApi';
+import authSlice from './slices/authSlice';
+import campusSlice from './slices/campusSlice';
+import semesterSlice from './slices/semesterSlice';
 
 const rootReducer = combineReducers({
-	// Auth reducers
 	[authSlice.name]: authSlice.reducer,
 	[campusSlice.name]: campusSlice.reducer,
-
-	[authApi.reducerPath]: authApi.reducer,
-	// Semester reducers
-	[semesterApi.reducerPath]: semesterApi.reducer,
+	[campusSlice.name]: campusSlice.reducer,
 	[semesterSlice.name]: semesterSlice.reducer,
-	// Business reducers
-	// Campus reducers
+	[authApi.reducerPath]: authApi.reducer,
+	[semesterApi.reducerPath]: semesterApi.reducer,
 	[campusApi.reducerPath]: campusApi.reducer,
 	[studentApi.reducerPath]: studentApi.reducer,
 	[configTimesApi.reducerPath]: configTimesApi.reducer,
 	[requestStudentsApi.reducerPath]: requestStudentsApi.reducer,
-	[campusSlice.name]: campusSlice.reducer,
-	//major reducer
 	[majorApi.reducerPath]: majorApi.reducer,
-	//upload drive
-
-	[registerInternAPI.reducerPath]: registerInternAPI.reducer,
-
+	[registerInternApi.reducerPath]: registerInternApi.reducer,
 	[businessApi.reducerPath]: businessApi.reducer,
-	//major reducer
 	[staffListApi.reducerPath]: staffListApi.reducer
 });
 

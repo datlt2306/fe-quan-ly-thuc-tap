@@ -1,20 +1,20 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import axiosBaseQuery from '../axiosBaseQuery';
 
-const registerInternAPI = createApi({
+const registerInternApi = createApi({
 	reducerPath: 'registerInternAPI',
 	baseQuery: axiosBaseQuery(),
-	tagTypes: ['registerIntern'],
+	tagTypes: ['RegisterIntern'],
 	endpoints: (build) => ({
 		uploadCv: build.mutation({
 			query: (payload) => {
 				return { url: '/intern/support', method: 'PATCH', data: payload };
 			},
-			invalidatesTags: ['registerIntern']
+			invalidatesTags: ['RegisterIntern']
 		})
 	})
 });
 
-export const { useUploadCvMutation } = registerInternAPI;
+export const { useUploadCvMutation } = registerInternApi;
 
-export default registerInternAPI;
+export default registerInternApi;

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useUploadCvMutation } from '@/App/providers/apis/registerInternAPI';
+import { useUploadCvMutation } from '@/App/providers/apis/registerInternApi';
 import { formSignUpSchoolSupportSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import FileUploadFieldControl from '@/Core/components/common/FormControl/FileUploadFieldControl';
