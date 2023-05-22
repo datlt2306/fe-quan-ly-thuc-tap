@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import axiosBaseQuery from '../axiosBaseQuery';
 
 const registerInternApi = createApi({
-	reducerPath: 'registerInternAPI',
+	reducerPath: 'registerInternApi',
 	baseQuery: axiosBaseQuery(),
 	tagTypes: ['RegisterIntern'],
 	endpoints: (build) => ({
