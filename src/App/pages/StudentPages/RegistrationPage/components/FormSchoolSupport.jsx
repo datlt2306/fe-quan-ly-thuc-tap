@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useUploadCvMutation } from '@/App/providers/apis/registerInternApi';
+
 import { formSignUpSchoolSupportSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import FileUploadFieldControl from '@/Core/components/common/FormControl/FileUploadFieldControl';
@@ -8,12 +8,12 @@ import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Fragment } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import FormRow from '../components/FormRow';
 import { WrapButton } from './FormSelfFinding';
+import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
 
 const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 	const navigate = useNavigate();
@@ -92,6 +92,6 @@ const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 	);
 };
 
-export const Form = tw.form` pb-4`;
+export const Form = tw.form`pb-4`;
 
 export default FormSchoolSupport;

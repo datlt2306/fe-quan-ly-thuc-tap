@@ -9,7 +9,6 @@ import { useCallback, useState } from 'react';
 import CountdownTimer from './components/CountdownTimer';
 import ExpiredNotice from './components/ExpiredNotice';
 
-
 import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
 import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';

@@ -12,7 +12,7 @@ import requestStudentsApi from './apis/requestStudentsApi';
 import studentApi from './apis/studentApi';
 import majorApi from './apis/majorApi';
 import staffListApi from './apis/staffListApi';
-import registerInternApi from './apis/registerInternApi';
+import registerInternApi from './apis/internRegistrationApi';
 
 const persistConfig = {
 	key: 'root',

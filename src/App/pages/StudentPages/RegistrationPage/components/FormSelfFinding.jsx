@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import tw from 'twin.macro';
-import { useUploadCvMutation } from '@/App/providers/apis/registerInternApi';
+import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
 import { formSignUpSelfFindingSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';

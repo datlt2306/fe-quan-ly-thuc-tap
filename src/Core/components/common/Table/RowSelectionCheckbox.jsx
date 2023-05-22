@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useRef } from 'react';
 import { Checkbox } from '../FormControl/CheckboxFieldControl';
 
-const IndeterminateCheckbox = forwardRef(({ indeterminate, onChange: handleChange, ...props }, ref) => {
+const IndeterminateCheckbox = forwardRef(({ indeterminate, onChange: handleChange, disabled, ...props }, ref) => {
 	const defaultRef = useRef();
 	const resolvedRef = ref || defaultRef;
 
@@ -9,7 +9,7 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, onChange: handleChang
 		resolvedRef.current.indeterminate = indeterminate;
 	}, [resolvedRef, indeterminate]);
 
-	return <Checkbox ref={resolvedRef} onChange={handleChange} {...props} />;
+	return <Checkbox ref={resolvedRef} disabled={disabled} onChange={handleChange} {...props} />;
 });
 
 export default IndeterminateCheckbox;
