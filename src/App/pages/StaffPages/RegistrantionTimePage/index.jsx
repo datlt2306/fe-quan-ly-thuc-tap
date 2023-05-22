@@ -15,38 +15,17 @@ import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import CompareDate from './CompareDate';
 import { toast } from 'react-toastify';
+import { TimesConfig } from '@/App/constants/timesConfig';
 
 const RegistrantionTimePage = () => {
-	const formType = [
-		{
-			typeNumber: 0,
-			typeName: 'Form đăng ký sinh viên tự tìm'
-		},
-		{
-			typeNumber: 1,
-			typeName: 'Form đăng ký nhờ nhà trường hỗ trợ'
-		},
-		{
-			typeNumber: 2,
-			typeName: 'Form nộp biên bản'
-		},
-		{
-			typeNumber: 3,
-			typeName: 'Form nộp báo cáo'
-		},
-		{
-			typeNumber: 4,
-			typeName: 'Form hiển thị thông tin doanh nghiệp'
-		}
-	];
 
 	const convertTime = (date) => {
 		if (typeof date !== "string") return "";
-		return date ? moment(date.substring(0, 10), 'YYYY-MM-DD').format('DD-MM-YYYY') : "";
+		return date ? moment(date.substring(0, 10), 'YYYY-MM-DD').format('DD/MM/YYYY') : "";
 	}
 
 	const convertTimeStamp = (date) => {
-		return date ? moment(date).format('DD-MM-YYYY') : ""
+		return date ? moment(date).format('DD/MM/YYYY') : ""
 	}
 
 	const [handleSetTime] = usePutSetTimeMutation()
@@ -133,8 +112,8 @@ const RegistrantionTimePage = () => {
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
-					{formType &&
-						formType.map((item, index) => (
+					{TimesConfig &&
+						TimesConfig.map((item, index) => (
 							<Table.Row key={index}>
 								<Table.Cell>{item.typeName}</Table.Cell>
 								<Table.Cell>{tableData && convertTimeStamp(tableData?.find((i) => i.typeNumber === item.typeNumber)?.startTime)}</Table.Cell>
