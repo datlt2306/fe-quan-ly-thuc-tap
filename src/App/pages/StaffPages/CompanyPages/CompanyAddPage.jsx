@@ -76,10 +76,10 @@ const AddBusinessForm = () => {
 	);
 };
 
-const Form = tw.form`px-8`;
-const Flex = tw.div`flex flex-row sm:grid resize-none`;
-const FlexLetf = tw.div`grid grid-cols-1 gap-4 grow m-4 h-[600px] lg:sticky top-[100px]`;
-const FlexRight = tw.div`grid grid-cols-1 gap-4 grow m-4`;
+const Form = tw.form``;
+const Flex = tw.div`grid grid-cols-2 gap-8 sm:grid-cols-1 resize-none`;
+const FlexLetf = tw.div`grid grid-cols-1 gap-4 grow h-[600px] lg:sticky top-[100px]`;
+const FlexRight = tw.div`grid grid-cols-1 gap-4 grow`;
 const Desktop = tw.div`self-center mt-4 sm:hidden`;
 const Mobile = tw.div`self-center mt-4 hidden sm:block`;
 const Title = tw.div`mb-8 text-primary text-xl font-bold`;
