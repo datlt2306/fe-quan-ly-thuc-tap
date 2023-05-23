@@ -218,8 +218,8 @@ const StudentListPage = () => {
 					)
 			},
 			{
-				Header: columnAccessors.position,
-				accessor: 'position',
+				Header: columnAccessors.dream,
+				accessor: 'dream',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
