@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import FormRow from '../components/FormRow';
 import { WrapButton } from './FormSelfFinding';
-import { useUploadCvMutation } from '@/App/providers/apis/interRegistrationApi';
+import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
 
 const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 	const navigate = useNavigate();

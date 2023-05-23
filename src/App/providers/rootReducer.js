@@ -11,7 +11,7 @@ import studentApi from './apis/studentApi';
 import authSlice from './slices/authSlice';
 import campusSlice from './slices/campusSlice';
 import semesterSlice from './slices/semesterSlice';
-import internRegistrationApi from './apis/interRegistrationApi';
+import internRegistrationApi from './apis/internRegistrationApi';
 
 const rootReducer = combineReducers({
 	[authSlice.name]: authSlice.reducer,
