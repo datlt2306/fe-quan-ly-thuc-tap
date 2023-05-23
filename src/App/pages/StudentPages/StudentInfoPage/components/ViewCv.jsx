@@ -103,7 +103,7 @@ const ViewCv = ({ data, setOpenState, nameMajor }) => {
 					{open && (
 						<>
 							<TextareaFieldControl control={control} name='description' />
-							<div className='mt-2 flex justify-between'>
+							<div className='mt-3 flex justify-end gap-3'>
 								<Button
 									variant='error'
 									className='hover:bg-red-600'
