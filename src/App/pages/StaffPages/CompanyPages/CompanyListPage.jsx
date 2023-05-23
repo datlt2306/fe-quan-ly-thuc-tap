@@ -8,11 +8,7 @@ import { CalendarDaysIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-import {
-	useAddArrayCompanyMutation,
-	useDeleteCompanyMutation,
-	useGetAllCompanyQuery
-} from '@/App/providers/apis/businessApi';
+import { useAddArrayCompanyMutation, useDeleteCompanyMutation, useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
 import { useGetAllSemestersQuery } from '@/App/providers/apis/semesterApi';
 import { useSelector } from 'react-redux';
 import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
@@ -111,10 +107,7 @@ const CompanyListPage = () => {
 				description: obj[columnAccessors.description],
 				benefit: obj[columnAccessors.benefit]
 			}));
-			const newData = newCompanyList?.map((item) => ({
-				...item,
-				major: majors?.find((majorItem) => majorItem.majorCode === item.major)?._id
-			}));
+			const newData = newCompanyList?.map((item) => ({ ...item, major: majors?.find((majorItem) => majorItem.majorCode === item.major)?._id }));
 			companyArraySchema
 				.validate(newData)
 				.then(async (data) => {
@@ -302,14 +295,8 @@ const CompanyListPage = () => {
 			isSort: false,
 			Cell: ({ value }) => (
 				<ActionList>
-					<Button
-						as={Link}
-						to={StaffPaths.COMPANY_UPDATE.replace(':id', value)}
-						type='button'
-						size='sm'
-						shape='square'
-						variant='default'>
-						<PencilSquareIcon className='h-4 w-4' />
+					<Button as={Link} to={StaffPaths.COMPANY_UPDATE.replace(':id', value)} type='button' size='sm' shape='square' variant='default'>
+						<PencilSquareIcon className='h-5 w-5' />
 					</Button>
 					<PopConfirm
 						okText='Ok'
@@ -319,7 +306,7 @@ const CompanyListPage = () => {
 						// onCancel={() => toast.info("Cancelled")}
 						onConfirm={() => onDeleteSubmit(value)}>
 						<Button size='sm' variant='error' shape='square'>
-							<TrashIcon className='h-4 w-4' />
+							<TrashIcon className='h-5 w-5' />
 						</Button>
 					</PopConfirm>
 				</ActionList>
@@ -331,14 +318,10 @@ const CompanyListPage = () => {
 		<Container>
 			<Box>
 				<SelectBox>
-					<label
-						htmlFor='semester-list'
-						className='inline-flex items-center gap-2 whitespace-nowrap text-base-content'>
+					<label htmlFor='semester-list' className='inline-flex items-center gap-2 whitespace-nowrap text-base-content'>
 						<CalendarDaysIcon className='h-6 w-6' /> Kỳ học
 					</label>
-					<Select
-						className='min-w-[12rem] capitalize sm:text-sm'
-						onChange={(e) => handleChangeSemester(e.target.value)}>
+					<Select className='min-w-[12rem] capitalize sm:text-sm' onChange={(e) => handleChangeSemester(e.target.value)}>
 						{Array.isArray(semester?.listSemesters) &&
 							semester?.listSemesters.map((item, index) => (
 								<Option value={item._id} key={index} selected={selectedSemesterId === item._id}>
@@ -370,7 +353,7 @@ const CompanyListPage = () => {
 	);
 };
 
-const ActionList = tw.div`flex items-stretch gap-1`;
+const ActionList = tw.div`flex justify-between`;
 const Container = tw.div`flex flex-col gap-6 h-full `;
 const Box = tw.div`flex items-center justify-between lg:flex-row-reverse`;
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
