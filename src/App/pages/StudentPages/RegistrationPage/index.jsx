@@ -36,7 +36,10 @@ const RegistrationPage = () => {
 	const { data: business } = useGetAllCompanyQuery();
 	const { data: majors } = useGetAllMajorQuery();
 	const { data: student } = useGetOneStudentQuery(user?.id);
-	const { data: times, isLoading } = useGetSetTimeQuery({ typeNumber: selectedOption || 0 }, { refetchOnMountOrArgChange: true });
+	const { data: times, isLoading } = useGetSetTimeQuery(
+		{ typeNumber: selectedOption || 0 },
+		{ refetchOnMountOrArgChange: true }
+	);
 
 	useEffect(() => {
 		if (times?.time) {
@@ -75,7 +78,14 @@ const RegistrationPage = () => {
 				)
 			},
 			{
-				content: <InputFieldControl label='Số điện thoại' control={control} name='phoneNumber' placeholder='Số điện thoại' />
+				content: (
+					<InputFieldControl
+						label='Số điện thoại'
+						control={control}
+						name='phoneNumber'
+						placeholder='Số điện thoại'
+					/>
+				)
 			},
 			{
 				content: <InputFieldControl label='Địa chỉ' control={control} name='address' placeholder='Địa chỉ' />
@@ -105,7 +115,8 @@ const RegistrationPage = () => {
 		];
 	}, []);
 
-	const deadlineCheck = deadline && deadline.endTime > new Date().getTime() && deadline.startTime < new Date().getTime();
+	const deadlineCheck =
+		deadline && deadline.endTime > new Date().getTime() && deadline.startTime < new Date().getTime();
 
 	const formElement = (
 		<>
@@ -116,7 +127,12 @@ const RegistrationPage = () => {
 						<RegistrationTypeCol>Kiểu đăng ký</RegistrationTypeCol>
 						{labelItems.map((item, index) => (
 							<LabelLayout key={index}>
-								<input type='radio' name='radio' defaultValue={item.value} onClick={() => handleChangeForm(item.value)} />
+								<input
+									type='radio'
+									name='radio'
+									defaultValue={item.value}
+									onClick={() => handleChangeForm(item.value)}
+								/>
 								<TitleForm>{item.label}</TitleForm>
 							</LabelLayout>
 						))}
@@ -124,9 +140,16 @@ const RegistrationPage = () => {
 
 					<Suspense fallback={<LoadingProgressBar />}>
 						{selectedOption == 1 && (
-							<FormSchoolSupport fields={sharedFields} business={business} selectedOption={selectedOption} user={student} />
+							<FormSchoolSupport
+								fields={sharedFields}
+								business={business}
+								selectedOption={selectedOption}
+								user={student}
+							/>
 						)}
-						{selectedOption == 0 && <FormSelfFinding fields={sharedFields} selectedOption={selectedOption} user={student} />}
+						{selectedOption == 0 && (
+							<FormSelfFinding fields={sharedFields} selectedOption={selectedOption} user={student} />
+						)}
 					</Suspense>
 				</>
 			)}

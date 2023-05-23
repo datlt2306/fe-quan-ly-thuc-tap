@@ -29,18 +29,24 @@ const DesktopSidebar = ({ navigation }) => {
 											return (
 												<>
 													<Disclosure.Button
-														className={classNames('z-10 flex w-full items-center justify-between p-2 text-gray-800 hover:bg-gray-100', {
-															'bg-gray-50': open
-														})}>
+														className={classNames(
+															'z-10 flex w-full items-center justify-between p-2 text-gray-800 hover:bg-gray-100',
+															{
+																'bg-gray-50': open
+															}
+														)}>
 														<span className='flex flex-1 items-center gap-2 text-gray-500'>
 															<item.icon className='h-6 w-6' />
 															{item.name}
 														</span>
 
 														<ChevronDownIcon
-															className={classNames('h-4 w-4 transform text-gray-500 duration-300 ease-in-out', {
-																'tranform rotate-180': open
-															})}
+															className={classNames(
+																'h-4 w-4 transform text-gray-500 duration-300 ease-in-out',
+																{
+																	'tranform rotate-180': open
+																}
+															)}
 														/>
 													</Disclosure.Button>
 													<Transition
@@ -57,7 +63,9 @@ const DesktopSidebar = ({ navigation }) => {
 																		<Menu.Item
 																			key={index}
 																			className='py-2 pl-10 pr-2 transition-[height_350ms_ease-in-out_transform] duration-300 hover:bg-gray-100 focus:active:bg-gray-100'>
-																			<NavLink to={child.path} className={({ isActive }) => navlinkClasses(isActive)}>
+																			<NavLink
+																				to={child.path}
+																				className={({ isActive }) => navlinkClasses(isActive)}>
 																				<child.icon className='h-5 w-5 ' /> {child.name}
 																			</NavLink>
 																		</Menu.Item>

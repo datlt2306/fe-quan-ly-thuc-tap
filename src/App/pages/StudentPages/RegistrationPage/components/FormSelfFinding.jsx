@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import tw from 'twin.macro';
-import { useUploadCvMutation } from '@/App/providers/apis/registerInternApi';
+import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
 import { formSignUpSelfFindingSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
@@ -24,16 +24,37 @@ const FormSelfFinding = ({ fields, selectedOption, user }) => {
 	const formSelfFinding = [
 		...fields(control),
 		{
-			content: <InputFieldControl label='Đơn vị thực tập' control={control} name='nameCompany' placeholder='Đơn vị thực tập/Tên doanh nghiệp' />
+			content: (
+				<InputFieldControl
+					label='Đơn vị thực tập'
+					control={control}
+					name='nameCompany'
+					placeholder='Đơn vị thực tập/Tên doanh nghiệp'
+				/>
+			)
 		},
 		{
-			content: <InputFieldControl label='Địa chỉ thực tập' control={control} name='addressCompany' placeholder='Địa chỉ đơn vị thực tập' />
+			content: (
+				<InputFieldControl
+					label='Địa chỉ thực tập'
+					control={control}
+					name='addressCompany'
+					placeholder='Địa chỉ đơn vị thực tập'
+				/>
+			)
 		},
 		{
 			content: <InputFieldControl label='Mã số thuế' control={control} name='taxCode' placeholder='Mã số thuế' />
 		},
 		{
-			content: <InputFieldControl label='Chức vụ người tiếp nhận' control={control} name='position' placeholder='Chức vụ người tiếp nhận' />
+			content: (
+				<InputFieldControl
+					label='Chức vụ người tiếp nhận'
+					control={control}
+					name='position'
+					placeholder='Chức vụ người tiếp nhận'
+				/>
+			)
 		},
 		{
 			content: (
@@ -46,7 +67,14 @@ const FormSelfFinding = ({ fields, selectedOption, user }) => {
 			)
 		},
 		{
-			content: <InputFieldControl label='Email người tiếp nhận' control={control} name='emailEnterprise' placeholder='Email người tiếp nhận' />
+			content: (
+				<InputFieldControl
+					label='Email người tiếp nhận'
+					control={control}
+					name='emailEnterprise'
+					placeholder='Email người tiếp nhận'
+				/>
+			)
 		}
 	];
 

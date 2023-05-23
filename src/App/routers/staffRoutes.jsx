@@ -1,7 +1,7 @@
 import { StaffPaths } from '@/Core/constants/routePaths';
 import { lazy } from 'react';
 import StaffPrivateLayout from '../layouts/PrivateLayout/StaffPrivateLayout';
-const ReviewPage = lazy(() => import('../pages/StaffPages/ReviewPage'));
+const ReviewPage = lazy(() => import('../pages/StaffPages/ReviewsPage'));
 const RegistrantionPage = lazy(() => import('../pages/StaffPages/RegistrantionTimePage'));
 const StudentListPage = lazy(() => import('../pages/StaffPages/StudentListPage'));
 const CompanyListPage = lazy(() => import('../pages/StaffPages/CompanyPages/CompanyListPage'));

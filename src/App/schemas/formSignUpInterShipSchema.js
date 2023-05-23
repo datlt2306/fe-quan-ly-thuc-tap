@@ -44,6 +44,11 @@ export const formSignUpSelfFindingSchema = yup.object().shape({
 		.required('Vui lòng nhập số điện thoại doanh nghiệp')
 		.default('')
 		.trim(),
-	emailEnterprise: yup.string().email('Email không hợp lệ').required('Vui lòng nhập email người tiếp nhận').default('').trim(),
+	emailEnterprise: yup
+		.string()
+		.email('Email không hợp lệ')
+		.required('Vui lòng nhập email người tiếp nhận')
+		.default('')
+		.trim(),
 	addressCompany: yup.string().required('Vui lòng nhập địa chỉ công ty').default('').trim()
 });
