@@ -185,7 +185,7 @@ const ReactTable = ({
 					<ButtonGroup>
 						<ButtonGroup.Item
 							variant={
-								(serverSidePagination ? serverPaginationProps.canPreviousPage : !canPreviousPage)
+								(serverSidePagination ? serverPaginationProps.canPreviousPage : canPreviousPage)
 									? 'ghost'
 									: 'disabled'
 							}
@@ -198,10 +198,9 @@ const ReactTable = ({
 							disabled={serverSidePagination ? !serverPaginationProps.canPreviousPage : !canPreviousPage}>
 							<ChevronDoubleLeftIcon className='h-4 w-4' aria-hidden='true' />
 						</ButtonGroup.Item>
-
 						<ButtonGroup.Item
 							variant={
-								(serverSidePagination ? serverPaginationProps.canPreviousPage : !canPreviousPage)
+								(serverSidePagination ? serverPaginationProps.canPreviousPage : canPreviousPage)
 									? 'ghost'
 									: 'disabled'
 							}
@@ -216,7 +215,7 @@ const ReactTable = ({
 						</ButtonGroup.Item>
 						<ButtonGroup.Item
 							variant={
-								(serverSidePagination ? serverPaginationProps.canNextPage : !canNextPage) ? 'ghost' : 'disabled'
+								(serverSidePagination ? serverPaginationProps.canNextPage : canNextPage) ? 'ghost' : 'disabled'
 							}
 							shape='square'
 							onClick={() => {
@@ -229,7 +228,7 @@ const ReactTable = ({
 						</ButtonGroup.Item>
 						<ButtonGroup.Item
 							variant={
-								(serverSidePagination ? serverPaginationProps.canNextPage : !canNextPage) ? 'ghost' : 'disabled'
+								(serverSidePagination ? serverPaginationProps.canNextPage : canNextPage) ? 'ghost' : 'disabled'
 							}
 							shape='square'
 							onClick={() => {
@@ -238,7 +237,7 @@ const ReactTable = ({
 											type: PaginationActionEnums.GO_TO_LAST_PAGE,
 											payload: serverPaginationProps?.totalPages
 									  })
-									: gotoPage(0);
+									: gotoPage(pageCount - 1);
 							}}
 							disabled={serverSidePagination ? !serverPaginationProps.canNextPage : !canNextPage}>
 							<ChevronDoubleRightIcon className='h-4 w-4' aria-hidden='true' />
