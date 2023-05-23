@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { RoleStaffEnum } from '@/App/constants/userRoles';
 import { useUpdateStaffMutation } from '@/App/providers/apis/staffListApi';
 import { staffDataValidator } from '@/App/schemas/staffSchema';
@@ -7,12 +6,12 @@ import InputFieldControl from '@/Core/components/common/FormControl/InputFieldCo
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import Modal from '@/Core/components/common/Modal';
-
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
+
 const UpdateStaffModal = ({ userData, onOpenStateChange, openState }) => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(staffDataValidator),

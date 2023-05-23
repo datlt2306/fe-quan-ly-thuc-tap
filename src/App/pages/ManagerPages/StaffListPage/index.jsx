@@ -6,29 +6,40 @@ import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
 import { PencilSquareIcon, TrashIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useMemo, useReducer, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import AddStaffSlideOver from './components/AddStaffSlideOver';
 import UpdateStaffModal from './components/UpdateStaffModal';
 import { RoleStaffEnum } from '@/App/constants/userRoles';
 import tw from 'twin.macro';
+import {
+	paginationInitialState,
+	paginationReducer
+} from '@/Core/components/common/Table/reducers/serverPaginationReducer';
 
 const StaffListPage = () => {
-	const { data: managers } = useGetAllStaffQuery();
 	const [isEditing, setIsEditing] = useState(false);
 	const [user, setUser] = useState();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const { reset } = useForm({
 		resolver: yupResolver(staffDataValidator)
 	});
+	const [serverPaginationState, dispatch] = useReducer(paginationReducer, paginationInitialState);
+	const { data } = useGetAllStaffQuery({
+		page: serverPaginationState?.pageIndex || paginationInitialState.pageIndex,
+		limit: serverPaginationState?.pageSize || paginationInitialState.pageSize
+	});
 
-	console.log(managers);
 	const tableData = useMemo(() => {
-		return Array.isArray(managers?.list)
-			? managers?.list?.map((user, index) => ({ ...user, index: index + 1, role: RoleStaffEnum[user?.role] }))
+		return Array.isArray(data?.list)
+			? data?.list?.map((user, index) => ({
+					...user,
+					index: index + 1,
+					role: RoleStaffEnum[user?.role]
+			  }))
 			: [];
-	}, [managers]);
+	}, [data]);
 
 	const [handleRemoveStaff] = useDeleteStaffMutation();
 
@@ -42,11 +53,11 @@ const StaffListPage = () => {
 	};
 
 	const onOpenUpdate = (data) => {
-		const selectedUser = Array.isArray(managers?.list) && managers?.list?.find((item) => item?._id === data);
+		const selectedUser = Array.isArray(tableData) && tableData?.find((item) => item?._id === data);
 		if (selectedUser) {
 			setUser(selectedUser);
-			setIsEditing(!isEditing);
 		}
+		setIsEditing(true);
 	};
 
 	const columnsData = useMemo(
@@ -136,7 +147,19 @@ const StaffListPage = () => {
 					</Button>
 				</ButtonList>
 
-				<ReactTable columns={columnsData} data={tableData} />
+				<ReactTable
+					columns={columnsData}
+					data={tableData}
+					serverSidePagination={true}
+					serverPaginationProps={{
+						...paginationInitialState,
+						pageIndex: data?.page,
+						totalPages: data?.totalPages,
+						canNextPage: data?.hasNextPage,
+						canPreviousPage: data?.hasPrevPage,
+						dispatch
+					}}
+				/>
 			</Box>
 		</Fragment>
 	);

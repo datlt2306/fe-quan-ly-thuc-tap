@@ -6,7 +6,7 @@ const staffListApi = createApi({
 	baseQuery: axiosBaseQuery(),
 	endpoints: (build) => ({
 		getAllStaff: build.query({
-			query: () => ({ url: '/manager', method: 'GET' }),
+			query: (params) => ({ url: '/manager', method: 'GET', params }),
 			providesTags: ['Manager']
 		}),
 		updateStaff: build.mutation({
