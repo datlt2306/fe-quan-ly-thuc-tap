@@ -1,34 +1,34 @@
-import { lazy, Suspense, useEffect } from "react";
-import { useSelector } from "react-redux";
-import tw from "twin.macro";
+import { lazy, Suspense, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import tw from 'twin.macro';
 
-import InputFieldControl from "@/Core/components/common/FormControl/InputFieldControl";
-import SelectFieldControl from "@/Core/components/common/FormControl/SelectFieldControl";
-import LoadingProgressBar from "@/Core/components/common/Loading/LoadingProgressBar";
-import { useCallback, useState } from "react";
-import CountdownTimer from "./components/CountdownTimer";
-import ExpiredNotice from "./components/ExpiredNotice";
-import { RegistrationType } from "./constants/RegistrationType";
+import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
+import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
+import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
+import { useCallback, useState } from 'react';
+import CountdownTimer from './components/CountdownTimer';
+import ExpiredNotice from './components/ExpiredNotice';
+import { RegistrationType } from './constants/RegistrationType';
 
-import { useGetAllCompanyQuery } from "@/App/providers/apis/businessApi";
-import { useGetSetTimeQuery } from "@/App/providers/apis/configTimesApi";
-import { useGetAllMajorQuery } from "@/App/providers/apis/majorApi";
-import { useGetOneStudentQuery } from "@/App/providers/apis/studentApi";
+import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
+import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
+import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
+import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 
 const Input = tw.input`block w-full rounded-md border-0 duration-300 px-2.5 py-1.5 text-gray-900 outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`;
 
-const FormSchoolSupport = lazy(() => import("./components/FormSchoolSupport"));
-const FormSelfFinding = lazy(() => import("./components/FormSelfFinding"));
+const FormSchoolSupport = lazy(() => import('./components/FormSchoolSupport'));
+const FormSelfFinding = lazy(() => import('./components/FormSelfFinding'));
 
 const labelItems = [
 	{
-		label: "Nhờ nhà trường hỗ trợ",
-		value: RegistrationType.SchoolSupport,
+		label: 'Nhờ nhà trường hỗ trợ',
+		value: RegistrationType.SchoolSupport
 	},
 	{
-		label: "Tự tìm nơi thực tập",
-		value: RegistrationType.SelfFinding,
-	},
+		label: 'Tự tìm nơi thực tập',
+		value: RegistrationType.SelfFinding
+	}
 ];
 
 const RegistrationPage = () => {
@@ -67,51 +67,51 @@ const RegistrationPage = () => {
 				content: (
 					<div>
 						<label>Họ và tên</label>
-						<Input className="mt-2" readOnly value={student?.name}></Input>
+						<Input className='mt-2' readOnly value={student?.name}></Input>
 					</div>
-				),
+				)
 			},
 			{
 				content: (
 					<div>
 						<label>Mã sinh viên</label>
-						<Input className="mt-2" readOnly value={student?.mssv}></Input>
+						<Input className='mt-2' readOnly value={student?.mssv}></Input>
 					</div>
-				),
+				)
 			},
 			{
-				content: <InputFieldControl label="Số điện thoại" control={control} name="phoneNumber" placeholder="Số điện thoại" />,
+				content: <InputFieldControl label='Số điện thoại' control={control} name='phoneNumber' placeholder='Số điện thoại' />
 			},
 			{
-				content: <InputFieldControl label="Địa chỉ" control={control} name="address" placeholder="Địa chỉ" />,
+				content: <InputFieldControl label='Địa chỉ' control={control} name='address' placeholder='Địa chỉ' />
 			},
 			{
 				content: (
 					<SelectFieldControl
-						label="Chuyên ngành"
-						className="w-full"
-						initialValue="Chọn chuyên ngành"
+						label='Chuyên ngành'
+						className='w-full'
+						initialValue='Chọn chuyên ngành'
 						control={control}
-						name="major"
+						name='major'
 						options={Array.isArray(majors) ? majors.map((item) => ({ value: item._id, label: item.name })) : []}
 					/>
-				),
+				)
 			},
 			{
 				content: (
 					<InputFieldControl
-						label="Vị trí thực tập"
+						label='Vị trí thực tập'
 						control={control}
-						name="dream"
-						placeholder="VD: Web Back-end, Dựng phim, Thiết kế nội thất"
+						name='dream'
+						placeholder='VD: Web Back-end, Dựng phim, Thiết kế nội thất'
 					/>
-				),
-			},
+				)
+			}
 		];
 	}, []);
 
 	const deadlineCheck = deadline && deadline.endTime > new Date().getTime() && deadline.startTime < new Date().getTime();
-	
+
 	if (isLoading) {
 		return <div>... Đang tải dữ liệu</div>;
 	}
@@ -125,7 +125,7 @@ const RegistrationPage = () => {
 						<RegistrationTypeCol>Kiểu đăng ký</RegistrationTypeCol>
 						{labelItems.map((item, index) => (
 							<LabelLayout key={index}>
-								<input type="radio" name="radio" defaultValue={item.value} onClick={() => handleChangeForm(item.value)} />
+								<input type='radio' name='radio' defaultValue={item.value} onClick={() => handleChangeForm(item.value)} />
 								<TitleForm>{item.label}</TitleForm>
 							</LabelLayout>
 						))}

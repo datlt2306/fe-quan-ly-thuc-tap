@@ -34,7 +34,7 @@ const SelectFieldControl = ({ initialValue = 'Chọn', control, name, label, opt
 				</label>
 			)}
 			<Select
-			{...props}
+				{...props}
 				onChange={(event) => {
 					field.onChange(event);
 					if (props.onChange) {

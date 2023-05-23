@@ -5,7 +5,7 @@ import Button from '@/Core/components/common/Button';
 import { InternSupportType } from '@/App/constants/studentStatus';
 import formatDate from '@/Core/utils/formatDate';
 
-const ViewForm = ({ data: user,nameMajor }) => {
+const ViewForm = ({ data: user, nameMajor }) => {
 	const dataViewForm = [
 		{
 			label: 'Kiểu đăng ký:',
