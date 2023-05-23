@@ -35,7 +35,11 @@ const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 					initialValue='Chọn doanh nghiệp'
 					control={control}
 					name='business'
-					options={Array.isArray(business?.list) ? business.list.map((item) => ({ value: item._id, label: item.name })) : []}
+					options={
+						Array.isArray(business?.list)
+							? business.list.map((item) => ({ value: item._id, label: item.name }))
+							: []
+					}
 				/>
 			)
 		}

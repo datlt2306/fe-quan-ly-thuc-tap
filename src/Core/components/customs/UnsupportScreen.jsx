@@ -1,8 +1,7 @@
-import React from 'react';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import tw from 'twin.macro';
 import Text from '../common/Text/Text';
 import Typography from '../common/Text/Typography';
-import { ExclamationTriangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 
 const UnsupportScreen = () => {
 	return (
@@ -12,7 +11,9 @@ const UnsupportScreen = () => {
 					<ExclamationTriangleIcon className='aspect-square w-8 text-error' />
 					<TextBox>
 						<Typography level={6}>Ooppsss! Some thing went wrong !</Typography>
-						<Text className='sm:text-sm'>Ứng dụng chưa hộ trợ màn hình này. Vui lòng sử dụng thiết bị có tỉ lệ màn hình lớn hơn.</Text>
+						<Text className='sm:text-sm'>
+							Ứng dụng chưa hộ trợ màn hình này. Vui lòng sử dụng thiết bị có tỉ lệ màn hình lớn hơn.
+						</Text>
 					</TextBox>
 				</Content>
 			</Box>

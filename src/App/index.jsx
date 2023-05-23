@@ -1,5 +1,10 @@
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
-import { CheckCircleIcon, ExclamationTriangleIcon, InformationCircleIcon, XCircleIcon } from '@heroicons/react/20/solid';
+import {
+	CheckCircleIcon,
+	ExclamationTriangleIcon,
+	InformationCircleIcon,
+	XCircleIcon
+} from '@heroicons/react/20/solid';
 import { Fragment } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Slide, ToastContainer } from 'react-toastify';

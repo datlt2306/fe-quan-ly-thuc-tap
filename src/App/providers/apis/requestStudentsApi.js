@@ -28,7 +28,11 @@ const requestStudentsApi = createApi({
 	})
 });
 
-export const { useRequestOfStudentMutation, useRemoveRequestApiMutation, useResetStudentRequestMutation, useGetRequestOfStudentQuery } =
-	requestStudentsApi;
+export const {
+	useRequestOfStudentMutation,
+	useRemoveRequestApiMutation,
+	useResetStudentRequestMutation,
+	useGetRequestOfStudentQuery
+} = requestStudentsApi;
 
 export default requestStudentsApi;
