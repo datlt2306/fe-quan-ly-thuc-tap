@@ -1,7 +1,9 @@
 import { StaffPaths } from '@/Core/constants/routePaths';
 import { lazy } from 'react';
 import StaffPrivateLayout from '../layouts/PrivateLayout/StaffPrivateLayout';
-const ReviewPage = lazy(() => import('../pages/StaffPages/ReviewsPage'));
+const ReviewCvPage = lazy(() => import('../pages/StaffPages/ReviewsPage/ReviewCvPage'));
+const ReviewReportPage = lazy(() => import('../pages/StaffPages/ReviewsPage/ReviewReportPage'));
+const ReviewRecordPage = lazy(() => import('../pages/StaffPages/ReviewsPage/ReviewRecordPage'));
 const RegistrantionPage = lazy(() => import('../pages/StaffPages/RegistrantionTimePage'));
 const StudentListPage = lazy(() => import('../pages/StaffPages/StudentListPage'));
 const CompanyListPage = lazy(() => import('../pages/StaffPages/CompanyPages/CompanyListPage'));
@@ -52,10 +54,26 @@ const staffRoutes = [
 		)
 	},
 	{
-		path: StaffPaths.REVIEWS,
+		path: StaffPaths.REVIEW_CV,
 		element: (
 			<StaffPrivateLayout>
-				<ReviewPage />
+				<ReviewCvPage />
+			</StaffPrivateLayout>
+		)
+	},
+	{
+		path: StaffPaths.REVIEW_REPORT,
+		element: (
+			<StaffPrivateLayout>
+				<ReviewReportPage />
+			</StaffPrivateLayout>
+		)
+	},
+	{
+		path: StaffPaths.REVIEW_RECORD,
+		element: (
+			<StaffPrivateLayout>
+				<ReviewRecordPage />
 			</StaffPrivateLayout>
 		)
 	},

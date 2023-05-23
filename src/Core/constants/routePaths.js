@@ -34,7 +34,9 @@ const StaffPaths = {
 	COMPANY_ADD: '/them-moi-cong-ty',
 	COMPANY_UPDATE: '/cap-nhat-cong-ty/:id',
 	STUDENT_LIST: '/danh-sach-sinh-vien',
-	REVIEWS: '/review-cv',
+	REVIEW_CV: '/review-cv',
+	REVIEW_REPORT: '/review-bao-cao',
+	REVIEW_RECORD: '/review-bien-ban',
 	SEMESTER: '/ky-hoc',
 	REGISTRATION_TIME: '/thoi-gian-dang-ky',
 	STUDENT_REQUESTS: '/yeu-cau-sinh-vien'
