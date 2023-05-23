@@ -2,22 +2,25 @@ import { useUploadFormMutation } from '@/App/providers/apis/reportApi';
 import { recordSchema } from '@/App/schemas/recordSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
+import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 
 const RecordPage = () => {
 	const navigate = useNavigate();
 
 	const { user } = useSelector((state) => state.auth);
+	const {data} = useGetOneStudentQuery(user?.id);
 
 	const [selectFile, setSelectFile] = useState(null);
 	const [validateFile, setValidateFile] = useState('');
 
-	const [handleSubmitForm] = useUploadFormMutation();
+	const [handleSubmitForm, { isLoading }] = useUploadFormMutation();
 
 	const fileInputRef = useRef(null);
 
@@ -44,29 +47,40 @@ const RecordPage = () => {
 			setSelectFile(e.target.files[0]);
 		}
 	};
-	const onSubmit = async (value) => {
+	const handleSubmitRecord = async (value) => {
+		const file = selectFile;
+		const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'docx'];
+		const fileName = file.name;
+		const fileExtension = fileName.split('.').pop().toLowerCase();
+		if (!allowedExtensions.includes(fileExtension)) {
+			return;
+		}
 		const formData = new FormData();
 		formData.append('file', selectFile);
 		formData.append('nameCompany', value.nameCompany);
 		formData.append('internshipTime', value.date);
-		formData.append('mssv', user.mssv);
-		formData.append('email', user.email);
-		formData.append('_id', user.id);
-		formData.append('typeNumber', 0);
-		console.log(formData)
+		formData.append('mssv', data.mssv);
+		formData.append('email', data.email);
+		formData.append('_id', data.id);
+		formData.append('typeNumber', 2);
 		const result = await handleSubmitForm(formData);
-		console.log(result);
-		// navigate('/');
+		if (result?.error) {
+			toast.error("Nộp biên bản thất bại!");
+			navigate('/');
+			return;
+		}
+		toast.success("Nộp biên bản thành công");
+		navigate('/');
 	};
 	return (
 		<Container>
 			<Title>Nộp biên bản</Title>
-			<Form onSubmit={handleSubmit(onSubmit)}>
+			<Form onSubmit={handleSubmit(handleSubmitRecord)}>
 				<Info>
-					Mã sinh viên: <Span>{user && user?.mssv}</Span>
+					Mã sinh viên: <Span>{data && data?.mssv}</Span>
 				</Info>
 				<Info>
-					Họ và tên: <Span>{user && user?.displayName}</Span>
+					Họ và tên: <Span>{data && data?.name}</Span>
 				</Info>
 				<InputFieldControl label='Tên doanh nghiệp' placeholder='Tên doanh nghiệp ...' control={control} name='nameCompany' />
 				<InputFieldControl label='Thời gian bắt đầu thực tập' control={control} name='date' type='date' />
@@ -79,8 +93,8 @@ const RecordPage = () => {
 					onChange={handleChange}
 				/>
 				<Error>{validateFile}</Error>
-				<Button variant='primary' type='submit'>
-					Nộp biên bản
+				<Button variant='primary' type='submit' disabled={isLoading}>
+					{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp biên bản
 				</Button>
 			</Form>
 		</Container>

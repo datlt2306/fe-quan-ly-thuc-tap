@@ -36,8 +36,6 @@ const authSlice = createSlice({
 				isSignedIn: payload.success,
 				user: {
 					id: payload.student?._id,
-					mssv: payload.student?.mssv,
-					campus: payload.manager?.campus_id,
 					displayName: payload.name,
 					email: payload.student?.email,
 					picture: payload.picture,

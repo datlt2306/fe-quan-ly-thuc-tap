@@ -7,7 +7,8 @@ const reportApi = createApi({
 	tagTypes: ['Report'],
 	endpoints: (build) => ({
 		uploadForm: build.mutation({
-			query: (payload) => ({ url: '/form', method: 'PATCH', data: payload })
+			query: (payload) => ({ url: '/upload/form', method: 'PATCH', data: payload }),
+			invalidatesTags: ['Report']
 		})
 	})
 });
