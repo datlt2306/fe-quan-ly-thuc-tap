@@ -48,17 +48,26 @@ const StudentInfoPage = () => {
 		},
 		{
 			label: 'Công ty đã chọn :',
-			value: data?.support === 1 ? data?.business?.name : data?.support === 0 ? data?.nameCompany : 'Chưa có thông tin'
+			value:
+				data?.support === 1 ? data?.business?.name : data?.support === 0 ? data?.nameCompany : 'Chưa có thông tin'
 		},
 		{
 			label: 'Trạng thái sinh viên :',
-			value: <>{<span className={`text-${handleGetInternStatusStyle(data?.statusCheck)}`}>{StudentStatusEnum[data?.statusCheck]}</span>}</>
+			value: (
+				<>
+					{
+						<span className={`text-${handleGetInternStatusStyle(data?.statusCheck)}`}>
+							{StudentStatusEnum[data?.statusCheck]}
+						</span>
+					}
+				</>
+			)
 		}
 	];
 
 	const formSubmittedRoute = [
 		{
-			condition: data?.CV,
+			condition: data?.CV || data?.nameCompany,
 			label: 'Form Đăng ký Thực Tập',
 			content: <ViewCv setOpenState={setOpenState} data={data} nameMajor={nameMajor} />
 		},
@@ -92,9 +101,13 @@ const StudentInfoPage = () => {
 					<Title>Các Form Đã Nộp</Title>
 					<WrapMenu>
 						<Menu>
-							{!(data?.CV || data?.form || data?.report) && <div className='font-medium'>Chưa có form nào được nộp</div>}
+							{!(data?.CV || data?.form || data?.report || data?.nameCompany) && (
+								<div className='font-medium'>Chưa có form nào được nộp</div>
+							)}
 							{formSubmittedRoute.map((item) => (
-								<Menu.Item key={item.label} className='w-full  rounded-md p-3 text-start hover:bg-gray-100  hover:text-primary'>
+								<Menu.Item
+									key={item.label}
+									className='w-full  rounded-md p-3 text-start hover:bg-gray-100  hover:text-primary'>
 									<>
 										{item.condition && (
 											<Button

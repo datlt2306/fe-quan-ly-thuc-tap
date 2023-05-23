@@ -1,6 +1,11 @@
 import Button from '@/Core/components/common/Button';
 import { Menu, Transition } from '@headlessui/react';
-import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import {
+	ArrowDownTrayIcon,
+	DocumentArrowDownIcon,
+	DocumentArrowUpIcon,
+	EllipsisHorizontalIcon
+} from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { Fragment, forwardRef, useRef } from 'react';
 import { studentListSampleData } from '../mocks';
@@ -42,13 +47,22 @@ const MobileDropdownButtonGroup = ({ tableData, handleImport, handleExport, canI
 							})
 						].join(' ')}>
 						<DocumentArrowUpIcon className='h-5 w-5 text-[inherit]' /> Tải lên file Excel
-						<input ref={fileInputRef} type='file' id='file-input' className='hidden' onChange={(e) => handleImport(e.target.files[0])} />
+						<input
+							ref={fileInputRef}
+							type='file'
+							id='file-input'
+							className='hidden'
+							onChange={(e) => handleImport(e.target.files[0])}
+						/>
 					</Menu.Item>
 					<Menu.Item as='button' className={getMenuItemClassNames()} onClick={() => handleExport(tableData)}>
 						<DocumentArrowDownIcon className='h-5 w-5 text-[inherit]' />
 						Export file Excel
 					</Menu.Item>
-					<Menu.Item as='button' className={getMenuItemClassNames()} onClick={() => handleExportFile(studentListSampleData)}>
+					<Menu.Item
+						as='button'
+						className={getMenuItemClassNames()}
+						onClick={() => handleExportFile(studentListSampleData)}>
 						<ArrowDownTrayIcon className='h-5 w-5 text-[inherit]' />
 						Tải file mẫu
 					</Menu.Item>

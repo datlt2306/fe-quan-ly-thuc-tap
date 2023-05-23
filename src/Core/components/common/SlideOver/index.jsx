@@ -37,7 +37,11 @@ export default function SlideOver({ open, onOpen, children, panelTitle }) {
 													{panelTitle || 'Panel title'}
 												</Dialog.Title>
 												<div className='ml-3 flex h-7 items-center'>
-													<Button type='button' shape='circle' variant='ghost' onClick={() => onOpen(false)}>
+													<Button
+														type='button'
+														shape='circle'
+														variant='ghost'
+														onClick={() => onOpen(false)}>
 														<XMarkIcon className='h-4 w-4' aria-hidden='true' />
 													</Button>
 												</div>

@@ -41,10 +41,25 @@ const AddBusinessForm = () => {
 			<Title>Thêm Mới Doanh Nghiệp</Title>
 			<Flex>
 				<FlexLetf>
-					<InputFieldControl control={control} name='name' label='Tên Doanh Nghiệp' placeholder='Công ty TNHH ...' />
+					<InputFieldControl
+						control={control}
+						name='name'
+						label='Tên Doanh Nghiệp'
+						placeholder='Công ty TNHH ...'
+					/>
 					<InputFieldControl control={control} name='tax_code' label='Mã Số Thuế' placeholder='0123456789 ...' />
-					<InputFieldControl control={control} name='business_code' label='Mã Doanh Nghiệp' placeholder='TT01 ...' />
-					<InputFieldControl control={control} name='internship_position' label='Vị Trí Thực Tập' placeholder='Intern ...' />
+					<InputFieldControl
+						control={control}
+						name='business_code'
+						label='Mã Doanh Nghiệp'
+						placeholder='TT01 ...'
+					/>
+					<InputFieldControl
+						control={control}
+						name='internship_position'
+						label='Vị Trí Thực Tập'
+						placeholder='Intern ...'
+					/>
 					<InputFieldControl control={control} name='amount' label='Số Lượng' placeholder='Số ...' type='number' />
 					<SelectFieldControl
 						name='major'
@@ -60,9 +75,19 @@ const AddBusinessForm = () => {
 					</Desktop>
 				</FlexLetf>
 				<FlexRight>
-					<TextareaFieldControl control={control} name='requirement' label='Yêu Cầu' placeholder='Sinh viên đi thực tập ...' />
+					<TextareaFieldControl
+						control={control}
+						name='requirement'
+						label='Yêu Cầu'
+						placeholder='Sinh viên đi thực tập ...'
+					/>
 
-					<TextareaFieldControl control={control} name='description' label='Mô tả' placeholder='Trách nghiệm, nhiệt tình ...' />
+					<TextareaFieldControl
+						control={control}
+						name='description'
+						label='Mô tả'
+						placeholder='Trách nghiệm, nhiệt tình ...'
+					/>
 
 					<TextareaFieldControl control={control} name='benefit' label='Quyền Lợi' placeholder='Có cơ hội ...' />
 				</FlexRight>
@@ -76,10 +101,10 @@ const AddBusinessForm = () => {
 	);
 };
 
-const Form = tw.form`px-8`;
-const Flex = tw.div`flex flex-row sm:grid resize-none`;
-const FlexLetf = tw.div`grid grid-cols-1 gap-4 grow m-4 h-[600px] lg:sticky top-[100px]`;
-const FlexRight = tw.div`grid grid-cols-1 gap-4 grow m-4`;
+const Form = tw.form``;
+const Flex = tw.div`grid grid-cols-2 gap-8 sm:grid-cols-1 resize-none`;
+const FlexLetf = tw.div`grid grid-cols-1 gap-4 grow h-[600px] lg:sticky top-[100px]`;
+const FlexRight = tw.div`grid grid-cols-1 gap-4 grow`;
 const Desktop = tw.div`self-center mt-4 sm:hidden`;
 const Mobile = tw.div`self-center mt-4 hidden sm:block`;
 const Title = tw.div`mb-8 text-primary text-xl font-bold`;

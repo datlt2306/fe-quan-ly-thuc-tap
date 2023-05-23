@@ -1,8 +1,8 @@
 import { StaffPaths } from '@/Core/constants/routePaths';
 import { lazy } from 'react';
 import StaffPrivateLayout from '../layouts/PrivateLayout/StaffPrivateLayout';
-const ReviewPage = lazy(() => import('../pages/StaffPages/ReviewPage'));
-const RegistrationPage = lazy(() => import('../pages/StudentPages/RegistrationPage'));
+const ReviewPage = lazy(() => import('../pages/StaffPages/ReviewsPage'));
+const RegistrantionPage = lazy(() => import('../pages/StaffPages/RegistrantionTimePage'));
 const StudentListPage = lazy(() => import('../pages/StaffPages/StudentListPage'));
 const CompanyListPage = lazy(() => import('../pages/StaffPages/CompanyPages/CompanyListPage'));
 const CompanyAddPage = lazy(() => import('../pages/StaffPages/CompanyPages/CompanyAddPage'));
@@ -47,7 +47,7 @@ const staffRoutes = [
 		path: StaffPaths.REGISTRATION_TIME,
 		element: (
 			<StaffPrivateLayout>
-				<RegistrationPage />
+				<RegistrantionPage />
 			</StaffPrivateLayout>
 		)
 	},

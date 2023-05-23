@@ -9,6 +9,7 @@ import DesktopSidebar from './components/DesktopSidebar';
 import MobileSidebar from './components/MobileSidebar';
 import Navbar from './components/Navbar';
 import { managerNavigation, staffNavigation, studentNavigation } from './constants/navigationConstants';
+import UnsupportScreen from '@/Core/components/customs/UnsupportScreen';
 
 const Page = memo(Outlet);
 
@@ -31,6 +32,7 @@ const MainLayout = () => {
 
 	return (
 		<Fragment>
+			<UnsupportScreen />
 			{/* Drawer menu on mobile */}
 			<MobileSidebar isOpen={sidebarOpen} onToggleSidebar={setSidebarOpen} navigation={navigation} />
 			{/* Static sidebar for desktop */}

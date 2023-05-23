@@ -12,11 +12,16 @@ import requestStudentsApi from './apis/requestStudentsApi';
 import studentApi from './apis/studentApi';
 import majorApi from './apis/majorApi';
 import staffListApi from './apis/staffListApi';
+<<<<<<< HEAD
 import reportApi from './apis/reportApi';
+=======
+import registerInternApi from './apis/internRegistrationApi';
+>>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 
 const persistConfig = {
 	key: 'root',
-	storage
+	storage,
+	whitelist: ['auth', 'campus']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer); // Provide a way to combine redux's root reducer
@@ -42,8 +47,13 @@ const store = configureStore({
 			studentApi.middleware,
 			majorApi.middleware,
 			staffListApi.middleware,
+<<<<<<< HEAD
 			reportApi.middleware
 		]),
+=======
+			registerInternApi.middleware
+		])
+>>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 });
 
 export const persistor = persistStore(store); // Save every thing of redux store in localstorage

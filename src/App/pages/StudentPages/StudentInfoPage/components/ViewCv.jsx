@@ -9,9 +9,10 @@ import { useState } from 'react';
 import { useRequestOfStudentMutation } from '@/App/providers/apis/requestStudentsApi';
 import { toast } from 'react-toastify';
 import { VerticalList } from '..';
-import TextAreaFieldControl from '@/Core/components/common/FormControl/TextAreaFieldControl';
+
 import { InternSupportType } from '@/App/constants/studentStatus';
 import tw from 'twin.macro';
+import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
 const ItemValue = tw.p`font-medium`;
 const ViewCv = ({ data, setOpenState, nameMajor }) => {
 	const [open, setOpen] = useState(false);
@@ -101,7 +102,7 @@ const ViewCv = ({ data, setOpenState, nameMajor }) => {
 				<form onSubmit={handleSubmit(onSubmit)}>
 					{open && (
 						<>
-							<TextAreaFieldControl control={control} name='description' />
+							<TextareaFieldControl control={control} name='description' />
 							<div className='mt-2 flex justify-between'>
 								<Button
 									variant='error'

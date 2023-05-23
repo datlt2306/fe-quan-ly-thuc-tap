@@ -16,7 +16,7 @@ module.exports = {
 		'prettier/prettier': [
 			'warn',
 			{
-				printWidth: 150,
+				printWidth: 120,
 				useTabs: true,
 				bracketSameLine: true,
 				jsxSingleQuote: true,
