@@ -12,10 +12,12 @@ export default function axiosBaseQuery() {
 			});
 			return { data: response };
 		} catch (error) {
+			const axiosError = error;
 			return {
-				status: error.response?.status,
-				data: error.response?.data || error.message,
-				error: !!error
+				error: {
+					status: axiosError.response.data?.status,
+					data: axiosError.response?.data || error.message
+				}
 			};
 		}
 	};
