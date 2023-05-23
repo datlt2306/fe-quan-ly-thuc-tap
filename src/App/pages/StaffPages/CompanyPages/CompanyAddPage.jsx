@@ -41,10 +41,25 @@ const AddBusinessForm = () => {
 			<Title>Thêm Mới Doanh Nghiệp</Title>
 			<Flex>
 				<FlexLetf>
-					<InputFieldControl control={control} name='name' label='Tên Doanh Nghiệp' placeholder='Công ty TNHH ...' />
+					<InputFieldControl
+						control={control}
+						name='name'
+						label='Tên Doanh Nghiệp'
+						placeholder='Công ty TNHH ...'
+					/>
 					<InputFieldControl control={control} name='tax_code' label='Mã Số Thuế' placeholder='0123456789 ...' />
-					<InputFieldControl control={control} name='business_code' label='Mã Doanh Nghiệp' placeholder='TT01 ...' />
-					<InputFieldControl control={control} name='internship_position' label='Vị Trí Thực Tập' placeholder='Intern ...' />
+					<InputFieldControl
+						control={control}
+						name='business_code'
+						label='Mã Doanh Nghiệp'
+						placeholder='TT01 ...'
+					/>
+					<InputFieldControl
+						control={control}
+						name='internship_position'
+						label='Vị Trí Thực Tập'
+						placeholder='Intern ...'
+					/>
 					<InputFieldControl control={control} name='amount' label='Số Lượng' placeholder='Số ...' type='number' />
 					<SelectFieldControl
 						name='major'
@@ -60,9 +75,19 @@ const AddBusinessForm = () => {
 					</Desktop>
 				</FlexLetf>
 				<FlexRight>
-					<TextareaFieldControl control={control} name='requirement' label='Yêu Cầu' placeholder='Sinh viên đi thực tập ...' />
+					<TextareaFieldControl
+						control={control}
+						name='requirement'
+						label='Yêu Cầu'
+						placeholder='Sinh viên đi thực tập ...'
+					/>
 
-					<TextareaFieldControl control={control} name='description' label='Mô tả' placeholder='Trách nghiệm, nhiệt tình ...' />
+					<TextareaFieldControl
+						control={control}
+						name='description'
+						label='Mô tả'
+						placeholder='Trách nghiệm, nhiệt tình ...'
+					/>
 
 					<TextareaFieldControl control={control} name='benefit' label='Quyền Lợi' placeholder='Có cơ hội ...' />
 				</FlexRight>

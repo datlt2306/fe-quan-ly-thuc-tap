@@ -4,7 +4,7 @@ import businessApi from './apis/businessApi';
 import campusApi from './apis/campusApi';
 import configTimesApi from './apis/configTimesApi';
 import majorApi from './apis/majorApi';
-
+import registerInternApi from './apis/internRegistrationApi';
 import requestStudentsApi from './apis/requestStudentsApi';
 import semesterApi from './apis/semesterApi';
 import staffListApi from './apis/staffListApi';
