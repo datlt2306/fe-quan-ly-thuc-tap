@@ -72,12 +72,12 @@ const SelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows,
 	const options = useMemo(() => {
 		const options = new Set();
 		preFilteredRows.forEach((row) => {
-			options.add(row.values[id]);
+			if (row.values[id]) options.add(row.values[id]);
 		});
 		return [...options.values()];
 	}, [id, preFilteredRows]);
 	return (
-		<Popover className='relative inline-block text-left' as='div'>
+		<Popover className='relative inline-block text-left text-base-content' as='div'>
 			{({ open }) => (
 				<Fragment>
 					<Popover.Button as='div'>
@@ -95,15 +95,15 @@ const SelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows,
 						leaveTo='transform opacity-0 scale-95'>
 						<Popover.Panel className='absolute left-0 right-0 top-8 z-10 w-[160px] rounded-md shadow-lg'>
 							<Select
-								className='min-w-[160px] py-1 text-sm'
+								className='min-w-[180px] py-1 text-sm'
 								value={filterValue}
 								onChange={(e) => {
 									setFilter(e.target.value || undefined);
 								}}>
 								<Option value=''>All</Option>
-								{options.map((option, i) => (
-									<Option key={i} value={option}>
-										{customOptions ? customOptions[option] : option}
+								{options.map((option, index) => (
+									<Option key={index} value={option}>
+										{option}
 									</Option>
 								))}
 							</Select>

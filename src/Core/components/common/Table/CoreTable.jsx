@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { LoadingSpinner } from '../Loading/LoadingSpinner';
+import { Skeleton } from '../../customs/Skelton';
 
 const Table = ({ children, ...props }) => (
 	<table {...props} className='table w-full'>
@@ -30,13 +31,19 @@ const Empty = () => (
 	</Table.Row>
 );
 
-const PendingRow = () => (
-	<Table.Row>
-		<Table.Cell className='flex items-center gap-2 text-center text-lg text-disabled'>
-			<LoadingSpinner size='sm' variant='primary' /> Đang tải dữ liệu
-		</Table.Cell>
-	</Table.Row>
-);
+const PendingRow = ({ numOfCols }) => {
+	const preRenderCells = Array.apply(null, Array(numOfCols)).map((x, i) => i);
+	const preRenderRows = Array.apply(null, Array(5)).map((x, i) => i);
+	return preRenderRows.map((_row) => (
+		<Table.Row>
+			{preRenderCells.map((_cell) => (
+				<Table.Cell>
+					<Skeleton />
+				</Table.Cell>
+			))}
+		</Table.Row>
+	));
+};
 
 Table.Header = Header;
 Table.Body = Body;

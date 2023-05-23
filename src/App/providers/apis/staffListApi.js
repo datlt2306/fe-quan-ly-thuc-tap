@@ -2,11 +2,11 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import axiosBaseQuery from '../axiosBaseQuery';
 
 const staffListApi = createApi({
-	reducerPath: 'manager',
+	reducerPath: 'managerApi',
 	baseQuery: axiosBaseQuery(),
 	endpoints: (build) => ({
 		getAllStaff: build.query({
-			query: () => ({ url: '/manager', method: 'GET' }),
+			query: (params) => ({ url: '/manager', method: 'GET', params }),
 			providesTags: ['Manager']
 		}),
 		updateStaff: build.mutation({
@@ -30,6 +30,7 @@ const staffListApi = createApi({
 	})
 });
 
-export const { useGetAllStaffQuery, useUpdateStaffMutation, useAddStaffMutation, useDeleteStaffMutation } = staffListApi;
+export const { useGetAllStaffQuery, useUpdateStaffMutation, useAddStaffMutation, useDeleteStaffMutation } =
+	staffListApi;
 
 export default staffListApi;

@@ -27,7 +27,12 @@ const Navbar = ({ onToggleSidebar, navigation }) => {
 	return (
 		<StickyHeader>
 			<NavbarStart>
-				<Button variant='ghost' shape='square' size='sm' className='hidden sm:inline-flex md:inline-flex' onClick={() => onToggleSidebar(true)}>
+				<Button
+					variant='ghost'
+					shape='square'
+					size='sm'
+					className='hidden sm:inline-flex md:inline-flex'
+					onClick={() => onToggleSidebar(true)}>
 					<Bars3Icon className='h-5 w-5' aria-hidden='true' />
 				</Button>
 
@@ -57,7 +62,9 @@ const Navbar = ({ onToggleSidebar, navigation }) => {
 					<Popover.Panel
 						className='group absolute right-0 z-10 mt-2.5 flex w-fit origin-top-right cursor-pointer flex-col gap-1 rounded-md bg-white p-1 shadow-lg ring-1 ring-gray-900/5 focus:outline-none'
 						as='ul'>
-						<li className='flex items-center gap-2 whitespace-nowrap p-2 hover:bg-gray-100' onClick={handleSignout}>
+						<li
+							className='flex items-center gap-2 whitespace-nowrap p-2 hover:bg-gray-100'
+							onClick={handleSignout}>
 							<ArrowLeftOnRectangleIcon className='h-5 w-5 text-gray-700' /> Đăng xuất
 						</li>
 					</Popover.Panel>

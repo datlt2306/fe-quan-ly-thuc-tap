@@ -1,10 +1,11 @@
+import classNames from 'classnames';
 import { forwardRef, useId, useRef } from 'react';
 import { useController } from 'react-hook-form';
 import tw from 'twin.macro';
 
 const FormControl = tw.div`flex items-center gap-6`;
 
-export const Checkbox = forwardRef(({ onChange: handleChange, ...props }, ref) => {
+export const Checkbox = forwardRef(({ onChange: handleChange, disabled, ...props }, ref) => {
 	const localRef = useRef(null);
 	const checkboxRef = ref || localRef;
 	return (
@@ -15,7 +16,10 @@ export const Checkbox = forwardRef(({ onChange: handleChange, ...props }, ref) =
 			aria-describedby='comments-description'
 			name='comments'
 			type='checkbox'
-			tw='h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary duration-100'
+			disabled={disabled}
+			className={classNames(`h-4 w-4 rounded border-gray-300 text-primary duration-100 focus:ring-primary`, {
+				'bg-disabled/20': disabled
+			})}
 		/>
 	);
 });
