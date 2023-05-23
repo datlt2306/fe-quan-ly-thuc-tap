@@ -16,9 +16,10 @@ import tw from 'twin.macro';
 import Button from '../Button';
 import ButtonGroup from '../Button/ButtonGroup';
 import { Option, Select } from '../FormControl/SelectFieldControl';
+import Text from '../Text/Text';
 import Table from './CoreTable';
 import { GlobalFilter, InputColumnFilter } from './ReactTableFilters';
-import Text from '../Text/Text';
+import { PaginationActionEnums } from './reducers/serverPaginationReducer';
 
 /**
  *
@@ -33,7 +34,14 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
-const ReactTable = ({ columns, data, manualPagination, onGetSelectedRows: handleGetSelectedRows, loading }) => {
+const ReactTable = ({
+	columns,
+	data,
+	serverSidePagination,
+	serverPaginationProps,
+	onGetSelectedRows: handleGetSelectedRows,
+	loading
+}) => {
 	const isEmptyData = useMemo(() => Array.isArray(data) && data.length > 0, [data]);
 	const filterTypes = useMemo(
 		() => ({
@@ -79,7 +87,7 @@ const ReactTable = ({ columns, data, manualPagination, onGetSelectedRows: handle
 			columns,
 			data,
 			defaultColumn,
-			manualPagination,
+			manualPagination: serverSidePagination,
 			filterTypes
 		},
 		useFilters,
@@ -93,6 +101,7 @@ const ReactTable = ({ columns, data, manualPagination, onGetSelectedRows: handle
 		if (handleGetSelectedRows) handleGetSelectedRows(selectedFlatRows.map((d) => d.original));
 	}, [selectedFlatRows]);
 
+	console.log(serverPaginationProps);
 	return (
 		<Wrapper>
 			{/* Global search  */}
@@ -175,40 +184,63 @@ const ReactTable = ({ columns, data, manualPagination, onGetSelectedRows: handle
 				<Footer.Item>
 					<ButtonGroup>
 						<ButtonGroup.Item
-							variant={canPreviousPage ? 'ghost' : 'disabled'}
+							variant={
+								(serverSidePagination ? serverPaginationProps.canPreviousPage : !canPreviousPage)
+									? 'ghost'
+									: 'disabled'
+							}
 							shape='square'
 							onClick={() => {
-								gotoPage(0);
+								serverSidePagination
+									? serverPaginationProps.dispatch({ type: PaginationActionEnums.GO_TO_FIRST_PAGE })
+									: gotoPage(0);
 							}}
-							disabled={!canPreviousPage}>
+							disabled={serverSidePagination ? !serverPaginationProps.canPreviousPage : !canPreviousPage}>
 							<ChevronDoubleLeftIcon className='h-4 w-4' aria-hidden='true' />
 						</ButtonGroup.Item>
 
 						<ButtonGroup.Item
-							variant={canPreviousPage ? 'ghost' : 'disabled'}
+							variant={
+								(serverSidePagination ? serverPaginationProps.canPreviousPage : !canPreviousPage)
+									? 'ghost'
+									: 'disabled'
+							}
 							shape='square'
 							onClick={() => {
-								previousPage();
+								serverSidePagination
+									? serverPaginationProps?.dispatch({ type: PaginationActionEnums.GO_TO_PREV_PAGE })
+									: previousPage();
 							}}
-							disabled={!canPreviousPage}>
+							disabled={serverSidePagination ? !serverPaginationProps.canPreviousPage : !canPreviousPage}>
 							<ChevronLeftIcon className='h-4 w-4' aria-hidden='true' />
 						</ButtonGroup.Item>
 						<ButtonGroup.Item
-							variant={canNextPage ? 'ghost' : 'disabled'}
+							variant={
+								(serverSidePagination ? serverPaginationProps.canNextPage : !canNextPage) ? 'ghost' : 'disabled'
+							}
 							shape='square'
 							onClick={() => {
-								nextPage();
+								serverSidePagination
+									? serverPaginationProps.dispatch({ type: PaginationActionEnums.GO_TO_NEXT_PAGE })
+									: nextPage();
 							}}
-							disabled={!canNextPage}>
+							disabled={serverSidePagination ? !serverPaginationProps.canNextPage : !canNextPage}>
 							<ChevronRightIcon className='h-4 w-4' aria-hidden='true' />
 						</ButtonGroup.Item>
 						<ButtonGroup.Item
-							variant={canNextPage ? 'ghost' : 'disabled'}
+							variant={
+								(serverSidePagination ? serverPaginationProps.canNextPage : !canNextPage) ? 'ghost' : 'disabled'
+							}
 							shape='square'
 							onClick={() => {
-								gotoPage(pageCount - 1);
+								serverSidePagination
+									? serverPaginationProps.dispatch({
+											type: PaginationActionEnums.GO_TO_LAST_PAGE,
+											payload: serverPaginationProps?.totalPages
+									  })
+									: gotoPage(0);
 							}}
-							disabled={!canNextPage}>
+							disabled={serverSidePagination ? !serverPaginationProps.canNextPage : !canNextPage}>
 							<ChevronDoubleRightIcon className='h-4 w-4' aria-hidden='true' />
 						</ButtonGroup.Item>
 					</ButtonGroup>
@@ -216,7 +248,10 @@ const ReactTable = ({ columns, data, manualPagination, onGetSelectedRows: handle
 
 				<Footer.Item className='inline-flex items-center text-center'>
 					<Text as='span' className='font-medium text-base-content-active sm:hidden'>
-						Trang {pageIndex + 1}/{pageOptions.length}
+						Trang{' '}
+						{serverSidePagination
+							? `${serverPaginationProps?.pageIndex}/${serverPaginationProps?.totalPages}`
+							: `${pageIndex + 1}/${pageOptions.length}`}
 					</Text>
 				</Footer.Item>
 
@@ -228,7 +263,12 @@ const ReactTable = ({ columns, data, manualPagination, onGetSelectedRows: handle
 							className='w-full max-w-[128px]'
 							defaultValue={pageSize}
 							onChange={(e) => {
-								setPageSize(e.target.value);
+								serverSidePagination
+									? serverPaginationProps.dispatch({
+											type: PaginationActionEnums.CHANGE_PAGE_SIZE,
+											payload: e.target.value
+									  })
+									: setPageSize(e.target.value);
 							}}>
 							{[10, 20, 30, 50].map((page_size, index) => (
 								<Option value={page_size} key={index}>
@@ -254,8 +294,7 @@ const Header = ({ children, ...props }) => (
 		{children}
 	</div>
 );
-const HeaderCell = tw.div`flex h-12 items-center justify-between gap-6`;
-HeaderCell.Actions = tw.div`flex items-center gap-px`;
+
 const Body = ({ children, isEmpty, ...props }) => (
 	<div
 		{...props}
@@ -278,5 +317,7 @@ Footer.Item = ({ ...props }) => (
 		{props.children}
 	</div>
 );
+const HeaderCell = tw.div`flex h-12 items-center justify-between gap-6`;
+HeaderCell.Actions = tw.div`flex items-center gap-px`;
 
 export default memo(ReactTable);
