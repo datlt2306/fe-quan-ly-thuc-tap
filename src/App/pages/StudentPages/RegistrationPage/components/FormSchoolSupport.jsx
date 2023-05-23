@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import FormRow from '../components/FormRow';
 import { WrapButton } from './FormSelfFinding';
-import { useUploadCvMutation } from '@/App/providers/apis/registerInternApi';
+import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
 
 const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 	const navigate = useNavigate();
@@ -35,7 +35,11 @@ const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 					initialValue='Chọn doanh nghiệp'
 					control={control}
 					name='business'
-					options={Array.isArray(business?.list) ? business.list.map((item) => ({ value: item._id, label: item.name })) : []}
+					options={
+						Array.isArray(business?.list)
+							? business.list.map((item) => ({ value: item._id, label: item.name }))
+							: []
+					}
 				/>
 			)
 		}
@@ -92,6 +96,6 @@ const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 	);
 };
 
-export const Form = tw.form` pb-4`;
+export const Form = tw.form`pb-4`;
 
 export default FormSchoolSupport;

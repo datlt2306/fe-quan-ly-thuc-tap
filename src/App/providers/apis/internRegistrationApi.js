@@ -1,7 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import axiosBaseQuery from '../axiosBaseQuery';
 
-const registerInternApi = createApi({
+
+const internRegistrationApi = createApi({
 	reducerPath: 'registerInternApi',
 	baseQuery: axiosBaseQuery(),
 	tagTypes: ['RegisterIntern'],
@@ -15,6 +16,5 @@ const registerInternApi = createApi({
 	})
 });
 
-export const { useUploadCvMutation } = registerInternApi;
-
-export default registerInternApi;
+export const { useUploadCvMutation } = internRegistrationApi;
+export default internRegistrationApi;

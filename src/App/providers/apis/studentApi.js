@@ -5,6 +5,7 @@ const studentApi = createApi({
 	reducerPath: 'studentApi',
 	baseQuery: axiosBaseQuery(),
 	tagTypes: ['Student'],
+	keepUnusedDataFor: 60 * 60 * 60,
 	endpoints: (build) => ({
 		getStudents: build.query({
 			query: (params) => ({ url: '/student', method: 'GET', params }),

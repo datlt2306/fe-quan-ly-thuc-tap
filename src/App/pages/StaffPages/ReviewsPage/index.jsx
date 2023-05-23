@@ -1,19 +1,20 @@
-import ReactTable from '@/Core/components/common/Table/ReactTable';
-import { Fragment, useEffect, useMemo, useState } from 'react';
-import { columnAccessors } from '../StudentListPage/constants';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
-import IndeterminateCheckbox from '@/Core/components/common/Table/RowSelectionCheckbox';
+import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from '@/App/constants/studentStatus';
 import { useGetStudentsQuery } from '@/App/providers/apis/studentApi';
-import { useSelector } from 'react-redux';
-import formatDate from '@/Core/utils/formatDate';
 import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
-import { CheckCircleIcon, ExclamationTriangleIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from '@/App/constants/studentStatus';
-import tw from 'twin.macro';
-import Typography from '@/Core/components/common/Text/Typography';
 import Modal from '@/Core/components/common/Modal';
+import ReactTable from '@/Core/components/common/Table/ReactTable';
+import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
+import IndeterminateCheckbox from '@/Core/components/common/Table/RowSelectionCheckbox';
 import Text from '@/Core/components/common/Text/Text';
+import Typography from '@/Core/components/common/Text/Typography';
+import formatDate from '@/Core/utils/formatDate';
+import { InformationCircleIcon } from '@heroicons/react/20/solid';
+import { ArrowDownIcon, CheckCircleIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import tw from 'twin.macro';
+import { columnAccessors } from '../StudentListPage/constants';
 
 const handleGetInternStatusStyle = (value) => {
 	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
@@ -22,9 +23,14 @@ const handleGetInternStatusStyle = (value) => {
 
 const ReviewPage = () => {
 	const { defaultSemester } = useSelector((state) => state.semester);
-	const { data: studentsListData, isLoading, isError } = useGetStudentsQuery({ semester: defaultSemester }, { refetchOnMountOrArgChange: true });
+	const {
+		data: studentsListData,
+		isLoading,
+		isError
+	} = useGetStudentsQuery({ semester: defaultSemester }, { refetchOnMountOrArgChange: true });
 	const [selectedStudents, setSelectedStudents] = useState([]);
 	const [open, setOpen] = useState(false);
+
 	const tableData = useMemo(() => {
 		return Array.isArray(studentsListData)
 			? studentsListData.map((student, index) => ({
@@ -38,17 +44,19 @@ const ReviewPage = () => {
 			: [];
 	}, [studentsListData, isLoading]);
 
-	useEffect(() => {
-		console.log(selectedStudents);
-	});
-
 	// Define columns of table
 	const columnsData = useMemo(
 		() => [
 			{
-				Header: ({ getToggleAllPageRowsSelectedProps }) => <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />,
+				Header: ({ getToggleAllPageRowsSelectedProps }) => (
+					<IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+				),
 				accessor: '_id',
-				Cell: ({ row }) => <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+				Cell: ({ row }) => {
+					const isDisabled = !(!!row.original?.CV || !!row.original?.form || !!row.original?.report);
+					console.log(isDisabled);
+					return <IndeterminateCheckbox disabled={isDisabled} {...row.getToggleRowSelectedProps()} />;
+				}
 			},
 			{
 				Header: columnAccessors.index,
@@ -99,7 +107,10 @@ const ReviewPage = () => {
 				Header: columnAccessors.statusCheck,
 				accessor: 'statusCheck',
 				Filter: ({ column: { filterValue, setFilter, preFilteredRows, id } }) => (
-					<SelectColumnFilter column={{ filterValue, setFilter, preFilteredRows, id }} customOptions={StudentStatusEnum} />
+					<SelectColumnFilter
+						column={{ filterValue, setFilter, preFilteredRows, id }}
+						customOptions={StudentStatusEnum}
+					/>
 				),
 				filterable: true,
 				Cell: ({ value }) => <Badge variant={handleGetInternStatusStyle(value)}>{value}</Badge>
@@ -137,7 +148,14 @@ const ReviewPage = () => {
 				filterable: false,
 				sortable: false,
 				Cell: ({ value }) => (
-					<Button as='a' href={value} target='_blank' variant={value ? 'ghost' : 'disabled'} shape='square' size='sm' disabled={!!value}>
+					<Button
+						as='a'
+						href={value}
+						target='_blank'
+						variant={value ? 'ghost' : 'disabled'}
+						shape='square'
+						size='sm'
+						disabled={!!value}>
 						{value ? <EyeIcon className='h-4 w-4' /> : <EyeSlashIcon className='h-4 w-4' />}
 					</Button>
 				)
@@ -187,9 +205,11 @@ const ReviewPage = () => {
 		<Fragment>
 			<Modal openState={open} onOpenStateChange={setOpen} title='Cập nhật trạng thái sinh viên'>
 				<Modal.Box>
-					<ExclamationTriangleIcon className='h-10 w-10 text-warning' />
 					<Modal.Content>
-						<Text>Xác nhận ?</Text>
+						<Text className='mb-10 inline-flex items-start gap-2 whitespace-normal align-middle'>
+							<InformationCircleIcon className='aspect-square w-5 text-info' /> Xác nhận review một trong số các
+							biên bản sau của sinh viên.
+						</Text>
 						<Modal.Actions>
 							<Button variant='primary' size='sm'>
 								Review CV
@@ -197,7 +217,7 @@ const ReviewPage = () => {
 							<Button variant='success' size='sm'>
 								Review biên bản
 							</Button>
-							<Button variant='info' size='sm'>
+							<Button variant='secondary' size='sm'>
 								Review báo cáo
 							</Button>
 						</Modal.Actions>
@@ -209,27 +229,38 @@ const ReviewPage = () => {
 					<Typography level={5} fontWeight='semibold'>
 						Review CV
 					</Typography>
-					{!!selectedStudents.length && (
-						<Button variant='success' onClick={() => setOpen(!open)}>
-							<CheckCircleIcon className='h-5 w-5' /> Xác nhận
+					<ButtonList>
+						{!!selectedStudents.length && (
+							<Button variant='primary' size='sm' onClick={() => setOpen(!open)}>
+								<CheckCircleIcon className='h-5 w-5' /> Cập nhật
+							</Button>
+						)}
+						<Button variant='success' size='sm'>
+							<ArrowDownIcon className='h-4 w-4' /> Export file excel
 						</Button>
-					)}
+					</ButtonList>
 				</Box>
-				<ReactTable data={tableData} columns={columnsData} loading={isLoading} onGetSelectedRows={setSelectedStudents} />
+				<ReactTable
+					data={tableData}
+					columns={columnsData}
+					loading={isLoading}
+					onGetSelectedRows={setSelectedStudents}
+				/>
 			</Container>
 		</Fragment>
 	);
 };
 
 const Container = tw.div`flex flex-col gap-6`;
-const Box = tw.div`flex justify-between items-center p-2`;
+const Box = tw.div`flex justify-between items-center py-4 h-[3rem]`;
+const ButtonList = tw.div`flex items-stretch gap-1`;
 Modal.Box = ({ ...props }) => (
-	<div {...props} className='flex items-start gap-6'>
+	<div {...props} className='flex w-full items-start gap-6'>
 		{props.children}
 	</div>
 );
 Modal.Content = ({ ...props }) => (
-	<div {...props} className='flex flex-col gap-3'>
+	<div {...props} className=''>
 		{props.children}
 	</div>
 );

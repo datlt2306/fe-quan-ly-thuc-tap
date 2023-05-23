@@ -93,10 +93,14 @@ const RegistrantionTimePage = () => {
 			<Flex>
 				<Item>
 					<SelectBox>
-						<label htmlFor='semester-list' className='inline-flex items-center gap-2 whitespace-nowrap text-base-content'>
+						<label
+							htmlFor='semester-list'
+							className='inline-flex items-center gap-2 whitespace-nowrap text-base-content'>
 							<CalendarDaysIcon className='h-6 w-6' /> Kỳ học
 						</label>
-						<Select className='min-w-[12rem] capitalize sm:text-sm' onChange={(e) => handleChangeSemester(e.target.value)}>
+						<Select
+							className='min-w-[12rem] capitalize sm:text-sm'
+							onChange={(e) => handleChangeSemester(e.target.value)}>
 							{Array.isArray(semester?.listSemesters) &&
 								semester?.listSemesters.map((item, index) => (
 									<Option value={item._id} key={index} selected={selectedSemester?._id === item._id}>
@@ -126,8 +130,14 @@ const RegistrantionTimePage = () => {
 						TimesConfig.map((item, index) => (
 							<Table.Row key={index}>
 								<Table.Cell>{item.typeName}</Table.Cell>
-								<Table.Cell>{tableData && convertTimeStamp(tableData?.find((i) => i.typeNumber === item.typeNumber)?.startTime)}</Table.Cell>
-								<Table.Cell>{tableData && convertTimeStamp(tableData?.find((i) => i.typeNumber === item.typeNumber)?.endTime)}</Table.Cell>
+								<Table.Cell>
+									{tableData &&
+										convertTimeStamp(tableData?.find((i) => i.typeNumber === item.typeNumber)?.startTime)}
+								</Table.Cell>
+								<Table.Cell>
+									{tableData &&
+										convertTimeStamp(tableData?.find((i) => i.typeNumber === item.typeNumber)?.endTime)}
+								</Table.Cell>
 								<Table.Cell>
 									{tableData && (
 										<CompareDate
