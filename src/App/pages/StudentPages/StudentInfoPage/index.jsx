@@ -44,7 +44,7 @@ const StudentInfoPage = () => {
 		{ label: 'Email :', value: data?.email },
 		{
 			label: 'Lựa chọn :',
-			value: data?.support ? InternSupportType[data?.support] : 'Chưa có thông tin'
+			value: data?.support == 1 || data?.support == 0 ? InternSupportType[data?.support] : 'Chưa có thông tin'
 		},
 		{
 			label: 'Công ty đã chọn :',
