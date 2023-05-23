@@ -1,6 +1,10 @@
 /* eslint-disable react/prop-types */
 import tw from 'twin.macro';
+<<<<<<< HEAD
 import { useUploadCvMutation } from '@/App/providers/apis/registerInternAPI';
+=======
+import { useUploadCvMutation } from '@/App/providers/apis/registerInternApi';
+>>>>>>> d9c780983b704e9aae04b622bedc398cb9bc0b54
 import { formSignUpSelfFindingSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
@@ -13,7 +17,10 @@ import { toast } from 'react-toastify';
 import FormRow from './FormRow';
 import { Form } from './FormSchoolSupport';
 const FormSelfFinding = ({ fields, selectedOption, user }) => {
+<<<<<<< HEAD
 	console.log(user);
+=======
+>>>>>>> d9c780983b704e9aae04b622bedc398cb9bc0b54
 	const navigate = useNavigate();
 
 	const { control, handleSubmit } = useForm({

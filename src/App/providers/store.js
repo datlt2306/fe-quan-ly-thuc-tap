@@ -12,10 +12,12 @@ import requestStudentsApi from './apis/requestStudentsApi';
 import studentApi from './apis/studentApi';
 import majorApi from './apis/majorApi';
 import staffListApi from './apis/staffListApi';
+import registerInternApi from './apis/registerInternApi';
 
 const persistConfig = {
 	key: 'root',
-	storage
+	storage,
+	blacklist: ['studentApi']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer); // Provide a way to combine redux's root reducer
@@ -40,7 +42,8 @@ const store = configureStore({
 			businessApi.middleware,
 			studentApi.middleware,
 			majorApi.middleware,
-			staffListApi.middleware
+			staffListApi.middleware,
+			registerInternApi.middleware
 		])
 });
 

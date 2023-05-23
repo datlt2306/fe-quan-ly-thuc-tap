@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { StudentSchoolingStatus } from '../constants/studentStatus';
 
 yup.addMethod(yup.array, 'unique', function (message, mapper = (a) => a) {
 	return this.test('unique', message, function (list) {
@@ -21,7 +22,10 @@ export const newStudentSchema = yup
 				.string()
 				.matches(/^\d{10}$/, { message: 'Số điện thoại của sinh viên chưa đúng định dạng' })
 				.required('Vui lòng nhập đầy đủ số điện thoại của sinh viên'),
-			statusStudent: yup.string().required('Vui lòng nhập đầy đủ trạng thái sinh viên'),
+			statusStudent: yup
+				.string()
+				.oneOf(Object.keys(StudentSchoolingStatus), 'Trạng thái sinh viên không hợp lệ')
+				.required('Vui lòng nhập đầy đủ trạng thái sinh viên'),
 			smester_id: yup.string().required('Vui lòng nhập đầy đủ kỳ học hiện tại của sinh viên'),
 			note: yup.string().optional()
 		})

@@ -1,14 +1,24 @@
 import * as yup from 'yup';
 
 const sharedFieldSchema = {
+<<<<<<< HEAD
 	address: yup.string().required('Vui lòng nhập địa chỉ của bạn').default(''),
 	dream: yup.string().required('Vui lòng nhập vị trí thực tập').default(''),
 	major: yup.string().required('Vui lòng chọn chuyên ngành').default(''),
+=======
+	address: yup.string().required('Vui lòng nhập địa chỉ của bạn').default('').trim(),
+	dream: yup.string().required('Vui lòng nhập vị trí thực tập').default('').trim(),
+	major: yup.string().required('Vui lòng chọn chuyên ngành').default('').trim(),
+>>>>>>> d9c780983b704e9aae04b622bedc398cb9bc0b54
 	phoneNumber: yup
 		.string()
 		.required('Vui lòng nhập  số điện thoại')
 		.matches(/^(0[3|5|7|8|9])+([0-9]{8})\b/, 'Số điện thoại không hợp lệ')
 		.default('')
+<<<<<<< HEAD
+=======
+		.trim()
+>>>>>>> d9c780983b704e9aae04b622bedc398cb9bc0b54
 };
 
 export const formSignUpSchoolSupportSchema = yup.object().shape({
@@ -24,13 +34,23 @@ export const formSignUpSchoolSupportSchema = yup.object().shape({
 
 export const formSignUpSelfFindingSchema = yup.object().shape({
 	...sharedFieldSchema,
+<<<<<<< HEAD
 	nameCompany: yup.string().required('Vui lòng nhập tên công ty').default(''),
+=======
+	nameCompany: yup.string().required('Vui lòng nhập tên công ty').default('').trim(),
+>>>>>>> d9c780983b704e9aae04b622bedc398cb9bc0b54
 	taxCode: yup
 		.string()
 		.required('Vui lòng nhập Mã số thuế')
 		.default('')
+<<<<<<< HEAD
 		.matches(/^[0-9]*$/, 'Mã số thuế không hợp lệ'),
 	position: yup.string().required('Vui lòng nhập chức vụ người tiếp nhận').default(''),
+=======
+		.matches(/^[0-9]*$/, 'Mã số thuế không hợp lệ')
+		.trim(),
+	position: yup.string().required('Vui lòng nhập chức vụ người tiếp nhận').default('').trim(),
+>>>>>>> d9c780983b704e9aae04b622bedc398cb9bc0b54
 	phoneNumberCompany: yup
 		.string()
 		.min(10, 'Phải có ít nhất 10 kí tự')
@@ -40,7 +60,14 @@ export const formSignUpSelfFindingSchema = yup.object().shape({
 			'Số điện thoại doanh nghiệp không hợp lệ'
 		)
 		.required('Vui lòng nhập số điện thoại doanh nghiệp')
+<<<<<<< HEAD
 		.default(''),
 	emailEnterprise: yup.string().email('Email không hợp lệ').required('Vui lòng nhập email người tiếp nhận').default(''),
 	addressCompany: yup.string().required('Vui lòng nhập địa chỉ công ty').default('')
+=======
+		.default('')
+		.trim(),
+	emailEnterprise: yup.string().email('Email không hợp lệ').required('Vui lòng nhập email người tiếp nhận').default('').trim(),
+	addressCompany: yup.string().required('Vui lòng nhập địa chỉ công ty').default('').trim()
+>>>>>>> d9c780983b704e9aae04b622bedc398cb9bc0b54
 });

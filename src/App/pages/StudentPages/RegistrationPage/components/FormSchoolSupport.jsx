@@ -1,5 +1,9 @@
 /* eslint-disable react/prop-types */
+<<<<<<< HEAD
 import { useUploadCvMutation } from '@/App/providers/apis/registerInternAPI';
+=======
+
+>>>>>>> d9c780983b704e9aae04b622bedc398cb9bc0b54
 import { formSignUpSchoolSupportSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import FileUploadFieldControl from '@/Core/components/common/FormControl/FileUploadFieldControl';
@@ -8,12 +12,19 @@ import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Fragment } from 'react';
 import { useForm } from 'react-hook-form';
+<<<<<<< HEAD
 import { useSelector } from 'react-redux';
+=======
+>>>>>>> d9c780983b704e9aae04b622bedc398cb9bc0b54
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import FormRow from '../components/FormRow';
 import { WrapButton } from './FormSelfFinding';
+<<<<<<< HEAD
+=======
+import { useUploadCvMutation } from '@/App/providers/apis/registerInternApi';
+>>>>>>> d9c780983b704e9aae04b622bedc398cb9bc0b54
 
 const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 	const navigate = useNavigate();
@@ -73,7 +84,10 @@ const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 		toast.success('Đăng ký thành công');
 		navigate('/thong-tin-sinh-vien');
 	};
+<<<<<<< HEAD
 	console.log(isLoading);
+=======
+>>>>>>> d9c780983b704e9aae04b622bedc398cb9bc0b54
 	return (
 		<>
 			<Form onSubmit={handleSubmit(handleFormSchoolSupport)}>

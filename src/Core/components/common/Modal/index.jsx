@@ -27,7 +27,7 @@ export default function Modal({ openState, onOpenStateChange, title, children })
 							leave='ease-in duration-200'
 							leaveFrom='opacity-100 scale-100'
 							leaveTo='opacity-0 scale-95'>
-							<Dialog.Panel className='relative w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+							<Dialog.Panel className='relative w-fit max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all'>
 								{!!title && (
 									<Dialog.Title as='h3' className='mb-6 text-lg font-medium leading-6 text-gray-900'>
 										{title}
