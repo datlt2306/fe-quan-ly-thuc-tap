@@ -1,15 +1,12 @@
-import { StudentStatusEnum } from '@/App/constants/studentStatus';
-import { useUpdateReviewCvMutation } from '@/App/providers/apis/studentApi';
-import { updateReviewCvData } from '@/App/schemas/studentSchema';
+import { useUpdateReviewMutation } from '@/App/providers/apis/studentApi';
 import Button from '@/Core/components/common/Button';
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import Modal from '@/Core/components/common/Modal';
-import Text from '@/Core/components/common/Text/Text';
 import { StaffPaths } from '@/Core/constants/routePaths';
-import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
-import React, { useMemo, useRef } from 'react';
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -21,19 +18,31 @@ const UpdateReviewModal = ({
 	selectedStudents,
 	statusOptions
 }) => {
-	const [updateReviewCV, { isLoading, isSuccess }] = useUpdateReviewCvMutation();
+	const [updateStatus, { isLoading, isSuccess }] = useUpdateReviewMutation();
 	const { email: reviewerEmail } = useSelector((state) => state.auth?.user);
 	const toastId = useRef(null);
 	const { control, handleSubmit } = useForm();
 	const navigate = useNavigate();
-
-	const handleUpdateReviewCV = async (data) => {
+	const handleReview = async (data) => {
 		try {
+			if (!selectedStudents.length) {
+				toast.error('Chưa có sinh viên nào được chọn !');
+				return;
+			}
+
 			const listIdStudent = selectedStudents.map((student) => student._id);
 			const listEmailStudent = selectedStudents.map((student) => student.email);
-			data = { ...data, listIdStudent, listEmailStudent };
+			data = {
+				...data,
+				listIdStudent,
+				listEmailStudent,
+				reviewerEmail,
+				status: data.status.toString()
+			};
+
 			toastId.current = toast.loading('Đang cập nhật ...');
-			const { error } = updateReviewCV(data);
+
+			const { error } = updateStatus(data);
 			if (error) {
 				toast.update(toastId.current, {
 					type: 'error',
@@ -68,12 +77,14 @@ const UpdateReviewModal = ({
 
 	return (
 		<Modal openState={openState} onOpenStateChange={handleOpenStateChange} title='Cập nhật trạng thái sinh viên'>
-			<Modal.Form onSubmit={handleSubmit(handleUpdateReviewCV)}>
-				<Text className='inline-flex items-start gap-2 whitespace-normal align-middle'>
-					<InformationCircleIcon className='aspect-square w-5 text-info' /> Xác nhận review các CV của sinh viên đã
-					chọn.
-				</Text>
-				<SelectFieldControl control={control} name='status' options={statusOptions} label='Trạng thái' />
+			<Modal.Form onSubmit={handleSubmit(handleReview)}>
+				<SelectFieldControl
+					control={control}
+					name='status'
+					options={statusOptions}
+					label='Trạng thái'
+					rules={[{ required: { value: true, message: 'Vui lòng chọn trạng thái cập nhật cho sinh viên' } }]}
+				/>
 				<TextareaFieldControl
 					control={control}
 					name='textNote'
@@ -82,7 +93,7 @@ const UpdateReviewModal = ({
 					label='Ghi chú'
 					placeholder='Ghi chú cho sinh viên ...'
 				/>
-				<Button type='submit' variant='primary' size='md'>
+				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
 					{isLoading && <LoadingSpinner size='sm' />}
 					{isSuccess && <CheckCircleIcon className='h-4 w-4' />}
 					Review CV
@@ -93,7 +104,7 @@ const UpdateReviewModal = ({
 };
 
 Modal.Form = ({ ...props }) => (
-	<form {...props} className='flex flex-col items-stretch gap-6'>
+	<form {...props} className='flex w-[320px] flex-col items-stretch gap-6'>
 		{props.children}
 	</form>
 );
