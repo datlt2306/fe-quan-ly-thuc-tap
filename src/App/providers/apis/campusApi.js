@@ -31,6 +31,7 @@ const campusApi = createApi({
 	})
 });
 
-export const { useGetAllCampusQuery, useAddCampusMutation, useDeleteCampusMutation, useUpdateCampusMutation } = campusApi;
+export const { useGetAllCampusQuery, useAddCampusMutation, useDeleteCampusMutation, useUpdateCampusMutation } =
+	campusApi;
 
 export default campusApi;

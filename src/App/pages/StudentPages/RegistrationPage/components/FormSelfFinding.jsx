@@ -12,7 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import FormRow from './FormRow';
 import { Form } from './FormSchoolSupport';
-const FormSelfFinding = ({ fields, selectedOption, user }) => {
+import SharedFields from './sharedFields';
+const FormSelfFinding = ({ selectedOption, user, majors }) => {
 	const navigate = useNavigate();
 
 	const { control, handleSubmit } = useForm({
@@ -22,7 +23,7 @@ const FormSelfFinding = ({ fields, selectedOption, user }) => {
 	const [hanldeUploadCvMutation, { isLoading }] = useUploadCvMutation();
 
 	const formSelfFinding = [
-		...fields(control),
+		...SharedFields(control, user, majors),
 		{
 			content: (
 				<InputFieldControl
@@ -104,15 +105,12 @@ const FormSelfFinding = ({ fields, selectedOption, user }) => {
 						<Fragment key={index}>{row.content}</Fragment>
 					))}
 				</FormRow>
-				<WrapButton>
-					<Button type='submit' variant='primary' disabled={isLoading}>
-						{isLoading && <LoadingSpinner size='sm' variant='primary' />}
-						Đăng ký
-					</Button>
-				</WrapButton>
+				<Button type='submit' variant='primary' disabled={isLoading}>
+					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
+					Đăng ký
+				</Button>
 			</Form>
 		</>
 	);
 };
-export const WrapButton = tw.div`flex justify-end m-4`;
 export default FormSelfFinding;

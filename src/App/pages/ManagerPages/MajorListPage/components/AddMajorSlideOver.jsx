@@ -31,7 +31,6 @@ const AddMajorSlideOver = ({ onOpen, open, panelTitle }) => {
 		toast.success('Thêm chuyên ngành thành công!');
 	};
 
-
 	return (
 		<SlideOver open={open} onOpen={onOpen} panelTitle={panelTitle}>
 			<Form onSubmit={handleSubmit(onAddSubmit)}>

@@ -1,8 +1,8 @@
-import { useRef } from 'react';
+import { forwardRef, useRef } from 'react';
 import { useController } from 'react-hook-form';
 import tw from 'twin.macro';
 
-export const Radio = ({ onChange: handleChange, ...props }, ref) => (
+export const Radio = forwardRef(({ onChange: handleChange, ...props }, ref) => (
 	<input
 		{...props}
 		onChange={(e) => handleChange(e)}
@@ -10,7 +10,7 @@ export const Radio = ({ onChange: handleChange, ...props }, ref) => (
 		type='radio'
 		className='border-gray-300 text-primary duration-300 focus:ring-primary'
 	/>
-);
+));
 
 const RadioFieldControl = ({ control, name, options, onChange: handleChange }) => {
 	const {

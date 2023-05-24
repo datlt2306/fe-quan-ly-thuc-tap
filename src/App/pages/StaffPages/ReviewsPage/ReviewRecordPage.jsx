@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const ReviewRecordPage = () => {
-  return (
-    <div>ReviewRecordPage</div>
-  )
-}
+	return <div>ReviewRecordPage</div>;
+};
 
-export default ReviewRecordPage
+export default ReviewRecordPage;

@@ -26,7 +26,9 @@ const CampusListPage = () => {
 	const { data: managers } = useGetAllCampusQuery();
 
 	const tableData = useMemo(() => {
-		return Array.isArray(managers?.listCampus) ? managers?.listCampus?.map((user, index) => ({ ...user, index: index + 1 })) : [];
+		return Array.isArray(managers?.listCampus)
+			? managers?.listCampus?.map((user, index) => ({ ...user, index: index + 1 }))
+			: [];
 	}, [managers]);
 
 	const [handleRemoveCampus] = useDeleteCampusMutation();
