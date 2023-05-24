@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 
-const AddMajorSlideOver = ({ onOpen, open, panelTitle }) => {
+const AddMajorSlideOver = ({ onOpen, open, panelTitle, majors }) => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(majorSchema),
 		values: majorSchema.getDefault()
@@ -20,7 +20,16 @@ const AddMajorSlideOver = ({ onOpen, open, panelTitle }) => {
 	const [handleAddNewMajor, { isLoading }] = useCreateMajorMutation();
 
 	const onAddSubmit = async (data) => {
-		const result = await handleAddNewMajor(data);
+		const checkMajorsDuplicate = majors?.some((item) => item.majorCode == data.majorCode);
+		if (checkMajorsDuplicate) {
+			toast.error('Mã chuyên ngành không được trùng');
+			onOpen();
+			return;
+		}
+		const result = await handleAddNewMajor({
+			...data,
+			majorCode:data?.majorCode.toUpperCase()
+		});
 		if (result?.error) {
 			onOpen();
 			toast.error('Thêm chuyên ngành không thành công!');
