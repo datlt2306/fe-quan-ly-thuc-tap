@@ -8,7 +8,7 @@ import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilSquareIcon, TrashIcon,UserPlusIcon } from '@heroicons/react/24/outline';
 import { useGetAllMajorQuery, useDeleteMajorMutation } from '@/App/providers/apis/majorApi';
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 
@@ -149,6 +149,7 @@ const MajorListPage = () => {
 			<Box>
 				<ButtonList>
 					<Button type='button' variant='primary' size='sm' onClick={handleAddSlideOver}>
+					<UserPlusIcon className='h-4 w-4 text-[inherit] ' />
 					 Thêm ngành học
 					</Button>
 				</ButtonList>
