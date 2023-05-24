@@ -20,7 +20,7 @@ import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
-import { columnAccessors } from './constants';
+import { studentColumnAccessors } from '../../../constants/studentColumnAccessors';
 
 const handleGetInternStatusStyle = (value) => {
 	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
@@ -36,8 +36,8 @@ const StudentListPage = () => {
 	const [currentSemester, setCurrentSemester] = useState();
 	const [defaultSemster, setDefaultSemster] = useState();
 	const { data: studentsListData, isLoading } = useGetStudentsQuery(
-		{ semester: currentSemester },
-		{ refetchOnMountOrArgChange: true }
+		{ semester: currentSemester }
+		// { refetchOnMountOrArgChange: false }
 	);
 	const fileInputRef = useRef(null);
 	const toastId = useRef(null);
@@ -68,13 +68,13 @@ const StudentListPage = () => {
 		}
 
 		const newStudentList = excelData.map((obj) => ({
-			name: obj[columnAccessors.name],
-			mssv: obj[columnAccessors.mssv],
-			course: obj[columnAccessors.course],
-			email: obj[columnAccessors.email],
-			phoneNumber: obj[columnAccessors.phoneNumber],
-			majorCode: obj[columnAccessors.majorCode],
-			statusStudent: obj[columnAccessors.statusStudent],
+			name: obj[studentColumnAccessors.name],
+			mssv: obj[studentColumnAccessors.mssv],
+			course: obj[studentColumnAccessors.course],
+			email: obj[studentColumnAccessors.email],
+			phoneNumber: obj[studentColumnAccessors.phoneNumber],
+			majorCode: obj[studentColumnAccessors.majorCode],
+			statusStudent: obj[studentColumnAccessors.statusStudent],
 			smester_id: semesterData?.defaultSemester?._id,
 			campus_id: currentCampus?._id
 		}));
@@ -87,10 +87,9 @@ const StudentListPage = () => {
 				smester_id: semesterData?.defaultSemester?._id,
 				campus_id: currentCampus?._id
 			});
-			console.log(error.status);
 			if (error) {
 				const message =
-					error.status === HttpStatusCode.CONFLICT ? 'Đã có sinh viên tồn tại trong hệ thống !' : 'Lỗi server !';
+					error?.status === HttpStatusCode.CONFLICT ? 'Đã có sinh viên tồn tại trong hệ thống !' : 'Lỗi server !';
 
 				toast.update(toastId.current, {
 					type: 'error',
@@ -102,8 +101,13 @@ const StudentListPage = () => {
 				fileInputRef.current.value = null;
 				return;
 			}
-
-			fileInputRef.current.value = null;
+			toast.update(toastId.current, {
+				type: 'success',
+				render: 'Tải lên dữ liệu thành công !',
+				isLoading: false,
+				closeButton: true,
+				autoClose: 2000
+			});
 		} catch (error) {
 			toast.update(toastId.current, {
 				type: 'error',
@@ -112,6 +116,7 @@ const StudentListPage = () => {
 				closeButton: true,
 				autoClose: 2000
 			});
+		} finally {
 			fileInputRef.current.value = null;
 		}
 	};
@@ -134,7 +139,7 @@ const StudentListPage = () => {
 			toast.warn('Chưa có dữ liệu để xuất file !');
 			return;
 		}
-		const exportedData = convertToExcelData({ data: data, columnKeysAccessor: columnAccessors });
+		const exportedData = convertToExcelData({ data: data, columnKeysAccessor: studentColumnAccessors });
 		if (!exportedData) {
 			toast.error('Export dữ liệu thất bại !');
 			return;
@@ -146,19 +151,19 @@ const StudentListPage = () => {
 	const columnsData = useMemo(
 		() => [
 			{
-				Header: columnAccessors.index,
+				Header: studentColumnAccessors.index,
 				accessor: 'index',
 				sortable: true
 			},
 			{
-				Header: columnAccessors.name,
+				Header: studentColumnAccessors.name,
 				accessor: 'name',
 				Filter: InputColumnFilter,
 				filterable: true,
 				sortable: true
 			},
 			{
-				Header: columnAccessors.mssv,
+				Header: studentColumnAccessors.mssv,
 				accessor: 'mssv', // object key
 				Filter: InputColumnFilter,
 				filterable: true,
@@ -166,32 +171,32 @@ const StudentListPage = () => {
 				Cell: ({ value }) => <span className='font-semibold uppercase'>{value}</span>
 			},
 			{
-				Header: columnAccessors.majorCode,
+				Header: studentColumnAccessors.majorCode,
 				accessor: 'majorCode',
 				Filter: SelectColumnFilter,
 				filterable: true,
 				sortable: true
 			},
 			{
-				Header: columnAccessors.phoneNumber,
+				Header: studentColumnAccessors.phoneNumber,
 				accessor: 'phoneNumber',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: columnAccessors.email,
+				Header: studentColumnAccessors.email,
 				accessor: 'email',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: columnAccessors.support,
+				Header: studentColumnAccessors.support,
 				accessor: 'support',
 				Filter: SelectColumnFilter,
 				filterable: true
 			},
 			{
-				Header: columnAccessors.statusCheck,
+				Header: studentColumnAccessors.statusCheck,
 				accessor: 'statusCheck',
 				Filter: SelectColumnFilter,
 				filterable: true,
@@ -199,7 +204,7 @@ const StudentListPage = () => {
 			},
 
 			{
-				Header: columnAccessors.nameCompany,
+				Header: studentColumnAccessors.nameCompany,
 				accessors: 'nameCompany',
 				Filter: InputColumnFilter,
 				filterable: true,
@@ -218,13 +223,13 @@ const StudentListPage = () => {
 					)
 			},
 			{
-				Header: columnAccessors.dream,
+				Header: studentColumnAccessors.dream,
 				accessor: 'dream',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: columnAccessors.CV,
+				Header: studentColumnAccessors.CV,
 				accessor: 'CV',
 				Filter: InputColumnFilter,
 				filterable: false,
@@ -244,23 +249,23 @@ const StudentListPage = () => {
 				)
 			},
 			{
-				Header: columnAccessors.report,
+				Header: studentColumnAccessors.report,
 				accessor: 'report',
 				Cell: ({ value }) => !!value && <Badge variant='info'>Đã nộp</Badge>
 			},
 			{
-				Header: columnAccessors.form,
+				Header: studentColumnAccessors.form,
 				accessor: 'form',
 				Cell: ({ value }) => !!value && <Badge variant='info'>Đã nộp</Badge>
 			},
 			{
-				Header: columnAccessors.reviewer,
+				Header: studentColumnAccessors.reviewer,
 				accessor: 'reviewer',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: columnAccessors.statusStudent,
+				Header: studentColumnAccessors.statusStudent,
 				accessor: 'statusStudent',
 				Filter: SelectColumnFilter,
 				filterable: true,
@@ -268,14 +273,14 @@ const StudentListPage = () => {
 			},
 
 			{
-				Header: columnAccessors.createdAt,
+				Header: studentColumnAccessors.createdAt,
 				accessor: 'createdAt',
 				Filter: InputColumnFilter,
 				filterable: true,
 				Cell: ({ value }) => <span>{formatDate(value)}</span>
 			},
 			{
-				Header: columnAccessors.note,
+				Header: studentColumnAccessors.note,
 				accessor: 'note',
 				filterable: false,
 				sortable: false
