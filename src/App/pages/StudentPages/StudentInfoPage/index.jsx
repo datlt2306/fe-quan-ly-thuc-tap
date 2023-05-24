@@ -3,11 +3,12 @@ import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 import Button from '@/Core/components/common/Button';
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
+import Typography from '@/Core/components/common/Text/Typography';
 import { Menu } from '@headlessui/react';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
-
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
 const ViewReport = lazy(() => import('./components/ViewReport'));
 const ViewForm = lazy(() => import('./components/ViewForm'));
 const ViewCv = lazy(() => import('./components/ViewCv'));
@@ -127,7 +128,15 @@ const StudentInfoPage = () => {
 				</LayoutFormSubmitted>
 			</WrapLayoutInfoUser>
 
-			<RenderNote label='Ghi chú' data={data} />
+			{/* <RenderNote label='Ghi chú' data={data} /> */}
+
+			<div className='bg-gray-50 p-4'>
+				<Typography level={6} className='flex items-center gap-1  text-lg font-medium '>
+					<PencilSquareIcon className='h-5 w-5' />
+					Ghi chú
+				</Typography>
+				<Note>{data?.note}</Note>
+			</div>
 
 			{openState && (
 				<Suspense fallback={<LoadingProgressBar />}>
@@ -142,18 +151,8 @@ const StudentInfoPage = () => {
 const Title = tw.h1`mb-5  text-lg font-medium text-primary`;
 const Text = tw.p`font-medium`;
 const WrapMenu = tw.div`mt-8 flex flex-col  gap-3`;
-const RenderNote = ({ label, data }) => (
-	<>
-		<label tw='mb-2 block text-sm font-medium text-gray-900 dark:text-white'>{label}</label>
-		<textarea
-			id='message'
-			rows={4}
-			tw='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:(placeholder-gray-400 border-gray-600 bg-gray-700 text-white)'
-			defaultValue={data?.note}
-			disabled
-		/>
-	</>
-);
+
+const Note = tw.div`mt-2  h-52 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200`;
 const handleGetInternStatusStyle = (value) => {
 	let style = null;
 	const checkstyle = Object.entries(StudentStatusGroupEnum).map(([k, v]) => {

@@ -7,6 +7,6 @@ const FormRow = ({ children, ...props }) => (
 );
 
 const WrapLayout = tw.div`flex flex-row sm:grid resize-none`;
-const Layout = tw.div`grid grid-cols-2  gap-6 grow m-4 sm:(grid-cols-1 gap-4) `;
+const Layout = tw.div`grid grid-cols-2  gap-6 grow my-4 sm:(grid-cols-1 gap-4) `;
 
 export default FormRow;

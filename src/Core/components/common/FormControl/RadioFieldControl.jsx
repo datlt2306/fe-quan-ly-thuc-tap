@@ -1,5 +1,4 @@
-import { forwardRef } from 'react';
-import { useRef } from 'react';
+import { forwardRef, useRef } from 'react';
 import { useController } from 'react-hook-form';
 import tw from 'twin.macro';
 
