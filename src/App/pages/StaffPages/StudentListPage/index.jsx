@@ -14,7 +14,7 @@ import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import formatDate from '@/Core/utils/formatDate';
 import getFileExtension from '@/Core/utils/getFileExtension';
 import { CalendarDaysIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
@@ -49,14 +49,32 @@ const StudentListPage = () => {
 
 	const tableData = useMemo(() => {
 		return Array.isArray(studentsListData)
-			? studentsListData.map((student, index) => ({
-					...student,
-					index: index + 1,
-					createdAt: formatDate(student.createdAt),
-					statusCheck: StudentStatusEnum[student.statusCheck],
-					support: InternSupportType[student.support],
-					statusStudent: student.statusStudent.trim()
-			  }))
+			? studentsListData.map((student, index) => {
+					const companyStudentApplyFor =
+						student.support === 1
+							? {
+									nameCompany: student.business?.name,
+									taxCode: student.business?.tax_code,
+									addressCompany: student.business?.address
+							  }
+							: student.support === 0
+							? {
+									nameCompany: student?.nameCompany,
+									taxCode: student?.taxCode,
+									addressCompany: student?.addressCompany
+							  }
+							: null;
+
+					return {
+						...student,
+						index: index + 1,
+						createdAt: formatDate(student.createdAt),
+						statusCheck: StudentStatusEnum[student.statusCheck],
+						support: InternSupportType[student.support],
+						statusStudent: student.statusStudent.trim(),
+						...companyStudentApplyFor
+					};
+			  })
 			: [];
 	}, [studentsListData, currentSemester]);
 
@@ -122,7 +140,8 @@ const StudentListPage = () => {
 	};
 
 	// Get file from device and execute callback to add new students
-	const handleImportStudents = (file) => {
+	const handleImportStudents = useCallback((file) => {
+		console.log('handleImportStudents');
 		const fileExtension = getFileExtension(file);
 		if (fileExtension !== AllowedFileExt.XLSX) {
 			toast.error('File import không hợp lệ');
@@ -131,10 +150,10 @@ const StudentListPage = () => {
 		}
 		handleImportFile(file, importExcelDataCallback);
 		fileInputRef.current.value = null; // reset input file after imported
-	};
+	}, []);
 
 	// Export data from table to excel file
-	const handleExportDataToExcel = (data) => {
+	const handleExportDataToExcel = useCallback((data) => {
 		if (!data.length) {
 			toast.warn('Chưa có dữ liệu để xuất file !');
 			return;
@@ -145,7 +164,7 @@ const StudentListPage = () => {
 			return;
 		}
 		handleExportFile({ data: exportedData, fileName: 'Danh sách sinh viên' });
-	};
+	}, []);
 
 	// Define columns of table
 	const columnsData = useMemo(
@@ -202,25 +221,29 @@ const StudentListPage = () => {
 				filterable: true,
 				Cell: ({ value }) => <Badge variant={handleGetInternStatusStyle(value)}>{value}</Badge>
 			},
-
 			{
-				Header: studentColumnAccessors.nameCompany,
-				accessors: 'nameCompany',
+				Header: 'Công ty thực tập',
+				accessor: 'nameCompany',
+				id: 'company',
 				Filter: InputColumnFilter,
 				filterable: true,
 				Aggregated: ({ value }) => value,
-				Cell: ({ row }) =>
-					row.original?.nameCompany && (
-						<ul tw='flex flex-col gap-2'>
-							<li>
-								<strong>{row.original?.nameCompany}</strong>
-							</li>
-							<li>
-								<i>Mã số thuế: </i>
-								{row.original?.taxCode}
-							</li>
-						</ul>
-					)
+				Cell: ({ row }) => {
+					const { original: student } = row;
+					return (
+						student.nameCompany && (
+							<List>
+								<List.Item>
+									<strong>{student?.nameCompany}</strong>
+								</List.Item>
+								<List.Item>
+									<i>Mã số thuế: </i>
+									{student?.taxCode}
+								</List.Item>
+							</List>
+						)
+					);
+				}
 			},
 			{
 				Header: studentColumnAccessors.dream,
@@ -271,7 +294,6 @@ const StudentListPage = () => {
 				filterable: true,
 				Cell: ({ value }) => <span className='font-semibold'>{value}</span>
 			},
-
 			{
 				Header: studentColumnAccessors.createdAt,
 				accessor: 'createdAt',
@@ -302,16 +324,14 @@ const StudentListPage = () => {
 					<Select
 						id='semester-list'
 						className='min-w-[12rem] capitalize sm:text-sm'
+						defaultValue={semesterData?.defaultSemester?._id}
 						onChange={(e) => {
 							console.log(e.target.value);
 							setCurrentSemester(e.target.value);
 						}}>
 						{Array.isArray(semesterData?.listSemesters) &&
 							semesterData?.listSemesters?.map((semester) => (
-								<Option
-									key={semester._id}
-									value={semester._id}
-									selected={semester._id === semesterData?.defaultSemester?._id}>
+								<Option key={semester._id} value={semester._id}>
 									{semester?.name}
 								</Option>
 							))}
@@ -341,5 +361,7 @@ const StudentListPage = () => {
 const Container = tw.div`flex flex-col gap-6 h-full `;
 const Box = tw.div`flex items-center justify-between lg:flex-row-reverse`;
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
+const List = tw.ul`flex flex-col gap-1`;
+List.Item = ({ ...props }) => <li {...props}>{props.children}</li>;
 
 export default StudentListPage;

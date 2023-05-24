@@ -7,7 +7,7 @@ import {
 	EllipsisHorizontalIcon
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
-import { Fragment, forwardRef, useRef } from 'react';
+import { Fragment, forwardRef, memo, useRef } from 'react';
 import { studentListSampleData } from '../mocks';
 import { useExportToExcel } from '@/App/hooks/useExcel';
 
@@ -72,4 +72,4 @@ const MobileDropdownButtonGroup = ({ tableData, handleImport, handleExport, canI
 	);
 };
 
-export default forwardRef(MobileDropdownButtonGroup);
+export default memo(forwardRef(MobileDropdownButtonGroup));
