@@ -1,8 +1,9 @@
+import { forwardRef } from 'react';
 import { useRef } from 'react';
 import { useController } from 'react-hook-form';
 import tw from 'twin.macro';
 
-export const Radio = ({ onChange: handleChange, ...props }, ref) => (
+export const Radio = forwardRef(({ onChange: handleChange, ...props }, ref) => (
 	<input
 		{...props}
 		onChange={(e) => handleChange(e)}
@@ -10,13 +11,15 @@ export const Radio = ({ onChange: handleChange, ...props }, ref) => (
 		type='radio'
 		className='border-gray-300 text-primary duration-300 focus:ring-primary'
 	/>
-);
+));
 
-const RadioFieldControl = ({ control, name, options, onChange: handleChange }) => {
+const RadioFieldControl = ({ control, name, options, onChange: handleChange, ...props }) => {
 	const {
 		fieldState: { error },
-		formState
-	} = useController({ control, name });
+		field
+	} = useController({ control, name, ...props });
+
+	const inputRef = useRef(null);
 
 	return (
 		<FormControl>
@@ -24,7 +27,17 @@ const RadioFieldControl = ({ control, name, options, onChange: handleChange }) =
 				{options.map((option, index) => (
 					<Label htmlFor={index.toString()} key={index}>
 						{option.label}
-						<Radio id={index.toString()} name={name} onChange={(e) => handleChange(e)} value={option.value} />
+						<Radio
+							ref={inputRef}
+							id={index.toString()}
+							name={name}
+							onChange={(event) => {
+								field.onChange(event);
+								if (props.onChange) {
+									props.onChange(event);
+								}
+							}}
+							value={option.value} />
 					</Label>
 				))}
 			</RadioGroup>

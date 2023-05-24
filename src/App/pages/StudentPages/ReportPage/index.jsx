@@ -1,26 +1,35 @@
-import { useUploadFormMutation } from '@/App/providers/apis/reportApi';
+import { useUploadReportMutation } from '@/App/providers/apis/reportApi';
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 import { reportSchema } from '@/App/schemas/reportSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
+import RadioFieldControl from '@/Core/components/common/FormControl/RadioFieldControl';
+import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import { yupResolver } from '@hookform/resolvers/yup';
+import moment from 'moment';
 import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 
 const ReportPage = () => {
 
+   const convertTime = (date) => {
+		if (typeof date !== 'string') return '';
+		return date ? moment(date.substring(0, 10), 'YYYY-MM-DD').format('DD/MM/YYYY') : '';
+	};
+
    const navigate = useNavigate();
 
    const { user } = useSelector((state) => state.auth);
-   const {data} = useGetOneStudentQuery(user?.id);
+   const { data } = useGetOneStudentQuery(user?.id);
 
    const [selectFile, setSelectFile] = useState(null);
    const [validateFile, setValidateFile] = useState('');
 
-   const [handleSubmitForm] = useUploadFormMutation();
+   const [handleSubmitForm, {isLoading}] = useUploadReportMutation();
 
    const fileInputRef = useRef(null);
 
@@ -49,35 +58,35 @@ const ReportPage = () => {
    };
    const onSubmit = async (value) => {
       const file = selectFile;
-		const allowedExtensions = ['pdf', 'docx'];
-		const fileName = file.name;
-		const fileExtension = fileName.split('.').pop().toLowerCase();
-		if (!allowedExtensions.includes(fileExtension)) {
-			return;
-		}
+      const allowedExtensions = ['pdf', 'docx'];
+      const fileName = file.name;
+      const fileExtension = fileName.split('.').pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+         return;
+      }
       const formData = new FormData();
       formData.append('file', selectFile);
       formData.append('endInternShipTime', value.endInternShipTime);
+      formData.append('resultScore', value.resultScore);
       formData.append('attitudePoint', value.attitudePoint);
       formData.append('signTheContract', value.signTheContract);
-      formData.append('endInternShipTime', value.endInternShipTime);
-      formData.append('_id', data.id);
+      formData.append('_id', data._id);
       formData.append('mssv', data.mssv);
       formData.append('email', data.email);
       formData.append('nameCompany', data.nameCompany);
-      formData.append('typeNumber', 4);
+      formData.append('typeNumber', 3);
       const result = await handleSubmitForm(formData);
       if (result?.error) {
-			toast.error("Nộp biên bản thất bại!");
-			navigate('/');
-			return;
-		}
-		toast.success("Nộp biên bản thành công");
-		navigate('/');
+         toast.error("Nộp báo cáo thất bại!");
+         navigate('/');
+         return;
+      }
+      toast.success("Nộp báo cáo thành công");
+      navigate('/');
    };
    return (
       <Container>
-         <Title>Nộp biên bản</Title>
+         <Title>Nộp báo cáo</Title>
          <Form onSubmit={handleSubmit(onSubmit)}>
             <Info>
                Mã sinh viên: <Span>{data && data?.mssv}</Span>
@@ -93,23 +102,14 @@ const ReportPage = () => {
 
             <InputFieldControl label='Điểm thái độ' placeholder='Nhập điểm thái độ thực tập' control={control} name='attitudePoint' />
 
-            <div className='grid grid-flow-col'>
-               Đề xuất ký HĐLĐ với doanh nghiệp:
-               <div className='flex items-center'>
-                  <input className='mr-1' type='radio' control={control} name='signTheContract' id="a" value={0} />
-                  <label for="a">Có</label>
-               </div>
-               <div className='flex items-center'>
-                  <input className='mr-1' type='radio' control={control} name='signTheContract' id="b" value={1} />
-                  <label for="b">Không</label>
-               </div>
-               <div className='flex items-center'>
-                  <input className='mr-1' type='radio' control={control} name='signTheContract' id="c" value={2} />
-                  <label for="c">Không nhận lời</label>
-               </div>
+
+            <div>
+               <div className='mb-2'>Đề xuất ký HĐLĐ với doanh nghiệp</div>
+               <RadioFieldControl control={control} name="signTheContract" options={[{ label: "Có", value: 0 }, { label: "Không", value: 1 }, { label: "Không nhận lời", value: 2 }]} />
             </div>
+
             <Info>
-               Thời gian bắt đầu thực tập: <Span>{data && data?.internshipTime}</Span>
+               Thời gian bắt đầu thực tập: <Span>{data && convertTime(data?.internshipTime)}</Span>
             </Info>
             <InputFieldControl label='Thời gian kết thúc thực tập' control={control} name='endInternShipTime' type='date' />
             <InputFieldControl
@@ -123,9 +123,9 @@ const ReportPage = () => {
             <Error>{validateFile}</Error>
             <div className='grid grid-flow-col justify-stretch gap-2'>
                <Button variant='primary' type='submit'>
-                  Nộp biên bản
+               {isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp báo cáo
                </Button>
-               <Button as="div" variant='success'>
+               <Button as="div" variant='success' onClick={() => window.open(data?.["CV"])}>
                   Xem CV
                </Button>
             </div>

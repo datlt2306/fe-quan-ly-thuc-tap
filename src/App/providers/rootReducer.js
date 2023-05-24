@@ -1,18 +1,18 @@
-import { combineReducers } from "@reduxjs/toolkit";
-import authSlice from "./slices/authSlice";
-import semesterApi from "./apis/semesterApi";
-import campusApi from "./apis/campusApi";
-import campusSlice from "./slices/campusSlice";
-import studentApi from "./apis/studentApi";
-import businessApi from "./apis/businessApi";
-import configTimesApi from "./apis/configTimesApi";
-import authApi from "./apis/authApi";
-import requestStudentsApi from "./apis/requestStudentsApi";
-import staffListApi from "./apis/staffListApi";
-import semesterSlice from "./slices/semesterSlice";
-import majorApi from "./apis/majorApi";
-import reportApi from "./apis/reportApi";
-import registerInternAPI from "./apis/registerInternAPI";
+import { combineReducers } from '@reduxjs/toolkit';
+import authApi from './apis/authApi';
+import businessApi from './apis/businessApi';
+import campusApi from './apis/campusApi';
+import configTimesApi from './apis/configTimesApi';
+import majorApi from './apis/majorApi';
+import requestStudentsApi from './apis/requestStudentsApi';
+import semesterApi from './apis/semesterApi';
+import staffListApi from './apis/staffListApi';
+import studentApi from './apis/studentApi';
+import authSlice from './slices/authSlice';
+import campusSlice from './slices/campusSlice';
+import semesterSlice from './slices/semesterSlice';
+import internRegistrationApi from './apis/internRegistrationApi';
+import reportApi from './apis/reportApi';
 
 const rootReducer = combineReducers({
 	[authSlice.name]: authSlice.reducer,
@@ -26,16 +26,10 @@ const rootReducer = combineReducers({
 	[configTimesApi.reducerPath]: configTimesApi.reducer,
 	[requestStudentsApi.reducerPath]: requestStudentsApi.reducer,
 	[majorApi.reducerPath]: majorApi.reducer,
-	[staffListApi.reducerPath]: staffListApi.reducer,
-	// report reducer
-	[reportApi.reducerPath]: reportApi.reducer,
-	//upload drive
-	
-	[registerInternAPI.reducerPath]: registerInternAPI.reducer,
-
-	
+	[internRegistrationApi.reducerPath]: internRegistrationApi.reducer,
 	[businessApi.reducerPath]: businessApi.reducer,
-	[staffListApi.reducerPath]: staffListApi.reducer
+	[staffListApi.reducerPath]: staffListApi.reducer,
+	[reportApi.reducerPath]: reportApi.reducer
 });
 
 export default rootReducer;

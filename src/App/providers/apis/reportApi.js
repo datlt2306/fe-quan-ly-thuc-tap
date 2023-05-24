@@ -9,10 +9,13 @@ const reportApi = createApi({
 		uploadForm: build.mutation({
 			query: (payload) => ({ url: '/upload/form', method: 'PATCH', data: payload }),
 			invalidatesTags: ['Report']
+		}),
+		uploadReport: build.mutation({
+			query: (payload) => ({url: '/upload/report', method: 'PATCH', data: payload})
 		})
 	})
 });
 
-export const { useUploadFormMutation } = reportApi;
+export const { useUploadFormMutation, useUploadReportMutation } = reportApi;
 
 export default reportApi;

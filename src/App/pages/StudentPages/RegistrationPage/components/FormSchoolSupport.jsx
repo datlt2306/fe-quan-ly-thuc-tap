@@ -1,9 +1,4 @@
 /* eslint-disable react/prop-types */
-<<<<<<< HEAD
-import { useUploadCvMutation } from '@/App/providers/apis/registerInternAPI';
-=======
-
->>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 import { formSignUpSchoolSupportSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import FileUploadFieldControl from '@/Core/components/common/FormControl/FileUploadFieldControl';
@@ -12,19 +7,12 @@ import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Fragment } from 'react';
 import { useForm } from 'react-hook-form';
-<<<<<<< HEAD
-import { useSelector } from 'react-redux';
-=======
->>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import FormRow from '../components/FormRow';
 import { WrapButton } from './FormSelfFinding';
-<<<<<<< HEAD
-=======
 import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
->>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 
 const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 	const navigate = useNavigate();
@@ -46,15 +34,11 @@ const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 					initialValue='Chọn doanh nghiệp'
 					control={control}
 					name='business'
-<<<<<<< HEAD
-					options={Array.isArray(business?.list) ? business.list.map((item) => ({ value: item._id, label: item.name })) : []}
-=======
 					options={
 						Array.isArray(business?.list)
 							? business.list.map((item) => ({ value: item._id, label: item.name }))
 							: []
 					}
->>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 				/>
 			)
 		}
@@ -92,10 +76,6 @@ const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 		toast.success('Đăng ký thành công');
 		navigate('/thong-tin-sinh-vien');
 	};
-<<<<<<< HEAD
-	console.log(isLoading);
-=======
->>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 	return (
 		<>
 			<Form onSubmit={handleSubmit(handleFormSchoolSupport)}>
@@ -115,10 +95,6 @@ const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 	);
 };
 
-<<<<<<< HEAD
-export const Form = tw.form` pb-4`;
-=======
 export const Form = tw.form`pb-4`;
->>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 
 export default FormSchoolSupport;

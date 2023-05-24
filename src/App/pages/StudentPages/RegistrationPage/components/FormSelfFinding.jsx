@@ -1,10 +1,6 @@
 /* eslint-disable react/prop-types */
 import tw from 'twin.macro';
-<<<<<<< HEAD
-import { useUploadCvMutation } from '@/App/providers/apis/registerInternAPI';
-=======
 import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
->>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 import { formSignUpSelfFindingSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
@@ -17,10 +13,6 @@ import { toast } from 'react-toastify';
 import FormRow from './FormRow';
 import { Form } from './FormSchoolSupport';
 const FormSelfFinding = ({ fields, selectedOption, user }) => {
-<<<<<<< HEAD
-	console.log(user);
-=======
->>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 	const navigate = useNavigate();
 
 	const { control, handleSubmit } = useForm({
@@ -32,12 +24,6 @@ const FormSelfFinding = ({ fields, selectedOption, user }) => {
 	const formSelfFinding = [
 		...fields(control),
 		{
-<<<<<<< HEAD
-			content: <InputFieldControl label='Đơn vị thực tập' control={control} name='nameCompany' placeholder='Đơn vị thực tập/Tên doanh nghiệp' />
-		},
-		{
-			content: <InputFieldControl label='Địa chỉ thực tập' control={control} name='addressCompany' placeholder='Địa chỉ đơn vị thực tập' />
-=======
 			content: (
 				<InputFieldControl
 					label='Đơn vị thực tập'
@@ -56,15 +42,11 @@ const FormSelfFinding = ({ fields, selectedOption, user }) => {
 					placeholder='Địa chỉ đơn vị thực tập'
 				/>
 			)
->>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 		},
 		{
 			content: <InputFieldControl label='Mã số thuế' control={control} name='taxCode' placeholder='Mã số thuế' />
 		},
 		{
-<<<<<<< HEAD
-			content: <InputFieldControl label='Chức vụ người tiếp nhận' control={control} name='position' placeholder='Chức vụ người tiếp nhận' />
-=======
 			content: (
 				<InputFieldControl
 					label='Chức vụ người tiếp nhận'
@@ -73,7 +55,6 @@ const FormSelfFinding = ({ fields, selectedOption, user }) => {
 					placeholder='Chức vụ người tiếp nhận'
 				/>
 			)
->>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 		},
 		{
 			content: (
@@ -86,9 +67,6 @@ const FormSelfFinding = ({ fields, selectedOption, user }) => {
 			)
 		},
 		{
-<<<<<<< HEAD
-			content: <InputFieldControl label='Email người tiếp nhận' control={control} name='emailEnterprise' placeholder='Email người tiếp nhận' />
-=======
 			content: (
 				<InputFieldControl
 					label='Email người tiếp nhận'
@@ -97,7 +75,6 @@ const FormSelfFinding = ({ fields, selectedOption, user }) => {
 					placeholder='Email người tiếp nhận'
 				/>
 			)
->>>>>>> ce685e144a4331e6d4bb4388f1b2289e9b18ccec
 		}
 	];
 

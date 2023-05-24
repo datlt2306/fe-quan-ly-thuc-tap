@@ -1,4 +1,5 @@
 import { useUploadFormMutation } from '@/App/providers/apis/reportApi';
+import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 import { recordSchema } from '@/App/schemas/recordSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
@@ -61,7 +62,7 @@ const RecordPage = () => {
 		formData.append('internshipTime', value.date);
 		formData.append('mssv', data.mssv);
 		formData.append('email', data.email);
-		formData.append('_id', data.id);
+		formData.append('_id', data._id);
 		formData.append('typeNumber', 2);
 		const result = await handleSubmitForm(formData);
 		if (result?.error) {
