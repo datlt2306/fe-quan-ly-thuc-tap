@@ -15,21 +15,17 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const UpdateReviewCvModal = ({ openState, onOpenStateChange: handleOpenStateChange, selectedStudents }) => {
+const UpdateReviewModal = ({
+	openState,
+	onOpenStateChange: handleOpenStateChange,
+	selectedStudents,
+	statusOptions
+}) => {
 	const [updateReviewCV, { isLoading, isSuccess }] = useUpdateReviewCvMutation();
 	const { email: reviewerEmail } = useSelector((state) => state.auth?.user);
 	const toastId = useRef(null);
 	const { control, handleSubmit } = useForm();
 	const navigate = useNavigate();
-
-	const reviewStatusOptions = useMemo(() => {
-		const studentStatusMap = new Map();
-		Object.keys(StudentStatusEnum).forEach((key) => studentStatusMap.set(key, StudentStatusEnum[key]));
-		return [
-			{ label: studentStatusMap.get('1'), value: 1 },
-			{ label: studentStatusMap.get('2'), value: 2 }
-		];
-	}, []);
 
 	const handleUpdateReviewCV = async (data) => {
 		try {
@@ -77,7 +73,7 @@ const UpdateReviewCvModal = ({ openState, onOpenStateChange: handleOpenStateChan
 					<InformationCircleIcon className='aspect-square w-5 text-info' /> Xác nhận review các CV của sinh viên đã
 					chọn.
 				</Text>
-				<SelectFieldControl control={control} name='status' options={reviewStatusOptions} label='Trạng thái' />
+				<SelectFieldControl control={control} name='status' options={statusOptions} label='Trạng thái' />
 				<TextareaFieldControl
 					control={control}
 					name='textNote'
@@ -107,4 +103,4 @@ Modal.Actions = ({ ...props }) => (
 	</div>
 );
 
-export default UpdateReviewCvModal;
+export default UpdateReviewModal;
