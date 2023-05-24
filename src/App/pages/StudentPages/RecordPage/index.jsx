@@ -16,7 +16,7 @@ const RecordPage = () => {
 	const navigate = useNavigate();
 
 	const { user } = useSelector((state) => state.auth);
-	const {data} = useGetOneStudentQuery(user?.id);
+	const { data } = useGetOneStudentQuery(user?.id);
 
 	const [selectFile, setSelectFile] = useState(null);
 	const [validateFile, setValidateFile] = useState('');
@@ -75,29 +75,33 @@ const RecordPage = () => {
 	};
 	return (
 		<Container>
-			<Title>Nộp biên bản</Title>
-			<Form onSubmit={handleSubmit(handleSubmitRecord)}>
-				<Info>
-					Mã sinh viên: <Span>{data && data?.mssv}</Span>
-				</Info>
-				<Info>
-					Họ và tên: <Span>{data && data?.name}</Span>
-				</Info>
-				<InputFieldControl label='Tên doanh nghiệp' placeholder='Tên doanh nghiệp ...' control={control} name='nameCompany' />
-				<InputFieldControl label='Thời gian bắt đầu thực tập' control={control} name='date' type='date' />
-				<InputFieldControl
-					ref={fileInputRef}
-					label='Upload (Image, PDF hoặc Docx)'
-					control={control}
-					name='form'
-					type='file'
-					onChange={handleChange}
-				/>
-				<Error>{validateFile}</Error>
-				<Button variant='primary' type='submit' disabled={isLoading}>
-					{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp biên bản
-				</Button>
-			</Form>
+			{data?.form ? (<Title>Bạn đã nộp form biên bản</Title>) : (
+				<>
+					<Title>Nộp biên bản</Title>
+					<Form onSubmit={handleSubmit(handleSubmitRecord)}>
+						<Info>
+							Mã sinh viên: <Span>{data && data?.mssv}</Span>
+						</Info>
+						<Info>
+							Họ và tên: <Span>{data && data?.name}</Span>
+						</Info>
+						<InputFieldControl label='Tên doanh nghiệp' placeholder='Tên doanh nghiệp ...' control={control} name='nameCompany' />
+						<InputFieldControl label='Thời gian bắt đầu thực tập' control={control} name='date' type='date' />
+						<InputFieldControl
+							ref={fileInputRef}
+							label='Upload (Image, PDF hoặc Docx)'
+							control={control}
+							name='form'
+							type='file'
+							onChange={handleChange}
+						/>
+						<Error>{validateFile}</Error>
+						<Button variant='primary' type='submit' disabled={isLoading}>
+							{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp biên bản
+						</Button>
+					</Form>
+				</>
+			)}
 		</Container>
 	);
 };
