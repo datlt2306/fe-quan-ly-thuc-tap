@@ -1,3 +1,4 @@
+import { studentColumnAccessors } from '@/App/constants/studentColumnAccessors';
 import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from '@/App/constants/studentStatus';
 import { useExportToExcel } from '@/App/hooks/useExcel';
 import { useGetStudentReviewCVQuery } from '@/App/providers/apis/studentApi';
@@ -12,9 +13,8 @@ import formatDate from '@/Core/utils/formatDate';
 import { ArrowDownIcon, ChatBubbleLeftEllipsisIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Fragment, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-import { studentColumnAccessors } from '@/App/constants/studentColumnAccessors';
-import UpdateReviewModal from './components/UpdateReviewModal';
 import tw from 'twin.macro';
+import UpdateReviewModal from './components/UpdateReviewModal';
 
 const handleGetInternStatusStyle = (value) => {
 	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
