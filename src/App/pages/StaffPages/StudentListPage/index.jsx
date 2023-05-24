@@ -18,9 +18,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
+import { studentColumnAccessors } from '../../../constants/studentColumnAccessors';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
-import { studentColumnAccessors } from '../../../constants/studentColumnAccessors';
 
 const handleGetInternStatusStyle = (value) => {
 	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
@@ -34,14 +34,12 @@ const StudentListPage = () => {
 	const [addStudents] = useAddStudentsMutation();
 	const { data: semesterData } = useGetAllSemestersQuery({ campus_id: currentCampus?._id });
 	const [currentSemester, setCurrentSemester] = useState();
-	const [defaultSemster, setDefaultSemster] = useState();
 	const { data: studentsListData, isLoading } = useGetStudentsQuery({ semester: currentSemester });
 	const fileInputRef = useRef(null);
 	const toastId = useRef(null);
 
 	useEffect(() => {
 		setCurrentSemester(semesterData?.defaultSemester?._id);
-		setDefaultSemster(semesterData?.defaultSemester?._id);
 	}, [semesterData]);
 
 	const tableData = useMemo(() => {
@@ -321,13 +319,11 @@ const StudentListPage = () => {
 					<Select
 						id='semester-list'
 						className='min-w-[12rem] capitalize sm:text-sm'
-						onChange={(e) => setCurrentSemester(e.target.value)}>
+						onChange={(e) => setCurrentSemester(e.target.value)}
+						value={currentSemester}>
 						{Array.isArray(semesterData?.listSemesters) &&
 							semesterData?.listSemesters?.map((semester) => (
-								<Option
-									key={semester._id}
-									value={semester._id}
-									selected={currentSemester === semesterData?.defaultSemester?._id}>
+								<Option key={semester._id} value={semester._id}>
 									{semester?.name}
 								</Option>
 							))}
@@ -337,14 +333,14 @@ const StudentListPage = () => {
 					tableData={tableData}
 					handleExport={handleExportDataToExcel}
 					handleImport={handleImportStudents}
-					canImport={currentSemester === defaultSemster}
+					canImport={currentSemester === semesterData?.defaultSemester?._id}
 					ref={fileInputRef}
 				/>
 				<MobileDropdownButtonGroup
 					tableData={tableData}
 					handleExport={handleExportDataToExcel}
 					handleImport={handleImportStudents}
-					canImport={currentSemester === defaultSemster}
+					canImport={currentSemester === semesterData?.defaultSemester?._id}
 					ref={fileInputRef}
 				/>
 			</Box>
