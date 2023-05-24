@@ -44,7 +44,7 @@ const CampusListPage = () => {
 	};
 
 	const onOpenUpdate = (data) => {
-		const selectedCampus = managers?.listCampus && managers?.listCampus?.find((item) => item?._id === data);
+		const selectedCampus = tableData && tableData.find((item) => item?._id === data);
 		if (selectedCampus) {
 			setCampus(selectedCampus);
 			setModal(!modal);
