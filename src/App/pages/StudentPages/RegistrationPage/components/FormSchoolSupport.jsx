@@ -13,7 +13,8 @@ import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import FormRow from '../components/FormRow';
 import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
-import SharedFields from './sharedFields';
+import SharedFields from './SharedFields';
+
 const FormSchoolSupport = ({ business, selectedOption, user, majors }) => {
 	const navigate = useNavigate();
 	const [hanldeUploadCvMutation, { isLoading }] = useUploadCvMutation();
