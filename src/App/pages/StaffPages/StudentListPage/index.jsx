@@ -35,10 +35,7 @@ const StudentListPage = () => {
 	const { data: semesterData } = useGetAllSemestersQuery({ campus_id: currentCampus?._id });
 	const [currentSemester, setCurrentSemester] = useState();
 	const [defaultSemster, setDefaultSemster] = useState();
-	const { data: studentsListData, isLoading } = useGetStudentsQuery(
-		{ semester: currentSemester }
-		// { refetchOnMountOrArgChange: false }
-	);
+	const { data: studentsListData, isLoading } = useGetStudentsQuery({ semester: currentSemester });
 	const fileInputRef = useRef(null);
 	const toastId = useRef(null);
 
@@ -324,14 +321,13 @@ const StudentListPage = () => {
 					<Select
 						id='semester-list'
 						className='min-w-[12rem] capitalize sm:text-sm'
-						defaultValue={semesterData?.defaultSemester?._id}
-						onChange={(e) => {
-							console.log(e.target.value);
-							setCurrentSemester(e.target.value);
-						}}>
+						onChange={(e) => setCurrentSemester(e.target.value)}>
 						{Array.isArray(semesterData?.listSemesters) &&
 							semesterData?.listSemesters?.map((semester) => (
-								<Option key={semester._id} value={semester._id}>
+								<Option
+									key={semester._id}
+									value={semester._id}
+									selected={currentSemester === semesterData?.defaultSemester?._id}>
 									{semester?.name}
 								</Option>
 							))}

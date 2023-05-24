@@ -18,9 +18,9 @@ const studentApi = createApi({
 			query: () => ({ url: '/student/reviewcv', method: 'GET' }),
 			providesTags: ['StudentReviewCV']
 		}),
-		updateReviewCv: build.mutation({
+		updateReview: build.mutation({
 			query: (payload) => ({ url: '/student/status', method: 'PATCH', data: payload }),
-			invalidatesTags: ['StudentReviewCV']
+			invalidatesTags: ['StudentReviewCV', 'Students']
 		}),
 		addStudents: build.mutation({
 			query: (payload) => ({ url: '/student', method: 'POST', data: payload }),
@@ -34,6 +34,6 @@ export const {
 	useGetOneStudentQuery,
 	useAddStudentsMutation,
 	useGetStudentReviewCVQuery,
-	useUpdateReviewCvMutation
+	useUpdateReviewMutation
 } = studentApi;
 export default studentApi;
