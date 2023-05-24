@@ -28,7 +28,7 @@ const AddMajorSlideOver = ({ onOpen, open, panelTitle, majors }) => {
 		}
 		const result = await handleAddNewMajor({
 			...data,
-			majorCode:data?.majorCode.toUpperCase()
+			majorCode: data?.majorCode.toUpperCase()
 		});
 		if (result?.error) {
 			onOpen();
