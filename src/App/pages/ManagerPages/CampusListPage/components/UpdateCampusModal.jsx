@@ -27,13 +27,26 @@ const UpdateCampusModal = ({ campusData, onOpenStateChange, openState }) => {
 	const [handleUpdateCampus, { isLoading }] = useUpdateCampusMutation();
 
 	const onUpdateSubmit = async (data) => {
-		const { error } = await handleUpdateCampus({ id: campusData._id, payload: data });
-		if (error) {
+		try {
+			const {
+				data: { success, message }
+			} = await handleUpdateCampus({ id: campusData._id, payload: data });
+			if (success) {
+				onOpenStateChange(!openState);
+				toast.success('Sửa cơ sở thành công!');
+			} else {
+				onOpenStateChange(!openState);
+				toast.error(message);
+			}
+		} catch (error) {
 			toast.error('Sửa cở sở không thành công!');
-			return;
 		}
-		onOpenStateChange(!openState);
-		toast.success('Sửa cơ sở thành công!');
+		// if (error) {
+		// 	toast.error('Sửa cở sở không thành công!');
+		// 	return;
+		// }
+		// onOpenStateChange(!openState);
+		// toast.success('Sửa cơ sở thành công!');
 	};
 
 	return (
