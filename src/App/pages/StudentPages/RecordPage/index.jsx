@@ -4,6 +4,7 @@ import { recordSchema } from '@/App/schemas/recordSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
+import Typography from '@/Core/components/common/Text/Typography';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,7 +17,7 @@ const RecordPage = () => {
 	const navigate = useNavigate();
 
 	const { user } = useSelector((state) => state.auth);
-	const { data } = useGetOneStudentQuery(user?.id);
+	const { data, isLoading: getUserLoading } = useGetOneStudentQuery(user?.id);
 
 	const [selectFile, setSelectFile] = useState(null);
 	const [validateFile, setValidateFile] = useState('');
@@ -73,13 +74,18 @@ const RecordPage = () => {
 		toast.success('Nộp biên bản thành công');
 		navigate('/');
 	};
+	if (getUserLoading) {
+		return <Typography level={6}>... Đang tải dữ liệu</Typography>;
+	}
 	return (
 		<Container>
 			{data?.form ? (
-				<Title>Bạn đã nộp form biên bản</Title>
+				<Typography level={6}>Bạn đã nộp biên bản thành công!</Typography>
 			) : (
 				<>
-					<Title>Nộp biên bản</Title>
+					<Typography level={4} color='text-primary'>
+						Nộp biên bản
+					</Typography>
 					<Form onSubmit={handleSubmit(handleSubmitRecord)}>
 						<Info>
 							Mã sinh viên: <Span>{data && data?.mssv}</Span>
@@ -113,11 +119,10 @@ const RecordPage = () => {
 	);
 };
 
-const Form = tw.form`grid gap-8`;
-const Title = tw.div`mb-8 text-primary text-xl font-bold`;
-const Container = tw.div`container mx-auto w-[512px]`;
+const Form = tw.form`flex flex-col gap-6 mt-4`;
+const Container = tw.div`container w-[512px]`;
 const Info = tw.div``;
 const Error = tw.div`text-error`;
-const Span = tw.span`font-bold`;
+const Span = tw.span`font-bold text-base-content`;
 
 export default RecordPage;

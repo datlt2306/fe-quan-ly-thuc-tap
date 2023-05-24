@@ -5,6 +5,7 @@ import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import RadioFieldControl from '@/Core/components/common/FormControl/RadioFieldControl';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
+import Typography from '@/Core/components/common/Text/Typography';
 import { yupResolver } from '@hookform/resolvers/yup';
 import moment from 'moment';
 import React, { useState, useRef } from 'react';
@@ -23,7 +24,7 @@ const ReportPage = () => {
 	const navigate = useNavigate();
 
 	const { user } = useSelector((state) => state.auth);
-	const { data } = useGetOneStudentQuery(user?.id);
+	const { data, isLoading: getUserLoading } = useGetOneStudentQuery(user?.id);
 
 	const [selectFile, setSelectFile] = useState(null);
 	const [validateFile, setValidateFile] = useState('');
@@ -56,6 +57,7 @@ const ReportPage = () => {
 		}
 	};
 	const onSubmit = async (value) => {
+		console.log(value);
 		const file = selectFile;
 		const allowedExtensions = ['pdf', 'docx'];
 		const fileName = file.name;
@@ -83,13 +85,18 @@ const ReportPage = () => {
 		toast.success('Nộp báo cáo thành công');
 		navigate('/');
 	};
+	if (getUserLoading) {
+		return <Typography level={6}>... Đang tải dữ liệu</Typography>;
+	}
 	return (
 		<Container>
 			{data?.report ? (
-				<Title>Bạn đã nộp form báo cáo</Title>
+				<Typography level={6}>Bạn đã nộp biên bản thành công!</Typography>
 			) : (
 				<>
-					<Title>Nộp báo cáo</Title>
+					<Typography level={4} color='text-primary'>
+						Nộp báo cáo
+					</Typography>
 					<Form onSubmit={handleSubmit(onSubmit)}>
 						<Info>
 							Mã sinh viên: <Span>{data && data?.mssv}</Span>
@@ -147,7 +154,7 @@ const ReportPage = () => {
 						/>
 						<Error>{validateFile}</Error>
 						<div className='grid grid-flow-col justify-stretch gap-2'>
-							<Button variant='primary' type='submit'>
+							<Button variant='primary' type='submit' disabled={isLoading}>
 								{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp báo cáo
 							</Button>
 							<Button as='div' variant='success' onClick={() => window.open(data?.['CV'])}>
@@ -161,11 +168,10 @@ const ReportPage = () => {
 	);
 };
 
-const Form = tw.form`grid gap-8`;
-const Title = tw.div`mb-8 text-primary text-xl font-bold`;
-const Container = tw.div`container mx-auto w-[580px]`;
+const Form = tw.form`flex flex-col gap-6 mt-4`;
+const Container = tw.div`container w-[512px]`;
 const Info = tw.div``;
 const Error = tw.div`text-error`;
-const Span = tw.span`font-bold`;
+const Span = tw.span`font-bold text-base-content`;
 
 export default ReportPage;

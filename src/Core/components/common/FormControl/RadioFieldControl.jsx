@@ -33,8 +33,8 @@ const RadioFieldControl = ({ control, name, options, onChange: handleChange, ...
 							name={name}
 							onChange={(event) => {
 								field.onChange(event);
-								if (props.onChange) {
-									props.onChange(event);
+								if (handleChange) {
+									handleChange(event);
 								}
 							}}
 							value={option.value}
