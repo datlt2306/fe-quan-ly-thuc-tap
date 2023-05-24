@@ -1,6 +1,6 @@
 import Button from '@/Core/components/common/Button';
 
-import React, { forwardRef, useRef } from 'react';
+import React, { forwardRef, memo, useRef } from 'react';
 import tw from 'twin.macro';
 import { studentListSampleData } from '../mocks';
 import { useExportToExcel } from '@/App/hooks/useExcel';
@@ -40,4 +40,4 @@ const DesktopButtonGroup = ({ tableData, handleImport, handleExport, canImport }
 
 const ButtonList = tw.div`flex items-center gap-1 sm:hidden md:hidden`;
 
-export default forwardRef(DesktopButtonGroup);
+export default memo(forwardRef(DesktopButtonGroup));
