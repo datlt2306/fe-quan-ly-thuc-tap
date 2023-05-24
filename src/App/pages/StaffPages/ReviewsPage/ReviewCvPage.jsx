@@ -1,4 +1,5 @@
 import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from '@/App/constants/studentStatus';
+import { useExportToExcel } from '@/App/hooks/useExcel';
 import { useGetStudentReviewCVQuery } from '@/App/providers/apis/studentApi';
 import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
@@ -6,21 +7,14 @@ import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
 import IndeterminateCheckbox from '@/Core/components/common/Table/RowSelectionCheckbox';
 import Typography from '@/Core/components/common/Text/Typography';
-import formatDate from '@/Core/utils/formatDate';
-import {
-	ArrowDownIcon,
-	ChatBubbleLeftEllipsisIcon,
-	CheckCircleIcon,
-	EyeIcon,
-	EyeSlashIcon
-} from '@heroicons/react/24/outline';
-import { Fragment, useMemo, useState } from 'react';
-import tw from 'twin.macro';
-import { columnAccessors } from '../../StudentListPage/constants';
-import UpdateReviewCvModal from './components/UpdateReviewCvModal';
-import { useExportToExcel } from '@/App/hooks/useExcel';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
+import formatDate from '@/Core/utils/formatDate';
+import { ArrowDownIcon, ChatBubbleLeftEllipsisIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { Fragment, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
+import tw from 'twin.macro';
+import { studentColumnAccessors } from '@/App/constants/studentColumnAccessors';
+import UpdateReviewModal from './components/UpdateReviewModal';
 
 const handleGetInternStatusStyle = (value) => {
 	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
@@ -60,19 +54,19 @@ const ReviewCvPage = () => {
 				}
 			},
 			{
-				Header: columnAccessors.index,
+				Header: studentColumnAccessors.index,
 				accessor: 'index',
 				sortable: true
 			},
 			{
-				Header: columnAccessors.name,
+				Header: studentColumnAccessors.name,
 				accessor: 'name',
 				Filter: InputColumnFilter,
 				filterable: true,
 				sortable: true
 			},
 			{
-				Header: columnAccessors.mssv,
+				Header: studentColumnAccessors.mssv,
 				accessor: 'mssv', // object key
 				Filter: InputColumnFilter,
 				filterable: true,
@@ -80,32 +74,32 @@ const ReviewCvPage = () => {
 				Cell: ({ value }) => <span className='font-semibold uppercase'>{value}</span>
 			},
 			{
-				Header: columnAccessors.majorCode,
+				Header: studentColumnAccessors.majorCode,
 				accessor: 'majorCode',
 				Filter: InputColumnFilter,
 				filterable: true,
 				sortable: true
 			},
 			{
-				Header: columnAccessors.phoneNumber,
+				Header: studentColumnAccessors.phoneNumber,
 				accessor: 'phoneNumber',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: columnAccessors.email,
+				Header: studentColumnAccessors.email,
 				accessor: 'email',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: columnAccessors.support,
+				Header: studentColumnAccessors.support,
 				accessor: 'support',
 				Filter: SelectColumnFilter,
 				filterable: true
 			},
 			{
-				Header: columnAccessors.statusCheck,
+				Header: studentColumnAccessors.statusCheck,
 				accessor: 'statusCheck',
 				Filter: ({ column: { filterValue, setFilter, preFilteredRows, id } }) => (
 					<SelectColumnFilter
@@ -118,7 +112,7 @@ const ReviewCvPage = () => {
 			},
 
 			{
-				Header: columnAccessors.nameCompany,
+				Header: studentColumnAccessors.nameCompany,
 				accessors: 'nameCompany',
 				Filter: InputColumnFilter,
 				filterable: true,
@@ -137,13 +131,13 @@ const ReviewCvPage = () => {
 					)
 			},
 			{
-				Header: columnAccessors.dream,
+				Header: studentColumnAccessors.dream,
 				accessor: 'dream',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: columnAccessors.CV,
+				Header: studentColumnAccessors.CV,
 				accessor: 'CV',
 				Filter: InputColumnFilter,
 				filterable: false,
@@ -162,13 +156,13 @@ const ReviewCvPage = () => {
 				)
 			},
 			{
-				Header: columnAccessors.reviewer,
+				Header: studentColumnAccessors.reviewer,
 				accessor: 'reviewer',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: columnAccessors.statusStudent,
+				Header: studentColumnAccessors.statusStudent,
 				accessor: 'statusStudent',
 				Filter: SelectColumnFilter,
 				filterable: true,
@@ -176,14 +170,14 @@ const ReviewCvPage = () => {
 			},
 
 			{
-				Header: columnAccessors.createdAt,
+				Header: studentColumnAccessors.createdAt,
 				accessor: 'createdAt',
 				Filter: InputColumnFilter,
 				filterable: true,
 				Cell: ({ value }) => <span>{formatDate(value)}</span>
 			},
 			{
-				Header: columnAccessors.note,
+				Header: studentColumnAccessors.note,
 				accessor: 'note',
 				filterable: false,
 				sortable: false
@@ -191,14 +185,21 @@ const ReviewCvPage = () => {
 		],
 		[]
 	);
-
+	const reviewStatusOptions = useMemo(() => {
+		const studentStatusMap = new Map();
+		Object.keys(StudentStatusEnum).forEach((key) => studentStatusMap.set(key, StudentStatusEnum[key]));
+		return [
+			{ label: studentStatusMap.get('1'), value: 1 },
+			{ label: studentStatusMap.get('2'), value: 2 }
+		];
+	}, []);
 	// Export data from table to excel file
 	const handleExportDataToExcel = (data) => {
 		if (!data.length) {
 			toast.warn('Chưa có dữ liệu để xuất file !');
 			return;
 		}
-		const exportedData = convertToExcelData({ data: data, columnKeysAccessor: columnAccessors });
+		const exportedData = convertToExcelData({ data: data, columnKeysAccessor: studentColumnAccessors });
 		if (!exportedData) {
 			toast.error('Export dữ liệu thất bại !');
 			return;
@@ -208,7 +209,12 @@ const ReviewCvPage = () => {
 
 	return (
 		<Fragment>
-			<UpdateReviewCvModal openState={open} onOpenStateChange={setOpen} selectedStudents={selectedStudents} />
+			<UpdateReviewModal
+				openState={open}
+				onOpenStateChange={setOpen}
+				selectedStudents={selectedStudents}
+				statusOptions={reviewStatusOptions}
+			/>
 			<Container>
 				<Box>
 					<Typography level={5} fontWeight='semibold'>
