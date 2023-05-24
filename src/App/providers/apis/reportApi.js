@@ -11,7 +11,7 @@ const reportApi = createApi({
 			invalidatesTags: ['Report']
 		}),
 		uploadReport: build.mutation({
-			query: (payload) => ({url: '/upload/report', method: 'PATCH', data: payload})
+			query: (payload) => ({ url: '/upload/report', method: 'PATCH', data: payload })
 		})
 	})
 });

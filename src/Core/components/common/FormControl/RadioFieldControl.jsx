@@ -37,7 +37,8 @@ const RadioFieldControl = ({ control, name, options, onChange: handleChange, ...
 									props.onChange(event);
 								}
 							}}
-							value={option.value} />
+							value={option.value}
+						/>
 					</Label>
 				))}
 			</RadioGroup>

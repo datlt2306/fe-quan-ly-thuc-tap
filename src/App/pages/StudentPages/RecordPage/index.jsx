@@ -66,16 +66,18 @@ const RecordPage = () => {
 		formData.append('typeNumber', 2);
 		const result = await handleSubmitForm(formData);
 		if (result?.error) {
-			toast.error("Nộp biên bản thất bại!");
+			toast.error('Nộp biên bản thất bại!');
 			navigate('/');
 			return;
 		}
-		toast.success("Nộp biên bản thành công");
+		toast.success('Nộp biên bản thành công');
 		navigate('/');
 	};
 	return (
 		<Container>
-			{data?.form ? (<Title>Bạn đã nộp form biên bản</Title>) : (
+			{data?.form ? (
+				<Title>Bạn đã nộp form biên bản</Title>
+			) : (
 				<>
 					<Title>Nộp biên bản</Title>
 					<Form onSubmit={handleSubmit(handleSubmitRecord)}>
@@ -85,7 +87,12 @@ const RecordPage = () => {
 						<Info>
 							Họ và tên: <Span>{data && data?.name}</Span>
 						</Info>
-						<InputFieldControl label='Tên doanh nghiệp' placeholder='Tên doanh nghiệp ...' control={control} name='nameCompany' />
+						<InputFieldControl
+							label='Tên doanh nghiệp'
+							placeholder='Tên doanh nghiệp ...'
+							control={control}
+							name='nameCompany'
+						/>
 						<InputFieldControl label='Thời gian bắt đầu thực tập' control={control} name='date' type='date' />
 						<InputFieldControl
 							ref={fileInputRef}

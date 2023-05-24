@@ -1,10 +1,10 @@
-import { StudentPaths } from "@/Core/constants/routePaths";
-import { lazy } from "react";
-import StudentPrivateLayout from "../layouts/PrivateLayout/StudentPrivateLayout";
-const RecordPage = lazy(() => import("../pages/StudentPages/RecordPage"));
-const RegistrationPage = lazy(() => import("../pages/StudentPages/RegistrationPage"));
-const ReportPage = lazy(() => import("../pages/StudentPages/ReportPage"));
-const StudentInfoPage = lazy(() => import("../pages/StudentPages/StudentInfoPage"));
+import { StudentPaths } from '@/Core/constants/routePaths';
+import { lazy } from 'react';
+import StudentPrivateLayout from '../layouts/PrivateLayout/StudentPrivateLayout';
+const RecordPage = lazy(() => import('../pages/StudentPages/RecordPage'));
+const RegistrationPage = lazy(() => import('../pages/StudentPages/RegistrationPage'));
+const ReportPage = lazy(() => import('../pages/StudentPages/ReportPage'));
+const StudentInfoPage = lazy(() => import('../pages/StudentPages/StudentInfoPage'));
 
 const studentRoutes = [
 	{
