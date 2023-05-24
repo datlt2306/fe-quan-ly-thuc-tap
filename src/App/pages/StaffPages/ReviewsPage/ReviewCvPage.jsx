@@ -12,9 +12,9 @@ import formatDate from '@/Core/utils/formatDate';
 import { ArrowDownIcon, ChatBubbleLeftEllipsisIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Fragment, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-import tw from 'twin.macro';
 import { studentColumnAccessors } from '@/App/constants/studentColumnAccessors';
 import UpdateReviewModal from './components/UpdateReviewModal';
+import tw from 'twin.macro';
 
 const handleGetInternStatusStyle = (value) => {
 	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
