@@ -4,7 +4,6 @@ import { Suspense, lazy, Fragment, useMemo, useState, useEffect, useCallback } f
 import tw from 'twin.macro';
 import { toast } from 'react-toastify';
 
-
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
@@ -129,7 +128,11 @@ const MajorListPage = () => {
 		<Fragment>
 			<Suspense fallback={<LoadingProgressBar />}>
 				{slideOverVisibility.AddSlide && (
-					<AddMajorSlideOver open={slideOverVisibility.AddSlide} onOpen={handleAddSlideOver} panelTitle={'Thêm ngành học'} />
+					<AddMajorSlideOver
+						open={slideOverVisibility.AddSlide}
+						onOpen={handleAddSlideOver}
+						panelTitle={'Thêm ngành học'}
+					/>
 				)}
 				{slideOverVisibility.UpdateSlide && (
 					<UpdateMajorSlideOver

@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import axiosBaseQuery from '../axiosBaseQuery';
 
-
 const internRegistrationApi = createApi({
 	reducerPath: 'registerInternApi',
 	baseQuery: axiosBaseQuery(),

@@ -12,10 +12,10 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import FormRow from '../components/FormRow';
-import { WrapButton } from './FormSelfFinding';
 import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
+import SharedFields from './SharedFields';
 
-const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
+const FormSchoolSupport = ({ business, selectedOption, user, majors }) => {
 	const navigate = useNavigate();
 	const [hanldeUploadCvMutation, { isLoading }] = useUploadCvMutation();
 	const { control, handleSubmit } = useForm({
@@ -24,10 +24,7 @@ const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 	});
 
 	const formSchoolSupport = [
-		...fields(control),
-		{
-			content: <FileUploadFieldControl label='Upload CV(PDF)' className='mt-1 w-96' control={control} name='CV' />
-		},
+		...SharedFields(control, user, majors),
 		{
 			content: (
 				<SelectFieldControl
@@ -42,6 +39,9 @@ const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 					}
 				/>
 			)
+		},
+		{
+			content: <FileUploadFieldControl label='Upload CV(PDF)' className='mt-1 w-96' control={control} name='CV' />
 		}
 	];
 
@@ -85,12 +85,10 @@ const FormSchoolSupport = ({ fields, business, selectedOption, user }) => {
 						<Fragment key={index}>{row.content}</Fragment>
 					))}
 				</FormRow>
-				<WrapButton>
-					<Button type='submit' variant='primary' className='mt-2' disabled={isLoading}>
-						{isLoading && <LoadingSpinner size='sm' variant='primary' />}
-						Đăng ký
-					</Button>
-				</WrapButton>
+				<Button type='submit' variant='primary' className='mt-2' disabled={isLoading}>
+					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
+					Đăng ký
+				</Button>
 			</Form>
 		</>
 	);
