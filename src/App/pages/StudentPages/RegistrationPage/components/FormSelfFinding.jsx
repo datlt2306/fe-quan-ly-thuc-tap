@@ -12,7 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import FormRow from './FormRow';
 import { Form } from './FormSchoolSupport';
-import SharedFields from './sharedFields';
+import SharedFields from './SharedFields';
+
 const FormSelfFinding = ({ selectedOption, user, majors }) => {
 	const navigate = useNavigate();
 
