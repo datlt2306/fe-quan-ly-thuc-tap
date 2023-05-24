@@ -9,6 +9,7 @@ import { Option, Select } from '@/Core/components/common/FormControl/SelectField
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
 import { AllowedFileExt } from '@/Core/constants/allowedFileType';
+import HttpStatusCode from '@/Core/constants/httpStatus';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import formatDate from '@/Core/utils/formatDate';
 import getFileExtension from '@/Core/utils/getFileExtension';
@@ -20,7 +21,6 @@ import tw from 'twin.macro';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
 import { columnAccessors } from './constants';
-import useLocalStorage from '@/App/hooks/useLocalstorage';
 
 const handleGetInternStatusStyle = (value) => {
 	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
@@ -87,11 +87,14 @@ const StudentListPage = () => {
 				smester_id: semesterData?.defaultSemester?._id,
 				campus_id: currentCampus?._id
 			});
-
+			console.log(error.status);
 			if (error) {
+				const message =
+					error.status === HttpStatusCode.CONFLICT ? 'Đã có sinh viên tồn tại trong hệ thống !' : 'Lỗi server !';
+
 				toast.update(toastId.current, {
 					type: 'error',
-					render: error.message || 'Đã có lỗi xảy ra !',
+					render: message,
 					isLoading: false,
 					closeButton: true,
 					autoClose: 2000
@@ -99,14 +102,6 @@ const StudentListPage = () => {
 				fileInputRef.current.value = null;
 				return;
 			}
-
-			toast.update(toastId.current, {
-				type: 'success',
-				render: 'Tải lên dữ liệu thành công!',
-				isLoading: false,
-				closeButton: true,
-				autoClose: 2000
-			});
 
 			fileInputRef.current.value = null;
 		} catch (error) {
@@ -223,8 +218,8 @@ const StudentListPage = () => {
 					)
 			},
 			{
-				Header: columnAccessors.position,
-				accessor: 'position',
+				Header: columnAccessors.dream,
+				accessor: 'dream',
 				Filter: InputColumnFilter,
 				filterable: true
 			},

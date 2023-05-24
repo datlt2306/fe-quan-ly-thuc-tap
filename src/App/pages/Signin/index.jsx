@@ -31,7 +31,7 @@ export default function SigninPage() {
 
 			setLoginInformation({
 				smester_id: defaultSemester.result?._id,
-				campus_id: defaultSemester.result?.campus_id
+				campus_id: campus
 			});
 
 			setAllowToLogin(!!campus);

@@ -4,26 +4,36 @@ import axiosBaseQuery from '../axiosBaseQuery';
 const studentApi = createApi({
 	reducerPath: 'studentApi',
 	baseQuery: axiosBaseQuery(),
-	tagTypes: ['Student'],
+	tagTypes: ['Students', 'StudentReviewCV'],
 	keepUnusedDataFor: 60 * 60 * 60,
 	endpoints: (build) => ({
 		getStudents: build.query({
 			query: (params) => ({ url: '/student', method: 'GET', params }),
-			providesTags: ['Student']
+			providesTags: ['Students']
 		}),
 		getOneStudent: build.query({
-			query: (id) => {
-				return { url: `/student/${id}`, method: 'GET' };
-			},
-
-			providesTags: ['Students']
+			query: (id) => ({ url: `/student/${id}`, method: 'GET' })
+		}),
+		getStudentReviewCV: build.query({
+			query: () => ({ url: '/student/reviewcv', method: 'GET' }),
+			providesTags: ['StudentReviewCV']
+		}),
+		updateReviewCv: build.mutation({
+			query: (payload) => ({ url: '/student/status', method: 'PATCH', data: payload }),
+			invalidatesTags: ['StudentReviewCV']
 		}),
 		addStudents: build.mutation({
 			query: (payload) => ({ url: '/student', method: 'POST', data: payload }),
-			invalidatesTags: ['Student']
+			invalidatesTags: ['Students']
 		})
 	})
 });
 
-export const { useGetStudentsQuery, useGetOneStudentQuery, useAddStudentsMutation } = studentApi;
+export const {
+	useGetStudentsQuery,
+	useGetOneStudentQuery,
+	useAddStudentsMutation,
+	useGetStudentReviewCVQuery,
+	useUpdateReviewCvMutation
+} = studentApi;
 export default studentApi;
