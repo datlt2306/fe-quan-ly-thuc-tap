@@ -118,13 +118,7 @@ const RegistrationPage = () => {
 	const deadlineCheck =
 		deadline && deadline.endTime > new Date().getTime() && deadline.startTime < new Date().getTime();
 
-	if (isLoading) {
-		return <div>... Đang tải dữ liệu</div>;
-	}
-	if (student?.CV || student?.nameCompany) {
-		return <div>Bạn đã nộp form đăng ký thực tập</div>;
-	}
-	return (
+	const formElement = (
 		<>
 			{deadlineCheck ? <CountdownTimer targetDate={deadline?.endTime} /> : <ExpiredNotice />}
 			{deadlineCheck && (
@@ -160,6 +154,17 @@ const RegistrationPage = () => {
 				</>
 			)}
 		</>
+	);
+
+	if (isLoading) {
+		return <div>... Đang tải dữ liệu</div>;
+	}
+	return student?.listTimeForm?.length > 0 ? (
+		formElement
+	) : student?.CV || student?.nameCompany ? (
+		<div>Bạn đã nộp form đăng ký thực tập</div>
+	) : (
+		formElement
 	);
 };
 

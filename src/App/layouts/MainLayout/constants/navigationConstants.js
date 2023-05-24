@@ -8,6 +8,8 @@ import {
 	ClipboardDocumentIcon,
 	ClockIcon,
 	DocumentChartBarIcon,
+	DocumentCheckIcon,
+	DocumentIcon,
 	DocumentTextIcon,
 	EnvelopeOpenIcon,
 	ListBulletIcon,
@@ -71,8 +73,27 @@ export const staffNavigation = [
 	},
 	{
 		name: 'Reviews',
-		path: StaffPaths.REVIEWS,
-		icon: ClipboardDocumentCheckIcon
+		icon: ClipboardDocumentCheckIcon,
+		children: [
+			{
+				name: 'Review CV',
+				path: StaffPaths.REVIEW_CV,
+				icon: DocumentCheckIcon,
+				show: true
+			},
+			{
+				name: 'Review biên bản',
+				path: StaffPaths.REVIEW_RECORD,
+				icon: DocumentTextIcon,
+				show: true
+			},
+			{
+				name: 'Review báo cáo',
+				path: StaffPaths.REVIEW_REPORT,
+				icon: DocumentChartBarIcon,
+				show: true
+			}
+		]
 	},
 	{
 		name: 'Kì học',
