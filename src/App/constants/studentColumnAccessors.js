@@ -1,4 +1,4 @@
-export const columnAccessors = {
+export const studentColumnAccessors = {
 	index: 'STT',
 	name: 'Họ tên',
 	mssv: 'MSSV',

@@ -6,7 +6,7 @@ import ExpiredNotice from './ExpiredNotice';
 
 const ShowCounter = ({ days, hours, minutes, seconds }) => {
 	return (
-		<div className='flex bg-gray-100 p-4 rounded-md'>
+		<div className='flex rounded-md bg-gray-100 p-4'>
 			<div className='flex gap-2'>
 				<div>Thời gian đăng ký còn lại</div>
 				<DateTimeDisplay value={days} type={'Ngày'} />
