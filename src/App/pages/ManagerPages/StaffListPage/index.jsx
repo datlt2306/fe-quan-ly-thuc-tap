@@ -121,7 +121,7 @@ const StaffListPage = () => {
 				)
 			}
 		],
-		[]
+		[tableData]
 	);
 
 	return (
@@ -132,6 +132,7 @@ const StaffListPage = () => {
 				onOpenStateChange={setIsEditing}
 				title={'Sửa nhân viên'}
 				userData={user}
+				users={data}
 			/>
 			<Box>
 				<ButtonList>
