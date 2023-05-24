@@ -21,14 +21,23 @@ const AddCampusSlideOver = ({ onOpen, open }) => {
 	const [handleAddNewCampus, { isLoading }] = useAddCampusMutation();
 
 	const onAddSubmit = async (data) => {
-		const result = await handleAddNewCampus(data);
-		if (result?.data?.statusCode) {
+		try {
+			const {
+				data: { success, message }
+			} = await handleAddNewCampus(data);
+
+			if (success) {
+				onOpen(!open);
+				reset();
+				toast.success('Thêm cơ sở thành công!');
+			} else {
+				onOpen(!open);
+				reset();
+				toast.error(message);
+			}
+		} catch (error) {
 			toast.error('Thêm cơ sở không thành công!');
-			return;
 		}
-		onOpen(!open);
-		reset();
-		toast.success('Thêm cơ sở thành công!');
 	};
 
 	useEffect(() => {

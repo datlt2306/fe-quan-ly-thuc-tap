@@ -26,7 +26,9 @@ const CampusListPage = () => {
 	const { data: managers } = useGetAllCampusQuery();
 
 	const tableData = useMemo(() => {
-		return Array.isArray(managers?.listCampus) ? managers?.listCampus?.map((user, index) => ({ ...user, index: index + 1 })) : [];
+		return Array.isArray(managers?.listCampus)
+			? managers?.listCampus?.map((user, index) => ({ ...user, index: index + 1 }))
+			: [];
 	}, [managers]);
 
 	const [handleRemoveCampus] = useDeleteCampusMutation();
@@ -42,7 +44,7 @@ const CampusListPage = () => {
 	};
 
 	const onOpenUpdate = (data) => {
-		const selectedCampus = managers?.listCampus && managers?.listCampus?.find((item) => item?._id === data);
+		const selectedCampus = tableData && tableData.find((item) => item?._id === data);
 		if (selectedCampus) {
 			setCampus(selectedCampus);
 			setModal(!modal);
