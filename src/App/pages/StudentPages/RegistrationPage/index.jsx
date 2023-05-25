@@ -102,7 +102,8 @@ const RegistrationPage = () => {
 			</div>
 		);
 	}
-	return student?.listTimeForm?.length > 0 ? (
+	//kiểm tra xem statusCheck có phải là trạng thái sửa cv hay không hay là có form nào mở hay không thì mở lại cho  học sinh đăng ký form
+	return student?.listTimeForm?.length > 0 || student?.statusCheck == 1 ? (
 		<FormElement
 			student={student}
 			majors={majors}
