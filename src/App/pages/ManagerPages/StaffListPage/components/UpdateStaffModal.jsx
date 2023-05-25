@@ -23,7 +23,7 @@ const UpdateStaffModal = ({ userData, onOpenStateChange, openState, users }) => 
 			reset({
 				name: userData?.name,
 				email: userData?.email,
-				role: userData?.role
+				role: userData?.role === 'Nhân Viên' ? 1 : 2
 			});
 		}
 	}, [userData]);

@@ -41,12 +41,6 @@ const UpdateCampusModal = ({ campusData, onOpenStateChange, openState }) => {
 		} catch (error) {
 			toast.error('Sửa cở sở không thành công!');
 		}
-		// if (error) {
-		// 	toast.error('Sửa cở sở không thành công!');
-		// 	return;
-		// }
-		// onOpenStateChange(!openState);
-		// toast.success('Sửa cơ sở thành công!');
 	};
 
 	return (
