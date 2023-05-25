@@ -6,7 +6,7 @@ import { studentListSampleData } from '../mocks';
 import { useExportToExcel } from '@/App/hooks/useExcel';
 import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon } from '@heroicons/react/24/outline';
 
-const DesktopButtonGroup = ({ tableData, handleImport, handleExport, canImport }, ref) => {
+const DesktopButtonGroup = forwardRef(({ tableData, handleImport, handleExport, canImport }, ref) => {
 	const localRef = useRef(null);
 	const fileInputRef = ref || localRef;
 	const { handleExportFile } = useExportToExcel();
@@ -36,8 +36,8 @@ const DesktopButtonGroup = ({ tableData, handleImport, handleExport, canImport }
 			</Button>
 		</ButtonList>
 	);
-};
+});
 
 const ButtonList = tw.div`flex items-center gap-1 sm:hidden md:hidden`;
 
-export default memo(forwardRef(DesktopButtonGroup));
+export default memo(DesktopButtonGroup);

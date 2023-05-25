@@ -41,7 +41,7 @@ const StudentListPage = () => {
 	useEffect(() => {
 		setCurrentSemester(semesterData?.defaultSemester?._id);
 	}, [semesterData]);
-
+	console.log('currentSemester :>> ', currentSemester);
 	const tableData = useMemo(() => {
 		return Array.isArray(studentsListData)
 			? studentsListData.map((student, index) => {
@@ -79,7 +79,7 @@ const StudentListPage = () => {
 			toast.warn('Vui lòng nhập thông tin đầy đủ !');
 			return;
 		}
-
+		console.log('currentSemester :>> ', currentSemester);
 		const newStudentList = excelData.map((obj) => ({
 			name: obj[studentColumnAccessors.name],
 			mssv: obj[studentColumnAccessors.mssv],
@@ -88,16 +88,16 @@ const StudentListPage = () => {
 			phoneNumber: obj[studentColumnAccessors.phoneNumber],
 			majorCode: obj[studentColumnAccessors.majorCode],
 			statusStudent: obj[studentColumnAccessors.statusStudent],
-			smester_id: semesterData?.defaultSemester?._id,
+			smester_id: currentSemester,
 			campus_id: currentCampus?._id
 		}));
 		try {
 			toastId.current = toast.loading('Đang tải lên dữ liệu ...');
 			const payload = await newStudentSchema.validate(newStudentList);
-
+			console.log('currentSemester :>> ', currentSemester);
 			const { error } = await addStudents({
 				data: payload,
-				smester_id: semesterData?.defaultSemester?._id,
+				smester_id: currentSemester,
 				campus_id: currentCampus?._id
 			});
 			if (error) {
@@ -135,31 +135,36 @@ const StudentListPage = () => {
 	};
 
 	// Get file from device and execute callback to add new students
-	const handleImportStudents = useCallback((file) => {
-		console.log('handleImportStudents');
-		const fileExtension = getFileExtension(file);
-		if (fileExtension !== AllowedFileExt.XLSX) {
-			toast.error('File import không hợp lệ');
-			fileInputRef.current.value = null;
-			return;
-		}
-		handleImportFile(file, importExcelDataCallback);
-		fileInputRef.current.value = null; // reset input file after imported
-	}, []);
+	const handleImportStudents = useCallback(
+		(file) => {
+			const fileExtension = getFileExtension(file);
+			if (fileExtension !== AllowedFileExt.XLSX) {
+				toast.error('File import không hợp lệ');
+				fileInputRef.current.value = null;
+				return;
+			}
+			handleImportFile(file, importExcelDataCallback);
+			fileInputRef.current.value = null; // reset input file after imported
+		},
+		[currentSemester]
+	);
 
 	// Export data from table to excel file
-	const handleExportDataToExcel = useCallback((data) => {
-		if (!data.length) {
-			toast.warn('Chưa có dữ liệu để xuất file !');
-			return;
-		}
-		const exportedData = convertToExcelData({ data: data, columnKeysAccessor: studentColumnAccessors });
-		if (!exportedData) {
-			toast.error('Export dữ liệu thất bại !');
-			return;
-		}
-		handleExportFile({ data: exportedData, fileName: 'Danh sách sinh viên' });
-	}, []);
+	const handleExportDataToExcel = useCallback(
+		(data) => {
+			if (!data.length) {
+				toast.warn('Chưa có dữ liệu để xuất file !');
+				return;
+			}
+			const exportedData = convertToExcelData({ data: data, columnKeysAccessor: studentColumnAccessors });
+			if (!exportedData) {
+				toast.error('Export dữ liệu thất bại !');
+				return;
+			}
+			handleExportFile({ data: exportedData, fileName: 'Danh sách sinh viên' });
+		},
+		[currentSemester]
+	);
 
 	// Define columns of table
 	const columnsData = useMemo(
