@@ -4,7 +4,7 @@ import axiosBaseQuery from '../axiosBaseQuery';
 const studentApi = createApi({
 	reducerPath: 'studentApi',
 	baseQuery: axiosBaseQuery(),
-	tagTypes: ['Students', 'StudentReviewCV'],
+	tagTypes: ['Students', 'StudentsToReview'],
 	keepUnusedDataFor: 60 * 60 * 60,
 	endpoints: (build) => ({
 		getStudents: build.query({
@@ -14,13 +14,13 @@ const studentApi = createApi({
 		getOneStudent: build.query({
 			query: (id) => ({ url: `/student/${id}`, method: 'GET' })
 		}),
-		getStudentReviewCV: build.query({
-			query: () => ({ url: '/student/reviewcv', method: 'GET' }),
-			providesTags: ['StudentReviewCV']
+		getStudentsToReview: build.query({
+			query: () => ({ url: '/student/reviews', method: 'GET' }),
+			providesTags: ['StudentsToReview']
 		}),
 		updateReview: build.mutation({
 			query: (payload) => ({ url: '/student/status', method: 'PATCH', data: payload }),
-			invalidatesTags: ['StudentReviewCV', 'Students']
+			invalidatesTags: ['StudentsToReview', 'Students']
 		}),
 		addStudents: build.mutation({
 			query: (payload) => ({ url: '/student', method: 'POST', data: payload }),
@@ -33,7 +33,8 @@ export const {
 	useGetStudentsQuery,
 	useGetOneStudentQuery,
 	useAddStudentsMutation,
-	useGetStudentReviewCVQuery,
+	useGetStudentsToReviewQuery,
 	useUpdateReviewMutation
 } = studentApi;
+
 export default studentApi;

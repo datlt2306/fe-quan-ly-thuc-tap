@@ -1,11 +1,10 @@
+import { InternSupportType, StudentColumnAccessors, StudentStatusEnum } from '@/App/constants/studentConstants';
 import { useGetStudentsQuery } from '@/App/providers/apis/studentApi';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
-import formatDate from '@/Core/utils/formatDate';
-import React, { useMemo, useRef, useState } from 'react';
-import { studentColumnAccessors } from '@/App/constants/studentColumnAccessors';
-import { InternSupportType, StudentStatusEnum } from '@/App/constants/studentStatus';
 import Typography from '@/Core/components/common/Text/Typography';
+import formatDate from '@/Core/utils/formatDate';
+import { useMemo, useRef, useState } from 'react';
 import tw from 'twin.macro';
 
 const ReviewReportPage = () => {
@@ -31,19 +30,19 @@ const ReviewReportPage = () => {
 	const columnsData = useMemo(
 		() => [
 			{
-				Header: studentColumnAccessors.index,
+				Header: StudentColumnAccessors.index,
 				accessor: 'index',
 				sortable: true
 			},
 			{
-				Header: studentColumnAccessors.name,
+				Header: StudentColumnAccessors.name,
 				accessor: 'name',
 				Filter: InputColumnFilter,
 				filterable: true,
 				sortable: true
 			},
 			{
-				Header: studentColumnAccessors.mssv,
+				Header: StudentColumnAccessors.mssv,
 				accessor: 'mssv', // object key
 				Filter: InputColumnFilter,
 				filterable: true,
@@ -51,32 +50,32 @@ const ReviewReportPage = () => {
 				Cell: ({ value }) => <span className='font-semibold uppercase'>{value}</span>
 			},
 			{
-				Header: studentColumnAccessors.majorCode,
+				Header: StudentColumnAccessors.majorCode,
 				accessor: 'majorCode',
 				Filter: SelectColumnFilter,
 				filterable: true,
 				sortable: true
 			},
 			{
-				Header: studentColumnAccessors.phoneNumber,
+				Header: StudentColumnAccessors.phoneNumber,
 				accessor: 'phoneNumber',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: studentColumnAccessors.email,
+				Header: StudentColumnAccessors.email,
 				accessor: 'email',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: studentColumnAccessors.support,
+				Header: StudentColumnAccessors.support,
 				accessor: 'support',
 				Filter: SelectColumnFilter,
 				filterable: true
 			},
 			{
-				Header: studentColumnAccessors.statusCheck,
+				Header: StudentColumnAccessors.statusCheck,
 				accessor: 'statusCheck',
 				Filter: SelectColumnFilter,
 				filterable: true,
@@ -84,7 +83,7 @@ const ReviewReportPage = () => {
 			},
 
 			{
-				Header: studentColumnAccessors.nameCompany,
+				Header: StudentColumnAccessors.nameCompany,
 				accessors: 'nameCompany',
 				Filter: InputColumnFilter,
 				filterable: true,
@@ -103,13 +102,13 @@ const ReviewReportPage = () => {
 					)
 			},
 			{
-				Header: studentColumnAccessors.dream,
+				Header: StudentColumnAccessors.dream,
 				accessor: 'dream',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: studentColumnAccessors.CV,
+				Header: StudentColumnAccessors.CV,
 				accessor: 'CV',
 				Filter: InputColumnFilter,
 				filterable: false,
@@ -129,19 +128,19 @@ const ReviewReportPage = () => {
 				)
 			},
 			{
-				Header: studentColumnAccessors.report,
+				Header: StudentColumnAccessors.report,
 				accessor: 'report',
 				Cell: ({ value }) => !!value && <Badge variant='info'>Đã nộp</Badge>
 			},
 
 			{
-				Header: studentColumnAccessors.reviewer,
+				Header: StudentColumnAccessors.reviewer,
 				accessor: 'reviewer',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: studentColumnAccessors.statusStudent,
+				Header: StudentColumnAccessors.statusStudent,
 				accessor: 'statusStudent',
 				Filter: SelectColumnFilter,
 				filterable: true,
@@ -149,14 +148,14 @@ const ReviewReportPage = () => {
 			},
 
 			{
-				Header: studentColumnAccessors.createdAt,
+				Header: StudentColumnAccessors.createdAt,
 				accessor: 'createdAt',
 				Filter: InputColumnFilter,
 				filterable: true,
 				Cell: ({ value }) => <span>{formatDate(value)}</span>
 			},
 			{
-				Header: studentColumnAccessors.note,
+				Header: StudentColumnAccessors.note,
 				accessor: 'note',
 				filterable: false,
 				sortable: false

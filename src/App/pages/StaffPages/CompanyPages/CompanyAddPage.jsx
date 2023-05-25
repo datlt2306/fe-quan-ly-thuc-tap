@@ -28,7 +28,6 @@ const AddBusinessForm = () => {
 	const onSubmit = async (data) => {
 		const result = await handleAddCompany(data);
 		if (result?.error) {
-			console.log(result);
 			toast.error('Thêm mới thất bại');
 			return;
 		}

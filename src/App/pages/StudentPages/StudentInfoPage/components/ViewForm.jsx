@@ -2,7 +2,7 @@
 import { VerticalList } from '..';
 
 import Button from '@/Core/components/common/Button';
-import { InternSupportType } from '@/App/constants/studentStatus';
+import { InternSupportType } from '@/App/constants/studentConstants';
 import formatDate from '@/Core/utils/formatDate';
 
 const ViewForm = ({ data: user, nameMajor }) => {

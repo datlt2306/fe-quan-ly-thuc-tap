@@ -19,6 +19,7 @@ module.exports = {
 		'react/jsx-uses-vars': 'off',
 		'react/prop-types': 'off',
 		'react/no-unknown-property': 'off',
+		'react/display-name': 'off',
 		'no-unused-vars': 'off',
 		'no-undef': 'off',
 		// ... any rules you want

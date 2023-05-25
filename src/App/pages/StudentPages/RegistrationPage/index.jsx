@@ -12,7 +12,7 @@ import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 
-import { InternSupportType } from '@/App/constants/studentStatus';
+import { InternSupportType } from '@/App/constants/studentConstants';
 
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';

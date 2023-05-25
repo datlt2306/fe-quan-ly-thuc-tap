@@ -24,7 +24,6 @@ const AddStaffSlideOver = ({ onOpen, open }) => {
 	const onAddSubmit = async (data) => {
 		try {
 			const result = await handleAddNewStaff(data);
-			console.log(result.data);
 			if (result.data) {
 				onOpen(!open);
 				reset();

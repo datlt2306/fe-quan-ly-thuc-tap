@@ -1,4 +1,4 @@
-import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from '@/App/constants/studentStatus';
+import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from '@/App/constants/studentConstants';
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 import Button from '@/Core/components/common/Button';

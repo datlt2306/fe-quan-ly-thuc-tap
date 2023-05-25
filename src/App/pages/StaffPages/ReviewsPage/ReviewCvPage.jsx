@@ -1,20 +1,22 @@
-import { studentColumnAccessors } from '@/App/constants/studentColumnAccessors';
-import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from '@/App/constants/studentStatus';
+import {
+	InternSupportType,
+	StudentColumnAccessors,
+	StudentReviewTypeEnum,
+	StudentStatusEnum,
+	StudentStatusGroupEnum
+} from '@/App/constants/studentConstants';
 import { useExportToExcel } from '@/App/hooks/useExcel';
+import { useGetStudentsToReviewQuery } from '@/App/providers/apis/studentApi';
 import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
 import IndeterminateCheckbox from '@/Core/components/common/Table/RowSelectionCheckbox';
-import Typography from '@/Core/components/common/Text/Typography';
-import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import formatDate from '@/Core/utils/formatDate';
-import { ArrowDownIcon, ChatBubbleLeftEllipsisIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { ChatBubbleLeftEllipsisIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Fragment, useMemo, useState } from 'react';
-import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import UpdateReviewModal from './components/UpdateReviewModal';
-import { useGetStudentReviewCVQuery } from '@/App/providers/apis/studentApi';
 
 const handleGetInternStatusStyle = (value) => {
 	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
@@ -22,7 +24,11 @@ const handleGetInternStatusStyle = (value) => {
 };
 
 const ReviewCvPage = () => {
-	const { data: studentsListData, isLoading: isLoadingData, isError } = useGetStudentReviewCVQuery();
+	const {
+		data: studentsListData,
+		isLoading: isLoadingData,
+		isError
+	} = useGetStudentsToReviewQuery({ type: StudentReviewTypeEnum.REVIEW_CV });
 	const [selectedStudents, setSelectedStudents] = useState([]);
 	const [open, setOpen] = useState(false);
 	const { handleExportFile } = useExportToExcel();
@@ -72,19 +78,19 @@ const ReviewCvPage = () => {
 				}
 			},
 			{
-				Header: studentColumnAccessors.index,
+				Header: StudentColumnAccessors.index,
 				accessor: 'index',
 				sortable: true
 			},
 			{
-				Header: studentColumnAccessors.name,
+				Header: StudentColumnAccessors.name,
 				accessor: 'name',
 				Filter: InputColumnFilter,
 				filterable: true,
 				sortable: true
 			},
 			{
-				Header: studentColumnAccessors.mssv,
+				Header: StudentColumnAccessors.mssv,
 				accessor: 'mssv', // object key
 				Filter: InputColumnFilter,
 				filterable: true,
@@ -92,32 +98,32 @@ const ReviewCvPage = () => {
 				Cell: ({ value }) => <span className='font-semibold uppercase'>{value}</span>
 			},
 			{
-				Header: studentColumnAccessors.majorCode,
+				Header: StudentColumnAccessors.majorCode,
 				accessor: 'majorCode',
 				Filter: InputColumnFilter,
 				filterable: true,
 				sortable: true
 			},
 			{
-				Header: studentColumnAccessors.phoneNumber,
+				Header: StudentColumnAccessors.phoneNumber,
 				accessor: 'phoneNumber',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: studentColumnAccessors.email,
+				Header: StudentColumnAccessors.email,
 				accessor: 'email',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: studentColumnAccessors.support,
+				Header: StudentColumnAccessors.support,
 				accessor: 'support',
 				Filter: SelectColumnFilter,
 				filterable: true
 			},
 			{
-				Header: studentColumnAccessors.statusCheck,
+				Header: StudentColumnAccessors.statusCheck,
 				accessor: 'statusCheck',
 				Filter: ({ column: { filterValue, setFilter, preFilteredRows, id } }) => (
 					<SelectColumnFilter
@@ -130,7 +136,7 @@ const ReviewCvPage = () => {
 			},
 
 			{
-				Header: studentColumnAccessors.nameCompany,
+				Header: StudentColumnAccessors.nameCompany,
 				accessors: 'nameCompany',
 				Filter: InputColumnFilter,
 				filterable: true,
@@ -149,13 +155,13 @@ const ReviewCvPage = () => {
 					)
 			},
 			{
-				Header: studentColumnAccessors.dream,
+				Header: StudentColumnAccessors.dream,
 				accessor: 'dream',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: studentColumnAccessors.CV,
+				Header: StudentColumnAccessors.CV,
 				accessor: 'CV',
 				Filter: InputColumnFilter,
 				filterable: false,
@@ -174,13 +180,13 @@ const ReviewCvPage = () => {
 				)
 			},
 			{
-				Header: studentColumnAccessors.reviewer,
+				Header: StudentColumnAccessors.reviewer,
 				accessor: 'reviewer',
 				Filter: InputColumnFilter,
 				filterable: true
 			},
 			{
-				Header: studentColumnAccessors.statusStudent,
+				Header: StudentColumnAccessors.statusStudent,
 				accessor: 'statusStudent',
 				Filter: SelectColumnFilter,
 				filterable: true,
@@ -188,14 +194,14 @@ const ReviewCvPage = () => {
 			},
 
 			{
-				Header: studentColumnAccessors.createdAt,
+				Header: StudentColumnAccessors.createdAt,
 				accessor: 'createdAt',
 				Filter: InputColumnFilter,
 				filterable: true,
 				Cell: ({ value }) => <span>{formatDate(value)}</span>
 			},
 			{
-				Header: studentColumnAccessors.note,
+				Header: StudentColumnAccessors.note,
 				accessor: 'note',
 				filterable: false,
 				sortable: false
@@ -212,19 +218,6 @@ const ReviewCvPage = () => {
 			{ label: studentStatusMap.get('2'), value: 2 }
 		];
 	}, []);
-	// Export data from table to excel file
-	const handleExportDataToExcel = (data) => {
-		if (!data.length) {
-			toast.warn('Chưa có dữ liệu để xuất file !');
-			return;
-		}
-		const exportedData = convertToExcelData({ data: data, columnKeysAccessor: studentColumnAccessors });
-		if (!exportedData) {
-			toast.error('Export dữ liệu thất bại !');
-			return;
-		}
-		handleExportFile({ data: exportedData, fileName: 'Danh sách sinh viên' });
-	};
 
 	return (
 		<Fragment>
@@ -235,21 +228,12 @@ const ReviewCvPage = () => {
 				statusOptions={reviewStatusOptions}
 			/>
 			<Container>
-				<Box>
-					<Typography level={5} fontWeight='semibold'>
-						Review CV
-					</Typography>
-					<ButtonList>
-						{!!selectedStudents.length && (
-							<Button variant='secondary' size='sm' onClick={() => setOpen(!open)}>
-								<ChatBubbleLeftEllipsisIcon className='h-5 w-5' /> Review
-							</Button>
-						)}
-						<Button variant='success' size='sm' onClick={() => handleExportDataToExcel(tableData)}>
-							<ArrowDownIcon className='h-4 w-4' /> Export file excel
-						</Button>
-					</ButtonList>
-				</Box>
+				{!!selectedStudents.length && (
+					<Button variant='secondary' size='sm' onClick={() => setOpen(!open)}>
+						<ChatBubbleLeftEllipsisIcon className='h-5 w-5' /> Review
+					</Button>
+				)}
+
 				<ReactTable
 					data={tableData}
 					columns={columnsData}

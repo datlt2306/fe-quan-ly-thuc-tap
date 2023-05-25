@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { StudentSchoolingStatus } from '../constants/studentStatus';
+import { StudentSchoolingStatus } from '../constants/studentConstants';
 
 /**
  * * Email manager: /^[A-Z0-9._%+-]+@fe\.edu\.vn$/i

@@ -57,7 +57,6 @@ const ReportPage = () => {
 		}
 	};
 	const onSubmit = async (value) => {
-		console.log(value);
 		const file = selectFile;
 		const allowedExtensions = ['pdf', 'docx'];
 		const fileName = file.name;

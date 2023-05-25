@@ -47,7 +47,6 @@ export default function SigninPage() {
 				...loginInformation,
 				token: accessToken
 			});
-			console.log(response);
 			if (!response.data?.success) {
 				toast.error('Đăng nhập thất bại !');
 				return;
