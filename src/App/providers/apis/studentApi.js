@@ -15,7 +15,7 @@ const studentApi = createApi({
 			query: (id) => ({ url: `/student/${id}`, method: 'GET' })
 		}),
 		getStudentsToReview: build.query({
-			query: () => ({ url: '/student/reviews', method: 'GET' }),
+			query: (params) => ({ url: '/student/reviews', method: 'GET', params }),
 			providesTags: ['StudentsToReview']
 		}),
 		updateReview: build.mutation({
