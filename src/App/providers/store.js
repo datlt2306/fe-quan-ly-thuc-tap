@@ -13,6 +13,7 @@ import studentApi from './apis/studentApi';
 import majorApi from './apis/majorApi';
 import staffListApi from './apis/staffListApi';
 import internRegistrationApi from './apis/internRegistrationApi';
+import narrowSpecializationApi from './apis/narrowSpecializationApi';
 import reportApi from './apis/reportApi';
 
 const persistConfig = {
@@ -45,7 +46,8 @@ const store = configureStore({
 			majorApi.middleware,
 			staffListApi.middleware,
 			internRegistrationApi.middleware,
-			reportApi.middleware
+			reportApi.middleware,
+			narrowSpecializationApi.middleware
 		])
 });
 
