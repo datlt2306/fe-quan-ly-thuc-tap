@@ -1,24 +1,14 @@
-import {
-	InternSupportType,
-	StudentReviewTypeEnum,
-	StudentStatusEnum,
-	StudentStatusGroupEnum
-} from '@/App/constants/studentConstants';
-import { useExportToExcel } from '@/App/hooks/useExcel';
+import { InternSupportType, StudentReviewTypeEnum, StudentStatusEnum } from '@/App/constants/studentConstants';
 import { useGetStudentsToReviewQuery } from '@/App/providers/apis/studentApi';
 import Button from '@/Core/components/common/Button';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
+import Typography from '@/Core/components/common/Text/Typography';
 import formatDate from '@/Core/utils/formatDate';
 import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { Fragment, useMemo, useState } from 'react';
 import tw from 'twin.macro';
 import InstanceStudentColumns from '../Shared/InstanceStudentColumns';
 import UpdateReviewModal from './components/UpdateReviewModal';
-
-const handleGetInternStatusStyle = (value) => {
-	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
-	return style;
-};
 
 const ReviewCvPage = () => {
 	const {
@@ -28,7 +18,6 @@ const ReviewCvPage = () => {
 	} = useGetStudentsToReviewQuery({ type: StudentReviewTypeEnum.REVIEW_CV });
 	const [selectedStudents, setSelectedStudents] = useState([]);
 	const [open, setOpen] = useState(false);
-	const { handleExportFile } = useExportToExcel();
 
 	const tableData = useMemo(() => {
 		return Array.isArray(studentsListData)
@@ -72,11 +61,9 @@ const ReviewCvPage = () => {
 	);
 
 	const reviewStatusOptions = useMemo(() => {
-		const studentStatusMap = new Map();
-		Object.keys(StudentStatusEnum).forEach((key) => studentStatusMap.set(key, StudentStatusEnum[key]));
 		return [
-			{ label: studentStatusMap.get('1'), value: 1 },
-			{ label: studentStatusMap.get('2'), value: 2 }
+			{ label: StudentStatusEnum[1], value: 1 },
+			{ label: StudentStatusEnum[2], value: 2 }
 		];
 	}, []);
 
@@ -89,11 +76,14 @@ const ReviewCvPage = () => {
 				statusOptions={reviewStatusOptions}
 			/>
 			<Container>
-				{!!selectedStudents.length && (
-					<Button variant='secondary' size='sm' onClick={() => setOpen(!open)}>
-						<ChatBubbleLeftEllipsisIcon className='h-5 w-5' /> Review
-					</Button>
-				)}
+				<Box>
+					<Typography level={6}>Review CV sinh viên</Typography>
+					{!!selectedStudents.length && (
+						<Button variant='secondary' size='md' className='w-auto' onClick={() => setOpen(!open)}>
+							<ChatBubbleLeftEllipsisIcon className='h-5 w-5' /> Review
+						</Button>
+					)}
+				</Box>
 
 				<ReactTable
 					data={tableData}
@@ -108,6 +98,5 @@ const ReviewCvPage = () => {
 
 const Container = tw.div`flex flex-col gap-6`;
 const Box = tw.div`flex justify-between items-center py-4 h-[3rem]`;
-const ButtonList = tw.div`flex items-stretch gap-1`;
 
 export default ReviewCvPage;
