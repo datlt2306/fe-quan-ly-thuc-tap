@@ -29,6 +29,7 @@ const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
 			return;
 		}
 		const result = await handleUpdateMajor({ data: { ...data, majorCode: majorCode }, id: major?._id });
+		console.log(result);
 		if (result?.error) {
 			onOpen();
 			toast.error('Sửa chuyên ngành không thành công!');
