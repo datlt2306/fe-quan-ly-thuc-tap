@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
-import { useUpdateMajorMutation } from '@/App/providers/apis/majorApi';
-import { majorSchema } from '@/App/schemas/majorSchema';
+import { useUpdateNarrowMutation } from '@/App/providers/apis/narrowSpecializationApi';
+import { narrowSpecializationSchema } from '@/App/schemas/NarrowSpecializationSchema';
+
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
+import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import SlideOver from '@/Core/components/common/SlideOver';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,26 +12,20 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 
-const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
+const UpdateNarrowSlideOver = ({ narrow, onOpen, open, panelTitle, majors }) => {
 	const { handleSubmit, control, reset } = useForm({
-		resolver: yupResolver(majorSchema),
+		resolver: yupResolver(narrowSpecializationSchema),
 		values: {
-			name: major?.name,
-			majorCode: major?.majorCode
+			name: narrow?.name,
+			id_majors: narrow?.id_majors?._id
 		}
 	});
-	const [handleUpdateMajor, { isLoading }] = useUpdateMajorMutation();
+	const [handleUpdateNarrow, { isLoading }] = useUpdateNarrowMutation();
 
 	const onUpdateSubmit = async (data) => {
-		const majorCode = data?.majorCode.toUpperCase();
-		const checkMajorsDuplicate = majors?.some((item) => item._id !== major._id && item.majorCode === majorCode);
-		if (checkMajorsDuplicate) {
-			toast.error('Mã chuyên ngành không được trùng');
-			onOpen();
-			return;
-		}
-		const result = await handleUpdateMajor({ data: { ...data, majorCode: majorCode }, id: major?._id });
-		if (result?.error) {
+		const result = await handleUpdateNarrow({ data, id: narrow?._id });
+		const error = result?.error;
+		if (error) {
 			onOpen();
 			toast.error('Sửa chuyên ngành không thành công!');
 			return;
@@ -42,8 +38,14 @@ const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
 	return (
 		<SlideOver open={open} onOpen={onOpen} panelTitle={panelTitle}>
 			<Form onSubmit={handleSubmit(onUpdateSubmit)}>
-				<InputFieldControl name='name' control={control} label='Tên chuyên ngành' />
-				<InputFieldControl name='majorCode' control={control} label='Mã chuyên ngành' />
+				<InputFieldControl name='name' control={control} label='Tên chuyên ngành hẹp' />
+				<SelectFieldControl
+					label='Chuyên ngành '
+					initialValue='Chọn chuyên ngành '
+					control={control}
+					name='id_majors'
+					options={Array.isArray(majors) ? majors.map((item) => ({ value: item._id, label: item.name })) : []}
+				/>
 				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Sửa
@@ -55,4 +57,4 @@ const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
 
 const Form = tw.form`flex flex-col gap-6`;
 
-export default UpdateMajorSlideOver;
+export default UpdateNarrowSlideOver;

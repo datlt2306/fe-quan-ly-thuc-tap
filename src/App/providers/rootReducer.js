@@ -13,7 +13,7 @@ import campusSlice from './slices/campusSlice';
 import semesterSlice from './slices/semesterSlice';
 import internRegistrationApi from './apis/internRegistrationApi';
 import reportApi from './apis/reportApi';
-
+import narrowSpecializationApi from './apis/narrowSpecializationApi';
 const rootReducer = combineReducers({
 	[authSlice.name]: authSlice.reducer,
 	[campusSlice.name]: campusSlice.reducer,
@@ -29,7 +29,8 @@ const rootReducer = combineReducers({
 	[internRegistrationApi.reducerPath]: internRegistrationApi.reducer,
 	[businessApi.reducerPath]: businessApi.reducer,
 	[staffListApi.reducerPath]: staffListApi.reducer,
-	[reportApi.reducerPath]: reportApi.reducer
+	[reportApi.reducerPath]: reportApi.reducer,
+	[narrowSpecializationApi.reducerPath]: narrowSpecializationApi.reducer
 });
 
 export default rootReducer;

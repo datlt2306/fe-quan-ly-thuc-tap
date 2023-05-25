@@ -6,7 +6,6 @@ import InputFieldControl from '@/Core/components/common/FormControl/InputFieldCo
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import SlideOver from '@/Core/components/common/SlideOver';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
@@ -20,19 +19,14 @@ const AddMajorSlideOver = ({ onOpen, open, panelTitle, majors }) => {
 	const [handleAddNewMajor, { isLoading }] = useCreateMajorMutation();
 
 	const onAddSubmit = async (data) => {
-		const checkMajorsDuplicate = majors?.some((item) => item.majorCode == data.majorCode);
-		if (checkMajorsDuplicate) {
-			toast.error('Mã chuyên ngành không được trùng');
-			onOpen();
-			return;
-		}
 		const result = await handleAddNewMajor({
 			...data,
 			majorCode: data?.majorCode.toUpperCase()
 		});
-		if (result?.error) {
+		const error = result?.error;
+		if (error) {
 			onOpen();
-			toast.error('Thêm chuyên ngành không thành công!');
+			toast.error(error?.data?.message ?? 'Thêm chuyên ngành không thành công!');
 			return;
 		}
 		onOpen();
