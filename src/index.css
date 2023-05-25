@@ -18,7 +18,7 @@
 	}
 
 	.table td {
-		@apply whitespace-nowrap px-3 py-1 text-sm text-base-content;
+		@apply whitespace-nowrap px-3 py-2 text-sm text-base-content;
 	}
 
 	.btn {
@@ -89,7 +89,7 @@
 	.loading-secondary {
 		@apply border-r-secondary border-t-secondary;
 	}
-	input[type="file"] {
-		@apply p-0 file:px-3 file:py-1.5 file:rounded-[4px] file:bg-secondary file:text-base-content file:border-none file:outline-none file:text-white file:focus:outline-none file:focus:border-none file:hover:bg-secondary-active focus:ring-0 ring-0 focus:outline-none shadow-none 
+	input[type='file'] {
+		@apply p-0 shadow-none ring-0 file:rounded-[4px] file:border-none file:bg-secondary file:px-3 file:py-1.5 file:text-base-content file:text-white file:outline-none focus:outline-none focus:ring-0 file:focus:border-none file:focus:outline-none file:hover:bg-secondary-active;
 	}
 }

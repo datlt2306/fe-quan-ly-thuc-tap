@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 module.exports = {
 	env: { browser: true, es2020: true },
 	extends: [
@@ -13,6 +14,15 @@ module.exports = {
 	plugins: ['react-refresh', 'prettier'],
 	rules: {
 		'react-refresh/only-export-components': 'warn',
+		'react/jsx-no-undef': 'warn',
+		'react/jsx-uses-react': 'warn',
+		'react/jsx-uses-vars': 'off',
+		'react/prop-types': 'off',
+		'react/no-unknown-property': 'off',
+		'react/display-name': 'off',
+		'no-unused-vars': 'off',
+		'no-undef': 'off',
+		// ... any rules you want
 		'prettier/prettier': [
 			'warn',
 			{

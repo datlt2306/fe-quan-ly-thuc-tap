@@ -10,7 +10,7 @@ import { useRequestOfStudentMutation } from '@/App/providers/apis/requestStudent
 import { toast } from 'react-toastify';
 import { VerticalList } from '..';
 
-import { InternSupportType } from '@/App/constants/studentStatus';
+import { InternSupportType } from '@/App/constants/studentConstants';
 import tw from 'twin.macro';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
 const ItemValue = tw.p`font-medium`;

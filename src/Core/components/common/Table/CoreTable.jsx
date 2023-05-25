@@ -33,11 +33,11 @@ const Empty = () => (
 
 const PendingRow = ({ numOfCols }) => {
 	const preRenderCells = Array.apply(null, Array(numOfCols)).map((x, i) => i);
-	const preRenderRows = Array.apply(null, Array(5)).map((x, i) => i);
-	return preRenderRows.map((_row) => (
-		<Table.Row>
-			{preRenderCells.map((_cell) => (
-				<Table.Cell>
+	const preRenderRows = Array.apply(null, Array(5)).map((x, j) => j);
+	return preRenderRows.map((_row, i) => (
+		<Table.Row key={i}>
+			{preRenderCells.map((_cell, j) => (
+				<Table.Cell key={j}>
 					<Skeleton />
 				</Table.Cell>
 			))}

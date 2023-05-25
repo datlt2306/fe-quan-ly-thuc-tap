@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { StudentSchoolingStatus } from '../constants/studentStatus';
+import { StudentSchoolingStatus } from '../constants/studentConstants';
 
 /**
  * * Email manager: /^[A-Z0-9._%+-]+@fe\.edu\.vn$/i
@@ -27,7 +27,7 @@ export const newStudentSchema = yup
 			phoneNumber: yup
 				.string()
 				.trim()
-				.matches(/^\d{10}$/, { message: 'Số điện thoại của sinh viên chưa đúng định dạng' })
+				.matches(/^\d{10,11}$/, { message: 'Số điện thoại của sinh viên chưa đúng định dạng' })
 				.required('Vui lòng nhập đầy đủ số điện thoại của sinh viên'),
 			statusStudent: yup
 				.string()
@@ -40,12 +40,3 @@ export const newStudentSchema = yup
 	)
 	.unique('Email không được trùng !', (value) => value.email)
 	.unique('Mã sinh viên không được trùng !', (value) => value.mssv);
-
-export const updateReviewCvData = yup.object({
-	listIdStudent: yup.array(yup.string()).required('Chưa có sinh viên nào được chọn !'),
-	listEmailStudent: yup
-		.array(
-			yup.string().matches(/^[A-Z0-9._%+-]+@fe\.edu\.vn$/i, { message: 'Email của sinh viên chưa đúng định dạng !' })
-		)
-		.required('')
-});

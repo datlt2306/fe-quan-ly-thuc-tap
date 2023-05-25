@@ -12,7 +12,7 @@ import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 
-import { InternSupportType } from '@/App/constants/studentStatus';
+import { InternSupportType } from '@/App/constants/studentConstants';
 
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
@@ -102,7 +102,8 @@ const RegistrationPage = () => {
 			</div>
 		);
 	}
-	return student?.listTimeForm?.length > 0 ? (
+	//kiểm tra xem statusCheck có phải là trạng thái sửa cv hay không hay là có form nào mở hay không thì mở lại cho  học sinh đăng ký form
+	return student?.listTimeForm?.length > 0 || student?.statusCheck == 1 ? (
 		<FormElement
 			student={student}
 			majors={majors}

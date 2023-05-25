@@ -19,7 +19,6 @@ const authSlice = createSlice({
 	initialState: initialState,
 	extraReducers: (build) => {
 		build.addMatcher(authApi.endpoints.signin.matchFulfilled, (state, { payload }) => {
-			console.log('payload', payload);
 			if (payload.isAdmin) {
 				return {
 					isSignedIn: payload.success,

@@ -101,7 +101,6 @@ const ReactTable = ({
 		if (handleGetSelectedRows) handleGetSelectedRows(selectedFlatRows.map((d) => d.original));
 	}, [selectedFlatRows]);
 
-	console.log(serverPaginationProps);
 	return (
 		<Wrapper>
 			{/* Global search  */}

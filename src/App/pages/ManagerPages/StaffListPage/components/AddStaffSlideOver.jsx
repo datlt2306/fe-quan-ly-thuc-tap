@@ -22,14 +22,21 @@ const AddStaffSlideOver = ({ onOpen, open }) => {
 	const [handleAddNewStaff, { isLoading }] = useAddStaffMutation();
 
 	const onAddSubmit = async (data) => {
-		const result = await handleAddNewStaff(data);
-		if (result?.data?.statusCode) {
+		try {
+			const result = await handleAddNewStaff(data);
+			if (result.data) {
+				onOpen(!open);
+				reset();
+				toast.success('Thêm nhân viên thành công!');
+			}
+			if (result.error) {
+				onOpen(!open);
+				reset();
+				toast.error(result.error.data.message);
+			}
+		} catch (error) {
 			toast.error('Thêm nhân viên không thành công!');
-			return;
 		}
-		onOpen(!open);
-		reset();
-		toast.success('Thêm nhân viên thành công!');
 	};
 
 	useEffect(() => {
