@@ -2,6 +2,7 @@ import { StudentColumnAccessors, StudentStatusGroupEnum } from '@/App/constants/
 import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
+import IndeterminateCheckbox from '@/Core/components/common/Table/RowSelectionCheckbox';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import tw from 'twin.macro';
 
@@ -14,6 +15,16 @@ const handleGetInternStatusStyle = (value) => {
 };
 
 const InstanceStudentColumns = [
+	{
+		Header: ({ getToggleAllPageRowsSelectedProps }) => (
+			<IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+		),
+		accessor: '_id',
+		Cell: ({ row }) => {
+			// const isDisabled = !(!!row.original?.CV || !!row.original?.form || !!row.original?.report);
+			return <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />;
+		}
+	},
 	{
 		Header: StudentColumnAccessors.index,
 		accessor: 'index',

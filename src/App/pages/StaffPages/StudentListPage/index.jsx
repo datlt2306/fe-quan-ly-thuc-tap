@@ -15,7 +15,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-import InstanceStudentColumns from '../shared/InstanceStudentColumns';
+import InstanceStudentColumns from '../Shared/InstanceStudentColumns';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
 
