@@ -3,7 +3,7 @@ import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
 import IndeterminateCheckbox from '@/Core/components/common/Table/RowSelectionCheckbox';
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { EyeIcon } from '@heroicons/react/24/outline';
 import tw from 'twin.macro';
 
 const List = tw.ul`flex flex-col gap-1`;
