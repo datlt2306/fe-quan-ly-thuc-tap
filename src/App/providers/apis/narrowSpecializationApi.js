@@ -4,7 +4,7 @@ import axiosBaseQuery from '../axiosBaseQuery';
 const narrowSpecializationApi = createApi({
 	reducerPath: 'narrowSpecializationApi',
 	baseQuery: axiosBaseQuery(),
-	tagTypes: ['Major'],
+	tagTypes: ['Narrow'],
 	endpoints: (build) => ({
 		getAllNarrow: build.query({
 			query: (params) => ({ url: '/narrows', method: 'GET', params }),

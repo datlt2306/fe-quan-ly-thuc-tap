@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useUpdateNarrowMutation } from '@/App/providers/apis/narrowSpecializationApi';
-import { narrowSpecializationSchema } from '@/App/schemas/NarrowSpecializationSchema';
+import { narrowSpecializationSchema } from '@/App/schemas/narrowSpecializationSchema';
 
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';

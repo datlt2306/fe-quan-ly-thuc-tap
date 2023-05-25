@@ -20,7 +20,7 @@ const AddNarrowSlideOver = lazy(() => import('./components/AddNarrowSlideOver'))
 const Box = tw.div`flex flex-col gap-6`;
 const ButtonList = tw.div`flex items-center gap-2`;
 
-const MajorListPage = () => {
+const SpecializationPage = () => {
 	const [narrow, setNarrow] = useState();
 
 	const { data: majors } = useGetAllMajorQuery();
@@ -163,4 +163,4 @@ const MajorListPage = () => {
 	);
 };
 
-export default MajorListPage;
+export default SpecializationPage;
