@@ -27,7 +27,7 @@ export const newStudentSchema = yup
 			phoneNumber: yup
 				.string()
 				.trim()
-				.matches(/^\d{10}$/, { message: 'Số điện thoại của sinh viên chưa đúng định dạng' })
+				.matches(/^\d{10,11}$/, { message: 'Số điện thoại của sinh viên chưa đúng định dạng' })
 				.required('Vui lòng nhập đầy đủ số điện thoại của sinh viên'),
 			statusStudent: yup
 				.string()
