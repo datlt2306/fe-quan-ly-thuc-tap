@@ -11,7 +11,7 @@ import { Fragment, forwardRef, memo, useRef } from 'react';
 import { studentListSampleData } from '../mocks';
 import { useExportToExcel } from '@/App/hooks/useExcel';
 
-const MobileDropdownButtonGroup = ({ tableData, handleImport, handleExport, canImport }, ref) => {
+const MobileDropdownButtonGroup = forwardRef(({ tableData, handleImport, handleExport, canImport }, ref) => {
 	const localRef = useRef(null);
 	const fileInputRef = ref || localRef;
 	const { handleExportFile } = useExportToExcel();
@@ -70,6 +70,6 @@ const MobileDropdownButtonGroup = ({ tableData, handleImport, handleExport, canI
 			</Transition>
 		</Menu>
 	);
-};
+});
 
-export default memo(forwardRef(MobileDropdownButtonGroup));
+export default memo(MobileDropdownButtonGroup);
