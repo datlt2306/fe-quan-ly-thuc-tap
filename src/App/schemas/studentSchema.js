@@ -40,12 +40,3 @@ export const newStudentSchema = yup
 	)
 	.unique('Email không được trùng !', (value) => value.email)
 	.unique('Mã sinh viên không được trùng !', (value) => value.mssv);
-
-export const updateReviewCvData = yup.object({
-	listIdStudent: yup.array(yup.string()).required('Chưa có sinh viên nào được chọn !'),
-	listEmailStudent: yup
-		.array(
-			yup.string().matches(/^[A-Z0-9._%+-]+@fe\.edu\.vn$/i, { message: 'Email của sinh viên chưa đúng định dạng !' })
-		)
-		.required('')
-});

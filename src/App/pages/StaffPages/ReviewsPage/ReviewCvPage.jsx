@@ -1,7 +1,6 @@
 import { studentColumnAccessors } from '@/App/constants/studentColumnAccessors';
 import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from '@/App/constants/studentStatus';
 import { useExportToExcel } from '@/App/hooks/useExcel';
-import { useGetStudentReviewCVQuery } from '@/App/providers/apis/studentApi';
 import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
@@ -15,6 +14,7 @@ import { Fragment, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import UpdateReviewModal from './components/UpdateReviewModal';
+import { useGetStudentReviewCVQuery } from '@/App/providers/apis/studentApi';
 
 const handleGetInternStatusStyle = (value) => {
 	const style = Object.keys(StudentStatusGroupEnum).find((k) => StudentStatusGroupEnum[k].includes(value));
@@ -29,14 +29,32 @@ const ReviewCvPage = () => {
 
 	const tableData = useMemo(() => {
 		return Array.isArray(studentsListData)
-			? studentsListData.map((student, index) => ({
-					...student,
-					index: index + 1,
-					createdAt: formatDate(student.createdAt),
-					statusCheck: StudentStatusEnum[student.statusCheck],
-					support: InternSupportType[student.support],
-					statusStudent: student.statusStudent.trim()
-			  }))
+			? studentsListData.map((student, index) => {
+					const companyStudentApplyFor =
+						student.support === 1
+							? {
+									nameCompany: student.business?.name,
+									taxCode: student.business?.tax_code,
+									addressCompany: student.business?.address
+							  }
+							: student.support === 0
+							? {
+									nameCompany: student?.nameCompany,
+									taxCode: student?.taxCode,
+									addressCompany: student?.addressCompany
+							  }
+							: null;
+
+					return {
+						...student,
+						index: index + 1,
+						createdAt: formatDate(student.createdAt),
+						statusCheck: StudentStatusEnum[student.statusCheck],
+						support: InternSupportType[student.support],
+						statusStudent: student.statusStudent.trim(),
+						...companyStudentApplyFor
+					};
+			  })
 			: [];
 	}, [studentsListData]);
 
@@ -185,6 +203,7 @@ const ReviewCvPage = () => {
 		],
 		[]
 	);
+
 	const reviewStatusOptions = useMemo(() => {
 		const studentStatusMap = new Map();
 		Object.keys(StudentStatusEnum).forEach((key) => studentStatusMap.set(key, StudentStatusEnum[key]));
