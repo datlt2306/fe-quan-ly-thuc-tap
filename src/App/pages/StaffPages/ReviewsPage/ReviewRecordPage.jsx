@@ -79,7 +79,7 @@ const ReviewRecordPage = () => {
 				<Box>
 					<Typography level={6}>Review biên bản sinh viên</Typography>
 					{!!selectedStudents.length && (
-						<Button variant='secondary' size='md' className='w-auto' onClick={() => setOpen(!open)}>
+						<Button variant='secondary' size='sm' onClick={() => setOpen(!open)}>
 							<ChatBubbleLeftEllipsisIcon className='h-5 w-5' /> Review
 						</Button>
 					)}
