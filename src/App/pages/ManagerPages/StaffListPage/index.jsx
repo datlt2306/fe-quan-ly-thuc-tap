@@ -97,26 +97,55 @@ const StaffListPage = () => {
 			},
 			{
 				Header: 'Thao tác',
-				accessor: '_id',
 				canFilter: false,
 				canSort: false,
 				filterable: false,
 				isSort: false,
-				Cell: ({ value }) => (
+				Cell: ({ row }) => (
 					<ButtonList>
-						<Button size='xs' variant='default' shape='square' onClick={() => onOpenUpdate(value)}>
-							<PencilSquareIcon className='h-4 w-4' />
-						</Button>
-						<PopConfirm
-							okText='Ok'
-							cancelText='Cancel'
-							title={'Xóa nhân viên'}
-							description={'Bạn muốn xóa nhân viên này ?'}
-							onConfirm={() => onDeleteSubmit(value)}>
-							<Button size='xs' variant='error' shape='square'>
-								<TrashIcon className='h-4 w-4' />
-							</Button>
-						</PopConfirm>
+						{row.original.role !== 'Quản lý' ? (
+							<>
+								<Button
+									size='xs'
+									variant='default'
+									shape='square'
+									onClick={() => onOpenUpdate(row.original._id)}>
+									<PencilSquareIcon className='h-4 w-4' />
+								</Button>
+
+								<PopConfirm
+									okText='Ok'
+									cancelText='Cancel'
+									title={'Xóa nhân viên'}
+									description={'Bạn muốn xóa nhân viên này ?'}
+									onConfirm={() => onDeleteSubmit(row.original._id)}>
+									<Button size='xs' variant='error' shape='square'>
+										<TrashIcon className='h-4 w-4' />
+									</Button>
+								</PopConfirm>
+							</>
+						) : (
+							<>
+								<PopConfirm
+									okText='Ok'
+									cancelText='Cancel'
+									title={'Không có quyền'}
+									description={'Bạn không được sửa quản lý ?'}>
+									<Button size='xs' variant='default' shape='square'>
+										<PencilSquareIcon className='h-4 w-4' />
+									</Button>
+								</PopConfirm>
+								<PopConfirm
+									okText='Ok'
+									cancelText='Cancel'
+									title={'Không có quyền'}
+									description={'Bạn không được xóa quản lý ?'}>
+									<Button size='xs' variant='error' shape='square'>
+										<TrashIcon className='h-4 w-4' />
+									</Button>
+								</PopConfirm>
+							</>
+						)}
 					</ButtonList>
 				)
 			}
