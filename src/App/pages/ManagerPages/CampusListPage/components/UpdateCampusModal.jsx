@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-const UpdateCampusModal = ({ campusData, onOpenStateChange, openState }) => {
+const UpdateCampusModal = ({ campusData, onOpenStateChange, openState, curCampus }) => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(campusDataValidator),
 		defaultValues: campusData
@@ -26,20 +26,48 @@ const UpdateCampusModal = ({ campusData, onOpenStateChange, openState }) => {
 
 	const [handleUpdateCampus, { isLoading }] = useUpdateCampusMutation();
 
-	const onUpdateSubmit = async (data) => {
-		try {
-			const {
-				data: { success, message }
-			} = await handleUpdateCampus({ id: campusData._id, payload: data });
-			if (success) {
-				onOpenStateChange(!openState);
-				toast.success('Sửa cơ sở thành công!');
-			} else {
-				onOpenStateChange(!openState);
-				toast.error(message);
+	const isCampusDuplicate = (data) => {
+		const newCampus = data.name
+			.toLowerCase()
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '')
+			.replace(/đ/g, 'd')
+			.replace(/Đ/g, 'D');
+		const temp = [];
+		curCampus.forEach((item) => {
+			const campus = item.name
+				.toLowerCase()
+				.normalize('NFD')
+				.replace(/[\u0300-\u036f]/g, '')
+				.replace(/đ/g, 'd')
+				.replace(/Đ/g, 'D');
+
+			if (campus.includes(newCampus)) {
+				temp.push(item);
 			}
-		} catch (error) {
-			toast.error('Sửa cở sở không thành công!');
+		});
+		return temp;
+	};
+
+	const onUpdateSubmit = async (data) => {
+		if (isCampusDuplicate(data).length === 0) {
+			try {
+				const {
+					data: { success, message }
+				} = await handleUpdateCampus({ id: campusData._id, payload: data });
+				if (success) {
+					onOpenStateChange(!openState);
+					toast.success('Sửa cơ sở thành công!');
+				} else {
+					onOpenStateChange(!openState);
+					toast.error(message);
+				}
+			} catch (error) {
+				toast.error('Sửa cở sở không thành công!');
+			}
+		} else {
+			onOpenStateChange(!openState);
+			toast.error('Cơ sở đã tồn tại !');
 		}
 	};
 
