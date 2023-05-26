@@ -1,9 +1,8 @@
-/* eslint-disable react/prop-types */
 import formatDate from '@/Core/utils/formatDate';
 import { VerticalList } from '..';
 import Button from '@/Core/components/common/Button';
-
-const ViewReport = ({ data: user }) => {
+import FormRequestSupport from './FormRequestSupport';
+const ViewReport = ({ data: user, setOpenState }) => {
 	const initDataViewReport = [
 		{ label: 'Họ tên:', value: user?.name },
 		{
@@ -26,6 +25,7 @@ const ViewReport = ({ data: user }) => {
 					<p>{item.label}</p> <div className='font-medium'>{item.value}</div>
 				</li>
 			))}
+			<FormRequestSupport formType='report' setOpenState={setOpenState} />
 		</VerticalList>
 	);
 };
