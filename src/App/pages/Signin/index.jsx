@@ -95,8 +95,8 @@ export default function SigninPage() {
 	);
 }
 
-const Screen = tw.div`relative flex h-screen w-full items-center justify-center lg:bg-gray-50 bg-white`;
-const Box = tw.div`sm:max-w-full md:max-w-full lg:(max-w-xl w-full p-8 shadow-2xl ) mx-auto bg-white rounded-lg`;
+const Screen = tw.div`sm:(max-w-full px-4) relative flex h-screen w-full items-center justify-center lg:bg-gray-50 bg-white`;
+const Box = tw.div`max-w-xl w-full p-8 shadow-2xl mx-auto bg-white rounded-lg sm:(shadow-none)`;
 const Image = tw.img`mx-auto max-w-full object-cover mb-10`;
 const Form = tw.div`flex items-center justify-center flex-col gap-3 w-full min-w-fit`;
 
