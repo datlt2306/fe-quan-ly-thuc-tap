@@ -5,13 +5,14 @@ import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { Fragment, useMemo, useState } from 'react';
 import tw from 'twin.macro';
 import Button from '@/Core/components/common/Button';
-import { PencilSquareIcon, TrashIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import AddCampusSlideOver from './components/AddCampusSlideOver';
 import { campusDataValidator } from '@/App/schemas/campusSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { toast } from 'react-toastify';
 import UpdateCampusModal from './components/UpdateCampusModal';
+import { PlusIcon } from '@heroicons/react/20/solid';
 
 const Box = tw.div`flex flex-col gap-6`;
 const ButtonList = tw.div`flex items-center gap-2`;
@@ -97,9 +98,20 @@ const CampusListPage = () => {
 	);
 	return (
 		<Fragment>
-			<AddCampusSlideOver open={slideOverVisibility} onOpen={setSlideOverVisibility} panelTitle={'Thêm cơ sở'} />
+			<AddCampusSlideOver
+				curCampus={tableData}
+				open={slideOverVisibility}
+				onOpen={setSlideOverVisibility}
+				panelTitle={'Thêm cơ sở'}
+			/>
 
-			<UpdateCampusModal openState={modal} onOpenStateChange={setModal} title={'Sửa cơ sở'} campusData={campus} />
+			<UpdateCampusModal
+				openState={modal}
+				onOpenStateChange={setModal}
+				title={'Sửa cơ sở'}
+				campusData={campus}
+				curCampus={tableData}
+			/>
 			<Box>
 				<ButtonList>
 					<Button
@@ -110,7 +122,7 @@ const CampusListPage = () => {
 							reset();
 							setSlideOverVisibility(!slideOverVisibility);
 						}}>
-						<UserPlusIcon className='h-4 w-4 text-[inherit] ' /> Thêm cơ sở
+						<PlusIcon className='h-4 w-4 text-[inherit] ' /> Thêm cơ sở
 					</Button>
 				</ButtonList>
 
