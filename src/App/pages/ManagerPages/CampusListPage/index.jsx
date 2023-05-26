@@ -23,7 +23,7 @@ const CampusListPage = () => {
 	const { reset } = useForm({
 		resolver: yupResolver(campusDataValidator)
 	});
-	const { data: managers } = useGetAllCampusQuery();
+	const { data: managers, isLoading } = useGetAllCampusQuery();
 
 	const tableData = useMemo(() => {
 		return Array.isArray(managers?.listCampus)
@@ -114,7 +114,7 @@ const CampusListPage = () => {
 					</Button>
 				</ButtonList>
 
-				<ReactTable columns={columnsData} data={tableData} />
+				<ReactTable columns={columnsData} data={tableData} loading={isLoading} />
 			</Box>
 		</Fragment>
 	);

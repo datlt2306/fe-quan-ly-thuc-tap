@@ -26,7 +26,7 @@ const StaffListPage = () => {
 		resolver: yupResolver(staffDataValidator)
 	});
 	const [serverPaginationState, dispatch] = useReducer(paginationReducer, paginationInitialState);
-	const { data } = useGetAllStaffQuery({
+	const { data, isLoading } = useGetAllStaffQuery({
 		page: serverPaginationState?.pageIndex || paginationInitialState.pageIndex,
 		limit: serverPaginationState?.pageSize || paginationInitialState.pageSize
 	});
@@ -149,6 +149,7 @@ const StaffListPage = () => {
 				</ButtonList>
 
 				<ReactTable
+					loading={isLoading}
 					columns={columnsData}
 					data={tableData}
 					serverSidePagination={true}

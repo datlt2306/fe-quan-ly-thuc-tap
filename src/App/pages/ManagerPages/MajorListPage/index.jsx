@@ -22,7 +22,7 @@ const ButtonList = tw.div`flex items-center gap-2`;
 const MajorListPage = () => {
 	const [major, setMajor] = useState();
 
-	const { data: majors } = useGetAllMajorQuery();
+	const { data: majors, isLoading } = useGetAllMajorQuery();
 	const [handleRemoveMajor] = useDeleteMajorMutation();
 
 	const [slideOverVisibility, setSlideOverVisibility] = useState({
@@ -154,7 +154,7 @@ const MajorListPage = () => {
 					</Button>
 				</ButtonList>
 
-				<ReactTable columns={columnsData} data={tableData} />
+				<ReactTable columns={columnsData} data={tableData} loading={isLoading} />
 			</Box>
 		</Fragment>
 	);

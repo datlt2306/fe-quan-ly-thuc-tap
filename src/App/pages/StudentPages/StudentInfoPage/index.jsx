@@ -30,6 +30,7 @@ const StudentInfoPage = () => {
 	const { data, isFetching } = useGetOneStudentQuery(user?.id, {
 		refetchOnMountOrArgChange: true
 	});
+
 	const { data: allMajor } = useGetAllMajorQuery();
 
 	useEffect(() => {
@@ -75,12 +76,12 @@ const StudentInfoPage = () => {
 		{
 			condition: data?.form,
 			label: 'Form Biên Bản',
-			content: <ViewForm data={data} nameMajor={nameMajor} />
+			content: <ViewForm setOpenState={setOpenState} data={data} nameMajor={nameMajor} />
 		},
 		{
 			condition: data?.report,
 			label: 'Form Báo Cáo',
-			content: <ViewReport data={data} nameMajor={nameMajor} />
+			content: <ViewReport setOpenState={setOpenState} data={data} nameMajor={nameMajor} />
 		}
 	];
 	return (
@@ -127,8 +128,6 @@ const StudentInfoPage = () => {
 					</WrapMenu>
 				</LayoutFormSubmitted>
 			</WrapLayoutInfoUser>
-
-			{/* <RenderNote label='Ghi chú' data={data} /> */}
 
 			<div className='bg-gray-50 p-4'>
 				<Typography level={6} className='flex items-center gap-1  text-lg font-medium '>
