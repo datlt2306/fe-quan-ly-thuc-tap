@@ -9,7 +9,7 @@ const Typography = ({
 	color = 'default',
 	...props
 }) => {
-	const Variant = useMemo(() => {
+	const Heading = useMemo(() => {
 		switch (level) {
 			case 1:
 				return 'h1';
@@ -27,8 +27,8 @@ const Typography = ({
 				return 'h1';
 		}
 	}, [level]);
-	const styles = useMemo(() =>
-		classNames(props.className, {
+	const styles = classNames(
+		{
 			'font-medium': fontWeight.includes('medium'),
 			'font-semibold': fontWeight.includes('semibold'),
 			'font-bold': fontWeight.includes('bold'),
@@ -56,12 +56,14 @@ const Typography = ({
 			'text-3xl sm:text-xl': level === 4,
 			'text-2xl sm:text-lg': level === 5,
 			'text-xl sm:text-base': level === 6
-		})
+		},
+		props.className
 	);
+
 	return (
-		<Variant className={styles} {...props}>
+		<Heading {...props} className={styles}>
 			{props.children}
-		</Variant>
+		</Heading>
 	);
 };
 

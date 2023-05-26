@@ -1,16 +1,13 @@
+import classNames from 'classnames';
 import { forwardRef, useId, useRef } from 'react';
 import { useController } from 'react-hook-form';
 import tw from 'twin.macro';
+import Text from '../Text/Text';
 
 export const Select = tw.select`block w-full rounded-[4px] border-none duration-300 text-base-content px-2 py-1.5 outline-none ring-1 ring-gray-300 focus:ring-primary focus:active:ring-primary min-w-[128px] m-0`;
 export const Option = tw.option`leading-6`;
-const FormControl = tw.div`flex flex-col gap-1 m-0`;
+const FormControl = tw.div`flex flex-col gap-px m-0`;
 
-/**
- *
- * @property {string} name
- * @returns
- */
 const SelectFieldControl = (
 	{ initialValue = 'Chọn', control, name, label, options, disabled, rules, ...props },
 	ref
@@ -29,12 +26,13 @@ const SelectFieldControl = (
 		defaultValue: props.value,
 		...props
 	});
+
 	return (
 		<FormControl>
 			{label && (
-				<label className='font-medium text-base-content' htmlFor={id}>
+				<Text as='label' className='font-medium text-base-content' htmlFor={id}>
 					{label}
-				</label>
+				</Text>
 			)}
 			<Select
 				{...props}
@@ -49,6 +47,7 @@ const SelectFieldControl = (
 					inputRef.current = e;
 				}}
 				id={id}
+				className={classNames({ 'ring-error': !!error })}
 				name={name}
 				disabled={disabled}
 				value={field.value}>
@@ -60,7 +59,11 @@ const SelectFieldControl = (
 						</Option>
 					))}
 			</Select>
-			{error && <small className='font-medium text-error'>{error.message}</small>}
+			{error && (
+				<Text as='small' color='error' className='font-medium'>
+					{error.message}
+				</Text>
+			)}
 		</FormControl>
 	);
 };
