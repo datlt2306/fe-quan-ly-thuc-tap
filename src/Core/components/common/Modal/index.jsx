@@ -5,7 +5,7 @@ import Button from '../Button';
 export default function Modal({ openState, onOpenStateChange, title, children }) {
 	return (
 		<Transition appear show={openState} as={Fragment}>
-			<Dialog as='div' className='relative z-[9999]' onClose={() => onOpenStateChange(false)}>
+			<Dialog as='div' className='relative z-[999]' onClose={() => onOpenStateChange(false)}>
 				<Transition.Child
 					as={Fragment}
 					enter='ease-out duration-300'
