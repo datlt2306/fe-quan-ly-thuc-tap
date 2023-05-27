@@ -34,36 +34,7 @@ const StudentListPage = () => {
 		setCurrentSemester(semesterData?.defaultSemester?._id);
 	}, [semesterData]);
 
-	const tableData = useMemo(() => {
-		return Array.isArray(studentsListData)
-			? studentsListData.map((student, index) => {
-					const companyStudentApplyFor =
-						student.support === 1
-							? {
-									nameCompany: student.business?.name,
-									taxCode: student.business?.tax_code,
-									addressCompany: student.business?.address
-							  }
-							: student.support === 0
-							? {
-									nameCompany: student?.nameCompany,
-									taxCode: student?.taxCode,
-									addressCompany: student?.addressCompany
-							  }
-							: null;
-
-					return {
-						...student,
-						index: index + 1,
-						createdAt: formatDate(student.createdAt),
-						statusCheck: StudentStatusEnum[student.statusCheck],
-						support: InternSupportType[student.support],
-						statusStudent: student.statusStudent.trim(),
-						...companyStudentApplyFor
-					};
-			  })
-			: [];
-	}, [studentsListData, currentSemester]);
+	const tableData = useMemo(() => studentsListData ?? [], [studentsListData]);
 
 	// Callback function will be executed after import file excel
 	const importExcelDataCallback = async (excelData) => {

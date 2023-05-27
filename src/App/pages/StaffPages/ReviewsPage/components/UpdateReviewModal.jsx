@@ -68,7 +68,7 @@ const UpdateReviewModal = ({
 					placeholder='Ghi chú cho sinh viên ...'
 				/>
 				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
-					Review CV
+					Xác nhận
 				</Button>
 			</Modal.Form>
 		</Modal>

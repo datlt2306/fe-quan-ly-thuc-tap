@@ -1,13 +1,15 @@
-import { InternSupportType, StudentReviewTypeEnum, StudentStatusEnum } from '@/App/constants/studentConstants';
+import { StudentColumnAccessors, StudentReviewTypeEnum, StudentStatusEnum } from '@/App/constants/studentConstants';
+import { useGetStudentsToReviewQuery, useUpdateStudentMutation } from '@/App/providers/apis/studentApi';
+import { studentScoreSchema } from '@/App/schemas/studentSchema';
+import Button from '@/Core/components/common/Button';
+import EditableCell from '@/Core/components/common/Table/EditableCell';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import Typography from '@/Core/components/common/Text/Typography';
-import formatDate from '@/Core/utils/formatDate';
 import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { Fragment, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import InstanceStudentColumns from '../Shared/InstanceStudentColumns';
-import { useGetStudentsToReviewQuery } from '@/App/providers/apis/studentApi';
-import Button from '@/Core/components/common/Button';
 import UpdateReviewModal from './components/UpdateReviewModal';
 
 const ReviewReportPage = () => {
@@ -18,37 +20,8 @@ const ReviewReportPage = () => {
 	} = useGetStudentsToReviewQuery({ type: StudentReviewTypeEnum.REVIEW_REPORT });
 	const [selectedStudents, setSelectedStudents] = useState([]);
 	const [open, setOpen] = useState(false);
-
-	const tableData = useMemo(() => {
-		return Array.isArray(studentsListData)
-			? studentsListData.map((student, index) => {
-					const companyStudentApplyFor =
-						student.support === 1
-							? {
-									nameCompany: student.business?.name,
-									taxCode: student.business?.tax_code,
-									addressCompany: student.business?.address
-							  }
-							: student.support === 0
-							? {
-									nameCompany: student?.nameCompany,
-									taxCode: student?.taxCode,
-									addressCompany: student?.addressCompany
-							  }
-							: null;
-
-					return {
-						...student,
-						index: index + 1,
-						createdAt: formatDate(student.createdAt),
-						statusCheck: StudentStatusEnum[student.statusCheck],
-						support: InternSupportType[student.support],
-						statusStudent: student.statusStudent.trim(),
-						...companyStudentApplyFor
-					};
-			  })
-			: [];
-	}, [studentsListData]);
+	const [handleUpdate, { isLoading }] = useUpdateStudentMutation();
+	const tableData = useMemo(() => studentsListData ?? [], [studentsListData]);
 
 	// Define columns of table
 	const columnsData = useMemo(
@@ -56,7 +29,38 @@ const ReviewReportPage = () => {
 			InstanceStudentColumns.filter((column) => {
 				const excludeColumns = ['CV', 'form'];
 				return !excludeColumns.includes(column?.accessor);
-			}),
+			}).concat([
+				{
+					Header: StudentColumnAccessors.attitudePoint,
+					accessor: 'attitudePoint',
+					sortable: true,
+					Cell: ({ row, column, value }) => {
+						return (
+							<EditableCell
+								value={value}
+								row={row}
+								column={column}
+								original={row?.original}
+								onConfirmChange={handleUpdateStudentScore}
+							/>
+						);
+					}
+				},
+				{
+					Header: StudentColumnAccessors.resultScore,
+					accessor: 'resultScore',
+					sortable: true,
+					Cell: ({ row, column, value }) => (
+						<EditableCell
+							value={value}
+							row={row}
+							column={column}
+							original={row?.original}
+							onConfirmChange={handleUpdateStudentScore}
+						/>
+					)
+				}
+			]),
 		[]
 	);
 
@@ -66,6 +70,22 @@ const ReviewReportPage = () => {
 			{ label: StudentStatusEnum[9], value: 9 }
 		];
 	}, []);
+
+	const handleUpdateStudentScore = async (field, value, student) => {
+		try {
+			const requestBody = { [field]: value };
+			const data = await studentScoreSchema(field).validate(requestBody);
+			const { error } = handleUpdate({ id: student._id, payload: data });
+			if (error) {
+				toast.error('Đã xảy ra lỗi');
+				return;
+			}
+			toast.success('Đã cập nhật điểm của sinh viên');
+		} catch (error) {
+			toast.error(error.message);
+			return;
+		}
+	};
 
 	return (
 		<Fragment>
@@ -90,6 +110,8 @@ const ReviewReportPage = () => {
 					columns={columnsData}
 					loading={isLoadingData}
 					onGetSelectedRows={setSelectedStudents}
+					// onUpdateData={updateTableData}
+					// skipPageReset={skipResetPage}
 				/>
 			</Container>
 		</Fragment>
@@ -97,6 +119,6 @@ const ReviewReportPage = () => {
 };
 
 const Container = tw.div`flex flex-col gap-6`;
-const Box = tw.div`flex items-center p-4`;
+const Box = tw.div`flex justify-between items-center py-4 h-[3rem]`;
 
 export default ReviewReportPage;
