@@ -14,6 +14,7 @@ import majorApi from './apis/majorApi';
 import staffListApi from './apis/staffListApi';
 import internRegistrationApi from './apis/internRegistrationApi';
 import reportApi from './apis/reportApi';
+import RTKQueryLogger from './middlewares/RTKQueryLogger';
 
 const persistConfig = {
 	key: 'root',
@@ -45,7 +46,9 @@ const store = configureStore({
 			majorApi.middleware,
 			staffListApi.middleware,
 			internRegistrationApi.middleware,
-			reportApi.middleware
+			reportApi.middleware,
+			// logger middleware
+			RTKQueryLogger
 		])
 });
 
