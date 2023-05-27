@@ -1,7 +1,7 @@
 import { useController } from 'react-hook-form';
 import tw from 'twin.macro';
 
-const FormControl = tw.div`flex flex-col gap-2 m-0 `;
+const FormControl = tw.div`flex flex-col gap-px m-0 `;
 
 const FileUploadFieldControl = ({ control, name, label, disabled, rules }) => {
 	const {

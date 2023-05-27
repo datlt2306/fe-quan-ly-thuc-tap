@@ -1,9 +1,10 @@
+import classNames from 'classnames';
 import { forwardRef, useId, useRef } from 'react';
 import { useController } from 'react-hook-form';
 import tw from 'twin.macro';
 
 export const Input = tw.input`block w-full rounded-md border-0 duration-300 px-2.5 py-1.5 text-gray-900 outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`;
-const FormControl = tw.div`flex flex-col gap-1 m-0`;
+const FormControl = tw.div`flex flex-col gap-px m-0`;
 
 const InputFieldControl = ({ control, name, label, disabled, rules, type = 'text', ...props }, ref) => {
 	const {
@@ -38,6 +39,7 @@ const InputFieldControl = ({ control, name, label, disabled, rules, type = 'text
 						props.onChange(event);
 					}
 				}}
+				className={classNames({ 'ring-error': !!error })}
 				value={field.value}
 				disabled={disabled}
 				ref={(e) => {
