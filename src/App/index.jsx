@@ -21,7 +21,7 @@ function App() {
 			<ToastContainer
 				hideProgressBar={true}
 				transition={Slide}
-				toastClassName='bg-white shadow-lg text-gray-500 place-content-center font-medium'
+				toastClassName='bg-white shadow-lg text-gray-500 place-content-center font-medium z-[9999]'
 				position='top-center'
 				closeButton={true}
 				autoClose={1000}
