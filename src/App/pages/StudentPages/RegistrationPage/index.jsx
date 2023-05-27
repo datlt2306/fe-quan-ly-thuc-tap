@@ -15,7 +15,7 @@ import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 import { InternSupportType } from '@/App/constants/studentConstants';
 
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
+import LoadingData from '../Shared/LoadingData';
 import { Radio } from '@/Core/components/common/FormControl/RadioFieldControl';
 import Typography from '@/Core/components/common/Text/Typography';
 const FormSchoolSupport = lazy(() => import('./components/FormSchoolSupport'));
@@ -96,11 +96,7 @@ const RegistrationPage = () => {
 		deadline && deadline.endTime > new Date().getTime() && deadline.startTime < new Date().getTime();
 
 	if (isLoading) {
-		return (
-			<div className='flex items-center justify-center gap-2'>
-				<LoadingSpinner variant={'primary'} size='sm' />
-			</div>
-		);
+		return <LoadingData />;
 	}
 	//kiểm tra xem statusCheck có phải là trạng thái sửa cv hay không hay là có form nào mở hay không thì mở lại cho  học sinh đăng ký form
 	return student?.listTimeForm?.length > 0 || student?.statusCheck == 1 ? (

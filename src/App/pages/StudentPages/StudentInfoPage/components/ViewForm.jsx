@@ -4,7 +4,7 @@ import Button from '@/Core/components/common/Button';
 import { InternSupportType } from '@/App/constants/studentConstants';
 import formatDate from '@/Core/utils/formatDate';
 import FormRequestSupport from './FormRequestSupport';
-const ViewForm = ({ data: user, nameMajor, setOpenState }) => {
+const ViewForm = ({ data: user, setOpenState }) => {
 	const dataViewForm = [
 		{
 			label: 'Kiểu đăng ký:',
@@ -15,7 +15,7 @@ const ViewForm = ({ data: user, nameMajor, setOpenState }) => {
 		{ label: 'Email:', value: user?.email },
 		{ label: 'Số điện thoại:', value: user?.phoneNumber },
 		{ label: 'Địa chỉ:', value: user?.address },
-		{ label: 'Chuyên ngành:', value: nameMajor },
+		{ label: 'Chuyên ngành:', value: user?.major?.name },
 		{ label: 'Vị trí thực tập:', value: user?.dream },
 		{ label: 'Ngày bắt đầu:', value: formatDate(user?.internshipTime) },
 		{

@@ -9,6 +9,7 @@ import { Suspense, lazy, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import LoadingData from '../Shared/LoadingData';
 const ViewReport = lazy(() => import('./components/ViewReport'));
 const ViewForm = lazy(() => import('./components/ViewForm'));
 const ViewCv = lazy(() => import('./components/ViewCv'));
@@ -22,26 +23,18 @@ export const VerticalList = (props) => (
 
 const StudentInfoPage = () => {
 	const user = useSelector((state) => state.auth?.user);
-	const [nameMajor, setNameMajor] = useState(null);
 	const [openState, setOpenState] = useState(false);
 	const [modalContent, setModalContent] = useState(null);
 	const [title, setTitle] = useState('');
 
-	const { data, isFetching } = useGetOneStudentQuery(user?.id, {
+	const { data, isLoading } = useGetOneStudentQuery(user?.id, {
 		refetchOnMountOrArgChange: true
 	});
-
-	const { data: allMajor } = useGetAllMajorQuery();
-
-	useEffect(() => {
-		const findMajor = allMajor?.find((item) => item?.majorCode == data?.majorCode);
-		setNameMajor(findMajor?.name);
-	}, [allMajor, data?.majorCode]);
 
 	const dataRegisterInfomation = [
 		{ label: 'Họ và tên :', value: data?.name },
 		{ label: 'Khóa học :', value: data?.course },
-		{ label: 'Ngành học :', value: nameMajor },
+		{ label: 'Ngành học :', value: data?.major?.name },
 
 		{ label: 'Email :', value: data?.email },
 		{
@@ -71,19 +64,22 @@ const StudentInfoPage = () => {
 		{
 			condition: data?.CV || data?.nameCompany,
 			label: 'Form Đăng ký Thực Tập',
-			content: <ViewCv setOpenState={setOpenState} data={data} nameMajor={nameMajor} />
+			content: <ViewCv setOpenState={setOpenState} data={data} />
 		},
 		{
 			condition: data?.form,
 			label: 'Form Biên Bản',
-			content: <ViewForm setOpenState={setOpenState} data={data} nameMajor={nameMajor} />
+			content: <ViewForm setOpenState={setOpenState} data={data} />
 		},
 		{
 			condition: data?.report,
 			label: 'Form Báo Cáo',
-			content: <ViewReport setOpenState={setOpenState} data={data} nameMajor={nameMajor} />
+			content: <ViewReport setOpenState={setOpenState} data={data} />
 		}
 	];
+	if (isLoading) {
+		return <LoadingData />;
+	}
 	return (
 		<>
 			<WrapLayoutInfoUser>
