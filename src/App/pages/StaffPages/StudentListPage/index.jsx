@@ -1,4 +1,4 @@
-import { InternSupportType, StudentColumnAccessors, StudentStatusEnum } from '@/App/constants/studentConstants';
+import { StudentColumnAccessors } from '@/App/constants/studentConstants';
 import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
 import { useGetAllSemestersQuery } from '@/App/providers/apis/semesterApi';
 import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/providers/apis/studentApi';
@@ -8,7 +8,6 @@ import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { AllowedFileExt } from '@/Core/constants/allowedFileType';
 import HttpStatusCode from '@/Core/constants/httpStatus';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
-import formatDate from '@/Core/utils/formatDate';
 import getFileExtension from '@/Core/utils/getFileExtension';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -29,6 +28,7 @@ const StudentListPage = () => {
 	const { data: studentsListData, isLoading } = useGetStudentsQuery({ semester: currentSemester });
 	const fileInputRef = useRef(null);
 	const toastId = useRef(null);
+	const [selectedStudents, setSelectedStudents] = useState([]);
 
 	useEffect(() => {
 		setCurrentSemester(semesterData?.defaultSemester?._id);
@@ -154,14 +154,14 @@ const StudentListPage = () => {
 					</Select>
 				</SelectBox>
 				<DesktopButtonGroup
-					tableData={tableData}
+					tableData={selectedStudents.length ? selectedStudents : tableData}
 					handleExport={handleExportDataToExcel}
 					handleImport={handleImportStudents}
 					canImport={currentSemester === semesterData?.defaultSemester?._id}
 					ref={fileInputRef}
 				/>
 				<MobileDropdownButtonGroup
-					tableData={tableData}
+					tableData={selectedStudents.length ? selectedStudents : tableData}
 					handleExport={handleExportDataToExcel}
 					handleImport={handleImportStudents}
 					canImport={currentSemester === semesterData?.defaultSemester?._id}
@@ -169,7 +169,12 @@ const StudentListPage = () => {
 				/>
 			</Box>
 
-			<ReactTable columns={columnsData} data={tableData} loading={isLoading} />
+			<ReactTable
+				columns={columnsData}
+				data={tableData}
+				loading={isLoading}
+				onGetSelectedRows={setSelectedStudents}
+			/>
 		</Container>
 	);
 };
