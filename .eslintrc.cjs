@@ -21,6 +21,7 @@ module.exports = {
 		'react/no-unknown-property': 'off',
 		'react/display-name': 'off',
 		'no-unused-vars': 'off',
+		'no-useless-escape': 'off',
 		'no-undef': 'off',
 		// ... any rules you want
 		'prettier/prettier': [
