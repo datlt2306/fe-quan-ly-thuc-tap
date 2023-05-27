@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import { LoadingSpinner } from '../Loading/LoadingSpinner';
 import { Skeleton } from '../../customs/Skelton';
+import Text from '../Text/Text';
 
 const Table = ({ children, ...props }) => (
 	<table {...props} className='table w-full'>
@@ -25,8 +25,8 @@ const Cell = ({ as: Element = 'td', children, ...props }) => {
 
 const Empty = () => (
 	<Table.Row>
-		<Cell colSpan='100%'>
-			<span className='select-none text-lg text-disabled'>Không có dữ liệu</span>
+		<Cell colSpan='100%' className=''>
+			<Text className='select-none text-base text-disabled'>Không có dữ liệu</Text>
 		</Cell>
 	</Table.Row>
 );
