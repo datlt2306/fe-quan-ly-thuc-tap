@@ -40,3 +40,8 @@ export const newStudentSchema = yup
 	)
 	.unique('Email không được trùng !', (value) => value.email)
 	.unique('Mã sinh viên không được trùng !', (value) => value.mssv);
+
+export const reviewSchema = yup.object({
+	status: yup.string().required('Vui lòng chọn trạng thái sinh viên'),
+	textNote: yup.string().optional()
+});
