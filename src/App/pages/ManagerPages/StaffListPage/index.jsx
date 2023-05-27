@@ -103,7 +103,7 @@ const StaffListPage = () => {
 				isSort: false,
 				Cell: ({ row }) => (
 					<ButtonList>
-						{row.original.role !== 'Quản lý' ? (
+						{row.original.role !== RoleStaffEnum[2] ? (
 							<>
 								<Button
 									size='xs'
