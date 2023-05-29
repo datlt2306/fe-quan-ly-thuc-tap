@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useEffect, useLayoutEffect, useMemo, useState, forwardRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 
 /**
  * @param {string} size
@@ -51,7 +51,7 @@ const Button = (
 		[variant, shape, size]
 	);
 	return (
-		<Element {...props} className={buttonStyles} ref={ref}>
+		<Element {...props} className={buttonStyles} ref={ref} disabled={variant === 'disabled'}>
 			{children}
 		</Element>
 	);
