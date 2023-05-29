@@ -57,8 +57,7 @@ const ReactTable = ({
 		}),
 		[]
 	);
-	const defaultColumn = useMemo(() => ({ Filter: InputColumnFilter }), []);
-
+	// const defaultColumn = useMemo(() => ({ Filter: InputColumnFilter }), []);
 	const {
 		// Default react table props
 		getTableProps,
@@ -86,7 +85,7 @@ const ReactTable = ({
 		{
 			columns,
 			data,
-			defaultColumn,
+			// defaultColumn,
 			manualPagination: serverSidePagination,
 			filterTypes
 		},
@@ -193,8 +192,7 @@ const ReactTable = ({
 								serverSidePagination
 									? serverPaginationProps.dispatch({ type: PaginationActionEnums.GO_TO_FIRST_PAGE })
 									: gotoPage(0);
-							}}
-							disabled={serverSidePagination ? !serverPaginationProps.canPreviousPage : !canPreviousPage}>
+							}}>
 							<ChevronDoubleLeftIcon className='h-4 w-4' aria-hidden='true' />
 						</ButtonGroup.Item>
 						<ButtonGroup.Item
@@ -208,8 +206,7 @@ const ReactTable = ({
 								serverSidePagination
 									? serverPaginationProps?.dispatch({ type: PaginationActionEnums.GO_TO_PREV_PAGE })
 									: previousPage();
-							}}
-							disabled={serverSidePagination ? !serverPaginationProps.canPreviousPage : !canPreviousPage}>
+							}}>
 							<ChevronLeftIcon className='h-4 w-4' aria-hidden='true' />
 						</ButtonGroup.Item>
 						<ButtonGroup.Item
@@ -221,8 +218,7 @@ const ReactTable = ({
 								serverSidePagination
 									? serverPaginationProps.dispatch({ type: PaginationActionEnums.GO_TO_NEXT_PAGE })
 									: nextPage();
-							}}
-							disabled={serverSidePagination ? !serverPaginationProps.canNextPage : !canNextPage}>
+							}}>
 							<ChevronRightIcon className='h-4 w-4' aria-hidden='true' />
 						</ButtonGroup.Item>
 						<ButtonGroup.Item
@@ -237,8 +233,7 @@ const ReactTable = ({
 											payload: serverPaginationProps?.totalPages
 									  })
 									: gotoPage(pageCount - 1);
-							}}
-							disabled={serverSidePagination ? !serverPaginationProps.canNextPage : !canNextPage}>
+							}}>
 							<ChevronDoubleRightIcon className='h-4 w-4' aria-hidden='true' />
 						</ButtonGroup.Item>
 					</ButtonGroup>
@@ -259,17 +254,17 @@ const ReactTable = ({
 						<Select
 							id='page-size-select'
 							className='w-full max-w-[128px]'
-							defaultValue={pageSize}
+							defaultValue={serverSidePagination ? serverPaginationProps.pageSize : pageSize}
 							onChange={(e) => {
 								serverSidePagination
 									? serverPaginationProps.dispatch({
 											type: PaginationActionEnums.CHANGE_PAGE_SIZE,
-											payload: e.target.value
+											payload: +e.target.value
 									  })
-									: setPageSize(e.target.value);
+									: setPageSize(+e.target.value);
 							}}>
-							{[10, 20, 30, 50].map((page_size, index) => (
-								<Option value={page_size} key={index}>
+							{[10, 20, 30, 50].map((page_size) => (
+								<Option value={page_size} key={page_size}>
 									{page_size} hàng
 								</Option>
 							))}
