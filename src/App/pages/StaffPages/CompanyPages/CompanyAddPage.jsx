@@ -26,7 +26,7 @@ const AddBusinessForm = () => {
 	});
 	const [handleAddCompany, { isLoading }] = useAddCompanyMutation();
 	const onSubmit = async (data) => {
-		const result = await handleAddCompany(data);
+		const result = await handleAddCompany([data]);
 		if (result?.error) {
 			toast.error('Thêm mới thất bại');
 			return;

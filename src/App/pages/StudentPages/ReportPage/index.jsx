@@ -39,7 +39,7 @@ const ReportPage = () => {
 
 	const handleChange = (e) => {
 		const file = e.target.files[0];
-		const allowedExtensions = ['pdf', 'docx'];
+		const allowedExtensions = ['pdf'];
 		if (!file) {
 			setValidateFile('Không có file được chọn');
 			return;
@@ -58,7 +58,7 @@ const ReportPage = () => {
 	};
 	const onSubmit = async (value) => {
 		const file = selectFile;
-		const allowedExtensions = ['pdf', 'docx'];
+		const allowedExtensions = ['pdf'];
 		const fileName = file.name;
 		const fileExtension = fileName.split('.').pop().toLowerCase();
 		if (!allowedExtensions.includes(fileExtension)) {
@@ -73,7 +73,7 @@ const ReportPage = () => {
 		formData.append('_id', data._id);
 		formData.append('mssv', data.mssv);
 		formData.append('email', data.email);
-		formData.append('nameCompany', data.nameCompany);
+		formData.append('nameCompany', data?.support === 1 ? data?.business?.name : data?.nameCompany);
 		formData.append('typeNumber', 3);
 		const result = await handleSubmitForm(formData);
 		if (result?.error) {
@@ -89,9 +89,7 @@ const ReportPage = () => {
 	}
 	return (
 		<Container>
-			{data?.report ? (
-				<Typography level={6}>Bạn đã nộp biên bản thành công!</Typography>
-			) : (
+			{data?.statusCheck === 6 || data?.statusCheck === 8 ? (
 				<>
 					<Typography level={4} color='text-primary'>
 						Nộp báo cáo
@@ -104,7 +102,8 @@ const ReportPage = () => {
 							Họ và tên: <Span>{data && data?.name}</Span>
 						</Info>
 						<Info>
-							Tên doanh nghiệp: <Span>{data && data?.nameCompany}</Span>
+							Tên doanh nghiệp:{' '}
+							<Span>{data && data?.support === 1 ? data?.business?.name : data?.nameCompany}</Span>
 						</Info>
 
 						<InputFieldControl
@@ -145,23 +144,22 @@ const ReportPage = () => {
 						/>
 						<InputFieldControl
 							ref={fileInputRef}
-							label='Upload báo cáo (PDF hoặc Docx)'
+							label='Upload báo cáo (PDF)'
 							control={control}
 							name='file'
 							type='file'
 							onChange={handleChange}
 						/>
 						<Error>{validateFile}</Error>
-						<div className='grid grid-flow-col justify-stretch gap-2'>
-							<Button variant='primary' type='submit' disabled={isLoading}>
-								{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp báo cáo
-							</Button>
-							<Button as='div' variant='success' onClick={() => window.open(data?.['CV'])}>
-								Xem CV
-							</Button>
-						</div>
+						<Button variant='primary' type='submit' disabled={isLoading}>
+							{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp báo cáo
+						</Button>
 					</Form>
 				</>
+			) : data?.report ? (
+				<Typography level={6}>Bạn đã nộp biên bản thành công!</Typography>
+			) : (
+				<Typography level={6}>Bạn chưa đủ điều kiện nộp báo cáo!</Typography>
 			)}
 		</Container>
 	);

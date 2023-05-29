@@ -38,7 +38,7 @@ const RegistrantionTimePage = () => {
 	const handleChangeSemester = (id) => {
 		setSelectedSemester(semester?.listSemesters.find((item) => item._id === id));
 	};
-	const { data } = useGetAllSetTimeQuery({ semester_id: selectedSemester._id }, { refetchOnMountOrArgChange: true });
+	const { data } = useGetAllSetTimeQuery({ semester_id: selectedSemester?._id }, { refetchOnMountOrArgChange: true });
 	const [tableData, setTableData] = useState([]);
 	useEffect(() => {
 		setTableData(data?.time);
