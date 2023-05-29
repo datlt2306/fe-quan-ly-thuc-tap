@@ -1,8 +1,6 @@
+import Typography from '@/Core/components/common/Text/Typography';
+import EmptyStateSection from '../../Shared/EmptyStateSection';
 const ExpiredNotice = () => {
-	return (
-		<div className='expired-notice'>
-			<span className='text-base'>Form đăng ký chưa mở</span>
-		</div>
-	);
+	return <EmptyStateSection title='Form đăng ký chưa mở'  />;
 };
 export default ExpiredNotice;

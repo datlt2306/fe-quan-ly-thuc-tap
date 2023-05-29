@@ -9,7 +9,7 @@ export default function EmptyStateSection({ title, message }) {
 			<Box>
 				<DocumentIcon width={40} height={40} className='text-disabled' />
 				<div>
-					<Typography level={6} fontWeight='semibold'>
+					<Typography className="text-gray-500"  level={6} fontWeight='semibold'>
 						{title}
 					</Typography>
 					<Text className='mt-1 text-gray-500'>{message}</Text>
