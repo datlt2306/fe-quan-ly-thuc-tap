@@ -1,11 +1,10 @@
-/* eslint-disable react/prop-types */
 import { VerticalList } from '..';
 
 import Button from '@/Core/components/common/Button';
 import { InternSupportType } from '@/App/constants/studentConstants';
 import formatDate from '@/Core/utils/formatDate';
-
-const ViewForm = ({ data: user, nameMajor }) => {
+import FormRequestSupport from './FormRequestSupport';
+const ViewForm = ({ data: user, setOpenState }) => {
 	const dataViewForm = [
 		{
 			label: 'Kiểu đăng ký:',
@@ -16,7 +15,7 @@ const ViewForm = ({ data: user, nameMajor }) => {
 		{ label: 'Email:', value: user?.email },
 		{ label: 'Số điện thoại:', value: user?.phoneNumber },
 		{ label: 'Địa chỉ:', value: user?.address },
-		{ label: 'Chuyên ngành:', value: nameMajor },
+		{ label: 'Chuyên ngành:', value: user?.major?.name },
 		{ label: 'Vị trí thực tập:', value: user?.dream },
 		{ label: 'Ngày bắt đầu:', value: formatDate(user?.internshipTime) },
 		{
@@ -24,6 +23,7 @@ const ViewForm = ({ data: user, nameMajor }) => {
 			value: <>{user?.['form'] && <Button onClick={() => window.open(user?.['form'])}>Xem</Button>}</>
 		}
 	];
+
 	return (
 		<>
 			<VerticalList>
@@ -32,6 +32,7 @@ const ViewForm = ({ data: user, nameMajor }) => {
 						<p>{item.label}</p> <span className='font-medium'>{item.value}</span>
 					</li>
 				))}
+				<FormRequestSupport formType='form' setOpenState={setOpenState} />
 			</VerticalList>
 		</>
 	);

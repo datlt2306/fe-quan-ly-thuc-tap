@@ -19,5 +19,5 @@ export default function EmptyStateSection({ title, message }) {
 	);
 }
 
-const Box = tw.div`max-w-lg mx-auto rounded-lg flex flex-col items-center justify-center place-content-center place-items-center items-center justify-center gap-4 text-center`;
+const Box = tw.div`max-w-lg mx-auto rounded-lg flex flex-col place-content-center place-items-center items-center justify-center gap-4 text-center`;
 const Container = tw.div`flex items-center justify-center h-full`;

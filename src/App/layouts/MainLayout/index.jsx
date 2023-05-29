@@ -1,5 +1,4 @@
 import { UserRoleEnum } from '@/App/constants/userRoles';
-import ErrorBoundary from '@/Core/components/ErrorBoundary';
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 import { Fragment, Suspense, memo, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -10,6 +9,7 @@ import MobileSidebar from './components/MobileSidebar';
 import Navbar from './components/Navbar';
 import { managerNavigation, staffNavigation, studentNavigation } from './constants/navigationConstants';
 import UnsupportScreen from '@/Core/components/customs/UnsupportScreen';
+import ErrorBoundary from '@/Core/components/error/ErrorBoundary';
 
 const Page = memo(Outlet);
 
