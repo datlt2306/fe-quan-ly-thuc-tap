@@ -151,14 +151,9 @@ const ReportPage = () => {
 							onChange={handleChange}
 						/>
 						<Error>{validateFile}</Error>
-						<div className='grid grid-flow-col justify-stretch gap-2'>
-							<Button variant='primary' type='submit' disabled={isLoading}>
-								{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp báo cáo
-							</Button>
-							<Button as='div' variant='success' onClick={() => window.open(data?.['CV'])}>
-								Xem CV
-							</Button>
-						</div>
+						<Button variant='primary' type='submit' disabled={isLoading}>
+							{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp báo cáo
+						</Button>
 					</Form>
 				</>
 			) : data?.report ? (
