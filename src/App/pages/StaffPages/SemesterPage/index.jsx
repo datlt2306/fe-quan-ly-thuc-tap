@@ -10,7 +10,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { campusDataValidator } from '@/App/schemas/campusSchema';
 import AddSemesterSlideOver from './components/AddSemesterSlideOver';
-// import { toast } from 'react-toastify';
 import UpdateSemesterModal from './components/UpdateSemesterModal';
 
 const Box = tw.div`flex flex-col gap-6`;
@@ -22,32 +21,19 @@ const SemesterPage = () => {
 	const [semester, setSemester] = useState();
 	const { currentCampus } = useSelector((state) => state.campus);
 	const { data: semesters } = useGetAllSemestersQuery({ campus_id: currentCampus?._id });
-	// const { defaultSemester } = useSelector((state) => state.semester);
 	const { reset } = useForm({
 		resolver: yupResolver(campusDataValidator)
 	});
 
 	const tableData = useMemo(() => {
 		return Array.isArray(semesters?.listSemesters)
-			? semesters?.listSemesters
-					?.map((semester, index) => ({
-						...semester,
-						name: semester.name.toUpperCase(),
-						end_time: moment(semester.end_time).format('DD/MM/YYYY'),
-						start_time: moment(semester.start_time).format('DD/MM/YYYY'),
-						index: index + 1
-					}))
-					.sort((a, b) => {
-						// Extract the season from the semester name
-						const seasonA = a.name.split(' ')[1];
-						const seasonB = b.name.split(' ')[1];
-
-						// Define the order of the seasons
-						const seasonOrder = ['SPRING ', 'SUMMER ', 'FALL '];
-
-						// Compare the seasons using the predefined order
-						return seasonOrder.indexOf(seasonA) - seasonOrder.indexOf(seasonB);
-					})
+			? semesters?.listSemesters?.map((semester, index) => ({
+					...semester,
+					name: semester.name.toUpperCase(),
+					end_time: moment(semester.end_time).format('DD/MM/YYYY'),
+					start_time: moment(semester.start_time).format('DD/MM/YYYY'),
+					index: index + 1
+			  }))
 			: [];
 	}, [semesters]);
 

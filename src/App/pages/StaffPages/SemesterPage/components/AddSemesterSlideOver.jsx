@@ -14,36 +14,13 @@ import { useAddSemesterMutation } from '@/App/providers/apis/semesterApi';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 
-const AddSemesterSlideOver = ({ onOpen, open, curSemester }) => {
+const AddSemesterSlideOver = ({ onOpen, open }) => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(semesterDataValidator),
 		defaultValue: semesterDataValidator.getDefault()
 	});
 	const { currentCampus } = useSelector((state) => state.campus);
 	const [handleAddNewSemester, { isLoading }] = useAddSemesterMutation();
-
-	// const isCampusDuplicate = (data) => {
-	// 	const newCampus = data.name
-	// 		.toLowerCase()
-	// 		.normalize('NFD')
-	// 		.replace(/[\u0300-\u036f]/g, '')
-	// 		.replace(/đ/g, 'd')
-	// 		.replace(/Đ/g, 'D');
-	// 	const temp = [];
-	// 	curCampus.forEach((item) => {
-	// 		const campus = item.name
-	// 			.toLowerCase()
-	// 			.normalize('NFD')
-	// 			.replace(/[\u0300-\u036f]/g, '')
-	// 			.replace(/đ/g, 'd')
-	// 			.replace(/Đ/g, 'D');
-
-	// 		if (campus.includes(newCampus)) {
-	// 			temp.push(item);
-	// 		}
-	// 	});
-	// 	return temp;
-	// };
 
 	const onAddSubmit = async (data) => {
 		const { error } = await handleAddNewSemester({
