@@ -1,9 +1,8 @@
-/* eslint-disable react/prop-types */
-
+import { useState, useEffect } from 'react';
 import { formSignUpSchoolSupportSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import FileUploadFieldControl from '@/Core/components/common/FormControl/FileUploadFieldControl';
-import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
+
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Fragment } from 'react';
@@ -14,24 +13,32 @@ import tw from 'twin.macro';
 import FormRow from '../components/FormRow';
 import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
 import SharedFields from './SharedFields';
-
-const FormSchoolSupport = ({ business, selectedOption, user, majors }) => {
+import ComboBoxFieldControl from '@/Core/components/common/FormControl/ComboBoxFieldControl';
+import {  useLazyGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
+const FormSchoolSupport = ({ selectedOption, user }) => {
 	const navigate = useNavigate();
 	const [hanldeUploadCvMutation, { isLoading }] = useUploadCvMutation();
+	const [getBusiness, { data: business, isLoading: loadingBusiness }] = useLazyGetAllCompanyQuery();
 	const { control, handleSubmit } = useForm({
 		resolver: yupResolver(formSignUpSchoolSupportSchema),
 		defaultValues: formSignUpSchoolSupportSchema.getDefault()
 	});
+	const handleMajorChange = (majorCode) => {
+		if (majorCode) {
+			getBusiness({ limit: 100, majorCode });
+		}
+	};
 
 	const formSchoolSupport = [
-		...SharedFields(control, user, majors),
+		...SharedFields(control, user, handleMajorChange),
 		{
 			content: (
-				<SelectFieldControl
-					label='Đơn vị thực tập'
-					initialValue='Chọn doanh nghiệp'
+				<ComboBoxFieldControl
+					loading={loadingBusiness}
+					placeholder='Chọn doanh nghiệp'
 					control={control}
 					name='business'
+					label='Đơn vị thực tập'
 					options={
 						Array.isArray(business?.list)
 							? business.list.map((item) => ({ value: item._id, label: item.name }))
@@ -68,7 +75,6 @@ const FormSchoolSupport = ({ business, selectedOption, user, majors }) => {
 			formData.append(key, value);
 		});
 		formData.append('file', file);
-		// const response = await uploadDriveMutation(formData);
 		const res = await hanldeUploadCvMutation(formData);
 		if (res?.error) {
 			toast.error('Đã có lỗi xảy ra');

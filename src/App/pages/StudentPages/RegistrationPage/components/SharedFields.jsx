@@ -1,8 +1,10 @@
-import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
+import ComboBoxFieldControl from '@/Core/components/common/FormControl/ComboBoxFieldControl';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import tw from 'twin.macro';
+import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
+const SharedFields = (control, student, handleMajorChange) => {
+	const { data: majors, isLoading } = useGetAllMajorQuery();
 
-const SharedFields = (control, student, majors) => {
 	return [
 		{
 			content: (
@@ -30,13 +32,17 @@ const SharedFields = (control, student, majors) => {
 		},
 		{
 			content: (
-				<SelectFieldControl
+				<ComboBoxFieldControl
+					loading={isLoading}
+					onChange={(value) => (handleMajorChange ? handleMajorChange(value) : null)}
 					label='Chuyên ngành'
 					className='w-full'
-					initialValue='Chọn chuyên ngành'
+					placeholder='Chọn chuyên ngành'
 					control={control}
-					name='major'
-					options={Array.isArray(majors) ? majors.map((item) => ({ value: item._id, label: item.name })) : []}
+					name='majorCode'
+					options={
+						Array.isArray(majors) ? majors.map((item) => ({ value: item.majorCode, label: item.name })) : []
+					}
 				/>
 			)
 		},

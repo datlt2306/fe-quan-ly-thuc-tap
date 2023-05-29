@@ -100,7 +100,7 @@ const StudentInfoPage = () => {
 					<WrapMenu>
 						<Menu>
 							{!(data?.CV || data?.form || data?.report || data?.nameCompany) && (
-								<div className='font-medium'>Chưa có form nào được nộp</div>
+								<Typography level={6}>Chưa có form nào được nộp</Typography>
 							)}
 							{formSubmittedRoute.map((item) => (
 								<Menu.Item

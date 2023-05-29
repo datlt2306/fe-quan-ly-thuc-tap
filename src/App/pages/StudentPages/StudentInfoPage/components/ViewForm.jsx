@@ -16,6 +16,10 @@ const ViewForm = ({ data: user, setOpenState }) => {
 		{ label: 'Số điện thoại:', value: user?.phoneNumber },
 		{ label: 'Địa chỉ:', value: user?.address },
 		{ label: 'Chuyên ngành:', value: user?.major?.name },
+		{
+			label: 'Tên công ty:',
+			value: user?.support === 1 ? user?.business?.name : user?.nameCompany
+		},
 		{ label: 'Vị trí thực tập:', value: user?.dream },
 		{ label: 'Ngày bắt đầu:', value: formatDate(user?.internshipTime) },
 		{

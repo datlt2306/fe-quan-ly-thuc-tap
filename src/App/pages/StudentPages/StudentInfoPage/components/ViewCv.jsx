@@ -23,7 +23,7 @@ const ViewCv = ({ data: user, setOpenState }) => {
 					{user?.support === 1 ? (
 						<>
 							<p className='pr-1 '>
-								Công ty: <span tw='font-medium'>:{user?.business?.name}</span>
+								Công ty: <span tw='font-medium'>{user?.business?.name}</span>
 							</p>
 							<div className='mt-3 flex items-center'>
 								<p className='pr-1'>CV:</p>

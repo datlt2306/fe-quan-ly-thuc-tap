@@ -14,7 +14,7 @@ import FormRow from './FormRow';
 import { Form } from './FormSchoolSupport';
 import SharedFields from './SharedFields';
 
-const FormSelfFinding = ({ selectedOption, user, majors }) => {
+const FormSelfFinding = ({ selectedOption, user }) => {
 	const navigate = useNavigate();
 
 	const { control, handleSubmit } = useForm({
@@ -24,7 +24,7 @@ const FormSelfFinding = ({ selectedOption, user, majors }) => {
 	const [hanldeUploadCvMutation, { isLoading }] = useUploadCvMutation();
 
 	const formSelfFinding = [
-		...SharedFields(control, user, majors),
+		...SharedFields(control, user),
 		{
 			content: (
 				<InputFieldControl

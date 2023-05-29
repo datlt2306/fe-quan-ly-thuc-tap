@@ -33,6 +33,7 @@ const businessApi = createApi({
 });
 
 export const {
+	useLazyGetAllCompanyQuery,
 	useGetAllCompanyQuery,
 	useAddCompanyMutation,
 	useDeleteCompanyMutation,
