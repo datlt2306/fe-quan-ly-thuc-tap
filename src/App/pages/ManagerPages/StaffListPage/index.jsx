@@ -17,8 +17,9 @@ import {
 	paginationInitialState,
 	paginationReducer
 } from '@/Core/components/common/Table/reducers/serverPaginationReducer';
-
+import { useSelector } from 'react-redux';
 const StaffListPage = () => {
+	const currentUser = useSelector((state) => state.auth?.user);
 	const [isEditing, setIsEditing] = useState(false);
 	const [user, setUser] = useState();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
@@ -44,6 +45,10 @@ const StaffListPage = () => {
 	const [handleRemoveStaff] = useDeleteStaffMutation();
 
 	const onDeleteSubmit = async (id) => {
+		if (currentUser.id == id) {
+			toast.error('Xóa không thành công!');
+			return;
+		}
 		const { error } = await handleRemoveStaff(id);
 		if (error) {
 			toast.error('Xóa không thành công!');
@@ -103,49 +108,22 @@ const StaffListPage = () => {
 				isSort: false,
 				Cell: ({ row }) => (
 					<ButtonList>
-						{row.original.role !== RoleStaffEnum[2] ? (
-							<>
-								<Button
-									size='xs'
-									variant='default'
-									shape='square'
-									onClick={() => onOpenUpdate(row.original._id)}>
-									<PencilSquareIcon className='h-4 w-4' />
-								</Button>
+						<>
+							<Button size='xs' variant='default' shape='square' onClick={() => onOpenUpdate(row.original._id)}>
+								<PencilSquareIcon className='h-4 w-4' />
+							</Button>
 
-								<PopConfirm
-									okText='Ok'
-									cancelText='Cancel'
-									title={'Xóa nhân viên'}
-									description={'Bạn muốn xóa nhân viên này ?'}
-									onConfirm={() => onDeleteSubmit(row.original._id)}>
-									<Button size='xs' variant='error' shape='square'>
-										<TrashIcon className='h-4 w-4' />
-									</Button>
-								</PopConfirm>
-							</>
-						) : (
-							<>
-								<PopConfirm
-									okText='Ok'
-									cancelText='Cancel'
-									title={'Không có quyền'}
-									description={'Bạn không được sửa quản lý ?'}>
-									<Button size='xs' variant='default' shape='square'>
-										<PencilSquareIcon className='h-4 w-4' />
-									</Button>
-								</PopConfirm>
-								<PopConfirm
-									okText='Ok'
-									cancelText='Cancel'
-									title={'Không có quyền'}
-									description={'Bạn không được xóa quản lý ?'}>
-									<Button size='xs' variant='error' shape='square'>
-										<TrashIcon className='h-4 w-4' />
-									</Button>
-								</PopConfirm>
-							</>
-						)}
+							<PopConfirm
+								okText='Ok'
+								cancelText='Cancel'
+								title={'Xóa nhân viên'}
+								description={'Bạn muốn xóa nhân viên này ?'}
+								onConfirm={() => onDeleteSubmit(row.original._id)}>
+								<Button size='xs' variant='error' shape='square'>
+									<TrashIcon className='h-4 w-4' />
+								</Button>
+							</PopConfirm>
+						</>
 					</ButtonList>
 				)
 			}
