@@ -48,7 +48,7 @@ const UpdateReviewModal = ({
 				return;
 			}
 			handleOpenStateChange(!openState);
-			toast.success('Xác nhận review CV thành công !');
+			toast.success('Xác nhận review thành công !');
 			navigate(StaffPaths.STUDENT_LIST);
 		} catch (error) {
 			toast.error(error.message);
