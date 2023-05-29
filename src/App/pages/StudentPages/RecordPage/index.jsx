@@ -32,7 +32,7 @@ const RecordPage = () => {
 
 	const handleChange = (e) => {
 		const file = e.target.files[0];
-		const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'docx'];
+		const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf'];
 		if (!file) {
 			setValidateFile('Không có file được chọn');
 			return;
@@ -51,7 +51,7 @@ const RecordPage = () => {
 	};
 	const handleSubmitRecord = async (value) => {
 		const file = selectFile;
-		const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'docx'];
+		const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf'];
 		const fileName = file.name;
 		const fileExtension = fileName.split('.').pop().toLowerCase();
 		if (!allowedExtensions.includes(fileExtension)) {
@@ -59,7 +59,7 @@ const RecordPage = () => {
 		}
 		const formData = new FormData();
 		formData.append('file', selectFile);
-		formData.append('nameCompany', value.nameCompany);
+		formData.append('nameCompany', data?.support === 1 ? data?.business?.name : data?.nameCompany);
 		formData.append('internshipTime', value.date);
 		formData.append('mssv', data.mssv);
 		formData.append('email', data.email);
@@ -77,11 +77,10 @@ const RecordPage = () => {
 	if (getUserLoading) {
 		return <Typography level={6}>... Đang tải dữ liệu</Typography>;
 	}
+	//data?.statusCheck === 5 || data?.statusCheck === 2 || data?.statusCheck === 11
 	return (
 		<Container>
-			{data?.form ? (
-				<Typography level={6}>Bạn đã nộp biên bản thành công!</Typography>
-			) : (
+			{[2, 5, 11].includes(data?.statusCheck) ? (
 				<>
 					<Typography level={4} color='text-primary'>
 						Nộp biên bản
@@ -93,16 +92,13 @@ const RecordPage = () => {
 						<Info>
 							Họ và tên: <Span>{data && data?.name}</Span>
 						</Info>
-						<InputFieldControl
-							label='Tên doanh nghiệp'
-							placeholder='Tên doanh nghiệp ...'
-							control={control}
-							name='nameCompany'
-						/>
+						<Info>
+							Tên công ty: <Span>{data && data?.support === 1 ? data?.business?.name : data?.nameCompany}</Span>
+						</Info>
 						<InputFieldControl label='Thời gian bắt đầu thực tập' control={control} name='date' type='date' />
 						<InputFieldControl
 							ref={fileInputRef}
-							label='Upload (Image, PDF hoặc Docx)'
+							label='Upload (Image, PDF)'
 							control={control}
 							name='form'
 							type='file'
@@ -114,6 +110,10 @@ const RecordPage = () => {
 						</Button>
 					</Form>
 				</>
+			) : data?.form ? (
+				<Typography level={6}>Bạn đã nộp biên bản thành công!</Typography>
+			) : (
+				<Typography level={6}>Bạn chưa đủ điều kiện để nộp biên bản!</Typography>
 			)}
 		</Container>
 	);

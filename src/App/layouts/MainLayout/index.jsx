@@ -1,5 +1,4 @@
 import { UserRoleEnum } from '@/App/constants/userRoles';
-import ErrorBoundary from '@/Core/components/ErrorBoundary';
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 import { Fragment, Suspense, memo, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -10,6 +9,7 @@ import MobileSidebar from './components/MobileSidebar';
 import Navbar from './components/Navbar';
 import { managerNavigation, staffNavigation, studentNavigation } from './constants/navigationConstants';
 import UnsupportScreen from '@/Core/components/customs/UnsupportScreen';
+import ErrorBoundary from '@/Core/components/error/ErrorBoundary';
 
 const Page = memo(Outlet);
 
@@ -52,8 +52,8 @@ const MainLayout = () => {
 	);
 };
 
-const Main = tw.div`lg:pl-72`;
-const OutletWrapper = tw.div`py-10 px-4 sm:px-6 lg:px-8`;
+const Main = tw.div`lg:pl-72 h-screen flex flex-col overflow-hidden`;
+const OutletWrapper = tw.div`py-10 px-4 sm:px-6 lg:px-8 h-full overflow-y-auto scrollbar-thin scrollbar-track-gray-50 scrollbar-thumb-gray-200`;
 const SidebarContent = tw.div`flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 py-4`;
 const Image = (props) => <img {...props} tw='max-w-[10rem] object-contain translate-x-2' />;
 const SidebarWrapper = tw.div`hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col`;

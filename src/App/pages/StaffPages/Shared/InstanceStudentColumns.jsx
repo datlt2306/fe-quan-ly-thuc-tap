@@ -120,27 +120,8 @@ const InstanceStudentColumns = [
 					href={value}
 					target='_blank'
 					variant={value ? 'ghost' : 'disabled'}
-					className='h-fit w-fit'
 					shape='pill'
-					size='xs'
-					disabled={!!value}>
-					<EyeIcon tw='h-4 w-4' /> Preview
-				</Button>
-			)
-	},
-	{
-		Header: StudentColumnAccessors.report,
-		accessor: 'report',
-		Cell: ({ value }) =>
-			value && (
-				<Button
-					as='a'
-					href={value}
-					target='_blank'
-					className='h-fit w-fit'
-					variant={value ? 'ghost' : 'disabled'}
-					shape='pill'
-					size='xs'
+					size='sm'
 					disabled={!!value}>
 					<EyeIcon tw='h-4 w-4' /> Preview
 				</Button>
@@ -155,7 +136,23 @@ const InstanceStudentColumns = [
 					as='a'
 					href={value}
 					target='_blank'
-					className='h-fit w-fit'
+					variant={value ? 'ghost' : 'disabled'}
+					shape='pill'
+					size='sm'
+					disabled={!!value}>
+					<EyeIcon tw='h-4 w-4' /> Preview
+				</Button>
+			)
+	},
+	{
+		Header: StudentColumnAccessors.report,
+		accessor: 'report',
+		Cell: ({ value }) =>
+			value && (
+				<Button
+					as='a'
+					href={value}
+					target='_blank'
 					variant={value ? 'ghost' : 'disabled'}
 					shape='pill'
 					size='sm'

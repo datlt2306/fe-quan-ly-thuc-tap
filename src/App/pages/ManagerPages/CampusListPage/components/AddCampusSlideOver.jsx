@@ -12,7 +12,7 @@ import tw from 'twin.macro';
 import { campusDataValidator } from '@/App/schemas/campusSchema';
 import { useAddCampusMutation } from '@/App/providers/apis/campusApi';
 
-const AddCampusSlideOver = ({ onOpen, open }) => {
+const AddCampusSlideOver = ({ onOpen, open, curCampus }) => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(campusDataValidator),
 		defaultValue: campusDataValidator.getDefault()
@@ -20,23 +20,52 @@ const AddCampusSlideOver = ({ onOpen, open }) => {
 
 	const [handleAddNewCampus, { isLoading }] = useAddCampusMutation();
 
-	const onAddSubmit = async (data) => {
-		try {
-			const {
-				data: { success, message }
-			} = await handleAddNewCampus(data);
+	const isCampusDuplicate = (data) => {
+		const newCampus = data.name
+			.toLowerCase()
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '')
+			.replace(/đ/g, 'd')
+			.replace(/Đ/g, 'D');
+		const temp = [];
+		curCampus.forEach((item) => {
+			const campus = item.name
+				.toLowerCase()
+				.normalize('NFD')
+				.replace(/[\u0300-\u036f]/g, '')
+				.replace(/đ/g, 'd')
+				.replace(/Đ/g, 'D');
 
-			if (success) {
-				onOpen(!open);
-				reset();
-				toast.success('Thêm cơ sở thành công!');
-			} else {
-				onOpen(!open);
-				reset();
-				toast.error(message);
+			if (campus.includes(newCampus)) {
+				temp.push(item);
 			}
-		} catch (error) {
-			toast.error('Thêm cơ sở không thành công!');
+		});
+		return temp;
+	};
+
+	const onAddSubmit = async (data) => {
+		if (isCampusDuplicate(data).length === 0) {
+			try {
+				const {
+					data: { success, message }
+				} = await handleAddNewCampus(data);
+
+				if (success) {
+					onOpen(!open);
+					reset();
+					toast.success('Thêm cơ sở thành công!');
+				} else {
+					onOpen(!open);
+					reset();
+					toast.error(message);
+				}
+			} catch (error) {
+				toast.error('Thêm cơ sở không thành công!');
+			}
+		} else {
+			onOpen(!open);
+			reset();
+			toast.error('Cơ sở đã tồn tại !');
 		}
 	};
 

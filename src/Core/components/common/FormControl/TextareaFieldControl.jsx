@@ -5,12 +5,12 @@ import tw from 'twin.macro';
 
 const Textarea = tw.textarea`block w-full rounded-md border-0 duration-300 px-2.5 py-1.5 text-gray-900 outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`;
 
-const FormControl = tw.div`flex flex-col gap-1 m-0`;
+const FormControl = tw.div`flex flex-col gap-px m-0`;
 
 const TextareaFieldControl = forwardRef(
-	({ control, name, label, disabled, rules, resizable, rows = 5, ...props }, ref) => {
+	({ control, name, label, onChange: handleChange, disabled, rules, resizable, rows = 5, ...props }, ref) => {
 		const {
-			field: { onChange, onBlur, value, ref: inputRef },
+			field,
 			fieldState: { error }
 		} = useController({
 			name,
@@ -21,18 +21,16 @@ const TextareaFieldControl = forwardRef(
 		});
 
 		const textareaRef = useRef(null);
+		const resolvedRef = ref || textareaRef;
 		const id = useId();
 
 		useEffect(() => {
-			const textarea = textareaRef.current;
-
+			const textarea = resolvedRef.current;
 			const handleInput = () => {
 				textarea.style.height = 'auto';
 				textarea.style.height = `${textarea.scrollHeight}px`;
 			};
-
 			textarea.addEventListener('input', handleInput);
-
 			return () => {
 				textarea.removeEventListener('input', handleInput);
 			};
@@ -48,19 +46,17 @@ const TextareaFieldControl = forwardRef(
 				<Textarea
 					{...props}
 					id={id}
-					onChange={onChange}
-					onBlur={onBlur}
-					value={value}
+					onChange={(e) => {
+						field.onChange(e);
+						if (handleChange) handleChange(e);
+					}}
+					value={field.value}
 					disabled={disabled}
-					className={classNames({ 'resize-none': !resizable })}
+					className={classNames({ 'resize-none': !resizable, 'ring-error': !!error })}
 					rows={rows}
 					ref={(e) => {
-						textareaRef.current = e;
-						if (typeof ref === 'function') {
-							ref(e);
-						} else if (ref && typeof ref === 'object') {
-							ref.current = e;
-						}
+						field.ref(e);
+						resolvedRef.current = e;
 					}}
 				/>
 				{error && <small className='font-medium text-error'>{error?.message}</small>}

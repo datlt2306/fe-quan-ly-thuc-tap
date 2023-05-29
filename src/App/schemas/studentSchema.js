@@ -40,3 +40,16 @@ export const newStudentSchema = yup
 	)
 	.unique('Email không được trùng !', (value) => value.email)
 	.unique('Mã sinh viên không được trùng !', (value) => value.mssv);
+
+export const reviewSchema = yup.object({
+	status: yup.string().required('Vui lòng chọn trạng thái sinh viên'),
+	textNote: yup.string().optional()
+});
+
+export const studentScoreSchema = (field) =>
+	yup.object({
+		[field]: yup
+			.string()
+			.matches(/^(10|[0-9])$/, { message: 'Điểm sinh viên phải là số từ 0-10' })
+			.required('Vui lòng nhập điểm của sinh viên')
+	});
