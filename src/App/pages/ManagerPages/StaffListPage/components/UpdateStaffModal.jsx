@@ -34,22 +34,41 @@ const UpdateStaffModal = ({ userData, onOpenStateChange, openState, users }) => 
 		const checkStaff = users.list.some((user) => user.email === data.email && user._id !== userData._id);
 		if (checkStaff) {
 			onOpenStateChange(!openState);
+			reset();
 			toast.error('Email nhân viên không được trùng');
-		} else {
-			try {
-				const result = await handleUpdateStaff({ id: userData._id, payload: data });
-				if (result.data) {
-					onOpenStateChange(!openState);
-					toast.success('Sửa nhân viên thành công!');
-				}
-				if (result.error) {
-					onOpenStateChange(!openState);
-					toast.error(result.error.data.message);
-				}
-			} catch (error) {
-				toast.error('Thêm nhân viên không thành công!');
-			}
+			return;
 		}
+		const { error } = await handleUpdateStaff({ id: userData._id, payload: data });
+
+		if (error) {
+			onOpenStateChange(!openState);
+			reset();
+			toast.error(error?.data?.message);
+			return;
+		}
+		onOpenStateChange(!openState);
+		// reset();
+		toast.success('Sửa nhân viên thành công!');
+
+		// else {
+		// 	const { error } = await handleUpdateStaff({ id: userData._id, payload: data });
+		// 	if(error) {
+
+		// 	}
+		// try {
+		// 	const result = await handleUpdateStaff({ id: userData._id, payload: data });
+		// 	if (result.data) {
+		// 		onOpenStateChange(!openState);
+		// 		toast.success('Sửa nhân viên thành công!');
+		// 	}
+		// 	if (result.error) {
+		// 		onOpenStateChange(!openState);
+		// 		toast.error(result.error.data.message);
+		// 	}
+		// } catch (error) {
+		// 	toast.error('Thêm nhân viên không thành công!');
+		// }
+		// }
 	};
 
 	return (
