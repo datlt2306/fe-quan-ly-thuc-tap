@@ -36,7 +36,7 @@ const StaffListPage = () => {
 		return Array.isArray(data?.list)
 			? data?.list?.map((user, index) => ({
 					...user,
-					index: index + 1,
+					index: index + 1 + (serverPaginationState?.pageIndex - 1) * serverPaginationState?.pageSize,
 					role: RoleStaffEnum[user?.role]
 			  }))
 			: [];
