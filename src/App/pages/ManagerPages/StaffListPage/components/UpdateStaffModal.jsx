@@ -1,5 +1,5 @@
 import { RoleStaffEnum } from '@/App/constants/userRoles';
-import { useGetAllStaffQuery, useUpdateStaffMutation } from '@/App/providers/apis/staffListApi';
+import { useUpdateStaffMutation } from '@/App/providers/apis/staffListApi';
 import { staffDataValidator } from '@/App/schemas/staffSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
@@ -47,28 +47,8 @@ const UpdateStaffModal = ({ userData, onOpenStateChange, openState, users }) => 
 			return;
 		}
 		onOpenStateChange(!openState);
-		// reset();
+		reset();
 		toast.success('Sửa nhân viên thành công!');
-
-		// else {
-		// 	const { error } = await handleUpdateStaff({ id: userData._id, payload: data });
-		// 	if(error) {
-
-		// 	}
-		// try {
-		// 	const result = await handleUpdateStaff({ id: userData._id, payload: data });
-		// 	if (result.data) {
-		// 		onOpenStateChange(!openState);
-		// 		toast.success('Sửa nhân viên thành công!');
-		// 	}
-		// 	if (result.error) {
-		// 		onOpenStateChange(!openState);
-		// 		toast.error(result.error.data.message);
-		// 	}
-		// } catch (error) {
-		// 	toast.error('Thêm nhân viên không thành công!');
-		// }
-		// }
 	};
 
 	return (
