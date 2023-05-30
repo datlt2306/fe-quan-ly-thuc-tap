@@ -26,7 +26,7 @@ const semesterApi = createApi({
 		}),
 		updateSemester: build.mutation({
 			query: ({ id, payload }) => {
-				return { url: '/semester' + id, method: 'PATCH', data: payload };
+				return { url: '/semester/' + id, method: 'PATCH', data: payload };
 			},
 			invalidatesTags: (_result, error, _data) => (error ? [] : [TagTypes.SEMESTERS])
 		})
