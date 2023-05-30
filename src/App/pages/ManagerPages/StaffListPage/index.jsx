@@ -85,9 +85,9 @@ const StaffListPage = () => {
 				Header: 'Cơ sở đang làm việc',
 				accessor: 'campus_id',
 				Filter: InputColumnFilter,
-				filterable: true,
-				isSort: true,
-				Cell: ({ value }) => value.name
+				Cell: ({ value }) => {
+					return value.name;
+				}
 			},
 			{
 				Header: 'Thao tác',
