@@ -1,1 +1,5 @@
-export const status = ['Đang xử lý', 'Đồng ý', 'Từ chối'];
+export const status = {
+	1: 'Đang xử lý',
+	2: 'Đồng ý',
+	3: 'Từ chối'
+};
