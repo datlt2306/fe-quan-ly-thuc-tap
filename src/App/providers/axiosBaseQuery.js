@@ -15,7 +15,7 @@ export default function axiosBaseQuery() {
 			const axiosError = error;
 			return {
 				error: {
-					status: axiosError.response?.data?.status,
+					status: axiosError.response?.status,
 					data: axiosError.response?.data || error.message
 				}
 			};

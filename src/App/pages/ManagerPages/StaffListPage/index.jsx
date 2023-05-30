@@ -1,3 +1,4 @@
+import useServerPagination from '@/App/hooks/useServerPagination';
 import { useDeleteStaffMutation, useGetAllStaffQuery } from '@/App/providers/apis/staffListApi';
 import { staffDataValidator } from '@/App/schemas/staffSchema';
 import Button from '@/Core/components/common/Button';
@@ -6,41 +7,29 @@ import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
 import { PencilSquareIcon, TrashIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Fragment, useMemo, useReducer, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import tw from 'twin.macro';
 import AddStaffSlideOver from './components/AddStaffSlideOver';
 import UpdateStaffModal from './components/UpdateStaffModal';
-import { RoleStaffEnum } from '@/App/constants/userRoles';
-import tw from 'twin.macro';
-import {
-	paginationInitialState,
-	paginationReducer
-} from '@/Core/components/common/Table/reducers/serverPaginationReducer';
-import { useSelector } from 'react-redux';
+
 const StaffListPage = () => {
 	const currentUser = useSelector((state) => state.auth?.user);
 	const [isEditing, setIsEditing] = useState(false);
 	const [user, setUser] = useState();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
+	const { paginationState, handlePaginate } = useServerPagination();
+	const { data, isLoading } = useGetAllStaffQuery({
+		page: paginationState?.pageIndex,
+		limit: paginationState?.pageSize
+	});
+
+	const tableData = useMemo(() => data?.list ?? [], [data]);
 	const { reset } = useForm({
 		resolver: yupResolver(staffDataValidator)
 	});
-	const [serverPaginationState, dispatch] = useReducer(paginationReducer, paginationInitialState);
-	const { data, isLoading } = useGetAllStaffQuery({
-		page: serverPaginationState?.pageIndex || paginationInitialState.pageIndex,
-		limit: serverPaginationState?.pageSize || paginationInitialState.pageSize
-	});
-
-	const tableData = useMemo(() => {
-		return Array.isArray(data?.list)
-			? data?.list?.map((user, index) => ({
-					...user,
-					index: index + 1,
-					role: RoleStaffEnum[user?.role]
-			  }))
-			: [];
-	}, [data]);
 
 	const [handleRemoveStaff] = useDeleteStaffMutation();
 
@@ -159,14 +148,14 @@ const StaffListPage = () => {
 					loading={isLoading}
 					columns={columnsData}
 					data={tableData}
+					onServerPaginate={handlePaginate}
 					serverSidePagination={true}
 					serverPaginationProps={{
-						...paginationInitialState,
+						...paginationState,
 						pageIndex: data?.page,
 						totalPages: data?.totalPages,
 						canNextPage: data?.hasNextPage,
-						canPreviousPage: data?.hasPrevPage,
-						dispatch
+						canPreviousPage: data?.hasPrevPage
 					}}
 				/>
 			</Box>
