@@ -117,12 +117,11 @@ const index = () => {
 				<Select
 					className='max-w-[12rem] capitalize sm:text-sm'
 					onChange={(e) => setTableData(data?.data.filter((item) => item.status == e.target.value))}>
-					{Array.isArray(status) &&
-						status.map((item, index) => (
-							<Option value={index + 1} key={index} selected={index + 1 === 1}>
-								{item}
-							</Option>
-						))}
+					{Object.entries(status).map(([key, value]) => (
+						<Option value={key} key={key} selected={key === 1}>
+							{value}
+						</Option>
+					))}
 				</Select>
 			</SelectBox>
 			{tableData && <ReactTable columns={columnsData} data={tableData} />}
