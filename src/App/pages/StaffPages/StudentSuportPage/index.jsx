@@ -11,9 +11,9 @@ import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/
 import moment from 'moment';
 import React, { useMemo, useState, useEffect } from 'react';
 import tw from 'twin.macro';
+import { status } from '@/App/constants/requestStudents';
 
 const index = () => {
-	const status = ['Đang xử lý', 'Đồng ý', 'Từ chối'];
 	const { data, refetch } = useGetRequestOfStudentQuery();
 	const [handleAccept] = useResetStudentRequestMutation();
 	const [handleReject] = useRemoveRequestApiMutation();
