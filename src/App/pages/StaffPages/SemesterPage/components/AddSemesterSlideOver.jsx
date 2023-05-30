@@ -47,8 +47,20 @@ const AddSemesterSlideOver = ({ onOpen, open }) => {
 		<SlideOver open={open} onOpen={onOpen} panelTitle={'Thêm kì học'}>
 			<Form onSubmit={handleSubmit(onAddSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên kì học' />
-				<InputFieldControl type='date' control={control} name='startTime' label='Ngày bắt đầu' />
-				<InputFieldControl type='date' control={control} name='endTime' label='Ngày kết thúc' />
+				<InputFieldControl
+					type='date'
+					control={control}
+					name='startTime'
+					min={moment().format('YYYY-MM-DD')}
+					label='Ngày bắt đầu'
+				/>
+				<InputFieldControl
+					type='date'
+					control={control}
+					name='endTime'
+					min={moment().format('YYYY-MM-DD')}
+					label='Ngày kết thúc'
+				/>
 				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Thêm
