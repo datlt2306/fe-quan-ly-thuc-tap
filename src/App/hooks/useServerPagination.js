@@ -1,3 +1,5 @@
+import { useReducer } from 'react';
+
 /**
  * @enum
  */
@@ -9,12 +11,12 @@ export const PaginationActionEnums = {
 	CHANGE_PAGE_SIZE: 'CHANGE_PAGE_SIZE'
 };
 
-export const paginationInitialState = {
+const paginationInitialState = {
 	pageIndex: 1,
 	pageSize: 10
 };
 
-export const paginationReducer = (state, action) => {
+const paginationReducer = (state, action) => {
 	switch (action.type) {
 		case PaginationActionEnums.GO_TO_NEXT_PAGE:
 			return { ...state, pageIndex: state.pageIndex + 1 };
@@ -28,3 +30,9 @@ export const paginationReducer = (state, action) => {
 			return { ...state, pageSize: action.payload };
 	}
 };
+
+export default function useServerPagination() {
+	const [serverPaginationState, dispatch] = useReducer(paginationReducer, paginationInitialState);
+	const paginationState = serverPaginationState ?? paginationInitialState;
+	return { paginationState, handlePaginate: dispatch };
+}
