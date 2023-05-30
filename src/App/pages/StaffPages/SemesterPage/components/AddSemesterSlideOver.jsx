@@ -25,9 +25,7 @@ const AddSemesterSlideOver = ({ onOpen, open }) => {
 	const onAddSubmit = async (data) => {
 		const { error } = await handleAddNewSemester({
 			...data,
-			campus_id: currentCampus._id,
-			start_time: moment(data.startTime).valueOf(),
-			end_time: moment(data.endTime).valueOf()
+			campus_id: currentCampus._id
 		});
 		if (error) {
 			onOpen(!open);
@@ -50,14 +48,14 @@ const AddSemesterSlideOver = ({ onOpen, open }) => {
 				<InputFieldControl
 					type='date'
 					control={control}
-					name='startTime'
+					name='start_time'
 					min={moment().format('YYYY-MM-DD')}
 					label='Ngày bắt đầu'
 				/>
 				<InputFieldControl
 					type='date'
 					control={control}
-					name='endTime'
+					name='end_time'
 					min={moment().format('YYYY-MM-DD')}
 					label='Ngày kết thúc'
 				/>
