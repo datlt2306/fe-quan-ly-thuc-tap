@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
+
 const UpdateSemesterModal = ({ semesterData, onOpenStateChange, openState }) => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(semesterDataValidator),
@@ -19,10 +20,11 @@ const UpdateSemesterModal = ({ semesterData, onOpenStateChange, openState }) => 
 
 	useEffect(() => {
 		if (semesterData) {
+			console.log('semesterData :>> ', semesterData);
 			reset({
 				name: semesterData?.name,
-				startTime: moment(semesterData?.start_time).format('YYYY-MM-DD'),
-				endTime: moment(semesterData?.end_time).format('YYYY-MM-DD')
+				start_time: moment(semesterData?.start_time).format('YYYY-MM-DD'),
+				end_time: moment(semesterData?.end_time).format('YYYY-MM-DD')
 			});
 		}
 	}, [semesterData]);
@@ -32,9 +34,7 @@ const UpdateSemesterModal = ({ semesterData, onOpenStateChange, openState }) => 
 	const onUpdateSubmit = async (values) => {
 		const data = {
 			...values,
-			campus_id: semesterData.campus_id,
-			start_time: moment(values.startTime).valueOf(),
-			end_time: moment(values.endTime).valueOf()
+			campus_id: semesterData.campus_id
 		};
 		const { error } = await handleUpdateSemester({ id: semesterData._id, payload: data });
 		if (error) {
@@ -52,20 +52,8 @@ const UpdateSemesterModal = ({ semesterData, onOpenStateChange, openState }) => 
 		<Modal openState={openState} onOpenStateChange={onOpenStateChange} title={'Sửa kì học'}>
 			<Form onSubmit={handleSubmit(onUpdateSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên kì học' />
-				<InputFieldControl
-					type='date'
-					control={control}
-					name='startTime'
-					min={moment().format('YYYY-MM-DD')}
-					label='Ngày bắt đầu'
-				/>
-				<InputFieldControl
-					type='date'
-					control={control}
-					name='endTime'
-					min={moment().format('YYYY-MM-DD')}
-					label='Ngày kết thúc'
-				/>
+				<InputFieldControl type='date' control={control} name='start_time' label='Ngày bắt đầu' />
+				<InputFieldControl type='date' control={control} name='end_time' label='Ngày kết thúc' />
 				<Button type='submit' size='md' variant='primary' disabled={isLoading}>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Cập nhật
@@ -75,6 +63,6 @@ const UpdateSemesterModal = ({ semesterData, onOpenStateChange, openState }) => 
 	);
 };
 
-const Form = tw.form`flex flex-col gap-6`;
+const Form = tw.form`flex flex-col gap-6 w-[320px]`;
 
 export default UpdateSemesterModal;
