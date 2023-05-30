@@ -32,16 +32,19 @@ const UpdateSemesterModal = ({ semesterData, onOpenStateChange, openState }) => 
 	const onUpdateSubmit = async (values) => {
 		const data = {
 			...values,
+			campus_id: semesterData.campus_id,
 			start_time: moment(values.startTime).valueOf(),
 			end_time: moment(values.endTime).valueOf()
 		};
 		const { error } = await handleUpdateSemester({ id: semesterData._id, payload: data });
 		if (error) {
 			onOpenStateChange(!openState);
+			reset();
 			toast.error(error?.data?.message);
 			return;
 		}
 		onOpenStateChange(!openState);
+		reset();
 		toast.success('Sửa kì học thành công!');
 	};
 
@@ -49,8 +52,20 @@ const UpdateSemesterModal = ({ semesterData, onOpenStateChange, openState }) => 
 		<Modal openState={openState} onOpenStateChange={onOpenStateChange} title={'Sửa kì học'}>
 			<Form onSubmit={handleSubmit(onUpdateSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên kì học' />
-				<InputFieldControl type='date' control={control} name='startTime' label='Ngày bắt đầu' />
-				<InputFieldControl type='date' control={control} name='endTime' label='Ngày kết thúc' />
+				<InputFieldControl
+					type='date'
+					control={control}
+					name='startTime'
+					min={moment().format('YYYY-MM-DD')}
+					label='Ngày bắt đầu'
+				/>
+				<InputFieldControl
+					type='date'
+					control={control}
+					name='endTime'
+					min={moment().format('YYYY-MM-DD')}
+					label='Ngày kết thúc'
+				/>
 				<Button type='submit' size='md' variant='primary' disabled={isLoading}>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Cập nhật
