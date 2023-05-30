@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
+import capitalizeString from '@/Core/utils/capitalizeString';
 
 const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
 	const { handleSubmit, control, reset } = useForm({
@@ -22,13 +23,18 @@ const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
 
 	const onUpdateSubmit = async (data) => {
 		const majorCode = data?.majorCode.toUpperCase();
-		const checkMajorsDuplicate = majors?.some((item) => item._id !== major._id && item.majorCode === majorCode);
+		const name = capitalizeString(data?.name);
+
+		const checkMajorsDuplicate = majors?.some(
+			(item) =>
+				(item._id !== major._id && item.majorCode === majorCode) || (item._id !== major._id && item.name == name)
+		);
 		if (checkMajorsDuplicate) {
-			toast.error('Mã chuyên ngành không được trùng');
+			toast.error('Mã và Tên chuyên ngành không được trùng với dữ liệu đã có');
 			onOpen();
 			return;
 		}
-		const result = await handleUpdateMajor({ data: { ...data, majorCode: majorCode }, id: major?._id });
+		const result = await handleUpdateMajor({ data: { name, majorCode }, id: major?._id });
 		if (result?.error) {
 			onOpen();
 			toast.error('Sửa chuyên ngành không thành công!');

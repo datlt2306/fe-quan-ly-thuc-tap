@@ -6,11 +6,10 @@ import InputFieldControl from '@/Core/components/common/FormControl/InputFieldCo
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import SlideOver from '@/Core/components/common/SlideOver';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-
+import capitalizeString from '@/Core/utils/capitalizeString';
 const AddMajorSlideOver = ({ onOpen, open, panelTitle, majors }) => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(majorSchema),
@@ -20,14 +19,16 @@ const AddMajorSlideOver = ({ onOpen, open, panelTitle, majors }) => {
 	const [handleAddNewMajor, { isLoading }] = useCreateMajorMutation();
 
 	const onAddSubmit = async (data) => {
-		const checkMajorsDuplicate = majors?.some((item) => item.majorCode == data.majorCode);
-		if (checkMajorsDuplicate) {
-			toast.error('Mã chuyên ngành không được trùng');
+		const name = capitalizeString(data?.name);
+		const checkDuplicate = majors?.some((item) => item.majorCode == data.majorCode || item.name == name);
+
+		if (checkDuplicate) {
+			toast.error('Mã và Tên chuyên ngành không được trùng với dữ liệu đã có');
 			onOpen();
 			return;
 		}
 		const result = await handleAddNewMajor({
-			...data,
+			name,
 			majorCode: data?.majorCode.toUpperCase()
 		});
 		if (result?.error) {
