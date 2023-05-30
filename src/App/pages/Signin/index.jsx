@@ -25,7 +25,7 @@ export default function SigninPage() {
 	// Chọn cơ sở
 	const handleSelectCampus = async (campus) => {
 		try {
-			const defaultSemester = await axiosClient.get('/smester/default', {
+			const defaultSemester = await axiosClient.get('/semester/default', {
 				params: { campus_id: campus }
 			});
 
