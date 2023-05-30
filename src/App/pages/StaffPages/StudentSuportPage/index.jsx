@@ -8,7 +8,6 @@ import { Option, Select } from '@/Core/components/common/FormControl/SelectField
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
-import { ListBulletIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import React, { useMemo, useState, useEffect } from 'react';
 import tw from 'twin.macro';
@@ -82,7 +81,7 @@ const index = () => {
 									});
 									refetch();
 								}}>
-								<Button type='button' size='sm' variant='secondary'>
+								<Button type='button' size='sm' variant='success'>
 									Đồng ý
 								</Button>
 							</PopConfirm>
@@ -113,7 +112,7 @@ const index = () => {
 				<label
 					htmlFor='semester-list'
 					className='inline-flex items-center gap-2 whitespace-nowrap text-base-content'>
-					<ListBulletIcon className='h-6 w-6' /> Trạng thái<i></i>
+					Trạng thái
 				</label>
 				<Select
 					className='max-w-[12rem] capitalize sm:text-sm'
