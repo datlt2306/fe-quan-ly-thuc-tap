@@ -145,6 +145,7 @@ const StudentListPage = () => {
 						className='min-w-[12rem] capitalize sm:text-sm'
 						onChange={(e) => setCurrentSemester(e.target.value)}
 						value={currentSemester}>
+						<Option>All</Option>
 						{Array.isArray(semesterData?.listSemesters) &&
 							semesterData?.listSemesters?.map((semester) => (
 								<Option key={semester._id} value={semester._id}>

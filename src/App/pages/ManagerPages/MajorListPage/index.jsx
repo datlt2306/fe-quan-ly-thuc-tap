@@ -1,23 +1,18 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { Suspense, lazy, Fragment, useMemo, useState, useEffect, useCallback } from 'react';
-import tw from 'twin.macro';
-import { toast } from 'react-toastify';
-
+import { useDeleteMajorMutation, useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import Button from '@/Core/components/common/Button';
+import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
-import { PencilSquareIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { useGetAllMajorQuery, useDeleteMajorMutation } from '@/App/providers/apis/majorApi';
-import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
+import { InputColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
+import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { Fragment, Suspense, lazy, useCallback, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
+import tw from 'twin.macro';
 
 const UpdateMajorSlideOver = lazy(() => import('./components/UpdateMajorSlideOver'));
 const AddMajorSlideOver = lazy(() => import('./components/AddMajorSlideOver'));
-// import AddMajorSlideOver from './components/AddMajorSlideOver';
-
-const Box = tw.div`flex flex-col gap-6`;
-const ButtonList = tw.div`flex items-center gap-2`;
 
 const MajorListPage = () => {
 	const [major, setMajor] = useState();
@@ -100,7 +95,7 @@ const MajorListPage = () => {
 					<ButtonList>
 						<Button
 							size='xs'
-							variant='default'
+							variant='ghost'
 							shape='square'
 							onClick={() => {
 								onOpenUpdate(value);
@@ -113,7 +108,7 @@ const MajorListPage = () => {
 							title={'Xóa chuyên ngành'}
 							description={'Bạn muốn xóa chuyên ngành này ?'}
 							onConfirm={() => onDeleteSubmit(value)}>
-							<Button size='xs' variant='error' shape='square'>
+							<Button size='xs' variant='ghost' className='text-error' shape='square'>
 								<TrashIcon className='h-4 w-4' />
 							</Button>
 						</PopConfirm>
@@ -159,5 +154,8 @@ const MajorListPage = () => {
 		</Fragment>
 	);
 };
+
+const Box = tw.div`flex flex-col gap-6`;
+const ButtonList = tw.div`flex items-center gap-px`;
 
 export default MajorListPage;

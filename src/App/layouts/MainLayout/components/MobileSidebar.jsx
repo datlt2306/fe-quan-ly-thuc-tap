@@ -100,7 +100,8 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 																					child?.show === true && (
 																						<Menu.Item
 																							key={index}
-																							className='py-2 pl-10 pr-2 transition-[height_350ms_ease-in-out_transform] duration-300 hover:bg-gray-100 focus:active:bg-gray-100'>
+																							className='py-2 pl-10 pr-2 transition-[height_350ms_ease-in-out_transform] duration-300 hover:bg-gray-100 focus:active:bg-gray-100'
+																							onClick={() => handleShowSlideOver(!isOpen)}>
 																							<NavLink
 																								to={child.path}
 																								className={({ isActive }) =>
@@ -121,7 +122,10 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 													</Disclosure>
 												</Menu.Item>
 											) : (
-												<Menu.Item key={item.name} className='rounded-md'>
+												<Menu.Item
+													key={item.name}
+													className='rounded-md'
+													onClick={() => handleShowSlideOver(!isOpen)}>
 													<NavLink to={item.path} className={({ isActive }) => navlinkClasses(isActive)}>
 														<item.icon className='h-6 w-6 shrink-0 text-[inherit]' aria-hidden='true' />
 														{item.name}

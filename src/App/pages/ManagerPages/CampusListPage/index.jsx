@@ -14,9 +14,6 @@ import { toast } from 'react-toastify';
 import UpdateCampusModal from './components/UpdateCampusModal';
 import { PlusIcon } from '@heroicons/react/20/solid';
 
-const Box = tw.div`flex flex-col gap-6`;
-const ButtonList = tw.div`flex items-center gap-2`;
-
 const CampusListPage = () => {
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const [modal, setModal] = useState(false);
@@ -73,7 +70,7 @@ const CampusListPage = () => {
 					<ButtonList>
 						<Button
 							size='xs'
-							variant='default'
+							variant='ghost'
 							shape='square'
 							onClick={() => {
 								onOpenUpdate(value);
@@ -86,7 +83,7 @@ const CampusListPage = () => {
 							title={'Xóa cơ sở'}
 							onConfirm={() => onDeleteSubmit(value)}
 							description={'Bạn muốn xóa cơ sở này ?'}>
-							<Button size='xs' variant='error' shape='square'>
+							<Button size='xs' variant='ghost' className='text-error' shape='square'>
 								<TrashIcon className='h-4 w-4' />
 							</Button>
 						</PopConfirm>
@@ -131,5 +128,8 @@ const CampusListPage = () => {
 		</Fragment>
 	);
 };
+
+const Box = tw.div`flex flex-col gap-6`;
+const ButtonList = tw.div`flex items-center gap-px`;
 
 export default CampusListPage;

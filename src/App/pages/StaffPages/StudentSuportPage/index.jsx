@@ -81,7 +81,7 @@ const index = () => {
 									});
 									refetch();
 								}}>
-								<Button type='button' size='sm' variant='success'>
+								<Button type='button' size='xs' variant='success'>
 									Đồng ý
 								</Button>
 							</PopConfirm>
@@ -94,7 +94,7 @@ const index = () => {
 									await handleReject(row.original._id);
 									refetch();
 								}}>
-								<Button type='button' size='sm' variant='error'>
+								<Button type='button' size='xs' variant='error'>
 									Từ chối
 								</Button>
 							</PopConfirm>

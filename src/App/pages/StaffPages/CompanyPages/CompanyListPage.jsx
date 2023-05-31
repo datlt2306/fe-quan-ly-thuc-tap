@@ -293,7 +293,7 @@ const CompanyListPage = () => {
 						type='button'
 						size='sm'
 						shape='square'
-						variant='default'>
+						variant='ghost'>
 						<PencilSquareIcon className='h-4 w-4' />
 					</Button>
 					<PopConfirm
@@ -303,7 +303,7 @@ const CompanyListPage = () => {
 						description={'Bạn muốn xóa công ty này ?'}
 						// onCancel={() => toast.info("Cancelled")}
 						onConfirm={() => onDeleteSubmit(value)}>
-						<Button size='sm' variant='error' shape='square'>
+						<Button size='sm' variant='ghost' className='text-error' shape='square'>
 							<TrashIcon className='h-4 w-4' />
 						</Button>
 					</PopConfirm>

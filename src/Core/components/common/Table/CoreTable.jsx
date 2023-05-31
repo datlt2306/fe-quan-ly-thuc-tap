@@ -7,7 +7,8 @@ const Table = ({ children, ...props }) => (
 		{children}
 	</table>
 );
-const Header = ({ sticky, children, ...props }) => (
+
+Table.Header = ({ sticky, children, ...props }) => (
 	<thead
 		{...props}
 		className={classNames({
@@ -16,22 +17,20 @@ const Header = ({ sticky, children, ...props }) => (
 		{children}
 	</thead>
 );
-const Body = (props) => <tbody {...props}>{props.children}</tbody>;
-const Footer = (props) => <tfoot {...props}>{props.children}</tfoot>;
-const Row = (props) => <tr {...props}>{props.children}</tr>;
-const Cell = ({ as: Element = 'td', children, ...props }) => {
+Table.Body = (props) => <tbody {...props}>{props.children}</tbody>;
+Table.Row = (props) => <tr {...props}>{props.children}</tr>;
+Table.Footer = (props) => <tfoot {...props}>{props.children}</tfoot>;
+Table.Cell = ({ as: Element = 'td', children, ...props }) => {
 	return <Element {...props}>{children}</Element>;
 };
-
-const Empty = () => (
+Table.Empty = () => (
 	<Table.Row>
-		<Cell colSpan='100%' className=''>
+		<Table.Cell colSpan='100%' className=''>
 			<Text className='select-none text-base text-disabled'>Không có dữ liệu</Text>
-		</Cell>
+		</Table.Cell>
 	</Table.Row>
 );
-
-const PendingRow = ({ numOfCols }) => {
+Table.Pending = ({ numOfCols }) => {
 	const preRenderCells = Array.apply(null, Array(numOfCols)).map((x, i) => i);
 	const preRenderRows = Array.apply(null, Array(5)).map((x, j) => j);
 	return preRenderRows.map((_row, i) => (
@@ -44,13 +43,5 @@ const PendingRow = ({ numOfCols }) => {
 		</Table.Row>
 	));
 };
-
-Table.Header = Header;
-Table.Body = Body;
-Table.Row = Row;
-Table.Footer = Footer;
-Table.Cell = Cell;
-Table.Empty = Empty;
-Table.Pending = PendingRow;
 
 export default Table;
