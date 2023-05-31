@@ -18,12 +18,10 @@ import SuccessStateSection from '../Shared/SuccessStateSection';
 import LoadingData from '../Shared/LoadingData';
 const RecordPage = () => {
 	// check the student's status to open the form
+	// 2: "Nhận CV", 5: "Sửa biên bản", 11: "Đã đăng ký"
 	const statusCheck = [2, 5, 11];
 
-	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery(
-		{ typeNumber: 2 },
-		{ refetchOnMountOrArgChange: true }
-	);
+	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery({ typeNumber: 2 });
 	const deadlineCheck =
 		times && times?.time?.endTime > new Date().getTime() && times?.time?.startTime < new Date().getTime();
 	const navigate = useNavigate();
