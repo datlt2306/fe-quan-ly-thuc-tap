@@ -1,3 +1,4 @@
+import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
 import { useUploadFormMutation } from '@/App/providers/apis/reportApi';
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 import { recordSchema } from '@/App/schemas/recordSchema';
@@ -12,8 +13,17 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-
+import EmptyStateSection from '../Shared/EmptyStateSection';
+import SuccessStateSection from '../Shared/SuccessStateSection';
+import LoadingData from '../Shared/LoadingData';
 const RecordPage = () => {
+	// check the student's status to open the form
+	// 2: "Nhận CV", 5: "Sửa biên bản", 11: "Đã đăng ký"
+	const statusCheck = [2, 5, 11];
+
+	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery({ typeNumber: 2 });
+	const deadlineCheck =
+		times && times?.time?.endTime > new Date().getTime() && times?.time?.startTime < new Date().getTime();
 	const navigate = useNavigate();
 
 	const { user } = useSelector((state) => state.auth);
@@ -74,48 +84,54 @@ const RecordPage = () => {
 		toast.success('Nộp biên bản thành công');
 		navigate('/');
 	};
-	if (getUserLoading) {
-		return <Typography level={6}>... Đang tải dữ liệu</Typography>;
+	if (getTimeLoading) {
+		return <LoadingData />;
 	}
-	//data?.statusCheck === 5 || data?.statusCheck === 2 || data?.statusCheck === 11
 	return (
-		<Container>
-			{[2, 5, 11].includes(data?.statusCheck) ? (
-				<>
-					<Typography level={4} color='text-primary'>
-						Nộp biên bản
-					</Typography>
-					<Form onSubmit={handleSubmit(handleSubmitRecord)}>
-						<Info>
-							Mã sinh viên: <Span>{data && data?.mssv}</Span>
-						</Info>
-						<Info>
-							Họ và tên: <Span>{data && data?.name}</Span>
-						</Info>
-						<Info>
-							Tên công ty: <Span>{data && data?.support === 1 ? data?.business?.name : data?.nameCompany}</Span>
-						</Info>
-						<InputFieldControl label='Thời gian bắt đầu thực tập' control={control} name='date' type='date' />
-						<InputFieldControl
-							ref={fileInputRef}
-							label='Upload (Image, PDF)'
-							control={control}
-							name='form'
-							type='file'
-							onChange={handleChange}
-						/>
-						<Error>{validateFile}</Error>
-						<Button variant='primary' type='submit' disabled={isLoading}>
-							{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp biên bản
-						</Button>
-					</Form>
-				</>
-			) : data?.form ? (
-				<Typography level={6}>Bạn đã nộp biên bản thành công!</Typography>
+		<div>
+			{deadlineCheck ? (
+				statusCheck.includes(data?.statusCheck) ? (
+					<Container>
+						<Typography level={4} color='text-primary'>
+							Nộp biên bản
+						</Typography>
+						<Form onSubmit={handleSubmit(handleSubmitRecord)}>
+							<Info>
+								Mã sinh viên: <Span>{data && data?.mssv}</Span>
+							</Info>
+							<Info>
+								Họ và tên: <Span>{data && data?.name}</Span>
+							</Info>
+							<Info>
+								Tên công ty:{' '}
+								<Span>{data && data?.support === 1 ? data?.business?.name : data?.nameCompany}</Span>
+							</Info>
+							<InputFieldControl label='Thời gian bắt đầu thực tập' control={control} name='date' type='date' />
+							<InputFieldControl
+								ref={fileInputRef}
+								label='Upload (Image, PDF)'
+								control={control}
+								name='form'
+								type='file'
+								onChange={handleChange}
+							/>
+							<Error>{validateFile}</Error>
+							<Button variant='primary' type='submit' disabled={isLoading}>
+								{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp biên bản
+							</Button>
+						</Form>
+					</Container>
+				) : data?.form ? (
+					<SuccessStateSection title={'Bạn đã nộp biên bản thành công!'} />
+				) : (
+					<EmptyStateSection title={'Bạn chưa đủ điều kiện nộp biên bản'} />
+				)
 			) : (
-				<Typography level={6}>Bạn chưa đủ điều kiện để nộp biên bản!</Typography>
+				<EmptyStateSection
+					title={'Thời gian đăng ký form biên bản chưa mở, sinh viên vui lòng chờ thông báo từ phòng QHDN'}
+				/>
 			)}
-		</Container>
+		</div>
 	);
 };
 

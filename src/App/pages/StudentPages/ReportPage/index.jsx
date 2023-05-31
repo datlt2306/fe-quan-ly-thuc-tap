@@ -1,3 +1,4 @@
+import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
 import { useUploadReportMutation } from '@/App/providers/apis/reportApi';
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 import { reportSchema } from '@/App/schemas/reportSchema';
@@ -14,8 +15,19 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
+import EmptyStateSection from '../Shared/EmptyStateSection';
+import SuccessStateSection from '../Shared/SuccessStateSection';
+import LoadingData from '../Shared/LoadingData';
 
 const ReportPage = () => {
+	// check the student's status to open the form
+	// 6: "Đang thực tập", 8: "Sửa báo cáo"
+	const statusCheck = [6, 8];
+
+	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery({ typeNumber: 3 });
+	const deadlineCheck =
+		times && times?.time?.endTime > new Date().getTime() && times?.time?.startTime < new Date().getTime();
+
 	const convertTime = (date) => {
 		if (typeof date !== 'string') return '';
 		return date ? moment(date.substring(0, 10), 'YYYY-MM-DD').format('DD/MM/YYYY') : '';
@@ -84,84 +96,90 @@ const ReportPage = () => {
 		toast.success('Nộp báo cáo thành công');
 		navigate('/');
 	};
-	if (getUserLoading) {
-		return <Typography level={6}>... Đang tải dữ liệu</Typography>;
+	if (getTimeLoading) {
+		return <LoadingData />;
 	}
 	return (
-		<Container>
-			{data?.statusCheck === 6 || data?.statusCheck === 8 ? (
-				<>
-					<Typography level={4} color='text-primary'>
-						Nộp báo cáo
-					</Typography>
-					<Form onSubmit={handleSubmit(onSubmit)}>
-						<Info>
-							Mã sinh viên: <Span>{data && data?.mssv}</Span>
-						</Info>
-						<Info>
-							Họ và tên: <Span>{data && data?.name}</Span>
-						</Info>
-						<Info>
-							Tên doanh nghiệp:{' '}
-							<Span>{data && data?.support === 1 ? data?.business?.name : data?.nameCompany}</Span>
-						</Info>
+		<div>
+			{deadlineCheck ? (
+				statusCheck.includes(data?.statusCheck) ? (
+					<Container>
+						<Typography level={4} color='text-primary'>
+							Nộp báo cáo
+						</Typography>
+						<Form onSubmit={handleSubmit(onSubmit)}>
+							<Info>
+								Mã sinh viên: <Span>{data && data?.mssv}</Span>
+							</Info>
+							<Info>
+								Họ và tên: <Span>{data && data?.name}</Span>
+							</Info>
+							<Info>
+								Tên doanh nghiệp:{' '}
+								<Span>{data && data?.support === 1 ? data?.business?.name : data?.nameCompany}</Span>
+							</Info>
 
-						<InputFieldControl
-							label='Điểm kết quả'
-							placeholder='Nhập điểm kết quả thực tập'
-							control={control}
-							name='resultScore'
-						/>
-
-						<InputFieldControl
-							label='Điểm thái độ'
-							placeholder='Nhập điểm thái độ thực tập'
-							control={control}
-							name='attitudePoint'
-						/>
-
-						<div>
-							<div className='mb-2'>Đề xuất ký HĐLĐ với doanh nghiệp</div>
-							<RadioFieldControl
+							<InputFieldControl
+								label='Điểm kết quả'
+								placeholder='Nhập điểm kết quả thực tập'
 								control={control}
-								name='signTheContract'
-								options={[
-									{ label: 'Có', value: 0 },
-									{ label: 'Không', value: 1 },
-									{ label: 'Không nhận lời', value: 2 }
-								]}
+								name='resultScore'
 							/>
-						</div>
 
-						<Info>
-							Thời gian bắt đầu thực tập: <Span>{data && convertTime(data?.internshipTime)}</Span>
-						</Info>
-						<InputFieldControl
-							label='Thời gian kết thúc thực tập'
-							control={control}
-							name='endInternShipTime'
-							type='date'
-						/>
-						<InputFieldControl
-							ref={fileInputRef}
-							label='Upload báo cáo (PDF)'
-							control={control}
-							name='file'
-							type='file'
-							onChange={handleChange}
-						/>
-						<Error>{validateFile}</Error>
-						<Button variant='primary' type='submit' disabled={isLoading}>
-							{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp báo cáo
-						</Button>
-					</Form>
-				</>
-			) : data?.report ? (
-				<Typography level={6}>Bạn đã nộp biên bản thành công!</Typography>
+							<InputFieldControl
+								label='Điểm thái độ'
+								placeholder='Nhập điểm thái độ thực tập'
+								control={control}
+								name='attitudePoint'
+							/>
+
+							<div>
+								<div className='mb-2'>Đề xuất ký HĐLĐ với doanh nghiệp</div>
+								<RadioFieldControl
+									control={control}
+									name='signTheContract'
+									options={[
+										{ label: 'Có', value: 0 },
+										{ label: 'Không', value: 1 },
+										{ label: 'Không nhận lời', value: 2 }
+									]}
+								/>
+							</div>
+
+							<Info>
+								Thời gian bắt đầu thực tập: <Span>{data && convertTime(data?.internshipTime)}</Span>
+							</Info>
+							<InputFieldControl
+								label='Thời gian kết thúc thực tập'
+								control={control}
+								name='endInternShipTime'
+								type='date'
+							/>
+							<InputFieldControl
+								ref={fileInputRef}
+								label='Upload báo cáo (PDF)'
+								control={control}
+								name='file'
+								type='file'
+								onChange={handleChange}
+							/>
+							<Error>{validateFile}</Error>
+							<Button variant='primary' type='submit' disabled={isLoading}>
+								{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp báo cáo
+							</Button>
+						</Form>
+					</Container>
+				) : data?.report ? (
+					<SuccessStateSection title={'Bạn đã nộp báo cáo thành công!'} />
+				) : (
+					<EmptyStateSection title={'Bạn chưa đủ điều kiện nộp báo cáo'} />
+				)
 			) : (
-				<Typography level={6}>Bạn chưa đủ điều kiện nộp báo cáo!</Typography>
+				<EmptyStateSection
+					title={'Thời gian đăng ký form báo cáo chưa mở, sinh viên vui lòng chờ thông báo từ phòng QHDN'}
+				/>
 			)}
-		</Container>
+		</div>
 	);
 };
 

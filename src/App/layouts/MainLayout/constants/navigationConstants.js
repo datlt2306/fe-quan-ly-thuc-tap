@@ -12,6 +12,7 @@ import {
 	DocumentIcon,
 	DocumentTextIcon,
 	EnvelopeOpenIcon,
+	InformationCircleIcon,
 	ListBulletIcon,
 	PlusIcon,
 	PlusSmallIcon,
@@ -26,19 +27,24 @@ export const studentNavigation = [
 		icon: UserIcon
 	},
 	{
+		name: 'Thông tin tuyển dụng',
+		path: StudentPaths.COMPANY_LIST,
+		icon: InformationCircleIcon
+	},
+	{
 		name: 'Đăng ký thực tập',
 		path: StudentPaths.REGISTRATION,
 		icon: PlusIcon
 	},
 	{
-		name: 'Báo cáo',
-		path: StudentPaths.REPORT,
-		icon: DocumentChartBarIcon
-	},
-	{
 		name: 'Biên bản',
 		path: StudentPaths.RECORD,
 		icon: DocumentTextIcon
+	},
+	{
+		name: 'Báo cáo',
+		path: StudentPaths.REPORT,
+		icon: DocumentChartBarIcon
 	}
 ];
 
