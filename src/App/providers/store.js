@@ -19,7 +19,7 @@ import RTKQueryLogger from './middlewares/RTKQueryLogger';
 const persistConfig = {
 	key: 'root',
 	storage,
-	whitelist: ['auth', 'campus']
+	whitelist: ['auth', 'campus', 'semester']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer); // Provide a way to combine redux's root reducer
