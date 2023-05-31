@@ -12,6 +12,7 @@ import {
 	DocumentIcon,
 	DocumentTextIcon,
 	EnvelopeOpenIcon,
+	InformationCircleIcon,
 	ListBulletIcon,
 	PlusIcon,
 	PlusSmallIcon,
@@ -24,6 +25,11 @@ export const studentNavigation = [
 		name: 'Thông tin sinh viên',
 		path: StudentPaths.STUDENT_INFO,
 		icon: UserIcon
+	},
+	{
+		name: 'Thông tin tuyển dụng',
+		path: StudentPaths.COMPANY_LIST,
+		icon: InformationCircleIcon
 	},
 	{
 		name: 'Đăng ký thực tập',
