@@ -20,6 +20,9 @@ import SuccessStateSection from '../Shared/SuccessStateSection';
 import LoadingData from '../Shared/LoadingData';
 
 const ReportPage = () => {
+	// check the student's status to open the form
+	const statusCheck = [6, 8];
+
 	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery(
 		{ typeNumber: 3 },
 		{ refetchOnMountOrArgChange: true }
@@ -101,7 +104,7 @@ const ReportPage = () => {
 	return (
 		<div>
 			{deadlineCheck ? (
-				data?.statusCheck === 6 || data?.statusCheck === 8 ? (
+				statusCheck.includes(data?.statusCheck) ? (
 					<Container>
 						<Typography level={4} color='text-primary'>
 							Nộp báo cáo

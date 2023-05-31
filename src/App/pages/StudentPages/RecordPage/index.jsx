@@ -17,6 +17,9 @@ import EmptyStateSection from '../Shared/EmptyStateSection';
 import SuccessStateSection from '../Shared/SuccessStateSection';
 import LoadingData from '../Shared/LoadingData';
 const RecordPage = () => {
+	// check the student's status to open the form
+	const statusCheck = [2, 5, 11];
+
 	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery(
 		{ typeNumber: 2 },
 		{ refetchOnMountOrArgChange: true }
@@ -89,7 +92,7 @@ const RecordPage = () => {
 	return (
 		<div>
 			{deadlineCheck ? (
-				[2, 5, 11].includes(data?.statusCheck) ? (
+				statusCheck.includes(data?.statusCheck) ? (
 					<Container>
 						<Typography level={4} color='text-primary'>
 							Nộp biên bản
