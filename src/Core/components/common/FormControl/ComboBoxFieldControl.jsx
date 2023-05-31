@@ -10,17 +10,6 @@ import Text from '@/Core/components/common/Text/Text';
 
 const FormControl = tw.div`flex flex-col gap-px m-0`;
 
-/*
-ví dụ cách sử dụng 
-	<ComboBoxFieldControl
-					label='Chuyên ngành'
-					className='w-full'
-					placeholder='Chọn chuyên ngành'
-					control={control}
-					name='major'
-					options={Array.isArray(majors) ? majors.map((item) => ({ value: item._id, label: item.name })) : []}
-				/>
-*/
 
 const ComboBoxFieldControl = forwardRef(
 	(

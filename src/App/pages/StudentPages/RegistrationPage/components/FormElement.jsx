@@ -40,7 +40,6 @@ const FormElement = ({ student }) => {
 	const handleFormChange = useCallback((value) => {
 		setSelectedOption(value);
 	}, []);
-
 	//check thời hạn hoạt động của form từ lúc bắt đầu đến lúc kết thúc nếu thời gian hiện tại nằm trong khoảng thời gian này thì mới hiện form
 	const deadlineCheck = useMemo(() => {
 		if (deadline) {

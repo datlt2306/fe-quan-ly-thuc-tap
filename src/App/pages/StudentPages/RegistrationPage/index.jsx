@@ -3,8 +3,6 @@ import { useMemo } from 'react';
 
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 
-import Typography from '@/Core/components/common/Text/Typography';
-
 import FormElement from './components/FormElement';
 
 import SuccessStateSection from '../Shared/SuccessStateSection';
