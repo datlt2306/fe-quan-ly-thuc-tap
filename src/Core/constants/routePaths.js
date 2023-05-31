@@ -13,7 +13,8 @@ const StudentPaths = {
 	STUDENT_INFO: '/thong-tin-sinh-vien',
 	REGISTRATION: '/dang-ky-thuc-tap',
 	REPORT: '/bao-cao-thuc-tap',
-	RECORD: '/bien-ban-thuc-tap'
+	RECORD: '/bien-ban-thuc-tap',
+	COMPANY_LIST: '/thong-tin-tuyen-dung'
 };
 
 /**

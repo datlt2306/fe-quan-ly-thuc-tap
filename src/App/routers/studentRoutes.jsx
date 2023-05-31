@@ -5,6 +5,7 @@ const RecordPage = lazy(() => import('../pages/StudentPages/RecordPage'));
 const RegistrationPage = lazy(() => import('../pages/StudentPages/RegistrationPage'));
 const ReportPage = lazy(() => import('../pages/StudentPages/ReportPage'));
 const StudentInfoPage = lazy(() => import('../pages/StudentPages/StudentInfoPage'));
+const CompanyListPage = lazy(() => import('../pages/StudentPages/CompanyListPage'));
 
 const studentRoutes = [
 	{
@@ -36,6 +37,14 @@ const studentRoutes = [
 		element: (
 			<StudentPrivateLayout>
 				<RecordPage />
+			</StudentPrivateLayout>
+		)
+	},
+	{
+		path: StudentPaths.COMPANY_LIST,
+		element: (
+			<StudentPrivateLayout>
+				<CompanyListPage />
 			</StudentPrivateLayout>
 		)
 	}
