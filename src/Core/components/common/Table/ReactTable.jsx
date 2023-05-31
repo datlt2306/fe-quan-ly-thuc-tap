@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/jsx-key */
+import { PaginationActionEnums } from '@/App/hooks/useServerPagination';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import {
 	ArrowDownIcon,
@@ -18,31 +16,31 @@ import ButtonGroup from '../Button/ButtonGroup';
 import { Option, Select } from '../FormControl/SelectFieldControl';
 import Text from '../Text/Text';
 import Table from './CoreTable';
-import { GlobalFilter, InputColumnFilter } from './ReactTableFilters';
-import { PaginationActionEnums } from './reducers/serverPaginationReducer';
-
-/**
- *
- * @param {Array} columns
- * @param {any} data
- * @returns React table element
- */
+import { GlobalFilter } from './ReactTableFilters';
+// import { useSearchParams } from 'react-router-dom';
 
 function fuzzyTextFilterFn(rows, id, filterValue) {
 	return matchSorter(rows, filterValue, { keys: [(row) => row.values[id]] });
 }
-// Let the table remove the filter if the string is empty
-fuzzyTextFilterFn.autoRemove = (val) => !val;
+fuzzyTextFilterFn.autoRemove = (val) => !val; // Let the table remove the filter if the string is empty
 
+/**
+ * @prop {Array} columns
+ * @prop {Array} data
+ * @prop {boolean} serverSidePagination
+ * @prop {Function} onGetSelectedRows
+ * @prop {boolean} loading
+ * @returns React table element
+ */
 const ReactTable = ({
 	columns,
 	data,
 	serverSidePagination,
 	serverPaginationProps,
+	onServerPaginate: dispatch,
 	onGetSelectedRows: handleGetSelectedRows,
 	loading
 }) => {
-	const isEmptyData = useMemo(() => Array.isArray(data) && data.length > 0, [data]);
 	const filterTypes = useMemo(
 		() => ({
 			fuzzyText: fuzzyTextFilterFn,
@@ -57,16 +55,13 @@ const ReactTable = ({
 		}),
 		[]
 	);
-	const defaultColumn = useMemo(() => ({ Filter: InputColumnFilter }), []);
 
 	const {
-		// Default react table props
 		getTableProps,
 		getTableBodyProps,
+		prepareRow,
 		headerGroups,
 		page,
-		prepareRow,
-		// Pagination props
 		canNextPage,
 		canPreviousPage,
 		nextPage,
@@ -86,9 +81,9 @@ const ReactTable = ({
 		{
 			columns,
 			data,
-			defaultColumn,
 			manualPagination: serverSidePagination,
 			filterTypes
+			// defaultColumn,
 		},
 		useFilters,
 		useGlobalFilter,
@@ -100,6 +95,36 @@ const ReactTable = ({
 	useEffect(() => {
 		if (handleGetSelectedRows) handleGetSelectedRows(selectedFlatRows.map((d) => d.original));
 	}, [selectedFlatRows]);
+
+	const isEmptyData = Array.isArray(data) && data.length > 0;
+	const hasNextPage = serverSidePagination ? serverPaginationProps.canNextPage : canNextPage;
+	const hasPreviousPage = serverSidePagination ? serverPaginationProps.canPreviousPage : canPreviousPage;
+
+	const gotoFirstPage = () => {
+		serverSidePagination ? dispatch({ type: PaginationActionEnums.GO_TO_FIRST_PAGE }) : gotoPage(0);
+	};
+	const gotoPreviousPage = () => {
+		serverSidePagination ? dispatch({ type: PaginationActionEnums.GO_TO_PREV_PAGE }) : previousPage();
+	};
+	const gotoNextPage = () => {
+		serverSidePagination ? dispatch({ type: PaginationActionEnums.GO_TO_NEXT_PAGE }) : nextPage();
+	};
+	const gotoLastPage = () => {
+		serverSidePagination
+			? dispatch({
+					type: PaginationActionEnums.GO_TO_LAST_PAGE,
+					payload: serverPaginationProps?.totalPages
+			  })
+			: gotoPage(pageCount - 1);
+	};
+	const changePageSize = (value) => {
+		serverSidePagination
+			? dispatch({
+					type: PaginationActionEnums.CHANGE_PAGE_SIZE,
+					payload: value
+			  })
+			: setPageSize(value);
+	};
 
 	return (
 		<Wrapper>
@@ -123,8 +148,8 @@ const ReactTable = ({
 					<Table.Header sticky={true}>
 						{headerGroups.map((headerGroup) => (
 							<Table.Row {...headerGroup.getHeaderGroupProps()}>
-								{headerGroup.headers.map((column) => (
-									<Table.Cell as='th' {...column.getHeaderProps()}>
+								{headerGroup.headers.map((column, index) => (
+									<Table.Cell key={index} as='th' {...column.getHeaderProps()}>
 										<HeaderCell>
 											{column.render('Header')}
 											<HeaderCell.Actions>
@@ -183,63 +208,22 @@ const ReactTable = ({
 				<Footer.Item>
 					<ButtonGroup>
 						<ButtonGroup.Item
-							variant={
-								(serverSidePagination ? serverPaginationProps.canPreviousPage : canPreviousPage)
-									? 'ghost'
-									: 'disabled'
-							}
+							variant={hasPreviousPage ? 'ghost' : 'disabled'}
 							shape='square'
-							onClick={() => {
-								serverSidePagination
-									? serverPaginationProps.dispatch({ type: PaginationActionEnums.GO_TO_FIRST_PAGE })
-									: gotoPage(0);
-							}}
-							disabled={serverSidePagination ? !serverPaginationProps.canPreviousPage : !canPreviousPage}>
-							<ChevronDoubleLeftIcon className='h-4 w-4' aria-hidden='true' />
+							onClick={gotoFirstPage}>
+							<ChevronDoubleLeftIcon className='h-4 w-4' />
 						</ButtonGroup.Item>
 						<ButtonGroup.Item
-							variant={
-								(serverSidePagination ? serverPaginationProps.canPreviousPage : canPreviousPage)
-									? 'ghost'
-									: 'disabled'
-							}
+							variant={hasPreviousPage ? 'ghost' : 'disabled'}
 							shape='square'
-							onClick={() => {
-								serverSidePagination
-									? serverPaginationProps?.dispatch({ type: PaginationActionEnums.GO_TO_PREV_PAGE })
-									: previousPage();
-							}}
-							disabled={serverSidePagination ? !serverPaginationProps.canPreviousPage : !canPreviousPage}>
-							<ChevronLeftIcon className='h-4 w-4' aria-hidden='true' />
+							onClick={gotoPreviousPage}>
+							<ChevronLeftIcon className='h-4 w-4' />
 						</ButtonGroup.Item>
-						<ButtonGroup.Item
-							variant={
-								(serverSidePagination ? serverPaginationProps.canNextPage : canNextPage) ? 'ghost' : 'disabled'
-							}
-							shape='square'
-							onClick={() => {
-								serverSidePagination
-									? serverPaginationProps.dispatch({ type: PaginationActionEnums.GO_TO_NEXT_PAGE })
-									: nextPage();
-							}}
-							disabled={serverSidePagination ? !serverPaginationProps.canNextPage : !canNextPage}>
-							<ChevronRightIcon className='h-4 w-4' aria-hidden='true' />
+						<ButtonGroup.Item variant={hasNextPage ? 'ghost' : 'disabled'} shape='square' onClick={gotoNextPage}>
+							<ChevronRightIcon className='h-4 w-4' />
 						</ButtonGroup.Item>
-						<ButtonGroup.Item
-							variant={
-								(serverSidePagination ? serverPaginationProps.canNextPage : canNextPage) ? 'ghost' : 'disabled'
-							}
-							shape='square'
-							onClick={() => {
-								serverSidePagination
-									? serverPaginationProps.dispatch({
-											type: PaginationActionEnums.GO_TO_LAST_PAGE,
-											payload: serverPaginationProps?.totalPages
-									  })
-									: gotoPage(pageCount - 1);
-							}}
-							disabled={serverSidePagination ? !serverPaginationProps.canNextPage : !canNextPage}>
-							<ChevronDoubleRightIcon className='h-4 w-4' aria-hidden='true' />
+						<ButtonGroup.Item variant={hasNextPage ? 'ghost' : 'disabled'} shape='square' onClick={gotoLastPage}>
+							<ChevronDoubleRightIcon className='h-4 w-4' />
 						</ButtonGroup.Item>
 					</ButtonGroup>
 				</Footer.Item>
@@ -259,17 +243,10 @@ const ReactTable = ({
 						<Select
 							id='page-size-select'
 							className='w-full max-w-[128px]'
-							defaultValue={pageSize}
-							onChange={(e) => {
-								serverSidePagination
-									? serverPaginationProps.dispatch({
-											type: PaginationActionEnums.CHANGE_PAGE_SIZE,
-											payload: e.target.value
-									  })
-									: setPageSize(e.target.value);
-							}}>
-							{[10, 20, 30, 50].map((page_size, index) => (
-								<Option value={page_size} key={index}>
+							defaultValue={serverSidePagination ? serverPaginationProps.pageSize : pageSize}
+							onChange={(e) => changePageSize(+e.target.value)}>
+							{[10, 20, 30, 50].map((page_size) => (
+								<Option value={page_size} key={page_size}>
 									{page_size} hàng
 								</Option>
 							))}
@@ -282,40 +259,21 @@ const ReactTable = ({
 };
 
 // Styled components
-const Wrapper = ({ children, ...props }) => (
-	<div {...props} tw='flex flex-col items-stretch'>
-		{children}
-	</div>
-);
-const Header = ({ children, ...props }) => (
-	<div {...props} tw='flex items-center justify-between bg-gray-50 p-4'>
-		{children}
-	</div>
-);
-
-const Body = ({ children, isEmpty, ...props }) => (
+const Wrapper = tw.div`flex flex-col items-stretch`;
+const Header = tw.div`flex items-center justify-between bg-gray-50 p-4`;
+const Body = ({ isEmpty, ...props }) => (
 	<div
 		{...props}
 		className={classNames('relative overflow-x-auto overscroll-x-auto', {
 			'pb-10 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
 			'scrollbar-none': !isEmpty
 		})}>
-		{children}
-	</div>
-);
-const Footer = ({ children, ...props }) => (
-	<div
-		{...props}
-		tw='flex w-full items-stretch bg-gray-50 p-3 divide-x divide-gray-300 [&>:first-child]:!pl-0 [&>:last-child]:!pr-0'>
-		{children}
-	</div>
-);
-Footer.Item = ({ ...props }) => (
-	<div {...props} className={classNames('px-6', props.className)}>
 		{props.children}
 	</div>
 );
 const HeaderCell = tw.div`flex h-12 items-center justify-between gap-6`;
 HeaderCell.Actions = tw.div`flex items-center gap-px`;
+const Footer = tw.div`flex w-full items-stretch bg-gray-50 p-3 divide-x divide-gray-300 [&>:first-child]:!pl-0 [&>:last-child]:!pr-0`;
+Footer.Item = tw.div`px-6`;
 
 export default memo(ReactTable);

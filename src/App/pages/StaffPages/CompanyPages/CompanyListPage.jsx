@@ -32,8 +32,6 @@ const CompanyListPage = () => {
 	const [modal, setModal] = useState(false);
 	const [dataModal, setDataModal] = useState({});
 
-	const toastId = useRef(null);
-
 	// get list company, semester, campus, major
 	const { data: majors } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
 	const campus = useSelector((state) => state.campus);
@@ -65,25 +63,12 @@ const CompanyListPage = () => {
 	// hanle delete company
 	const [handleDeleteCompany] = useDeleteCompanyMutation();
 	const onDeleteSubmit = async (id) => {
-		toastId.current = toast.loading('Đang xóa công ty');
 		const result = await handleDeleteCompany({ id });
 		if (result?.error) {
-			toast.update(toastId.current, {
-				type: 'error',
-				render: error.message || 'Đã có lỗi xảy ra !',
-				isLoading: false,
-				closeButton: true,
-				autoClose: 2000
-			});
+			toast.error(result?.error?.message || 'Xóa doanh nghiệp thất bại');
 			return;
 		}
-		toast.update(toastId.current, {
-			type: 'success',
-			render: 'Đã xóa thành công doanh nghiệp!',
-			isLoading: false,
-			closeButton: true,
-			autoClose: 2000
-		});
+		toast.success('Đã xóa doanh nghiệp thành công');
 	};
 
 	// handle export, import
@@ -362,7 +347,7 @@ const CompanyListPage = () => {
 					ref={fileInputRefMobile}
 				/>
 			</Box>
-			{tableData && <ReactTable columns={columnsData} data={tableData} loading={companyLoading} />}
+			<ReactTable columns={columnsData} data={tableData || []} loading={companyLoading} />
 			<Modal openState={modal} onOpenStateChange={setModal} title={dataModal?.title}>
 				<p className='text-gray-500'>{dataModal?.data}</p>
 			</Modal>

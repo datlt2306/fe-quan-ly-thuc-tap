@@ -12,25 +12,26 @@ import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import FormRow from '../components/FormRow';
 import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
-import SharedFields from './SharedFields';
+import SharedFields, { SharedDefaultValues } from './SharedFields';
 import ComboBoxFieldControl from '@/Core/components/common/FormControl/ComboBoxFieldControl';
-import {  useLazyGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
+import {  useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
 const FormSchoolSupport = ({ selectedOption, user }) => {
 	const navigate = useNavigate();
+	const { data: business, isLoading: loadingBusiness } = useGetAllCompanyQuery();
 	const [hanldeUploadCvMutation, { isLoading }] = useUploadCvMutation();
-	const [getBusiness, { data: business, isLoading: loadingBusiness }] = useLazyGetAllCompanyQuery();
+
 	const { control, handleSubmit } = useForm({
 		resolver: yupResolver(formSignUpSchoolSupportSchema),
-		defaultValues: formSignUpSchoolSupportSchema.getDefault()
+		defaultValues: formSignUpSchoolSupportSchema.getDefault(),
+		values: user?.support == 1 &&
+			user?.statusCheck == 1 && {
+				...SharedDefaultValues({ user }),
+				business: user?.business?._id
+			}
 	});
-	const handleMajorChange = (majorCode) => {
-		if (majorCode) {
-			getBusiness({ limit: 100, majorCode });
-		}
-	};
 
 	const formSchoolSupport = [
-		...SharedFields(control, user, handleMajorChange),
+		...SharedFields(control, user),
 		{
 			content: (
 				<ComboBoxFieldControl
@@ -63,10 +64,8 @@ const FormSchoolSupport = ({ selectedOption, user }) => {
 		const handleData = {
 			...data,
 			typeNumber: selectedOption,
-			support: Number(selectedOption),
-			mssv: user?.mssv,
+			support: selectedOption,
 			_id: user?._id,
-			email: user?.email,
 			CV: '',
 			majorCode: user?.majorCode
 		};

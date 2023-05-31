@@ -63,6 +63,7 @@ const ComboBoxFieldControl = forwardRef(
 				return map;
 			}, {});
 		}, [options]);
+
 		return (
 			<FormControl>
 				{label && (
@@ -114,7 +115,7 @@ const ComboBoxFieldControl = forwardRef(
 										leaveFrom='opacity-100'
 										leaveTo='opacity-0'
 										afterLeave={() => setQuery('')}>
-										<Combobox.Options className='absolute mt-1 z-10 max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+										<Combobox.Options className='absolute  z-10 max-h-60 w-full overflow-auto rounded-md bg-white  text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
 											{loading ? (
 												<BoxData>Đang tải dữ liệu ...</BoxData>
 											) : (filteredOptions.length === 0 && query !== '') || options?.length == 0 ? (
@@ -124,7 +125,7 @@ const ComboBoxFieldControl = forwardRef(
 													<Combobox.Option
 														key={option.value}
 														className={({ active }) =>
-															classNames('relative cursor-default select-none px-2 py-[2px]', {
+															classNames('relative cursor-default select-none px-3 py-[2px]', {
 																'bg-[#1E90FF] text-white': active,
 																'text-gray-900': !active
 															})

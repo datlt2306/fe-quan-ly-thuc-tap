@@ -1,5 +1,14 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import axiosBaseQuery from '../axiosBaseQuery';
+import getPaginationIndex from '@/Core/utils/getPaginationIndex';
+import { RoleStaffEnum } from '@/App/constants/userRoles';
+
+/**
+ * @enum
+ */
+const TagTypes = {
+	MANAGERS: 'Managers'
+};
 
 const staffListApi = createApi({
 	reducerPath: 'managerApi',
@@ -7,25 +16,36 @@ const staffListApi = createApi({
 	endpoints: (build) => ({
 		getAllStaff: build.query({
 			query: (params) => ({ url: '/manager', method: 'GET', params }),
-			providesTags: ['Manager']
+			transformResponse: (response, meta, arg) => {
+				const { limit, page } = arg;
+				if (response && Array.isArray(response.list))
+					response.list = response.list.map((staff, index) => ({
+						...staff,
+						index: getPaginationIndex(limit, page, index),
+						role: RoleStaffEnum[staff.role]
+					}));
+				return response;
+			},
+
+			providesTags: Object.values(TagTypes)
 		}),
 		updateStaff: build.mutation({
 			query: ({ id, payload }) => {
 				return { url: '/manager/' + id, method: 'PATCH', data: payload };
 			},
-			invalidatesTags: ['Manager']
+			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		addStaff: build.mutation({
 			query: (payload) => {
 				return { url: '/manager', method: 'POST', data: payload };
 			},
-			invalidatesTags: ['Manager']
+			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		deleteStaff: build.mutation({
 			query: (id) => {
 				return { url: '/manager/' + id, method: 'DELETE' };
 			},
-			invalidatesTags: ['Manager']
+			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		})
 	})
 });

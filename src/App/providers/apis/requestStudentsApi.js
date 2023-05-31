@@ -16,8 +16,8 @@ const requestStudentsApi = createApi({
 			}
 		}),
 		resetStudentRequest: build.mutation({
-			query: (userId) => {
-				return { url: `/resetStudent/${userId}`, method: 'PATCH' };
+			query: (payload) => {
+				return { url: `/resetStudent/${payload.userId}`, method: 'PATCH', data: payload };
 			}
 		}),
 		removeRequestApi: build.mutation({

@@ -3,7 +3,6 @@ import * as yup from 'yup';
 const sharedFieldSchema = {
 	address: yup.string().required('Vui lòng nhập địa chỉ của bạn').default('').trim(),
 	dream: yup.string().required('Vui lòng nhập vị trí thực tập').default('').trim(),
-	majorCode: yup.string().required('Vui lòng chọn chuyên ngành').default('').trim(),
 	phoneNumber: yup
 		.string()
 		.required('Vui lòng nhập  số điện thoại')

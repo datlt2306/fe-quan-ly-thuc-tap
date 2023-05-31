@@ -4,11 +4,9 @@ import Button from '@/Core/components/common/Button';
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
 import Modal from '@/Core/components/common/Modal';
-import { StaffPaths } from '@/Core/constants/routePaths';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const UpdateReviewModal = ({
@@ -22,7 +20,6 @@ const UpdateReviewModal = ({
 	const { control, handleSubmit } = useForm({
 		resolver: yupResolver(reviewSchema)
 	});
-	const navigate = useNavigate();
 
 	const handleReview = async (data) => {
 		try {
@@ -48,8 +45,7 @@ const UpdateReviewModal = ({
 				return;
 			}
 			handleOpenStateChange(!openState);
-			toast.success('Xác nhận review CV thành công !');
-			navigate(StaffPaths.STUDENT_LIST);
+			toast.success('Xác nhận review thành công !');
 		} catch (error) {
 			toast.error(error.message);
 		}

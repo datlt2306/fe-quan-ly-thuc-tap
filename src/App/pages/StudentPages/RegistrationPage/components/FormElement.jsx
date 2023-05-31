@@ -23,6 +23,7 @@ const labelItems = Object.entries(InternSupportType).map(([key, value]) => {
 });
 const FormElement = ({ student }) => {
 	const [selectedOption, setSelectedOption] = useState(null);
+
 	const [deadline, setDeadLine] = useState(null);
 	const { data: times, isLoading } = useGetSetTimeQuery(
 		{ typeNumber: selectedOption || 0 },

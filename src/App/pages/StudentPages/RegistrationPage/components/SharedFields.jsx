@@ -1,18 +1,9 @@
-import ComboBoxFieldControl from '@/Core/components/common/FormControl/ComboBoxFieldControl';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import tw from 'twin.macro';
-import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
-const SharedFields = (control, student, handleMajorChange) => {
-	const { data: majors, isLoading } = useGetAllMajorQuery();
-
+const SharedFields = (control, student) => {
 	return [
 		{
-			content: (
-				<div>
-					<label>Họ và tên</label>
-					<Input className='mt-2' readOnly value={student?.name}></Input>
-				</div>
-			)
+			content: <ReadOnly title='Họ và tên' value={student?.name} />
 		},
 		{
 			content: (
@@ -31,20 +22,7 @@ const SharedFields = (control, student, handleMajorChange) => {
 			content: <InputFieldControl label='Địa chỉ' control={control} name='address' placeholder='Địa chỉ' />
 		},
 		{
-			content: (
-				<ComboBoxFieldControl
-					loading={isLoading}
-					onChange={(value) => (handleMajorChange ? handleMajorChange(value) : null)}
-					label='Chuyên ngành'
-					className='w-full'
-					placeholder='Chọn chuyên ngành'
-					control={control}
-					name='majorCode'
-					options={
-						Array.isArray(majors) ? majors.map((item) => ({ value: item.majorCode, label: item.name })) : []
-					}
-				/>
-			)
+			content: <ReadOnly title='Chuyên ngành' value={student?.major?.name} />
 		},
 		{
 			content: (
@@ -59,5 +37,22 @@ const SharedFields = (control, student, handleMajorChange) => {
 	];
 };
 
-const Input = tw.input`block w-full rounded-md border-0 duration-300 px-2.5 py-1.5 text-gray-900 outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`;
+const Input = tw.input` block w-full rounded-md border-0 duration-300 px-2.5 py-1.5 text-gray-900 outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`;
+
+const ReadOnly = ({ title, value }) => {
+	return (
+		<div>
+			<label>{title}</label>
+			<Input readOnly value={value}></Input>
+		</div>
+	);
+};
+
+export const SharedDefaultValues = ({ user }) => {
+	return {
+		phoneNumber: user?.phoneNumber,
+		address: user?.address,
+		dream: user?.dream
+	};
+};
 export default SharedFields;

@@ -1,25 +1,34 @@
-/* eslint-disable react/prop-types */
-import tw from 'twin.macro';
 import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
 import { formSignUpSelfFindingSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import FormRow from './FormRow';
 import { Form } from './FormSchoolSupport';
-import SharedFields from './SharedFields';
+import SharedFields, { SharedDefaultValues } from './SharedFields';
 
 const FormSelfFinding = ({ selectedOption, user }) => {
 	const navigate = useNavigate();
 
 	const { control, handleSubmit } = useForm({
 		resolver: yupResolver(formSignUpSelfFindingSchema),
-		defaultValues: formSignUpSelfFindingSchema.getDefault()
+		defaultValues: formSignUpSelfFindingSchema.getDefault(),
+		values: user?.support == 0 &&
+			user?.statusCheck == 1 && {
+				...SharedDefaultValues({ user }),
+				business: user?.nameCompany,
+				addressCompany: user?.addressCompany,
+				phoneNumberCompany: user?.phoneNumberCompany,
+				taxCode: user?.taxCode,
+				emailEnterprise: user?.emailEnterprise,
+				position: user?.position,
+				nameCompany: user?.nameCompany
+			}
 	});
 	const [hanldeUploadCvMutation, { isLoading }] = useUploadCvMutation();
 
@@ -85,11 +94,9 @@ const FormSelfFinding = ({ selectedOption, user }) => {
 			...data,
 			typeNumber: selectedOption,
 			support: selectedOption,
-			mssv: user?.mssv,
 			_id: user?._id,
-			email: user?.email,
-			majorCode: user?.majorCode,
-			CV: 'NO-CV'
+			CV: 'NO-CV',
+			majorCode: user?.majorCode
 		});
 		if (res?.error) {
 			toast.error('Đã có lỗi xảy ra');

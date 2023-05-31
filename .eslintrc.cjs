@@ -17,6 +17,7 @@ module.exports = {
 		'react/jsx-no-undef': 'warn',
 		'react/jsx-uses-react': 'warn',
 		'react/jsx-uses-vars': 'off',
+		'react/jsx-key': 'off',
 		'react/prop-types': 'off',
 		'react/no-unknown-property': 'off',
 		'react/display-name': 'off',
