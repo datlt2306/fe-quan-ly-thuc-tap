@@ -14,7 +14,7 @@ import tw from 'twin.macro';
 import { status } from '@/App/constants/requestStudents';
 
 const index = () => {
-	const { data, refetch } = useGetRequestOfStudentQuery();
+	const { data, refetch, isLoading } = useGetRequestOfStudentQuery();
 	const [handleAccept] = useResetStudentRequestMutation();
 	const [handleReject] = useRemoveRequestApiMutation();
 	const [tableData, setTableData] = useState([]);
@@ -124,7 +124,7 @@ const index = () => {
 					))}
 				</Select>
 			</SelectBox>
-			{tableData && <ReactTable columns={columnsData} data={tableData} />}
+			<ReactTable columns={columnsData} data={tableData || []} loading={isLoading} />
 		</div>
 	);
 };
