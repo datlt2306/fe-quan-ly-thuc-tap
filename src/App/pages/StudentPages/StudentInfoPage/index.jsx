@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import LoadingData from '../Shared/LoadingData';
+import EmptyStateSection from '../Shared/EmptyStateSection';
+
 const ViewReport = lazy(() => import('./components/ViewReport'));
 const ViewForm = lazy(() => import('./components/ViewForm'));
 const ViewCv = lazy(() => import('./components/ViewCv'));
@@ -100,7 +102,7 @@ const StudentInfoPage = () => {
 					<WrapMenu>
 						<Menu>
 							{!(data?.CV || data?.form || data?.report || data?.nameCompany) && (
-								<div className='font-medium'>Chưa có form nào được nộp</div>
+								<EmptyStateSection title='Chưa có form nào được nộp' />
 							)}
 							{formSubmittedRoute.map((item) => (
 								<Menu.Item
@@ -109,6 +111,7 @@ const StudentInfoPage = () => {
 									<>
 										{item.condition && (
 											<Button
+												variant='outline'
 												onClick={() => {
 													setModalContent(item.content);
 													setTitle(item.label);
