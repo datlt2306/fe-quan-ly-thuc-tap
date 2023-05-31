@@ -31,14 +31,14 @@ export const studentNavigation = [
 		icon: PlusIcon
 	},
 	{
-		name: 'Báo cáo',
-		path: StudentPaths.REPORT,
-		icon: DocumentChartBarIcon
-	},
-	{
 		name: 'Biên bản',
 		path: StudentPaths.RECORD,
 		icon: DocumentTextIcon
+	},
+	{
+		name: 'Báo cáo',
+		path: StudentPaths.REPORT,
+		icon: DocumentChartBarIcon
 	}
 ];
 
