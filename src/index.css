@@ -22,7 +22,7 @@
 	}
 
 	.btn {
-		@apply flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] bg-white font-semibold text-gray-500 shadow-[inset_0px_0px_4px_#cbd5e1] outline-none duration-300 hover:bg-gray-50 focus:active:scale-95;
+		@apply flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] bg-gray-50 bg-white font-semibold text-gray-500 outline-none duration-300 hover:bg-gray-50 focus:active:scale-95;
 	}
 
 	.btn-primary {
@@ -47,7 +47,7 @@
 		@apply rounded-[inherit] border bg-transparent text-gray-600 !shadow-none ring-inset ring-[1] ring-gray-300 hover:bg-gray-100 focus:active:bg-gray-200;
 	}
 	.btn-disabled {
-		@apply cursor-not-allowed !bg-gray-200 !text-gray-400 !shadow-none;
+		@apply !bg-gray-200 !text-gray-400 !shadow-none;
 	}
 	.btn-xs {
 		@apply px-2 py-1 text-xs;

@@ -1,6 +1,6 @@
 import Text from '@/Core/components/common/Text/Text';
 import Typography from '@/Core/components/common/Text/Typography';
-import { CheckCircleIcon, DocumentCheckIcon } from '@heroicons/react/24/outline';
+import { DocumentCheckIcon } from '@heroicons/react/24/outline';
 import tw from 'twin.macro';
 
 export default function SuccessStateSection({ title, message }) {

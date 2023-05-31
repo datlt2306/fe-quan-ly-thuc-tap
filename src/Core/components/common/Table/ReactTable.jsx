@@ -264,7 +264,7 @@ const Header = tw.div`flex items-center justify-between bg-gray-50 p-4`;
 const Body = ({ isEmpty, ...props }) => (
 	<div
 		{...props}
-		className={classNames('relative overflow-x-auto overscroll-x-auto', {
+		className={classNames('relative h-fit overflow-x-auto overscroll-x-auto', {
 			'pb-10 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
 			'scrollbar-none': !isEmpty
 		})}>

@@ -9,13 +9,15 @@ import Table from '@/Core/components/common/Table/CoreTable';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import CompareDate from './CompareDate';
 import { toast } from 'react-toastify';
 import { TimesConfig } from '@/App/constants/timesConfig';
+import Typography from '@/Core/components/common/Text/Typography';
+import Text from '@/Core/components/common/Text/Text';
 
 const RegistrantionTimePage = () => {
 	const convertTime = (date) => {
@@ -88,9 +90,8 @@ const RegistrantionTimePage = () => {
 	};
 
 	return (
-		<div>
-			<Title1>Quản lý thời gian các tính năng cho sinh viên</Title1>
-			<Flex>
+		<Fragment>
+			<Box>
 				<Item>
 					<SelectBox>
 						<label
@@ -111,10 +112,11 @@ const RegistrantionTimePage = () => {
 					</SelectBox>
 				</Item>
 				<Item className='text-base-content'>
-					Thời gian kỳ: <Span>{selectedSemester && convertTime(selectedSemester?.start_time)}</Span> -{' '}
-					<Span>{selectedSemester && convertTime(selectedSemester?.end_time)}</Span>
+					Thời gian kỳ:{' '}
+					<Text className='font-medium'>{selectedSemester && convertTime(selectedSemester?.start_time)}</Text> -{' '}
+					<Text className='font-medium'>{selectedSemester && convertTime(selectedSemester?.end_time)}</Text>
 				</Item>
-			</Flex>
+			</Box>
 			<Table>
 				<Table.Header>
 					<Table.Row>
@@ -149,7 +151,7 @@ const RegistrantionTimePage = () => {
 								<Table.Cell>
 									<Button
 										disabled={selectedSemester?._id !== defaultSemester?._id}
-										size='sm'
+										size='xs'
 										variant={selectedSemester?._id !== defaultSemester?._id ? 'disabled' : 'success'}
 										onClick={() =>
 											handleClick(
@@ -165,23 +167,22 @@ const RegistrantionTimePage = () => {
 				</Table.Body>
 			</Table>
 			<Modal openState={modal} onOpenStateChange={setModal}>
-				<Form onSubmit={handleSubmit(onSubmit)}>
+				<Modal.Form onSubmit={handleSubmit(onSubmit)}>
 					<InputFieldControl type='date' control={control} name='startTime' label='Start date' />
 					<InputFieldControl type='date' control={control} name='endTime' label='End date' />
 					<Button type='submit' variant='primary'>
 						Đặt thời gian
 					</Button>
-				</Form>
+				</Modal.Form>
 			</Modal>
-		</div>
+		</Fragment>
 	);
 };
 
-const Title1 = tw.div`text-center font-bold text-2xl text-primary mb-8`;
-const Flex = tw.div`flex justify-between mb-8`;
+const Box = tw.div`flex justify-between items-center mb-8 bg-gray-50 px-3 py-4`;
 const Item = tw.div``;
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
 const Span = tw.span`font-semibold`;
-const Form = tw.form`grid gap-6`;
+Modal.Form = tw.form`grid gap-6`;
 
 export default RegistrantionTimePage;

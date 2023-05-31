@@ -98,7 +98,7 @@ const StaffListPage = () => {
 				Cell: ({ row }) => (
 					<ButtonList>
 						<>
-							<Button size='xs' variant='default' shape='square' onClick={() => onOpenUpdate(row.original._id)}>
+							<Button size='xs' variant='ghost' shape='square' onClick={() => onOpenUpdate(row.original._id)}>
 								<PencilSquareIcon className='h-4 w-4' />
 							</Button>
 
@@ -108,7 +108,7 @@ const StaffListPage = () => {
 								title={'Xóa nhân viên'}
 								description={'Bạn muốn xóa nhân viên này ?'}
 								onConfirm={() => onDeleteSubmit(row.original._id)}>
-								<Button size='xs' variant='error' shape='square'>
+								<Button size='xs' variant='ghost' className='text-error' shape='square'>
 									<TrashIcon className='h-4 w-4' />
 								</Button>
 							</PopConfirm>
@@ -164,6 +164,6 @@ const StaffListPage = () => {
 };
 
 const Box = tw.div`flex flex-col gap-6`;
-const ButtonList = tw.div`flex items-center gap-1`;
+const ButtonList = tw.div`flex items-center gap-px`;
 
 export default StaffListPage;

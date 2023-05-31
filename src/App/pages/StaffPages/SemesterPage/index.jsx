@@ -12,9 +12,6 @@ import { campusDataValidator } from '@/App/schemas/campusSchema';
 import AddSemesterSlideOver from './components/AddSemesterSlideOver';
 import UpdateSemesterModal from './components/UpdateSemesterModal';
 
-const Box = tw.div`flex flex-col gap-6`;
-const ButtonList = tw.div`flex items-center gap-2`;
-
 const SemesterPage = () => {
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const [modal, setModal] = useState(false);
@@ -75,7 +72,7 @@ const SemesterPage = () => {
 					<ButtonList>
 						<Button
 							size='xs'
-							variant='default'
+							variant='ghost'
 							shape='square'
 							onClick={() => {
 								onOpenUpdate(value);
@@ -124,5 +121,8 @@ const SemesterPage = () => {
 		</Fragment>
 	);
 };
+
+const Box = tw.div`flex flex-col gap-6`;
+const ButtonList = tw.div`flex items-center gap-px`;
 
 export default SemesterPage;
