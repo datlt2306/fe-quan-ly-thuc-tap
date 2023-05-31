@@ -21,12 +21,10 @@ import LoadingData from '../Shared/LoadingData';
 
 const ReportPage = () => {
 	// check the student's status to open the form
+	// 6: "Đang thực tập", 8: "Sửa báo cáo"
 	const statusCheck = [6, 8];
 
-	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery(
-		{ typeNumber: 3 },
-		{ refetchOnMountOrArgChange: true }
-	);
+	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery({ typeNumber: 3 });
 	const deadlineCheck =
 		times && times?.time?.endTime > new Date().getTime() && times?.time?.startTime < new Date().getTime();
 
