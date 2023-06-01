@@ -6,16 +6,17 @@ import InputFieldControl from '@/Core/components/common/FormControl/InputFieldCo
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import Modal from '@/Core/components/common/Modal';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
+
 const UpdateCampusModal = ({ campusData, onOpenStateChange, openState, curCampus }) => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(campusDataValidator),
 		defaultValues: campusData
 	});
-
+	const [handleUpdateCampus, { isLoading }] = useUpdateCampusMutation();
 	useEffect(() => {
 		if (campusData) {
 			reset({
@@ -23,8 +24,6 @@ const UpdateCampusModal = ({ campusData, onOpenStateChange, openState, curCampus
 			});
 		}
 	}, [campusData]);
-
-	const [handleUpdateCampus, { isLoading }] = useUpdateCampusMutation();
 
 	const isCampusDuplicate = (data) => {
 		const newCampus = data.name
@@ -34,7 +33,8 @@ const UpdateCampusModal = ({ campusData, onOpenStateChange, openState, curCampus
 			.replace(/đ/g, 'd')
 			.replace(/Đ/g, 'D');
 		const temp = [];
-		curCampus.forEach((item) => {
+		const listCampus = curCampus.filter((item) => item._id !== campusData._id);
+		listCampus.forEach((item) => {
 			const campus = item.name
 				.toLowerCase()
 				.normalize('NFD')
@@ -46,27 +46,26 @@ const UpdateCampusModal = ({ campusData, onOpenStateChange, openState, curCampus
 				temp.push(item);
 			}
 		});
-		return temp;
+		return !!temp.length;
 	};
 
 	const onUpdateSubmit = async (data) => {
-		if (isCampusDuplicate(data).length === 0) {
-			try {
-				const {
-					data: { success, message }
-				} = await handleUpdateCampus({ id: campusData._id, payload: data });
-				if (success) {
-					onOpenStateChange(!openState);
-					toast.success('Sửa cơ sở thành công!');
-				} else {
-					onOpenStateChange(!openState);
-					toast.error(message);
-				}
-			} catch (error) {
-				toast.error('Sửa cở sở không thành công!');
+		if (!isCampusDuplicate(data)) {
+			const { error } = await handleUpdateCampus({ id: campusData?._id, payload: data });
+
+			if (error) {
+				onOpenStateChange(!openState);
+				reset();
+				toast.error(error?.data?.message);
+				return;
 			}
+
+			onOpenStateChange(!openState);
+			reset();
+			toast.success('Sửa cơ sở thành công!');
 		} else {
 			onOpenStateChange(!openState);
+			reset();
 			toast.error('Cơ sở đã tồn tại !');
 		}
 	};
@@ -75,8 +74,7 @@ const UpdateCampusModal = ({ campusData, onOpenStateChange, openState, curCampus
 		<Modal openState={openState} onOpenStateChange={onOpenStateChange} title={'Sửa cơ sở'}>
 			<Form onSubmit={handleSubmit(onUpdateSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên cơ sở' />
-
-				<Button type='submit' size='md' variant='primary' disabled={isLoading}>
+				<Button type='submit' size='md' variant={isLoading ? 'disabled' : 'primary'}>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Cập nhật
 				</Button>

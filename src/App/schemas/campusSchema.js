@@ -8,7 +8,6 @@ export const campusDataValidator = object({
 			let isUpper = true;
 			for (let i = 0; i < valueSplit.length; i++) {
 				if (!(valueSplit[i].charAt(0) === valueSplit[i].charAt(0).toUpperCase())) {
-					console.log(valueSplit[i]);
 					isUpper = false;
 					break;
 				}

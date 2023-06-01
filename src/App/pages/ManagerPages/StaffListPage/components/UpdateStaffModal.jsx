@@ -65,7 +65,7 @@ const UpdateStaffModal = ({ userData, onOpenStateChange, openState, users }) => 
 						value: role.toString()
 					}))}
 				/>
-				<Button type='submit' size='md' variant='primary' disabled={isLoading}>
+				<Button type='submit' size='md' variant={isLoading ? 'disabled' : 'primary'}>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Cập nhật
 				</Button>

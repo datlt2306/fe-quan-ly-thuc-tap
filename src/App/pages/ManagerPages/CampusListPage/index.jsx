@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 import { useDeleteCampusMutation, useGetAllCampusQuery } from '@/App/providers/apis/campusApi';
 import { useForm } from 'react-hook-form';

@@ -51,7 +51,7 @@ const AddStaffSlideOver = ({ onOpen, open }) => {
 						value: role.toString()
 					}))}
 				/>
-				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
+				<Button type='submit' variant={isLoading ? 'disabled' : 'primary'} size='md'>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Thêm
 				</Button>
