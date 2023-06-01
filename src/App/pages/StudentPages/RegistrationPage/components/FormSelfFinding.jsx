@@ -87,7 +87,7 @@ const FormSelfFinding = ({ selectedOption, user }) => {
 				<FormRow className='grid-cols-3 sm:grid-cols-1 md:grid-cols-2'>
 					<SharedFields control={control} student={user} inputFields={FieldsFormSelfFinding} />
 				</FormRow>
-				<Button type='submit' variant='primary' disabled={isLoading}>
+				<Button type='submit' variant={isLoading ? 'disabled' : 'primary'}>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Đăng ký
 				</Button>

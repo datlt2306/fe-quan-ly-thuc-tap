@@ -10,7 +10,6 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import capitalizeString from '@/Core/utils/capitalizeString';
-
 const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(majorSchema),
@@ -44,13 +43,12 @@ const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
 		reset();
 		toast.success('Sửa chuyên ngành thành công!');
 	};
-
 	return (
 		<SlideOver open={open} onOpen={onOpen} panelTitle={panelTitle}>
 			<Form onSubmit={handleSubmit(onUpdateSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên chuyên ngành' />
 				<InputFieldControl name='majorCode' control={control} label='Mã chuyên ngành' />
-				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
+				<Button type='submit' variant={isLoading ? 'disabled' : 'primary'} size='md'>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Sửa
 				</Button>
