@@ -76,7 +76,7 @@ const UpdateCampusModal = ({ campusData, onOpenStateChange, openState, curCampus
 			<Form onSubmit={handleSubmit(onUpdateSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên cơ sở' />
 
-				<Button type='submit' size='md' variant='primary' disabled={isLoading}>
+				<Button type='submit' size='md' variant={isLoading ? 'disabled' : 'primary'}>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Cập nhật
 				</Button>

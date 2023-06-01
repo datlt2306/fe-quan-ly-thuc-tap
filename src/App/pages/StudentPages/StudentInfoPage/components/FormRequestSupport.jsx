@@ -48,7 +48,7 @@ const FormRequestSupport = ({ formType, setOpenState }) => {
 							}}>
 							Huỷ
 						</Button>
-						<Button type='submit' variant='primary' disabled={isLoading} onClick={() => setOpen(true)}>
+						<Button type='submit' variant={isLoading ? 'disabled' : 'primary'} onClick={() => setOpen(true)}>
 							{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 							Gửi
 						</Button>

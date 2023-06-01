@@ -85,7 +85,7 @@ const FormSchoolSupport = ({ business, selectedOption, user, majors }) => {
 						<Fragment key={index}>{row.content}</Fragment>
 					))}
 				</FormRow>
-				<Button type='submit' variant='primary' className='mt-2' disabled={isLoading}>
+				<Button type='submit' variant={isLoading ? 'disabled' : 'primary'} className='mt-2'>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Đăng ký
 				</Button>

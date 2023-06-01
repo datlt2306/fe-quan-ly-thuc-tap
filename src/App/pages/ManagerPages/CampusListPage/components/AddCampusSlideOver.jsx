@@ -77,7 +77,7 @@ const AddCampusSlideOver = ({ onOpen, open, curCampus }) => {
 			<Form onSubmit={handleSubmit(onAddSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên cơ sở' />
 
-				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
+				<Button type='submit' variant={isLoading ? 'disabled' : 'primary'} size='md'>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Thêm
 				</Button>
