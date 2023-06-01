@@ -14,10 +14,13 @@ import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi'
 import SharedFields, { SharedDefaultValues } from './SharedFields';
 import ComboBoxFieldControl from '@/Core/components/common/FormControl/ComboBoxFieldControl';
 import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
+import { useSelector } from 'react-redux';
 
 const FormSchoolSupport = ({ selectedOption, user }) => {
 	const navigate = useNavigate();
-	const { data: business, isLoading: loadingBusiness } = useGetAllCompanyQuery();
+	const currentSemester = useSelector((state) => state.semester?.defaultSemester);
+	const { data: business, isLoading: loadingBusiness } = useGetAllCompanyQuery({ semester_id: currentSemester?._id });
+
 	const [hanldeUploadCvMutation, { isLoading }] = useUploadCvMutation();
 
 	const { control, handleSubmit } = useForm({

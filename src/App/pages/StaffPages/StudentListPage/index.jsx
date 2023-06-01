@@ -1,6 +1,5 @@
 import { StudentColumnAccessors } from '@/App/constants/studentConstants';
 import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
-import { useGetAllSemestersQuery } from '@/App/providers/apis/semesterApi';
 import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/providers/apis/studentApi';
 import { newStudentSchema } from '@/App/schemas/studentSchema';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
@@ -23,7 +22,7 @@ const StudentListPage = () => {
 	const [handleImportFile] = useImportFromExcel();
 	const { handleExportFile } = useExportToExcel();
 	const [addStudents] = useAddStudentsMutation();
-	const { data: semesterData } = useGetAllSemestersQuery({ campus_id: currentCampus?._id });
+	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useState();
 	const { data: studentsListData, isLoading } = useGetStudentsQuery({ semester: currentSemester });
 	const fileInputRef = useRef(null);
@@ -31,8 +30,8 @@ const StudentListPage = () => {
 	const [selectedStudents, setSelectedStudents] = useState([]);
 
 	useEffect(() => {
-		setCurrentSemester(semesterData?.defaultSemester?._id);
-	}, [semesterData]);
+		setCurrentSemester(defaultSemester?._id);
+	}, [defaultSemester]);
 
 	const tableData = useMemo(() => studentsListData ?? [], [studentsListData]);
 
@@ -146,8 +145,8 @@ const StudentListPage = () => {
 						onChange={(e) => setCurrentSemester(e.target.value)}
 						value={currentSemester}>
 						<Option>All</Option>
-						{Array.isArray(semesterData?.listSemesters) &&
-							semesterData?.listSemesters?.map((semester) => (
+						{Array.isArray(listSemesters) &&
+							listSemesters?.map((semester) => (
 								<Option key={semester._id} value={semester._id}>
 									{semester?.name}
 								</Option>
@@ -158,14 +157,14 @@ const StudentListPage = () => {
 					tableData={selectedStudents.length ? selectedStudents : tableData}
 					handleExport={handleExportDataToExcel}
 					handleImport={handleImportStudents}
-					canImport={currentSemester === semesterData?.defaultSemester?._id}
+					canImport={currentSemester === defaultSemester?._id}
 					ref={fileInputRef}
 				/>
 				<MobileDropdownButtonGroup
 					tableData={selectedStudents.length ? selectedStudents : tableData}
 					handleExport={handleExportDataToExcel}
 					handleImport={handleImportStudents}
-					canImport={currentSemester === semesterData?.defaultSemester?._id}
+					canImport={currentSemester === defaultSemester?._id}
 					ref={fileInputRef}
 				/>
 			</Box>
