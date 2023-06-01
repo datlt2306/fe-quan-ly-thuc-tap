@@ -4,9 +4,13 @@ import { XCircleIcon } from '@heroicons/react/24/outline';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useGetAllSemestersQuery } from '../providers/apis/semesterApi';
 
 const DefaultPage = () => {
 	const user = useSelector((state) => state.auth?.user);
+	const currentCampus = useSelector((state) => state.campus?.currentCampus);
+	useGetAllSemestersQuery({ campus_id: currentCampus?._id }, { skip: !currentCampus });
+
 	switch (user.role) {
 		case UserRoleEnum.STUDENT:
 			return <Navigate to={StudentPaths.STUDENT_INFO} replace={true} />;
