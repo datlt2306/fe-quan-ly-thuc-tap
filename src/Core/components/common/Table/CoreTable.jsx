@@ -30,9 +30,9 @@ Table.Empty = () => (
 		</Table.Cell>
 	</Table.Row>
 );
-Table.Pending = ({ numOfCols }) => {
-	const preRenderCells = Array.apply(null, Array(numOfCols)).map((x, i) => i);
-	const preRenderRows = Array.apply(null, Array(5)).map((x, j) => j);
+Table.Pending = ({ prepareRows = 5, prepareCols }) => {
+	const preRenderCells = Array.apply(null, Array(prepareCols)).map((x, i) => i);
+	const preRenderRows = Array.apply(null, Array(prepareRows)).map((x, j) => j);
 	return preRenderRows.map((_row, i) => (
 		<Table.Row key={i}>
 			{preRenderCells.map((_cell, j) => (
