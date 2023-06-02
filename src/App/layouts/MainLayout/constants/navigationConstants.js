@@ -1,4 +1,4 @@
-import { ManagerPaths, StaffPaths, StudentPaths } from '@/Core/constants/routePaths';
+import { AdminPaths, ManagerPaths, StaffPaths, StudentPaths } from '@/Core/constants/routePaths';
 import {
 	AcademicCapIcon,
 	BookOpenIcon,
@@ -135,5 +135,18 @@ export const managerNavigation = [
 		name: 'Ngành hẹp',
 		path: ManagerPaths.SPECIALIZATION,
 		icon: BookOpenIcon
+	}
+];
+
+export const adminNavigation = [
+	{
+		name: 'Danh sách quản lý',
+		path: AdminPaths.MANAGER_LIST,
+		icon: UserGroupIcon
+	},
+	{
+		name: 'Danh sách cơ sở',
+		path: AdminPaths.CAMPUS,
+		icon: BuildingOffice2Icon
 	}
 ];

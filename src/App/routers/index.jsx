@@ -5,9 +5,11 @@ import PrivateLayout from '../layouts/PrivateLayout';
 import DefaultPage from '../pages';
 import NotFoundPage from '../pages/404';
 import SigninPage from '../pages/Signin';
+import AdminSigninPage from '../pages/Signin/superAdmin';
 import managerRoutes from './managerRoutes';
 import staffRoutes from './staffRoutes';
 import studentRoutes from './studentRoutes';
+import adminRoutes from './adminRoutes';
 
 const routes = [
 	{
@@ -22,7 +24,10 @@ const routes = [
 		path: BasePaths.SIGNIN,
 		element: <SigninPage />
 	},
-
+	{
+		path: BasePaths.ADMIN_SIGNIN,
+		element: <AdminSigninPage />
+	},
 	{
 		path: '/',
 		element: (
@@ -37,7 +42,8 @@ const routes = [
 			},
 			...studentRoutes,
 			...staffRoutes,
-			...managerRoutes
+			...managerRoutes,
+			...adminRoutes
 		]
 	}
 ];

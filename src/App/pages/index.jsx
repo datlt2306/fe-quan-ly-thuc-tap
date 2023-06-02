@@ -1,4 +1,4 @@
-import { BasePaths, ManagerPaths, StaffPaths, StudentPaths } from '@/Core/constants/routePaths';
+import { AdminPaths, BasePaths, ManagerPaths, StaffPaths, StudentPaths } from '@/Core/constants/routePaths';
 import { UserRoleEnum } from '@/App/constants/userRoles';
 import { XCircleIcon } from '@heroicons/react/24/outline';
 import { useSelector } from 'react-redux';
@@ -18,6 +18,8 @@ const DefaultPage = () => {
 			return <Navigate to={StaffPaths.STUDENT_LIST} replace={true} />;
 		case UserRoleEnum.MANAGER:
 			return <Navigate to={ManagerPaths.STAFF_LIST} replace={true} />;
+		case UserRoleEnum.ADMIN:
+			return <Navigate to={AdminPaths.MANAGER_LIST} replace={true} />;
 		default:
 			toast.error('Vai trò người dùng không nằm trong hệ thống', {
 				icon: XCircleIcon

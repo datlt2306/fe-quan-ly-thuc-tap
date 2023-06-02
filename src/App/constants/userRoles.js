@@ -4,8 +4,8 @@
 export const UserRoleEnum = {
 	STUDENT: 'STUDENT',
 	MANAGER: 'MANAGER',
-	STAFF: 'STAFF'
-	// ADMIN: "ADMIN",
+	STAFF: 'STAFF',
+	ADMIN: 'ADMIN'
 };
 
 /**
@@ -13,5 +13,6 @@ export const UserRoleEnum = {
  */
 export const RoleStaffEnum = {
 	1: 'Nhân Viên',
-	2: 'Quản lý'
+	2: 'Quản lý',
+	3: 'Admin'
 };
