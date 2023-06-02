@@ -6,7 +6,6 @@ import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
 import Button from '@/Core/components/common/Button';
 import LoadingData from '@/App/pages/StudentPages/Shared/LoadingData';
 import formatDate from '@/Core/utils/formatDate';
-import moment from 'moment';
 import { handleGetInternStatusStyle } from '@/App/pages/StudentPages/StudentInfoPage';
 import { StudentStatusEnum } from '@/App/constants/studentConstants';
 import Badge from '@/Core/components/common/Badge';
@@ -81,9 +80,7 @@ const InfoStudentModal = ({ id, onOpenStateChange, openState }) => {
 			label: formTime?.typeName ? `${formTime?.typeName}:` : 'Form đăng ký:',
 			value:
 				formSchoolSupport || formSelfFinding
-					? `Từ ${moment(formTime?.startTime).format('DD/MM/YYYY')} đến  ${moment(formTime?.endTime).format(
-							'DD/MM/YYYY'
-					  )} `
+					? `Từ ${formatDate(formTime?.startTime)} đến  ${formatDate(formTime?.endTime)} `
 					: 'Chưa có thông tin'
 		}
 	];

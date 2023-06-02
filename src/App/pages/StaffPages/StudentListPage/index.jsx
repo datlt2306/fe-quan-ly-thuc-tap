@@ -3,20 +3,21 @@ import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
 import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/providers/apis/studentApi';
 import { newStudentSchema } from '@/App/schemas/studentSchema';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
+import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { AllowedFileExt } from '@/Core/constants/allowedFileType';
 import HttpStatusCode from '@/Core/constants/httpStatus';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import getFileExtension from '@/Core/utils/getFileExtension';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, Suspense, lazy } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import InstanceStudentColumns from '../Shared/InstanceStudentColumns';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
-import InfoStudentModal from './components/InfoStudentModal';
+const InfoStudentModal = lazy(() => import('./components/InfoStudentModal'));
 const StudentListPage = () => {
 	const [modal, setModal] = useState(false);
 	const [idUser, setIdUser] = useState(null);
@@ -201,7 +202,11 @@ const StudentListPage = () => {
 				loading={isLoading}
 				onGetSelectedRows={setSelectedStudents}
 			/>
-			<InfoStudentModal id={idUser} openState={modal} onOpenStateChange={setModal} />
+			{modal && (
+				<Suspense loading={<LoadingProgressBar />}>
+					<InfoStudentModal id={idUser} openState={modal} onOpenStateChange={setModal} />
+				</Suspense>
+			)}
 		</Container>
 	);
 };
