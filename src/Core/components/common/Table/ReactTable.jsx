@@ -182,7 +182,7 @@ const ReactTable = ({
 
 					<Table.Body {...getTableBodyProps()}>
 						{loading ? (
-							<Table.Pending numOfCols={columns.length} />
+							<Table.Pending prepareRows={5} prepareCols={columns.length} />
 						) : data.length ? (
 							page.map((row) => {
 								prepareRow(row);

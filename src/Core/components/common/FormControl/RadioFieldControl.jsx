@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { forwardRef, useRef } from 'react';
 import { useController } from 'react-hook-form';
 import tw from 'twin.macro';
+import FormControl from './FormControl';
 
 export const Radio = forwardRef(({ onChange: handleChange, ...props }, ref) => (
 	<input
@@ -50,6 +51,5 @@ const RadioFieldControl = ({ control, name, options, onChange: handleChange, ...
 
 const Label = tw.label`flex items-center gap-2`;
 const RadioGroup = tw.div`flex items-center gap-3`;
-const FormControl = tw.div`flex flex-col gap-1 m-0`;
 
 export default RadioFieldControl;
