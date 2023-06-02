@@ -28,11 +28,16 @@ export default function SigninPage() {
 			const defaultSemester = await axiosClient.get('/semester/default', {
 				params: { campus_id: campus }
 			});
-			setLoginInformation({
-				smester_id: defaultSemester?._id,
-				campus_id: campus
-			});
-
+			if (defaultSemester) {
+				setLoginInformation({
+					smester_id: defaultSemester?._id,
+					campus_id: campus
+				});
+			} else {
+				setLoginInformation({
+					campus_id: campus
+				});
+			}
 			setAllowToLogin(!!campus);
 		} catch (error) {
 			setAllowToLogin(false);
