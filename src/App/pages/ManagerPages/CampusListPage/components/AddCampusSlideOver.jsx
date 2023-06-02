@@ -1,16 +1,15 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
+import { useAddCampusMutation } from '@/App/providers/apis/campusApi';
+import { campusDataValidator } from '@/App/schemas/campusSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import SlideOver from '@/Core/components/common/SlideOver';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-import { campusDataValidator } from '@/App/schemas/campusSchema';
-import { useAddCampusMutation } from '@/App/providers/apis/campusApi';
 
 const AddCampusSlideOver = ({ onOpen, open, curCampus }) => {
 	const { handleSubmit, control, reset } = useForm({
@@ -76,9 +75,7 @@ const AddCampusSlideOver = ({ onOpen, open, curCampus }) => {
 		<SlideOver open={open} onOpen={onOpen} panelTitle={'Thêm cơ sở'}>
 			<Form onSubmit={handleSubmit(onAddSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên cơ sở' />
-
-				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
-					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
+				<Button as='button' type='submit' variant='primary' size='md' disabled={isLoading} loading={isLoading}>
 					Thêm
 				</Button>
 			</Form>

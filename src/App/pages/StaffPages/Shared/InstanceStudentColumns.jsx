@@ -121,7 +121,7 @@ const InstanceStudentColumns = [
 					target='_blank'
 					variant={value ? 'ghost' : 'disabled'}
 					shape='pill'
-					size='sm'
+					size='xs'
 					disabled={!!value}>
 					<EyeIcon tw='h-4 w-4' /> Preview
 				</Button>
@@ -138,7 +138,7 @@ const InstanceStudentColumns = [
 					target='_blank'
 					variant={value ? 'ghost' : 'disabled'}
 					shape='pill'
-					size='sm'
+					size='xs'
 					disabled={!!value}>
 					<EyeIcon tw='h-4 w-4' /> Preview
 				</Button>
@@ -155,7 +155,7 @@ const InstanceStudentColumns = [
 					target='_blank'
 					variant={value ? 'ghost' : 'disabled'}
 					shape='pill'
-					size='sm'
+					size='xs'
 					disabled={!!value}>
 					<EyeIcon tw='h-4 w-4' /> Preview
 				</Button>

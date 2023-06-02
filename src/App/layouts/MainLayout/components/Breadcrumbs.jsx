@@ -48,5 +48,5 @@ export default function Breadcrumbs({ navigation }) {
 const NavBreadcrumbs = tw.nav`flex sm:hidden`;
 const List = tw.ol`flex items-center space-x-4`;
 const Center = tw.div`flex items-center`;
-const BreadCrumbLink = tw(Link)`ml-4 text-sm font-medium text-gray-500 hover:text-base-content duration-200`;
+const BreadCrumbLink = tw(Link)`ml-4 text-sm font-medium text-base-content hover:text-base-content duration-200`;
 List.Item = (props) => <li {...props}>{props.children}</li>;

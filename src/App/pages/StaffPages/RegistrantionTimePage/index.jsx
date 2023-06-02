@@ -182,7 +182,6 @@ const RegistrantionTimePage = () => {
 const Box = tw.div`flex justify-between items-center mb-8 bg-gray-50 px-3 py-4`;
 const Item = tw.div``;
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
-const Span = tw.span`font-semibold`;
 Modal.Form = tw.form`grid gap-6`;
 
 export default RegistrantionTimePage;

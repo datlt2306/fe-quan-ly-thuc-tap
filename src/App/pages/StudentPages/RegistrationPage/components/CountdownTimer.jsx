@@ -1,36 +1,30 @@
 import useCountdown from '@/App/hooks/useCountdown';
+import Text from '@/Core/components/common/Text/Text';
+import { ClockIcon } from '@heroicons/react/24/outline';
 import { memo, useEffect } from 'react';
-import DateTimeDisplay from './DateTimeDisplay ';
-// import "./style/CountDownStyle.css";
-import ExpiredNotice from './ExpiredNotice';
-
-const ShowCounter = ({ days, hours, minutes, seconds }) => {
-	return (
-		<div className='flex rounded-md bg-gray-100 p-4'>
-			<div className='flex gap-2'>
-				<div>Thời gian đăng ký còn lại</div>
-				<DateTimeDisplay value={days} type={'Ngày'} />
-				<p>:</p>
-				<DateTimeDisplay value={hours} type={'Giờ'} />
-				<p>:</p>
-				<DateTimeDisplay value={minutes} type={'Phút'} />
-				<p>:</p>
-				<DateTimeDisplay value={seconds} type={'Giây'} />
-			</div>
-		</div>
-	);
-};
+import tw from 'twin.macro';
+import EmptyStateSection from '../../Shared/EmptyStateSection';
 
 const CountdownTimer = ({ targetDate }) => {
 	const [days, hours, minutes, seconds, countdownControllers] = useCountdown(targetDate);
 	useEffect(() => {
 		countdownControllers.startCountdown();
 	}, [countdownControllers]);
-	if (days + hours + minutes + seconds <= 0) {
-		return <ExpiredNotice />;
-	} else {
-		return <ShowCounter days={days} hours={hours} minutes={minutes} seconds={seconds} />;
-	}
+	if (days + hours + minutes + seconds <= 0)
+		return (
+			<EmptyStateSection icon={ClockIcon} title='Form đăng ký chưa mở' message='Sinh viên vui lòng quay lại sau.' />
+		);
+	else
+		return (
+			<Box>
+				<Text>Thời gian đăng ký còn lại:</Text>
+				<Text className='text-lg font-medium tracking-wide'>
+					{days} ngày : {hours} giờ : {minutes} phút : {seconds} giây
+				</Text>
+			</Box>
+		);
 };
+
+const Box = tw.div`flex items-center gap-2 bg-gray-100 p-4`;
 
 export default memo(CountdownTimer);

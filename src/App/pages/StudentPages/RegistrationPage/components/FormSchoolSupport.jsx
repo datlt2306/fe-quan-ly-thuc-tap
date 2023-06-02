@@ -1,20 +1,17 @@
-import { useState, useEffect } from 'react';
 import { formSignUpSchoolSupportSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import FileUploadFieldControl from '@/Core/components/common/FormControl/FileUploadFieldControl';
 
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
+import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
+import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
+import ComboBoxFieldControl from '@/Core/components/common/FormControl/ComboBoxFieldControl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-import FormRow from '../components/FormRow';
-import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
 import SharedFields, { SharedDefaultValues } from './SharedFields';
-import ComboBoxFieldControl from '@/Core/components/common/FormControl/ComboBoxFieldControl';
-import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
-import { useSelector } from 'react-redux';
 
 const FormSchoolSupport = ({ selectedOption, user }) => {
 	const navigate = useNavigate();
@@ -35,12 +32,6 @@ const FormSchoolSupport = ({ selectedOption, user }) => {
 
 	const handleFormSchoolSupport = async (data) => {
 		const file = data.CV;
-
-		const isPDF = file.type === 'application/pdf';
-		if (!isPDF) {
-			toast.error(`Vui lòng chọn file PDF`);
-			return;
-		}
 		const handleData = {
 			...data,
 			typeNumber: selectedOption,
@@ -63,33 +54,31 @@ const FormSchoolSupport = ({ selectedOption, user }) => {
 		navigate('/thong-tin-sinh-vien');
 	};
 	return (
-		<>
-			<Form onSubmit={handleSubmit(handleFormSchoolSupport)}>
-				<FormRow>
-					<SharedFields control={control} student={user} />
-					<ComboBoxFieldControl
-						loading={loadingBusiness}
-						placeholder='Chọn doanh nghiệp'
-						control={control}
-						name='business'
-						label='Đơn vị thực tập'
-						options={
-							Array.isArray(business?.list)
-								? business.list.map((item) => ({ value: item._id, label: item.name }))
-								: []
-						}
-					/>
-					<FileUploadFieldControl label='Upload CV(PDF)' className='mt-1 w-96' control={control} name='CV' />
-				</FormRow>
-				<Button type='submit' variant='primary' className='mt-2' disabled={isLoading}>
-					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
-					Đăng ký
-				</Button>
-			</Form>
-		</>
+		<Form onSubmit={handleSubmit(handleFormSchoolSupport)}>
+			<Form.Grid>
+				<SharedFields control={control} student={user} />
+				<ComboBoxFieldControl
+					loading={loadingBusiness}
+					placeholder='Chọn doanh nghiệp'
+					control={control}
+					name='business'
+					label='Đơn vị thực tập'
+					options={
+						Array.isArray(business?.data)
+							? business.data.map((item) => ({ value: item._id, label: item.name }))
+							: []
+					}
+				/>
+				<FileUploadFieldControl label='Upload CV (PDF)' className='w-full' control={control} name='CV' />
+			</Form.Grid>
+			<Button type='submit' variant='primary' className='mt-2' disabled={isLoading} loading={isLoading}>
+				Đăng ký
+			</Button>
+		</Form>
 	);
 };
 
-export const Form = tw.form`pb-4`;
+const Form = tw.form``;
+Form.Grid = tw.form`grid-cols-2 grid gap-6 mb-6`;
 
 export default FormSchoolSupport;

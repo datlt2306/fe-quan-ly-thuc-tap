@@ -1,5 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors');
+
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -19,8 +20,8 @@ export default {
 			warning: '#eab308',
 			'warning-active': '#d97706',
 			disabled: '#9ca3af',
-			'base-content-active': '#1f2937',
-			'base-content': '#4b5563',
+			'base-content-active': '#3f3f46',
+			'base-content': '#6b7280',
 			...colors
 		},
 		screens: {
@@ -43,7 +44,8 @@ export default {
 				sans: ['Inter var', ...defaultTheme.fontFamily.sans]
 			},
 			animation: {
-				slide: 'shimmer 1s ease infinite'
+				slide: 'shimmer 1s ease infinite',
+				spin: 'spin 1.2s ease infinite'
 			},
 			keyframes: {
 				shimmer: {
@@ -53,6 +55,10 @@ export default {
 					'100%': {
 						transform: 'translateX(100%)'
 					}
+				},
+				spin: {
+					'0%': { transform: 'rotate(0turn)' },
+					'100%': { transform: 'rotate(1turn)' }
 				}
 			}
 		}

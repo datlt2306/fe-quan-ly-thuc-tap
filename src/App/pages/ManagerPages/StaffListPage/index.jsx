@@ -21,12 +21,12 @@ const StaffListPage = () => {
 	const [user, setUser] = useState();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const { paginationState, handlePaginate } = useServerPagination();
-	const { data, isLoading } = useGetAllStaffQuery({
+	const { data: staffList, isLoading } = useGetAllStaffQuery({
 		page: paginationState?.pageIndex,
 		limit: paginationState?.pageSize
 	});
 
-	const tableData = useMemo(() => data?.list ?? [], [data]);
+	const tableData = useMemo(() => staffList?.data ?? [], [staffList]);
 	const { reset } = useForm({
 		resolver: yupResolver(staffDataValidator)
 	});
@@ -128,7 +128,7 @@ const StaffListPage = () => {
 				onOpenStateChange={setIsEditing}
 				title={'Sửa nhân viên'}
 				userData={user}
-				users={data}
+				users={staffList}
 			/>
 			<Box>
 				<ButtonList>
@@ -152,10 +152,10 @@ const StaffListPage = () => {
 					serverSidePagination={true}
 					serverPaginationProps={{
 						...paginationState,
-						pageIndex: data?.page,
-						totalPages: data?.totalPages,
-						canNextPage: data?.hasNextPage,
-						canPreviousPage: data?.hasPrevPage
+						pageIndex: staffList?.page,
+						totalPages: staffList?.totalPages,
+						canNextPage: staffList?.hasNextPage,
+						canPreviousPage: staffList?.hasPrevPage
 					}}
 				/>
 			</Box>

@@ -1,17 +1,13 @@
-import { Suspense, useState, useEffect, useCallback, useMemo, lazy, Fragment } from 'react';
-import tw from 'twin.macro';
-
-import LoadingData from '../../Shared/LoadingData';
-import ExpiredNotice from './ExpiredNotice';
-import CountdownTimer from './CountdownTimer';
-
+import { Fragment, Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
+import { InternSupportType } from '@/App/constants/studentConstants';
+import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
 import { Radio } from '@/Core/components/common/FormControl/RadioFieldControl';
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
-
-import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
-import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
-import { InternSupportType } from '@/App/constants/studentConstants';
-
+import Text from '@/Core/components/common/Text/Text';
+import EmptyStateSection from '../../Shared/EmptyStateSection';
+import LoadingData from '../../Shared/LoadingData';
+import CountdownTimer from './CountdownTimer';
+import tw from 'twin.macro';
 const FormSchoolSupport = lazy(() => import('./FormSchoolSupport'));
 const FormSelfFinding = lazy(() => import('./FormSelfFinding'));
 
@@ -21,6 +17,7 @@ const labelItems = Object.entries(InternSupportType).map(([key, value]) => {
 		value: key
 	};
 });
+
 const FormElement = ({ student }) => {
 	const [selectedOption, setSelectedOption] = useState(null);
 
@@ -40,6 +37,7 @@ const FormElement = ({ student }) => {
 	const handleFormChange = useCallback((value) => {
 		setSelectedOption(value);
 	}, []);
+
 	//check thời hạn hoạt động của form từ lúc bắt đầu đến lúc kết thúc nếu thời gian hiện tại nằm trong khoảng thời gian này thì mới hiện form
 	const deadlineCheck = useMemo(() => {
 		if (deadline) {
@@ -53,29 +51,41 @@ const FormElement = ({ student }) => {
 	}
 	return (
 		<Fragment>
-			{deadlineCheck ? <CountdownTimer targetDate={deadline?.endTime} /> : <ExpiredNotice />}
+			{deadlineCheck ? (
+				<CountdownTimer targetDate={deadline?.endTime} />
+			) : (
+				<EmptyStateSection title='Form đăng ký chưa mở' message='Sinh viên vui lòng quay lại đăng ký sau.' />
+			)}
 			{deadlineCheck && (
-				<Fragment>
-					<Layout>
+				<Container>
+					<SelectBox>
 						{labelItems.map((item, index) => (
 							<RadioGroup key={index}>
-								<Radio name='radio' value={item.value} onChange={() => handleFormChange(item.value)} />
-								<TitleForm>{item.label}</TitleForm>
+								<Radio
+									name='radio'
+									id={index}
+									value={item.value}
+									onChange={() => handleFormChange(item.value)}
+								/>
+								<Text as='label' level={6} className='text-base' htmlFor={index}>
+									{item.label}
+								</Text>
 							</RadioGroup>
 						))}
-					</Layout>
+					</SelectBox>
 
 					<Suspense fallback={<LoadingProgressBar />}>
 						{selectedOption == 1 && <FormSchoolSupport selectedOption={selectedOption} user={student} />}
 						{selectedOption == 0 && <FormSelfFinding selectedOption={selectedOption} user={student} />}
 					</Suspense>
-				</Fragment>
+				</Container>
 			)}
 		</Fragment>
 	);
 };
 
-const RadioGroup = tw.label`inline-flex items-center`;
-const TitleForm = tw.span`ml-2 font-medium`;
-const Layout = tw.div`flex gap-7 py-6 items-center `;
+const Container = tw.div`flex flex-col gap-6`;
+const RadioGroup = tw.label`inline-flex items-center gap-2`;
+const SelectBox = tw.div`flex gap-8 py-6 items-center`;
+
 export default FormElement;
