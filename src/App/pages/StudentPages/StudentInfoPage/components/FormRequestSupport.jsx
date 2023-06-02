@@ -21,7 +21,7 @@ const FormRequestSupport = ({ formType, setOpenState }) => {
 		const response = await requestOfStudentMutation({
 			type: formType,
 			description: description,
-			user_id: user?.id
+			userId: user?.id
 		});
 		const error = response?.error;
 		setOpenState(false);

@@ -20,7 +20,15 @@ const ViewForm = ({ data: user, setOpenState }) => {
 		{ label: 'Ngày bắt đầu:', value: formatDate(user?.internshipTime) },
 		{
 			label: 'Biên bản thực tập:',
-			value: <>{user?.['form'] && <Button onClick={() => window.open(user?.['form'])}>Xem</Button>}</>
+			value: (
+				<>
+					{user?.['form'] && (
+						<Button variant='outline' onClick={() => window.open(user?.['form'])}>
+							Xem
+						</Button>
+					)}
+				</>
+			)
 		}
 	];
 
@@ -29,7 +37,7 @@ const ViewForm = ({ data: user, setOpenState }) => {
 			<VerticalList>
 				{dataViewForm.map((item, index) => (
 					<li key={index} className='flex items-center gap-3'>
-						<p>{item.label}</p> <span className='font-medium'>{item.value}</span>
+						<p>{item.label}</p> <span className='font-medium'>{item.value || 'Chưa có thông tin'}</span>
 					</li>
 				))}
 				<FormRequestSupport formType='form' setOpenState={setOpenState} />

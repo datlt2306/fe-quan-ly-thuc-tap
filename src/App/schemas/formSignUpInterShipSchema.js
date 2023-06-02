@@ -46,5 +46,6 @@ export const formSignUpSelfFindingSchema = yup.object().shape({
 		.required('Vui lòng nhập email người tiếp nhận')
 		.default('')
 		.trim(),
+	nameEnterprise: yup.string().required('Vui lòng nhập tên người tiếp nhận').default('').trim(),
 	addressCompany: yup.string().required('Vui lòng nhập địa chỉ công ty').default('').trim()
 });
