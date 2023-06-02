@@ -16,8 +16,10 @@ import tw from 'twin.macro';
 import InstanceStudentColumns from '../Shared/InstanceStudentColumns';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
-
+import InfoStudentModal from './components/InfoStudentModal';
 const StudentListPage = () => {
+	const [modal, setModal] = useState(false);
+	const [idUser, setIdUser] = useState(null);
 	const { currentCampus } = useSelector((state) => state.campus);
 	const [handleImportFile] = useImportFromExcel();
 	const { handleExportFile } = useExportToExcel();
@@ -126,8 +128,32 @@ const StudentListPage = () => {
 		[currentSemester]
 	);
 
+	const handleGetInfoStudent = (id) => {
+		setIdUser(id);
+		setModal(true);
+	};
+
 	// Define columns of table
-	const columnsData = useMemo(() => InstanceStudentColumns, []);
+	const columnsData = useMemo(() => {
+		const mssvColumnIndex = InstanceStudentColumns.findIndex((c) => c.accessor === 'mssv');
+		const updatedColumns = [...InstanceStudentColumns];
+		updatedColumns[mssvColumnIndex] = {
+			...updatedColumns[mssvColumnIndex],
+			Cell: ({
+				value,
+				row: {
+					original: { id, mssv }
+				}
+			}) => {
+				return (
+					<span className='cursor-pointer font-semibold uppercase ' onClick={() => handleGetInfoStudent(id)}>
+						{value}
+					</span>
+				);
+			}
+		};
+		return updatedColumns;
+	}, []);
 
 	return (
 		<Container>
@@ -175,6 +201,7 @@ const StudentListPage = () => {
 				loading={isLoading}
 				onGetSelectedRows={setSelectedStudents}
 			/>
+			<InfoStudentModal id={idUser} openState={modal} onOpenStateChange={setModal} />
 		</Container>
 	);
 };

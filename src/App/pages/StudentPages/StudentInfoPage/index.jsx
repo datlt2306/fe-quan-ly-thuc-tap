@@ -151,7 +151,7 @@ const Text = tw.p`font-medium`;
 const WrapMenu = tw.div`mt-8 flex flex-col  gap-3`;
 
 const Note = tw.div`mt-2  h-52 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200`;
-const handleGetInternStatusStyle = (value) => {
+export const handleGetInternStatusStyle = (value) => {
 	let style = null;
 	const checkstyle = Object.entries(StudentStatusGroupEnum).map(([k, v]) => {
 		const findItem = v.find((item) => StudentStatusEnum[value] == item);
