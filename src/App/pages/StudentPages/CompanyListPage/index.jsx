@@ -163,7 +163,7 @@ const CompanyListPage = () => {
 				<div>
 					<ReactTable columns={columnsData} data={company?.list || []} loading={companyLoading} />
 					<Modal openState={modal} onOpenStateChange={setModal} title={dataModal?.title}>
-						<p className='text-gray-500'>{dataModal?.data}</p>
+						<p className='text-base-content'>{dataModal?.data}</p>
 					</Modal>
 				</div>
 			) : (

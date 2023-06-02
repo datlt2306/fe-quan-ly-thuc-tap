@@ -3,21 +3,23 @@ import { useUploadReportMutation } from '@/App/providers/apis/reportApi';
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 import { reportSchema } from '@/App/schemas/reportSchema';
 import Button from '@/Core/components/common/Button';
-import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
+import InputFieldControl, { Input } from '@/Core/components/common/FormControl/InputFieldControl';
 import RadioFieldControl from '@/Core/components/common/FormControl/RadioFieldControl';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
+import Text from '@/Core/components/common/Text/Text';
 import Typography from '@/Core/components/common/Text/Typography';
+import formatDate from '@/Core/utils/formatDate';
 import { yupResolver } from '@hookform/resolvers/yup';
 import moment from 'moment';
-import React, { useState, useRef } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import EmptyStateSection from '../Shared/EmptyStateSection';
-import SuccessStateSection from '../Shared/SuccessStateSection';
 import LoadingData from '../Shared/LoadingData';
+import SuccessStateSection from '../Shared/SuccessStateSection';
+import FormControl from '@/Core/components/common/FormControl/FormControl';
 
 const ReportPage = () => {
 	// check the student's status to open the form
@@ -37,10 +39,7 @@ const ReportPage = () => {
 
 	const { user } = useSelector((state) => state.auth);
 	const { data, isLoading: getUserLoading } = useGetOneStudentQuery(user?.id);
-
-	const [selectFile, setSelectFile] = useState(null);
-	const [validateFile, setValidateFile] = useState('');
-
+	const [chosenFile, setChosenFile] = useState(null);
 	const [handleSubmitForm, { isLoading }] = useUploadReportMutation();
 
 	const fileInputRef = useRef(null);
@@ -49,35 +48,9 @@ const ReportPage = () => {
 		resolver: yupResolver(reportSchema)
 	});
 
-	const handleChange = (e) => {
-		const file = e.target.files[0];
-		const allowedExtensions = ['pdf'];
-		if (!file) {
-			setValidateFile('Không có file được chọn');
-			return;
-		}
-		// Get the file extension
-		const fileName = file.name;
-		const fileExtension = fileName.split('.').pop().toLowerCase();
-
-		if (!allowedExtensions.includes(fileExtension)) {
-			setValidateFile('File không đúng định dạng');
-			return;
-		} else {
-			setValidateFile('');
-			setSelectFile(e.target.files[0]);
-		}
-	};
 	const onSubmit = async (value) => {
-		const file = selectFile;
-		const allowedExtensions = ['pdf'];
-		const fileName = file.name;
-		const fileExtension = fileName.split('.').pop().toLowerCase();
-		if (!allowedExtensions.includes(fileExtension)) {
-			return;
-		}
 		const formData = new FormData();
-		formData.append('file', selectFile);
+		formData.append('file', chosenFile);
 		formData.append('endInternShipTime', value.endInternShipTime);
 		formData.append('resultScore', value.resultScore);
 		formData.append('attitudePoint', value.attitudePoint);
@@ -100,72 +73,83 @@ const ReportPage = () => {
 		return <LoadingData />;
 	}
 	return (
-		<div>
+		<Fragment>
 			{deadlineCheck ? (
 				statusCheck.includes(data?.statusCheck) ? (
 					<Container>
-						<Typography level={4} color='text-primary'>
+						<Typography level={5} className='mb-6'>
 							Nộp báo cáo
 						</Typography>
-						<Form onSubmit={handleSubmit(onSubmit)}>
-							<Info>
-								Mã sinh viên: <Span>{data && data?.mssv}</Span>
-							</Info>
-							<Info>
-								Họ và tên: <Span>{data && data?.name}</Span>
-							</Info>
-							<Info>
-								Tên doanh nghiệp:{' '}
-								<Span>{data && data?.support === 1 ? data?.business?.name : data?.nameCompany}</Span>
-							</Info>
-
-							<InputFieldControl
-								label='Điểm kết quả'
-								placeholder='Nhập điểm kết quả thực tập'
-								control={control}
-								name='resultScore'
-							/>
-
-							<InputFieldControl
-								label='Điểm thái độ'
-								placeholder='Nhập điểm thái độ thực tập'
-								control={control}
-								name='attitudePoint'
-							/>
-
-							<div>
-								<div className='mb-2'>Đề xuất ký HĐLĐ với doanh nghiệp</div>
-								<RadioFieldControl
+						<List>
+							<List.Item>
+								Họ và tên: <Text className='font-medium'>{data && data?.name}</Text>
+							</List.Item>
+							<List.Item>
+								Mã sinh viên: <Text className='font-medium'>{data && data?.mssv}</Text>
+							</List.Item>
+							<List.Item>
+								Tên doanh nghiệp:
+								<Text className='font-medium'>
+									{data && data?.support === 1 ? data?.business?.name : data?.nameCompany}
+								</Text>
+							</List.Item>
+						</List>
+						<Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
+							<Grid>
+								<InputFieldControl
+									label='Điểm kết quả'
+									placeholder='Nhập điểm kết quả thực tập'
 									control={control}
-									name='signTheContract'
-									options={[
-										{ label: 'Có', value: 0 },
-										{ label: 'Không', value: 1 },
-										{ label: 'Không nhận lời', value: 2 }
-									]}
+									name='resultScore'
 								/>
-							</div>
-
-							<Info>
-								Thời gian bắt đầu thực tập: <Span>{data && convertTime(data?.internshipTime)}</Span>
-							</Info>
-							<InputFieldControl
-								label='Thời gian kết thúc thực tập'
-								control={control}
-								name='endInternShipTime'
-								type='date'
-							/>
-							<InputFieldControl
-								ref={fileInputRef}
-								label='Upload báo cáo (PDF)'
-								control={control}
-								name='file'
-								type='file'
-								onChange={handleChange}
-							/>
-							<Error>{validateFile}</Error>
-							<Button variant='primary' type='submit' disabled={isLoading}>
-								{isLoading && <LoadingSpinner size='sm' variant='primary' />} Nộp báo cáo
+								<InputFieldControl
+									label='Điểm thái độ'
+									placeholder='Nhập điểm thái độ thực tập'
+									control={control}
+									name='attitudePoint'
+								/>
+							</Grid>
+							<Grid>
+								<FormControl>
+									<Text as='label'>Thời gian bắt đầu thực tập:</Text>
+									<Input readOnly value={data && formatDate(data?.internshipTime)} />
+								</FormControl>
+								<InputFieldControl
+									label='Thời gian kết thúc thực tập'
+									control={control}
+									name='endInternShipTime'
+									type='date'
+								/>
+							</Grid>
+							<Grid>
+								<RadioGroup>
+									<Text className='font-medium'>Đề xuất ký HĐLĐ với doanh nghiệp</Text>
+									<RadioFieldControl
+										control={control}
+										name='signTheContract'
+										options={[
+											{ label: 'Có', value: 0 },
+											{ label: 'Không', value: 1 },
+											{ label: 'Không nhận lời', value: 2 }
+										]}
+									/>
+								</RadioGroup>
+								<InputFieldControl
+									ref={fileInputRef}
+									label='Upload báo cáo (PDF)'
+									control={control}
+									name='file'
+									type='file'
+									onChange={(e) => setChosenFile(e.target.files[0])}
+								/>
+							</Grid>
+							<Button
+								variant='primary'
+								className='w-auto'
+								type='submit'
+								disabled={isLoading}
+								loading={isLoading}>
+								Nộp báo cáo
 							</Button>
 						</Form>
 					</Container>
@@ -179,14 +163,15 @@ const ReportPage = () => {
 					title={'Thời gian đăng ký form báo cáo chưa mở, sinh viên vui lòng chờ thông báo từ phòng QHDN'}
 				/>
 			)}
-		</div>
+		</Fragment>
 	);
 };
 
-const Form = tw.form`flex flex-col gap-6 mt-4`;
-const Container = tw.div`container w-[512px]`;
-const Info = tw.div``;
-const Error = tw.div`text-error`;
-const Span = tw.span`font-bold text-base-content`;
+const List = tw.ol`flex flex-col gap-2 bg-gray-50 p-4 mb-6`;
+const Form = tw.form`flex flex-col gap-6`;
+const Container = tw.div`max-w-2xl text-base-content md:mx-auto`;
+const RadioGroup = tw.div`flex flex-col gap-1`;
+const Grid = tw.div`grid grid-cols-2 gap-6 sm:grid-cols-1`;
+List.Item = tw.li`whitespace-nowrap text-base-content inline-flex items-baseline gap-2`;
 
 export default ReportPage;

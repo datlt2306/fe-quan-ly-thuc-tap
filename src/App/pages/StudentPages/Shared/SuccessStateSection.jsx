@@ -12,7 +12,7 @@ export default function SuccessStateSection({ title, message }) {
 					<Typography level={6} fontWeight='semibold'>
 						{title}
 					</Typography>
-					<Text className='mt-1 text-gray-500'>{message}</Text>
+					<Text className='mt-1 text-base-content'>{message}</Text>
 				</div>
 			</Box>
 		</Container>

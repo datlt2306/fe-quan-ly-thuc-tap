@@ -9,27 +9,24 @@ import {
 	ClockIcon,
 	DocumentChartBarIcon,
 	DocumentCheckIcon,
-	DocumentIcon,
 	DocumentTextIcon,
 	EnvelopeOpenIcon,
-	InformationCircleIcon,
-	ListBulletIcon,
 	PlusIcon,
-	PlusSmallIcon,
+	UserCircleIcon,
 	UserGroupIcon,
-	UserIcon
+	UsersIcon
 } from '@heroicons/react/24/outline';
 
 export const studentNavigation = [
 	{
 		name: 'Thông tin sinh viên',
 		path: StudentPaths.STUDENT_INFO,
-		icon: UserIcon
+		icon: UserCircleIcon
 	},
 	{
 		name: 'Thông tin tuyển dụng',
 		path: StudentPaths.COMPANY_LIST,
-		icon: InformationCircleIcon
+		icon: UsersIcon
 	},
 	{
 		name: 'Đăng ký thực tập',

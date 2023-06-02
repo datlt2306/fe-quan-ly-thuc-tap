@@ -11,7 +11,7 @@ import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/
 import moment from 'moment';
 import React, { useMemo, useState, useEffect } from 'react';
 import tw from 'twin.macro';
-import { status } from '@/App/constants/requestStudents';
+import { RequestStudentStatusEnum } from '@/App/constants/requestStudents';
 
 const index = () => {
 	const { data, refetch, isLoading } = useGetRequestOfStudentQuery();
@@ -117,7 +117,7 @@ const index = () => {
 				<Select
 					className='max-w-[12rem] capitalize sm:text-sm'
 					onChange={(e) => setTableData(data?.data.filter((item) => item.status == e.target.value))}>
-					{Object.entries(status).map(([key, value]) => (
+					{Object.entries(RequestStudentStatusEnum).map(([key, value]) => (
 						<Option value={key} key={key} selected={key === 1}>
 							{value}
 						</Option>

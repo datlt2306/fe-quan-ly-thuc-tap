@@ -22,7 +22,7 @@
 	}
 
 	.btn {
-		@apply flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] bg-gray-50 bg-white font-semibold text-gray-500 outline-none duration-300 hover:bg-gray-50 focus:active:scale-95;
+		@apply inline-flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] bg-gray-50 font-semibold text-base-content outline-none duration-300 hover:bg-gray-50 focus:active:scale-95;
 	}
 
 	.btn-primary {
@@ -90,6 +90,6 @@
 		@apply border-r-secondary border-t-secondary;
 	}
 	input[type='file'] {
-		@apply p-0 shadow-none ring-0 file:rounded-[4px] file:border-none file:bg-secondary file:px-3 file:py-1.5 file:text-base-content file:text-white file:outline-none focus:outline-none focus:ring-0 file:focus:border-none file:focus:outline-none file:hover:bg-secondary-active;
+		@apply file:btn file:btn-sm rounded-md border-none p-1 shadow-none outline-none ring-0 file:border-none file:bg-base-content file:text-sm file:text-white focus:border-none focus:outline-none file:focus:border-none file:focus:outline-none file:hover:bg-base-content-active;
 	}
 }

@@ -11,7 +11,7 @@ const DesktopSidebar = ({ navigation }) => {
 		classNames({
 			'flex items-center gap-2 p-2 hover:bg-gray-100': true,
 			'text-primary bg-gray-50 hover:bg-gray-100': isActive,
-			'text-gray-500': !isActive
+			'text-base-content': !isActive
 		});
 
 	return (
@@ -35,14 +35,14 @@ const DesktopSidebar = ({ navigation }) => {
 																'bg-gray-50': open
 															}
 														)}>
-														<span className='flex flex-1 items-center gap-2 text-gray-500'>
+														<span className='flex flex-1 items-center gap-2 text-base-content'>
 															<item.icon className='h-6 w-6' />
 															{item.name}
 														</span>
 
 														<ChevronDownIcon
 															className={classNames(
-																'h-4 w-4 transform text-gray-500 duration-300 ease-in-out',
+																'h-4 w-4 transform text-base-content duration-300 ease-in-out',
 																{
 																	'tranform rotate-180': open
 																}
@@ -62,11 +62,11 @@ const DesktopSidebar = ({ navigation }) => {
 																	child?.show === true && (
 																		<Menu.Item
 																			key={index}
-																			className='border-none py-2 pl-10 pr-2 outline-none transition-[height_350ms_ease-in-out_transform] duration-300 focus:border-none hover:bg-gray-100 focus:active:bg-gray-100'>
+																			className='border-none py-2 pl-10 pr-2 outline-none duration-200 focus:border-none hover:bg-gray-100 focus:active:bg-gray-100'>
 																			<NavLink
 																				to={child.path}
 																				className={({ isActive }) => navlinkClasses(isActive)}>
-																				<child.icon className='h-5 w-5 ' /> {child.name}
+																				<child.icon className='h-5 w-5' /> {child.name}
 																			</NavLink>
 																		</Menu.Item>
 																	)
@@ -80,7 +80,7 @@ const DesktopSidebar = ({ navigation }) => {
 									</Disclosure>
 								</Menu.Item>
 							) : (
-								<Menu.Item key={item.name} className='rounded-md outline-none'>
+								<Menu.Item key={item.name} className='rounded-md outline-none duration-200'>
 									<NavLink to={item.path} className={({ isActive }) => navlinkClasses(isActive)}>
 										<item.icon className='h-6 w-6 shrink-0 text-[inherit]' aria-hidden='true' />
 										{item.name}
