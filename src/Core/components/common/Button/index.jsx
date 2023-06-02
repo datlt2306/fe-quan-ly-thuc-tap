@@ -1,18 +1,19 @@
 import classNames from 'classnames';
 import { forwardRef, useMemo } from 'react';
-import { LoadingSpinner } from '../Loading/LoadingSpinner';
 
 /**
- * @param {{as: HTMLElementTagNameMap, size: string, disabled: boolean, loading: boolean, [key: string]: React.ButtonHTMLAttributes }}
+ * @param {string} size
+ * @param {string} color
+ * @param {any} children
  * @returns Tailwind styled Button component
  */
 const Button = (
 	{
 		variant,
+		children,
 		size = 'md',
-		shape,
-		disabled,
-		loading,
+		shape = undefined,
+		className = '',
 		as: Element = 'button', // Polymorphic component, display as other tag
 		...props
 	},
@@ -22,8 +23,10 @@ const Button = (
 		() =>
 			classNames(
 				{
+					// default
 					btn: true,
-					/* Variant */
+
+					// variant
 					'btn-primary': variant === 'primary',
 					'btn-secondary': variant === 'secondary',
 					'btn-outline': variant === 'outline',
@@ -32,32 +35,24 @@ const Button = (
 					'btn-success': variant === 'success',
 					'btn-error': variant === 'error',
 					'btn-disabled': variant === 'disabled',
-					/* Shape */
+					// shape
 					'btn-square': shape === 'square',
 					'btn-circle': shape === 'circle',
 					'btn-pill': shape === 'pill',
-					/* Size */
+					// size
 					'btn-xs': size === 'xs',
 					'btn-sm': size === 'sm',
 					'btn-md': size === 'md',
 					'btn-lg': size === 'lg'
 				},
-				props.className
+				// others
+				className
 			),
 		[variant, shape, size]
 	);
 	return (
-		<Element {...props} className={buttonStyles} ref={ref} disabled={variant === 'disabled' || disabled}>
-			{loading && <LoadingSpinner size='sm' variant='primary' />}{' '}
-			{props.icon && !loading && (
-				<props.icon
-					className={classNames('aspect-square', {
-						'h-4': size === 'xs' || size === 'sm',
-						'h-6': size === 'md' || size === 'lg'
-					})}
-				/>
-			)}{' '}
-			{props.children}
+		<Element {...props} className={buttonStyles} ref={ref} disabled={variant === 'disabled'}>
+			{children}
 		</Element>
 	);
 };

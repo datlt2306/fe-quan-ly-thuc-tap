@@ -3,9 +3,12 @@ import { Combobox, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import React, { forwardRef, Fragment, useState, useId, useRef, useMemo, useCallback } from 'react';
 import classNames from 'classnames';
+
 import tw from 'twin.macro';
+
 import Text from '@/Core/components/common/Text/Text';
-import FormControl from './FormControl';
+
+const FormControl = tw.div`flex flex-col gap-px m-0`;
 
 const ComboBoxFieldControl = forwardRef(
 	(
@@ -100,7 +103,7 @@ const ComboBoxFieldControl = forwardRef(
 										leaveFrom='opacity-100'
 										leaveTo='opacity-0'
 										afterLeave={() => setQuery('')}>
-										<Combobox.Options className='absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white  text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+										<Combobox.Options className='absolute  z-10 max-h-60 w-full overflow-auto rounded-md bg-white  text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
 											{loading ? (
 												<BoxData>Đang tải dữ liệu ...</BoxData>
 											) : (filteredOptions.length === 0 && query !== '') || options?.length == 0 ? (

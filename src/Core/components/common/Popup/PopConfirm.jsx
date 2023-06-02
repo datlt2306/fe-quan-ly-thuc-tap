@@ -36,7 +36,7 @@ const PopConfirm = ({ onConfirm, onCancel, title = '', description, children, ok
 					{({ close }) => (
 						<>
 							<h3 className='mb-3 text-base font-medium text-gray-600'>{title}</h3>
-							<p className='mb-6 text-base-content'>{description}</p>
+							<p className='mb-6 text-gray-500'>{description}</p>
 
 							<ButtonGroup>
 								<Button size='xs' variant='outline' onClick={() => handleConfirm(close)}>
