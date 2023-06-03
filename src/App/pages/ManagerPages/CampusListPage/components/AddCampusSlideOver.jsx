@@ -39,28 +39,20 @@ const AddCampusSlideOver = ({ onOpen, open, curCampus }) => {
 				temp.push(item);
 			}
 		});
-		return temp;
+		return !!temp.length;
 	};
 
 	const onAddSubmit = async (data) => {
-		if (isCampusDuplicate(data).length === 0) {
-			try {
-				const {
-					data: { success, message }
-				} = await handleAddNewCampus(data);
-
-				if (success) {
-					onOpen(!open);
-					reset();
-					toast.success('Thêm cơ sở thành công!');
-				} else {
-					onOpen(!open);
-					reset();
-					toast.error(message);
-				}
-			} catch (error) {
-				toast.error('Thêm cơ sở không thành công!');
+		if (!isCampusDuplicate(data)) {
+			const { error } = await handleAddNewCampus(data);
+			if (error) {
+				onOpen(!open);
+				reset();
+				toast.error(error?.data?.message);
 			}
+			onOpen(!open);
+			reset();
+			toast.success('Thêm cơ sở thành công!');
 		} else {
 			onOpen(!open);
 			reset();
@@ -76,6 +68,7 @@ const AddCampusSlideOver = ({ onOpen, open, curCampus }) => {
 			<Form onSubmit={handleSubmit(onAddSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên cơ sở' />
 				<Button as='button' type='submit' variant='primary' size='md' disabled={isLoading} loading={isLoading}>
+					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Thêm
 				</Button>
 			</Form>
