@@ -61,7 +61,11 @@ const FormRequestSupport = ({ formType, setOpenState }) => {
 					</Form.Action>
 				</Fragment>
 			) : (
-				<Button variant='primary' className='mt-3 w-full' onClick={() => setOpen(true)} icon={EnvelopeIcon}>
+				<Button
+					variant={isLoading ? 'disabled' : 'primary'}
+					className='mt-3 w-full'
+					onClick={() => setOpen(true)}
+					icon={EnvelopeIcon}>
 					Gửi yêu cầu hỗ trợ
 				</Button>
 			)}

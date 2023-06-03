@@ -47,7 +47,7 @@ const AddMajorSlideOver = ({ onOpen, open, panelTitle, majors }) => {
 				<InputFieldControl name='name' control={control} label='Tên chuyên ngành' />
 				<InputFieldControl name='majorCode' control={control} label='Mã chuyên ngành' />
 
-				<Button type='submit' variant='primary' size='md' disabled={isLoading} loading={isLoading}>
+				<Button type='submit' size='md' variant={isLoading ? 'disabled' : 'primary'}>
 					Thêm
 				</Button>
 			</Form>

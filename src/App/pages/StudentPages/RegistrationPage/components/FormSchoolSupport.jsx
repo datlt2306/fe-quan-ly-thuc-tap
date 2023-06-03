@@ -71,7 +71,7 @@ const FormSchoolSupport = ({ selectedOption, user }) => {
 				/>
 				<FileUploadFieldControl label='Upload CV (PDF)' className='w-full' control={control} name='CV' />
 			</Form.Grid>
-			<Button type='submit' variant='primary' className='mt-2' disabled={isLoading} loading={isLoading}>
+			<Button type='submit' className='mt-2' variant={isLoading ? 'disabled' : 'primary'}>
 				Đăng ký
 			</Button>
 		</Form>
