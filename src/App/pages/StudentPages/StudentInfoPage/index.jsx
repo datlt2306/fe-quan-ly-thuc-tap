@@ -17,7 +17,7 @@ const ViewForm = lazy(() => import('./components/ViewForm'));
 const ViewCv = lazy(() => import('./components/ViewCv'));
 const Modal = lazy(() => import('@/Core/components/common/Modal'));
 
-const handleGetInternStatusStyle = (value) => {
+export const handleGetInternStatusStyle = (value) => {
 	let style = null;
 	const checkstyle = Object.entries(StudentStatusGroupEnum).map(([k, v]) => {
 		const findItem = v.find((item) => StudentStatusEnum[value] == item);
@@ -165,19 +165,5 @@ Grid.Col = tw.div`divide-y divide-gray-200 flex flex-col [&>*]:p-3`;
 List.Item = tw.li`py-2 px-1 inline-grid grid-cols-2 items-baseline`;
 Modal.Content = tw.div`min-w-[576px] w-full max-w-full`;
 
-const Note = tw.div`mt-2  h-52 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200`;
-const handleGetInternStatusStyle = (value) => {
-	let style = null;
-	const checkstyle = Object.entries(StudentStatusGroupEnum).map(([k, v]) => {
-		const findItem = v.find((item) => StudentStatusEnum[value] == item);
-		if (findItem) {
-			style = k;
-			return;
-		}
-	});
-	return style;
-};
-const WrapLayoutInfoUser = tw.section`mb-8  grid grid-cols-2 sm:grid-cols-1 `;
-const LayoutInfoUser = tw.div`border-r-2 sm:(border-r-0 border-b-2 pb-4 border-r-0)`;
-const LayoutFormSubmitted = tw.div`ml-8 sm:(pt-4 ml-0)`;
+export { List };
 export default StudentInfoPage;
