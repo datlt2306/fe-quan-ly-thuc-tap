@@ -26,6 +26,11 @@ const FieldsFormSelfFinding = [
 		placeholder: 'Mã số thuế'
 	},
 	{
+		label: 'Tên người tiếp nhận',
+		name: 'nameEnterprise',
+		placeholder: 'Tên người tiếp nhận'
+	},
+	{
 		label: 'Chức vụ người tiếp nhận',
 		name: 'position',
 		placeholder: 'Chức vụ người tiếp nhận'
@@ -55,6 +60,7 @@ const FormSelfFinding = ({ selectedOption, user }) => {
 				addressCompany: user?.addressCompany,
 				phoneNumberCompany: user?.phoneNumberCompany,
 				taxCode: user?.taxCode,
+				nameEnterprise: user?.nameEnterprise,
 				emailEnterprise: user?.emailEnterprise,
 				position: user?.position,
 				nameCompany: user?.nameCompany

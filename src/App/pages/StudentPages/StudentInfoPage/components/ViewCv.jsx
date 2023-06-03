@@ -8,6 +8,15 @@ import Text from '@/Core/components/common/Text/Text';
 import { EyeIcon } from '@heroicons/react/24/outline';
 
 const ViewCv = ({ data: user, setOpenState }) => {
+	const dataInfoCompany = [
+		{ label: 'Tên công ty:', value: user?.nameCompany },
+		{ label: 'Địa chỉ thực tập:', value: user?.addressCompany },
+		{ label: 'Mã số thuế:', value: user?.taxCode },
+		{ label: 'Chức vụ người tiếp nhận:', value: user?.position },
+		{ label: 'SĐT doanh nghiệp:', value: user?.phoneNumberCompany },
+		{ label: 'Tên người tiếp nhận:', value: user?.nameEnterprise },
+		{ label: 'Email người tiếp nhận:', value: user?.emailEnterprise }
+	];
 	const dataFormInterShip = [
 		{ label: 'Kiểu đăng ký', value: InternSupportType[+user?.support] ?? null },
 		{ label: 'Mã sinh viên', value: user?.mssv },
@@ -43,30 +52,14 @@ const ViewCv = ({ data: user, setOpenState }) => {
 					</Fragment>
 				) : user?.support === 0 ? (
 					<Fragment>
-						<List.Item>
-							<Text>Tên công ty</Text>
-							<Text className='font-medium text-base-content-active'>{user?.nameCompany}</Text>
-						</List.Item>
-						<List.Item>
-							<Text>Địa chỉ thực tập</Text>
-							<Text className='font-medium text-base-content-active'>{user?.addressCompany}</Text>
-						</List.Item>
-						<List.Item>
-							<Text>Mã số thuế:</Text>
-							<Text className='font-medium text-base-content-active'>{user?.taxCode}</Text>
-						</List.Item>
-						<List.Item>
-							<Text>Chức vụ người tiếp nhận</Text>
-							<Text className='font-medium text-base-content-active'>{user?.position}</Text>
-						</List.Item>
-						<List.Item>
-							<Text>SĐT doanh nghiệp</Text>
-							<Text className='font-medium text-base-content-active'>{user?.phoneNumberCompany}</Text>
-						</List.Item>
-						<List.Item>
-							<Text>Email người tiếp nhận</Text>
-							<Text className='font-medium text-base-content-active'>{user?.emailEnterprise}</Text>
-						</List.Item>
+						{dataInfoCompany?.map((item) => (
+							<List.Item>
+								<Text>{item.label}</Text>
+								<Text className='font-medium text-base-content-active'>
+									{item.value || 'Chưa có thông tin'}
+								</Text>
+							</List.Item>
+						))}
 					</Fragment>
 				) : null}
 			</List>
