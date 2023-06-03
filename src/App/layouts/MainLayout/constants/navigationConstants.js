@@ -122,19 +122,9 @@ export const managerNavigation = [
 		icon: UserGroupIcon
 	},
 	{
-		name: 'Danh sách cơ sở',
-		path: ManagerPaths.CAMPUS,
-		icon: BuildingOffice2Icon
-	},
-	{
 		name: 'Ngành học',
 		path: ManagerPaths.MAJOR,
 		icon: AcademicCapIcon
-	},
-	{
-		name: 'Ngành hẹp',
-		path: ManagerPaths.SPECIALIZATION,
-		icon: BookOpenIcon
 	}
 ];
 

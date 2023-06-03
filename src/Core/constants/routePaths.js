@@ -31,9 +31,7 @@ const StudentPaths = {
  */
 const ManagerPaths = {
 	STAFF_LIST: '/danh-sach-nhan-vien',
-	CAMPUS: '/co-so',
-	MAJOR: '/nganh-hoc',
-	SPECIALIZATION: '/nganh-hep'
+	MAJOR: '/nganh-hoc'
 };
 
 /**

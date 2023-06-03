@@ -48,8 +48,8 @@ const staffListApi = createApi({
 			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		getAllManager: build.query({
-			query: () => {
-				return { url: '/admin/manager', method: 'GET' };
+			query: (params) => {
+				return { url: '/admin/manager', method: 'GET', params };
 			},
 			providesTags: Object.values(TagTypes)
 		}),
