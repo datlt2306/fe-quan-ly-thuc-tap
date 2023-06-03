@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-
+import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 const FormRequestSupport = ({ formType, setOpenState }) => {
 	//xử lý gửi yêu cầu của hỗ trợ các form biên bản ,cv,báo cáo
 	const user = useSelector((state) => state.auth?.user);
@@ -51,21 +51,16 @@ const FormRequestSupport = ({ formType, setOpenState }) => {
 						</Button>
 						<Button
 							type='submit'
-							variant='primary'
-							disabled={isLoading}
+							variant={isLoading ? 'disabled' : 'primary'}
 							onClick={() => setOpen(true)}
-							icon={PaperAirplaneIcon}
-							loading={isLoading}>
+							icon={PaperAirplaneIcon}>
+							{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 							Gửi
 						</Button>
 					</Form.Action>
 				</Fragment>
 			) : (
-				<Button
-					variant={isLoading ? 'disabled' : 'primary'}
-					className='mt-3 w-full'
-					onClick={() => setOpen(true)}
-					icon={EnvelopeIcon}>
+				<Button variant='primary' className='mt-3 w-full' onClick={() => setOpen(true)} icon={EnvelopeIcon}>
 					Gửi yêu cầu hỗ trợ
 				</Button>
 			)}
