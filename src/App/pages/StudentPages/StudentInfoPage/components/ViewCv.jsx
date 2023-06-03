@@ -55,7 +55,9 @@ const ViewCv = ({ data: user, setOpenState }) => {
 						{dataInfoCompany?.map((item) => (
 							<List.Item>
 								<Text>{item.label}</Text>
-								<Text className='font-medium text-base-content-active'>{item.value}</Text>
+								<Text className='font-medium text-base-content-active'>
+									{item.value || 'Chưa có thông tin'}
+								</Text>
 							</List.Item>
 						))}
 					</Fragment>

@@ -32,7 +32,7 @@ const ViewReport = ({ data: user, setOpenState }) => {
 				{initDataViewReport.map((item, index) => (
 					<List.Item key={index}>
 						<Text>{item.label}</Text>
-						<Text className='font-medium'>{item.value || "Chưa có thông tin"}</Text>
+						<Text className='font-medium'>{item.value || 'Chưa có thông tin'}</Text>
 					</List.Item>
 				))}
 			</List>
