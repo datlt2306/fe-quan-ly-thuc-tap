@@ -36,7 +36,8 @@ const ViewForm = ({ data: user, setOpenState }) => {
 			<List className='mb-6 divide-y divide-gray-100'>
 				{dataViewForm.map((item, index) => (
 					<List.Item key={index}>
-						<Text>{item.label}</Text> <Text className='font-medium text-base-content-active'>{item.value}</Text>
+						<Text>{item.label}</Text>{' '}
+						<Text className='font-medium text-base-content-active'>{item.value || 'Chưa có thông tin'}</Text>
 					</List.Item>
 				))}
 			</List>

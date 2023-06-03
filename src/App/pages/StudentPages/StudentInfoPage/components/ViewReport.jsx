@@ -11,7 +11,7 @@ const ViewReport = ({ data: user, setOpenState }) => {
 		{ label: 'Họ tên:', value: user?.name },
 		{
 			label: 'Tên công ty:',
-			value: user?.support === 1 ? user?.business?.name : user?.nameCompany
+			value: user?.business?.name || user?.nameCompany
 		},
 		{ label: 'Điểm kết quả:', value: user?.resultScore },
 		{ label: 'Điểm thái độ:', value: user?.attitudePoint },
@@ -32,7 +32,7 @@ const ViewReport = ({ data: user, setOpenState }) => {
 				{initDataViewReport.map((item, index) => (
 					<List.Item key={index}>
 						<Text>{item.label}</Text>
-						<Text className='font-medium'>{item.value}</Text>
+						<Text className='font-medium'>{item.value || 'Chưa có thông tin'}</Text>
 					</List.Item>
 				))}
 			</List>
