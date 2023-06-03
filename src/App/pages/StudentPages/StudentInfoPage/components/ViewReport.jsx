@@ -1,7 +1,11 @@
 import formatDate from '@/Core/utils/formatDate';
-import { VerticalList } from '..';
+import { List } from '..';
 import Button from '@/Core/components/common/Button';
 import FormRequestSupport from './FormRequestSupport';
+import Text from '@/Core/components/common/Text/Text';
+import { EyeIcon } from '@heroicons/react/24/outline';
+import { Fragment } from 'react';
+
 const ViewReport = ({ data: user, setOpenState }) => {
 	const initDataViewReport = [
 		{ label: 'Họ tên:', value: user?.name },
@@ -15,26 +19,25 @@ const ViewReport = ({ data: user, setOpenState }) => {
 		{ label: 'Thời gian kết thúc:', value: formatDate(user?.endInternShipTime) },
 		{
 			label: 'Báo cáo:',
-			value: (
-				<>
-					{user?.['report'] && (
-						<Button variant='outline' onClick={() => window.open(user?.['report'])}>
-							Xem
-						</Button>
-					)}
-				</>
+			value: user?.['report'] && (
+				<Button as='a' href={user?.report} target='_blank' size='sm' variant='outline' icon={EyeIcon}>
+					Preview
+				</Button>
 			)
 		}
 	];
 	return (
-		<VerticalList>
-			{initDataViewReport.map((item, index) => (
-				<li key={index} className='flex items-center gap-2'>
-					<p>{item.label}</p> <div className='font-medium'>{item.value || 'Chưa có thông tin'}</div>
-				</li>
-			))}
+		<Fragment>
+			<List className='mb-6'>
+				{initDataViewReport.map((item, index) => (
+					<List.Item key={index}>
+						<Text>{item.label}</Text>
+						<Text className='font-medium'>{item.value || "Chưa có thông tin"}</Text>
+					</List.Item>
+				))}
+			</List>
 			<FormRequestSupport formType='report' setOpenState={setOpenState} />
-		</VerticalList>
+		</Fragment>
 	);
 };
 export default ViewReport;

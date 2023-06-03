@@ -3,13 +3,12 @@ import { useUpdateMajorMutation } from '@/App/providers/apis/majorApi';
 import { majorSchema } from '@/App/schemas/majorSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import SlideOver from '@/Core/components/common/SlideOver';
+import capitalizeString from '@/Core/utils/capitalizeString';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-import capitalizeString from '@/Core/utils/capitalizeString';
 
 const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
 	const { handleSubmit, control, reset } = useForm({
@@ -50,8 +49,7 @@ const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
 			<Form onSubmit={handleSubmit(onUpdateSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên chuyên ngành' />
 				<InputFieldControl name='majorCode' control={control} label='Mã chuyên ngành' />
-				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
-					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
+				<Button type='submit' variant='primary' size='md' disabled={isLoading} loading={isLoading}>
 					Sửa
 				</Button>
 			</Form>

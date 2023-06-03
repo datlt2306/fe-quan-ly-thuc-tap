@@ -1,6 +1,9 @@
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import { Fragment } from 'react';
 import { Input } from '@/Core/components/common/FormControl/InputFieldControl';
+import FormControl from '@/Core/components/common/FormControl/FormControl';
+import Text from '@/Core/components/common/Text/Text';
+
 const SharedFields = ({ control, student, inputFields = [] }) => {
 	const readOnlyFields = [
 		{ title: 'Họ và tên', value: student?.name },
@@ -21,7 +24,7 @@ const SharedFields = ({ control, student, inputFields = [] }) => {
 	return (
 		<Fragment>
 			{readOnlyFields.map((field, index) => (
-				<ReadOnly key={index} title={field.title} value={field.value} />
+				<ReadOnlyField key={index} title={field.title} value={field.value} />
 			))}
 			{fields.map((item, index) => (
 				<InputFieldControl
@@ -36,12 +39,14 @@ const SharedFields = ({ control, student, inputFields = [] }) => {
 	);
 };
 
-const ReadOnly = ({ title, value }) => {
+const ReadOnlyField = ({ title, value }) => {
 	return (
-		<div>
-			<label>{title}</label>
+		<FormControl>
+			<Text as='label' className='font-medium text-base-content'>
+				{title}
+			</Text>
 			<Input readOnly value={value}></Input>
-		</div>
+		</FormControl>
 	);
 };
 

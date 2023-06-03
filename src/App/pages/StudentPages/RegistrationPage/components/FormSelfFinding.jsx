@@ -1,15 +1,12 @@
 import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
 import { formSignUpSelfFindingSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
-import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import FormRow from './FormRow';
-import { Form } from './FormSchoolSupport';
+import tw from 'twin.macro';
 import SharedFields, { SharedDefaultValues } from './SharedFields';
 
 const FieldsFormSelfFinding = [
@@ -88,17 +85,20 @@ const FormSelfFinding = ({ selectedOption, user }) => {
 		navigate('/thong-tin-sinh-vien');
 	};
 	return (
-		<>
-			<Form onSubmit={handleSubmit(handleFormSelfFinding)}>
-				<FormRow className='grid-cols-3 sm:grid-cols-1 md:grid-cols-2'>
-					<SharedFields control={control} student={user} inputFields={FieldsFormSelfFinding} />
-				</FormRow>
-				<Button type='submit' variant='primary' disabled={isLoading}>
-					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
-					Đăng ký
-				</Button>
-			</Form>
-		</>
+		<Form onSubmit={handleSubmit(handleFormSelfFinding)}>
+			<Form.Grid>
+				<SharedFields control={control} student={user} inputFields={FieldsFormSelfFinding} />
+			</Form.Grid>
+
+			<Button type='submit' variant='primary' disabled={isLoading} className='w-auto'>
+				{isLoading && <LoadingSpinner size='sm' variant='primary' />}
+				Đăng ký
+			</Button>
+		</Form>
 	);
 };
+
+const Form = tw.form``;
+Form.Grid = tw.form`grid-cols-3 sm:grid-cols-1 md:grid-cols-2 grid gap-6 mb-6`;
+
 export default FormSelfFinding;

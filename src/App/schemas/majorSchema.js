@@ -8,7 +8,7 @@ export const majorSchema = object({
 		.trim(),
 	majorCode: string()
 		.required('Mã chuyên ngành là bắt buộc')
-		.matches(/^[a-zA-Z0-9\s]+$/, 'Mã chuyên ngành không được chứa các ký tự đặc biệt')
+		.matches(/^[a-zA-Z0-9\sĐđ]+$/, 'Mã chuyên ngành không được chứa các ký tự đặc biệt')
 		.default('')
 		.trim()
 });

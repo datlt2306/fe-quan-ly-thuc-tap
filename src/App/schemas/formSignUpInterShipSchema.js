@@ -1,3 +1,5 @@
+import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
+import getFileExtension from '@/Core/utils/getFileExtension';
 import * as yup from 'yup';
 
 const sharedFieldSchema = {
@@ -17,9 +19,11 @@ export const formSignUpSchoolSupportSchema = yup.object().shape({
 	CV: yup
 		.mixed()
 		.default('')
-		.test('required', 'CV không được để trống', (value) => {
-			return value;
+		.test({
+			message: 'Vui lòng chọn file PDF',
+			test: (value) => AllowedFileExtension.PDF === getFileExtension(value)
 		})
+		.required('CV không được để trống')
 });
 
 export const formSignUpSelfFindingSchema = yup.object().shape({

@@ -42,6 +42,20 @@ const authSlice = createSlice({
 				}
 			};
 		});
+		build.addMatcher(authApi.endpoints.adminSignin.matchFulfilled, (state, { payload }) => {
+			if (payload.isAdmin) {
+				return {
+					isSignedIn: payload.success,
+					user: {
+						id: payload.manager?._id,
+						displayName: payload.name,
+						email: payload.manager?.email,
+						picture: payload.picture,
+						role: UserRoleEnum.ADMIN
+					}
+				};
+			}
+		});
 	}
 });
 

@@ -9,10 +9,15 @@ const authApi = createApi({
 			query: (payload) => {
 				return { url: '/login-google', method: 'POST', data: payload };
 			}
+		}),
+		adminSignin: build.mutation({
+			query: (payload) => {
+				return { url: '/login-admin', method: 'POST', data: payload };
+			}
 		})
 	})
 });
 
-export const { useSigninMutation } = authApi;
+export const { useSigninMutation, useAdminSigninMutation } = authApi;
 
 export default authApi;

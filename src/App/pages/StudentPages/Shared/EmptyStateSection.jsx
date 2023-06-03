@@ -1,18 +1,22 @@
 import Text from '@/Core/components/common/Text/Text';
 import Typography from '@/Core/components/common/Text/Typography';
-import { DocumentIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import tw from 'twin.macro';
 
-export default function EmptyStateSection({ title, message }) {
+export default function EmptyStateSection({ title, message, ...props }) {
 	return (
 		<Container>
 			<Box>
-				<DocumentIcon width={40} height={40} className='text-disabled' />
+				{props.icon ? (
+					<props.icon width={40} height={40} />
+				) : (
+					<DocumentTextIcon width={40} height={40} className='text-disabled' />
+				)}
 				<div>
 					<Typography level={6} fontWeight='semibold'>
 						{title}
 					</Typography>
-					<Text className='mt-1 text-gray-500'>{message}</Text>
+					<Text className='mt-1 text-base-content'>{message}</Text>
 				</div>
 			</Box>
 		</Container>

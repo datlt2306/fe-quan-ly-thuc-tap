@@ -1,4 +1,4 @@
-import { ManagerPaths, StaffPaths, StudentPaths } from '@/Core/constants/routePaths';
+import { AdminPaths, ManagerPaths, StaffPaths, StudentPaths } from '@/Core/constants/routePaths';
 import {
 	AcademicCapIcon,
 	BookOpenIcon,
@@ -9,27 +9,24 @@ import {
 	ClockIcon,
 	DocumentChartBarIcon,
 	DocumentCheckIcon,
-	DocumentIcon,
 	DocumentTextIcon,
 	EnvelopeOpenIcon,
-	InformationCircleIcon,
-	ListBulletIcon,
 	PlusIcon,
-	PlusSmallIcon,
+	UserCircleIcon,
 	UserGroupIcon,
-	UserIcon
+	UsersIcon
 } from '@heroicons/react/24/outline';
 
 export const studentNavigation = [
 	{
 		name: 'Thông tin sinh viên',
 		path: StudentPaths.STUDENT_INFO,
-		icon: UserIcon
+		icon: UserCircleIcon
 	},
 	{
 		name: 'Thông tin tuyển dụng',
 		path: StudentPaths.COMPANY_LIST,
-		icon: InformationCircleIcon
+		icon: UsersIcon
 	},
 	{
 		name: 'Đăng ký thực tập',
@@ -138,5 +135,18 @@ export const managerNavigation = [
 		name: 'Ngành hẹp',
 		path: ManagerPaths.SPECIALIZATION,
 		icon: BookOpenIcon
+	}
+];
+
+export const adminNavigation = [
+	{
+		name: 'Danh sách quản lý',
+		path: AdminPaths.MANAGER_LIST,
+		icon: UserGroupIcon
+	},
+	{
+		name: 'Danh sách cơ sở',
+		path: AdminPaths.CAMPUS,
+		icon: BuildingOffice2Icon
 	}
 ];

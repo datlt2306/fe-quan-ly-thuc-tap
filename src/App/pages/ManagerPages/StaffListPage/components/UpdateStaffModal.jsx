@@ -4,7 +4,6 @@ import { staffDataValidator } from '@/App/schemas/staffSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import Modal from '@/Core/components/common/Modal';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
@@ -53,7 +52,7 @@ const UpdateStaffModal = ({ userData, onOpenStateChange, openState, users }) => 
 
 	return (
 		<Modal openState={openState} onOpenStateChange={onOpenStateChange} title={'Sửa nhân viên'}>
-			<Form onSubmit={handleSubmit(onUpdateSubmit)}>
+			<Modal.Form onSubmit={handleSubmit(onUpdateSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên nhân viên' />
 				<InputFieldControl name='email' control={control} label='Email nhân viên' />
 				<SelectFieldControl
@@ -65,15 +64,14 @@ const UpdateStaffModal = ({ userData, onOpenStateChange, openState, users }) => 
 						value: role.toString()
 					}))}
 				/>
-				<Button type='submit' size='md' variant='primary' disabled={isLoading}>
-					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
+				<Button type='submit' size='md' variant='primary' disabled={isLoading} loading={isLoading}>
 					Cập nhật
 				</Button>
-			</Form>
+			</Modal.Form>
 		</Modal>
 	);
 };
 
-const Form = tw.form`flex flex-col gap-6 min-w-[320px] max-w-full items-stretch`;
+Modal.Form = tw.form`flex flex-col gap-6 min-w-[320px] max-w-full items-stretch`;
 
 export default UpdateStaffModal;

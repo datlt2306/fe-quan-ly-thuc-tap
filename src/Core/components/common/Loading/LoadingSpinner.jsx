@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { useMemo } from 'react';
 import tw from 'twin.macro';
 
-export const Spinner = tw.div`pointer-events-none animate-spin rounded-full border-[3px] border-gray-100 `;
+export const Spinner = tw.div`pointer-events-none animate-spin rounded-full border-[3px] border-gray-200 `;
 
 export const LoadingSpinner = ({ size, variant }) => {
 	const loadingStyles = useMemo(

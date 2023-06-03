@@ -1,4 +1,4 @@
-import { AllowedFileExt } from '@/Core/constants/allowedFileType';
+import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
 import { mapExcelData } from '@/Core/utils/excelDataHandler';
 import { useState } from 'react';
 
@@ -69,7 +69,7 @@ export const useExportToExcel = () => {
 				isSuccess: true,
 				isError: false
 			});
-			return XLSX.writeFile(workbook, fileName + AllowedFileExt.XLSX);
+			return XLSX.writeFile(workbook, fileName + AllowedFileExtension.XLSX);
 		} catch (error) {
 			setExportState({
 				isSuccess: false,

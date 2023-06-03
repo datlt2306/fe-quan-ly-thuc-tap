@@ -50,19 +50,18 @@ const UpdateSemesterModal = ({ semesterData, onOpenStateChange, openState }) => 
 
 	return (
 		<Modal openState={openState} onOpenStateChange={onOpenStateChange} title={'Sửa kì học'}>
-			<Form onSubmit={handleSubmit(onUpdateSubmit)}>
+			<Modal.Form onSubmit={handleSubmit(onUpdateSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên kì học' />
 				<InputFieldControl type='date' control={control} name='start_time' label='Ngày bắt đầu' />
 				<InputFieldControl type='date' control={control} name='end_time' label='Ngày kết thúc' />
-				<Button type='submit' size='md' variant='primary' disabled={isLoading}>
-					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
+				<Button type='submit' size='md' variant='primary' disabled={isLoading} loading={isLoading}>
 					Cập nhật
 				</Button>
-			</Form>
+			</Modal.Form>
 		</Modal>
 	);
 };
 
-const Form = tw.form`flex flex-col gap-6 w-[320px]`;
+Modal.Form = tw.form`flex flex-col gap-6 w-[320px]`;
 
 export default UpdateSemesterModal;

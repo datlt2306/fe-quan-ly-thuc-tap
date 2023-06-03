@@ -1,67 +1,60 @@
-import { useEffect, useState, useRef } from 'react';
-import Button from '@/Core/components/common/Button';
-import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
-import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
-import { CalendarDaysIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import tw from 'twin.macro';
+import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
 import {
 	useAddArrayCompanyMutation,
 	useDeleteCompanyMutation,
 	useGetAllCompanyQuery
 } from '@/App/providers/apis/businessApi';
-import { useGetAllSemestersQuery } from '@/App/providers/apis/semesterApi';
-import { useSelector } from 'react-redux';
-import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
-import { columnAccessors } from './constants';
-import getFileExtension from '@/Core/utils/getFileExtension';
-import { convertToExcelData } from '@/Core/utils/excelDataHandler';
-import { AllowedFileExt } from '@/Core/constants/allowedFileType';
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { companyArraySchema } from '@/App/schemas/companySchema';
+import Button from '@/Core/components/common/Button';
+import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
+import Modal from '@/Core/components/common/Modal';
+import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
+import ReactTable from '@/Core/components/common/Table/ReactTable';
+import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
+import Text from '@/Core/components/common/Text/Text';
+import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
 import { StaffPaths } from '@/Core/constants/routePaths';
+import { convertToExcelData } from '@/Core/utils/excelDataHandler';
+import getFileExtension from '@/Core/utils/getFileExtension';
+import { CalendarDaysIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import tw from 'twin.macro';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
-import Modal from '@/Core/components/common/Modal';
+import { columnAccessors } from './constants';
 
 const CompanyListPage = () => {
-	// state modal
 	const [modal, setModal] = useState(false);
 	const [dataModal, setDataModal] = useState({});
-
-	// get list company, semester, campus, major
 	const { data: majors } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
 	const campus = useSelector((state) => state.campus);
-	const { data: semester } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
-	const { defaultSemester } = useSelector((state) => state.semester);
-	const [selectedSemesterId, setSelectedSemesterId] = useState(defaultSemester?._id);
-	const { data: company, isLoading: companyLoading } = useGetAllCompanyQuery(
-		{ limit: 1000, semester_id: selectedSemesterId },
-		{ refetchOnMountOrArgChange: true }
-	);
+	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
+	const [currentSemester, setCurrentSemester] = useState(defaultSemester?._id);
+	const [handleDeleteCompany] = useDeleteCompanyMutation();
+	const { data: company, isLoading: companyLoading } = useGetAllCompanyQuery({
+		limit: 1000,
+		semester_id: currentSemester
+	});
 
 	useEffect(() => {
-		setSelectedSemesterId(defaultSemester?._id);
+		setCurrentSemester(defaultSemester?._id);
 	}, [defaultSemester]);
 
 	const handleChangeSemester = (id) => {
-		setSelectedSemesterId(id);
+		setCurrentSemester(id);
 	};
 	useEffect(() => {
-		setSelectedSemesterId(defaultSemester?._id);
+		setCurrentSemester(defaultSemester?._id);
 	}, [defaultSemester]);
 
-	// set table data
-	const [tableData, setTableData] = useState([]);
-	useEffect(() => {
-		setTableData(company?.list);
-	}, [company]);
+	const tableData = useMemo(() => company?.list ?? [], [company]);
 
 	// hanle delete company
-	const [handleDeleteCompany] = useDeleteCompanyMutation();
+
 	const onDeleteSubmit = async (id) => {
 		const result = await handleDeleteCompany({ id });
 		if (result?.error) {
@@ -116,10 +109,10 @@ const CompanyListPage = () => {
 		}
 	};
 
-	// // Get file from device and execute callback to add new companies
+	// Get file from device and execute callback to add new companies
 	const handleImportCompanies = (file) => {
 		const fileExtension = getFileExtension(file);
-		if (fileExtension !== AllowedFileExt.XLSX) {
+		if (fileExtension !== AllowedFileExtension.XLSX) {
 			toast.error('File import không hợp lệ');
 			fileInputRef.current.value = null;
 			fileInputRefMobile.current.value = null;
@@ -140,7 +133,7 @@ const CompanyListPage = () => {
 				...company,
 				major: company.major.name,
 				campus_id: campus?.campusList?.listCampus?.find((item) => item._id === company.campus_id).name,
-				semester_id: semester.listSemesters.find((item) => item._id === company.semester_id).name,
+				semester_id: listSemesters.find((item) => item._id === company.semester_id).name,
 				index: index + 1
 			};
 		});
@@ -160,7 +153,14 @@ const CompanyListPage = () => {
 		{
 			Header: columnAccessors.index,
 			accessor: 'STT',
-			Cell: ({ row }) => <span className='font-medium'>{row.index + 1}</span>
+			Cell: ({ row }) => <Text className='font-medium'>{row.index + 1}</Text>
+		},
+		{
+			Header: columnAccessors.name,
+			accessor: 'name',
+			Filter: InputColumnFilter,
+			filterable: true,
+			sortable: true
 		},
 		{
 			Header: columnAccessors.business_code,
@@ -168,7 +168,7 @@ const CompanyListPage = () => {
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
-			Cell: ({ value }) => <span className='font-medium uppercase'>{value}</span>
+			Cell: ({ value }) => <Text className='font-medium uppercase'>{value}</Text>
 		},
 		{
 			Header: columnAccessors.tax_code,
@@ -176,32 +176,13 @@ const CompanyListPage = () => {
 			Filter: InputColumnFilter,
 			filterable: true,
 			sortable: true,
-			Cell: ({ value }) => <span className='font-medium uppercase'>{value}</span>
-		},
-		{
-			Header: columnAccessors.name,
-			accessor: 'name',
-			Filter: InputColumnFilter,
-			filterable: true,
-			sortable: true,
-			canSort: true,
-			canFilter: true,
-			Cell: ({ value }) => (
-				<div className='w-full max-w-xs overflow-hidden'>
-					<p className='overflow-ellipsis whitespace-normal'>{value}</p>
-				</div>
-			)
+			Cell: ({ value }) => <Text className='font-medium uppercase'>{value}</Text>
 		},
 		{
 			Header: columnAccessors.internship_position,
 			accessor: 'internship_position',
 			Filter: InputColumnFilter,
-			filterable: true,
-			Cell: ({ value }) => (
-				<div className='w-full max-w-xs overflow-hidden'>
-					<p className='overflow-ellipsis whitespace-normal'>{value}</p>
-				</div>
-			)
+			filterable: true
 		},
 		{
 			Header: columnAccessors.amount,
@@ -221,11 +202,7 @@ const CompanyListPage = () => {
 			accessor: 'address',
 			Filter: InputColumnFilter,
 			filterable: true,
-			Cell: ({ value }) => (
-				<div className='max-w- w-full overflow-hidden'>
-					<p className='overflow-ellipsis whitespace-normal'>{value}</p>
-				</div>
-			)
+			Cell: ({ value }) => <Text className='whitespace-normal'>{value}</Text>
 		},
 		{
 			Header: columnAccessors.requirement,
@@ -324,9 +301,9 @@ const CompanyListPage = () => {
 					<Select
 						className='min-w-[12rem] capitalize sm:text-sm'
 						onChange={(e) => handleChangeSemester(e.target.value)}>
-						{Array.isArray(semester?.listSemesters) &&
-							semester?.listSemesters.map((item, index) => (
-								<Option value={item._id} key={index} selected={selectedSemesterId === item._id}>
+						{Array.isArray(listSemesters) &&
+							listSemesters.map((item, index) => (
+								<Option value={item._id} key={index} selected={currentSemester === item._id}>
 									{item.name}
 								</Option>
 							))}
@@ -336,20 +313,20 @@ const CompanyListPage = () => {
 					tableData={tableData}
 					handleExport={handleExportDataToExcel}
 					handleImport={handleImportCompanies}
-					canImport={selectedSemesterId === semester?.defaultSemester?._id}
+					canImport={currentSemester === defaultSemester?._id}
 					ref={fileInputRef}
 				/>
 				<MobileDropdownButtonGroup
 					tableData={tableData}
 					handleExport={handleExportDataToExcel}
 					handleImport={handleImportCompanies}
-					canImport={selectedSemesterId === semester?.defaultSemester?._id}
+					canImport={currentSemester === defaultSemester?._id}
 					ref={fileInputRefMobile}
 				/>
 			</Box>
 			<ReactTable columns={columnsData} data={tableData || []} loading={companyLoading} />
 			<Modal openState={modal} onOpenStateChange={setModal} title={dataModal?.title}>
-				<p className='text-gray-500'>{dataModal?.data}</p>
+				<p className='text-base-content'>{dataModal?.data}</p>
 			</Modal>
 		</Container>
 	);

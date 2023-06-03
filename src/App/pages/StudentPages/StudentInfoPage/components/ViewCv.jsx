@@ -1,13 +1,12 @@
 import Button from '@/Core/components/common/Button';
-import { VerticalList } from '..';
-
+import { List } from '..';
 import { InternSupportType } from '@/App/constants/studentConstants';
 import tw from 'twin.macro';
-
 import FormRequestSupport from './FormRequestSupport';
 import { Fragment } from 'react';
+import Text from '@/Core/components/common/Text/Text';
+import { EyeIcon } from '@heroicons/react/24/outline';
 
-const ItemValue = tw.p`font-medium`;
 const ViewCv = ({ data: user, setOpenState }) => {
 	const dataInfoCompany = [
 		{ label: 'Tên công ty:', value: user?.nameCompany },
@@ -19,62 +18,51 @@ const ViewCv = ({ data: user, setOpenState }) => {
 		{ label: 'Email người tiếp nhận:', value: user?.emailEnterprise }
 	];
 	const dataFormInterShip = [
-		{ label: 'Kiểu đăng ký :', value: InternSupportType[+user?.support] ?? null },
-		{ label: 'Mã sinh viên :', value: user?.mssv },
-		{ label: 'Họ tên :', value: user?.name },
-		{ label: 'Email:', value: user?.email },
-		{ label: 'Số điện thoại:', value: user?.phoneNumber },
-		{ label: 'Địa chỉ:', value: user?.address },
-		{ label: 'Chuyên ngành:', value: user?.major?.name },
-		{ label: 'Vị trí thực tập:', value: user?.dream },
-		{
-			label: (
-				<Fragment>
-					{user?.support == 1 && (
-						<>
-							<p className='pr-1 '>
-								Công ty: <span tw='font-medium'>{user?.business?.name}</span>
-							</p>
-							<div className='mt-3 flex items-center'>
-								<p className='pr-1'>CV:</p>
-								<Button variant='outline' onClick={() => window.open(user?.['CV'])}>
-									Xem
-								</Button>
-							</div>
-						</>
-					)}
-					{user?.support == 0 && (
-						<div className='flex flex-col gap-3'>
-							{dataInfoCompany?.map((item) => (
-								<Flex>
-									<p>{item.label}</p>
-									<ItemValue>{item.value || 'Chưa có thông tin'}</ItemValue>
-								</Flex>
-							))}
-						</div>
-					)}
-				</Fragment>
-			)
-		}
+		{ label: 'Kiểu đăng ký', value: InternSupportType[+user?.support] ?? null },
+		{ label: 'Mã sinh viên', value: user?.mssv },
+		{ label: 'Họ tên', value: user?.name },
+		{ label: 'Email', value: user?.email },
+		{ label: 'Số điện thoại', value: user?.phoneNumber },
+		{ label: 'Địa chỉ', value: user?.address },
+		{ label: 'Chuyên ngành', value: user?.major?.name },
+		{ label: 'Vị trí thực tập', value: user?.dream }
 	];
 
 	return (
-		<>
-			<VerticalList>
+		<Fragment>
+			<List className='w-full max-w-xl'>
 				{dataFormInterShip.map((item) => (
-					<Fragment>
-						<li key={item.label} className='flex items-center gap-1'>
-							<div>{item.label}</div>
-							<span className='font-medium'>{item.value}</span>
-						</li>
-					</Fragment>
+					<List.Item key={item.label}>
+						<Text>{item.label}</Text>
+						<Text className='font-medium text-base-content-active'>{item.value}</Text>
+					</List.Item>
 				))}
-
-				<FormRequestSupport formType='narrow' setOpenState={setOpenState} />
-			</VerticalList>
-		</>
+				{user?.support === 1 ? (
+					<Fragment>
+						<List.Item>
+							<Text>Công ty</Text>
+							<Text className='font-medium text-base-content-active'>{user?.business?.name}</Text>
+						</List.Item>
+						<List.Item>
+							<Text>CV</Text>
+							<Button as='a' href={user?.CV} target='_blank' shape='pill'>
+								<EyeIcon className='h-4 w-4' /> Preview
+							</Button>
+						</List.Item>
+					</Fragment>
+				) : user?.support === 0 ? (
+					<Fragment>
+						{dataInfoCompany?.map((item) => (
+							<List.Item>
+								<Text>{item.label}</Text>
+								<Text className='font-medium text-base-content-active'>{item.value}</Text>
+							</List.Item>
+						))}
+					</Fragment>
+				) : null}
+			</List>
+			<FormRequestSupport formType='narrow' setOpenState={setOpenState} />
+		</Fragment>
 	);
 };
-
-const Flex = tw.div`flex gap-1`;
 export default ViewCv;

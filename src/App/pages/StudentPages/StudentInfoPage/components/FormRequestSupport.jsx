@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
-import Button from '@/Core/components/common/Button';
-import { useForm } from 'react-hook-form';
-import { requestOfStudentValidator } from '@/App/schemas/requestStudentSchema';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
-import { useSelector } from 'react-redux';
 import { useRequestOfStudentMutation } from '@/App/providers/apis/requestStudentsApi';
+import { requestOfStudentValidator } from '@/App/schemas/requestStudentSchema';
+import Button from '@/Core/components/common/Button';
+import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
+import { EnvelopeIcon, PaperAirplaneIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Fragment, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import tw from 'twin.macro';
 
 const FormRequestSupport = ({ formType, setOpenState }) => {
 	//xử lý gửi yêu cầu của hỗ trợ các form biên bản ,cv,báo cáo
 	const user = useSelector((state) => state.auth?.user);
 	const [requestOfStudentMutation, { isLoading }] = useRequestOfStudentMutation();
-
 	const { control, handleSubmit, reset } = useForm({
 		resolver: yupResolver(requestOfStudentValidator)
 	});
@@ -34,35 +34,42 @@ const FormRequestSupport = ({ formType, setOpenState }) => {
 	};
 	const [open, setOpen] = useState(false);
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
-			{open && (
-				<>
+		<Form onSubmit={handleSubmit(onSubmit)}>
+			{open ? (
+				<Fragment>
 					<TextareaFieldControl control={control} name='description' />
-					<div className='mt-3 flex justify-end gap-3'>
+					<Form.Action>
 						<Button
 							variant='error'
 							className='hover:bg-red-600'
 							onClick={() => {
 								setOpen(false);
 								reset();
-							}}>
+							}}
+							icon={XMarkIcon}>
 							Huỷ
 						</Button>
-						<Button type='submit' variant='primary' disabled={isLoading} onClick={() => setOpen(true)}>
-							{isLoading && <LoadingSpinner size='sm' variant='primary' />}
+						<Button
+							type='submit'
+							variant='primary'
+							disabled={isLoading}
+							onClick={() => setOpen(true)}
+							icon={PaperAirplaneIcon}
+							loading={isLoading}>
 							Gửi
 						</Button>
-					</div>
-				</>
-			)}
-
-			{!open && (
-				<Button variant='primary' className='mt-3 w-full' onClick={() => setOpen(true)}>
+					</Form.Action>
+				</Fragment>
+			) : (
+				<Button variant='primary' className='mt-3 w-full' onClick={() => setOpen(true)} icon={EnvelopeIcon}>
 					Gửi yêu cầu hỗ trợ
 				</Button>
 			)}
-		</form>
+		</Form>
 	);
 };
+
+const Form = tw.form`flex flex-col gap-3`;
+Form.Action = tw.div`self-end flex items-center gap-1`;
 
 export default FormRequestSupport;
