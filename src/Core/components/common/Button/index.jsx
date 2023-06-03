@@ -1,9 +1,10 @@
 import classNames from 'classnames';
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo, useRef } from 'react';
 import { LoadingSpinner } from '../Loading/LoadingSpinner';
 
 /**
- * @param {{as: HTMLElementTagNameMap, size: string, disabled: boolean, loading: boolean, [key: string]: React.ButtonHTMLAttributes }}
+ * @prop {{as: HTMLElementTagNameMap, variant: const, size: const, disabled: boolean, loading: boolean, [key: string]: React.ButtonHTMLAttributes }} props
+ * @prop {MutableRefObject<any>} ref
  * @returns Tailwind styled Button component
  */
 const Button = (
@@ -13,11 +14,14 @@ const Button = (
 		shape,
 		disabled,
 		loading,
-		as: Element = 'button', // Polymorphic component, display as other tag
+		as: Element = 'button', // Polymorphic button has behaviors as other tag
 		...props
 	},
 	ref
 ) => {
+	const localRef = useRef(null);
+	const resolvedRef = ref || localRef;
+
 	const buttonStyles = useMemo(
 		() =>
 			classNames(
@@ -47,8 +51,8 @@ const Button = (
 		[variant, shape, size]
 	);
 	return (
-		<Element {...props} className={buttonStyles} ref={ref} disabled={variant === 'disabled' || disabled}>
-			{loading && <LoadingSpinner size='sm' variant='primary' />}{' '}
+		<Element {...props} className={buttonStyles} ref={resolvedRef} disabled={variant === 'disabled' || disabled}>
+			{loading && <LoadingSpinner size='sm' variant='primary' />}
 			{props.icon && !loading && (
 				<props.icon
 					className={classNames('aspect-square', {
@@ -56,7 +60,7 @@ const Button = (
 						'h-6': size === 'md' || size === 'lg'
 					})}
 				/>
-			)}{' '}
+			)}
 			{props.children}
 		</Element>
 	);

@@ -6,7 +6,7 @@ import formatDate from '@/Core/utils/formatDate';
 /**
  * @enum
  */
-const StudentApiTags = {
+const TagTypes = {
 	STUDENTS: 'Students',
 	STUDENTS_TO_REVIEW: 'StudentsToReview'
 };
@@ -19,13 +19,13 @@ const StudentApiTags = {
 const studentApi = createApi({
 	reducerPath: 'studentApi',
 	baseQuery: axiosBaseQuery(),
-	tagTypes: Object.values(StudentApiTags),
+	tagTypes: Object.values(TagTypes),
 	keepUnusedDataFor: 60 * 60 * 60,
 	endpoints: (build) => ({
 		getStudents: build.query({
 			query: (params) => ({ url: '/student', method: 'GET', params }),
 			transformResponse: (response) => transformStudentListData(response),
-			providesTags: [StudentApiTags.STUDENTS]
+			providesTags: [TagTypes.STUDENTS]
 		}),
 		getOneStudent: build.query({
 			query: (id) => ({ url: `/student/${id}`, method: 'GET' })
@@ -33,19 +33,19 @@ const studentApi = createApi({
 		getStudentsToReview: build.query({
 			query: (params) => ({ url: '/student/reviews', method: 'GET', params }),
 			transformResponse: (response) => transformStudentListData(response),
-			providesTags: [StudentApiTags.STUDENTS_TO_REVIEW]
+			providesTags: [TagTypes.STUDENTS_TO_REVIEW]
 		}),
 		updateStudent: build.mutation({
 			query: ({ id, payload }) => ({ url: `/student/${id}`, method: 'PATCH', data: payload }),
-			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(StudentApiTags))
+			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		updateReview: build.mutation({
 			query: (payload) => ({ url: '/student/status', method: 'PATCH', data: payload }),
-			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(StudentApiTags))
+			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		addStudents: build.mutation({
 			query: (payload) => ({ url: '/student', method: 'POST', data: payload }),
-			invalidatesTags: (_result, error, _data) => (error ? [] : [StudentApiTags.STUDENTS])
+			invalidatesTags: (_result, error, _data) => (error ? [] : [TagTypes.STUDENTS])
 		})
 	})
 });

@@ -19,7 +19,7 @@ const Modal = lazy(() => import('@/Core/components/common/Modal'));
 
 const handleGetInternStatusStyle = (value) => {
 	let style = null;
-	const checkstyle = Object.entries(StudentStatusGroupEnum).map(([k, v]) => {
+	Object.entries(StudentStatusGroupEnum).map(([k, v]) => {
 		const findItem = v.find((item) => StudentStatusEnum[value] == item);
 		if (findItem) {
 			style = k;

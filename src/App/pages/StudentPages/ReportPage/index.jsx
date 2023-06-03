@@ -95,7 +95,7 @@ const ReportPage = () => {
 							</List.Item>
 						</List>
 						<Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
-							<Grid>
+							<Form.Grid>
 								<InputFieldControl
 									label='Điểm kết quả'
 									placeholder='Nhập điểm kết quả thực tập'
@@ -108,8 +108,8 @@ const ReportPage = () => {
 									control={control}
 									name='attitudePoint'
 								/>
-							</Grid>
-							<Grid>
+							</Form.Grid>
+							<Form.Grid>
 								<FormControl>
 									<Text as='label'>Thời gian bắt đầu thực tập:</Text>
 									<Input readOnly value={data && formatDate(data?.internshipTime)} />
@@ -120,8 +120,8 @@ const ReportPage = () => {
 									name='endInternShipTime'
 									type='date'
 								/>
-							</Grid>
-							<Grid>
+							</Form.Grid>
+							<Form.Grid>
 								<RadioGroup>
 									<Text className='font-medium'>Đề xuất ký HĐLĐ với doanh nghiệp</Text>
 									<RadioFieldControl
@@ -142,7 +142,7 @@ const ReportPage = () => {
 									type='file'
 									onChange={(e) => setChosenFile(e.target.files[0])}
 								/>
-							</Grid>
+							</Form.Grid>
 							<Button
 								variant='primary'
 								className='w-auto'
@@ -171,7 +171,7 @@ const List = tw.ol`flex flex-col gap-2 bg-gray-50 p-4 mb-6`;
 const Form = tw.form`flex flex-col gap-6`;
 const Container = tw.div`max-w-2xl text-base-content md:mx-auto`;
 const RadioGroup = tw.div`flex flex-col gap-1`;
-const Grid = tw.div`grid grid-cols-2 gap-6 sm:grid-cols-1`;
+Form.Grid = tw.div`grid grid-cols-2 gap-6 sm:grid-cols-1`;
 List.Item = tw.li`whitespace-nowrap text-base-content inline-flex items-baseline gap-2`;
 
 export default ReportPage;
