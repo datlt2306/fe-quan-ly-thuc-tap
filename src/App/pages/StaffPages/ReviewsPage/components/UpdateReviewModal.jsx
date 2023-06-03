@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import tw from 'twin.macro';
 
 const UpdateReviewModal = ({
 	openState,
@@ -71,15 +72,7 @@ const UpdateReviewModal = ({
 	);
 };
 
-Modal.Form = ({ ...props }) => (
-	<form {...props} className='flex w-[320px] flex-col items-stretch gap-6'>
-		{props.children}
-	</form>
-);
-Modal.Actions = ({ ...props }) => (
-	<div {...props} className='flex items-center justify-end gap-1'>
-		{props.children}
-	</div>
-);
+Modal.Form = tw.form`flex w-[320px] flex-col items-stretch gap-6`;
+Modal.Actions = tw.div`flex items-center justify-end gap-1`;
 
 export default UpdateReviewModal;

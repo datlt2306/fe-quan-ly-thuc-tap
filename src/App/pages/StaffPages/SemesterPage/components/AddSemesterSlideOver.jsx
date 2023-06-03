@@ -1,18 +1,17 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
+import { useAddSemesterMutation } from '@/App/providers/apis/semesterApi';
+import { semesterDataValidator } from '@/App/schemas/semesterSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import SlideOver from '@/Core/components/common/SlideOver';
 import { yupResolver } from '@hookform/resolvers/yup';
+import moment from 'moment';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-import { semesterDataValidator } from '@/App/schemas/semesterSchema';
-import { useAddSemesterMutation } from '@/App/providers/apis/semesterApi';
-import { useSelector } from 'react-redux';
-import moment from 'moment';
 
 const AddSemesterSlideOver = ({ onOpen, open }) => {
 	const { handleSubmit, control, reset } = useForm({
@@ -59,8 +58,7 @@ const AddSemesterSlideOver = ({ onOpen, open }) => {
 					min={moment().format('YYYY-MM-DD')}
 					label='Ngày kết thúc'
 				/>
-				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
-					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
+				<Button type='submit' variant='primary' size='md' disabled={isLoading} loading={isLoading}>
 					Thêm
 				</Button>
 			</Form>

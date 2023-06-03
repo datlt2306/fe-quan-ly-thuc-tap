@@ -15,7 +15,7 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 		classNames({
 			'flex items-center gap-2 p-2 hover:bg-gray-100': true,
 			'text-primary': isActive,
-			'text-gray-500': !isActive
+			'text-base-content': !isActive
 		});
 
 	return (
@@ -54,7 +54,7 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 									<Button
 										shape='circle'
 										variant='ghost'
-										className='text-white hover:text-gray-500 '
+										className='text-white hover:text-base-content '
 										onClick={() => handleShowSlideOver(!isOpen)}>
 										<XMarkIcon className='h-6 w-6' />
 									</Button>
@@ -76,24 +76,24 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 																		className={`z-10 flex w-full items-center justify-between p-2 text-gray-800 hover:bg-gray-100 ${
 																			open ? 'bg-gray-50' : ''
 																		}`}>
-																		<span className='flex flex-1 items-center gap-2 text-gray-500'>
+																		<span className='flex flex-1 items-center gap-2 text-base-content'>
 																			<item.icon className='h-6 w-6' />
 																			{item.name}
 																		</span>
 
 																		<ChevronDownIcon
-																			className={`h-4 w-4 transform text-gray-500 duration-300 ease-in-out ${
+																			className={`h-4 w-4 transform text-base-content duration-300 ease-in-out ${
 																				open ? 'tranform rotate-180' : ''
 																			}`}
 																		/>
 																	</Disclosure.Button>
 																	<Transition
 																		enter='transition duration-500 transform'
-																		enterFrom='opacity-0 -translate-y-4 max=h-0'
+																		enterFrom='opacity-0 -translate-y-2 max-h-0'
 																		enterTo='opacity-100 translate-y-0 max-h-none'
-																		leave='transition duration-[300ms] transform'
+																		leave='transition duration-150 transform'
 																		leaveFrom='opacity-100 translate-y-0 max-h-none'
-																		leaveTo='opacity-0 -translate-y-2 max-h-0'>
+																		leaveTo='opacity-0 -translate-y-2 max-h-0 blur-lg'>
 																		<Disclosure.Panel className='z-0 bg-gray-50 ' as={Menu.Items}>
 																			{item.children.map((child, index) => {
 																				return (
@@ -107,7 +107,7 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 																								className={({ isActive }) =>
 																									navlinkClasses(isActive)
 																								}>
-																								<child.icon className='h-5 w-5 text-gray-500' />{' '}
+																								<child.icon className='h-5 w-5 text-base-content' />{' '}
 																								{child.name}
 																							</NavLink>
 																						</Menu.Item>

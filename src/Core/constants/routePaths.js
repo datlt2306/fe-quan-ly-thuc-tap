@@ -3,7 +3,16 @@
  */
 const BasePaths = {
 	NOT_FOUND: '/404',
-	SIGNIN: '/signin'
+	SIGNIN: '/signin',
+	ADMIN_SIGNIN: '/admin-signin'
+};
+
+/**
+ * @enum
+ */
+const AdminPaths = {
+	MANAGER_LIST: '/admin-danh-sach-quan-ly',
+	CAMPUS: '/admin-co-so'
 };
 
 /**
@@ -43,4 +52,4 @@ const StaffPaths = {
 	STUDENT_REQUESTS: '/yeu-cau-sinh-vien'
 };
 
-export { BasePaths, StudentPaths, StaffPaths, ManagerPaths };
+export { BasePaths, StudentPaths, StaffPaths, ManagerPaths, AdminPaths };

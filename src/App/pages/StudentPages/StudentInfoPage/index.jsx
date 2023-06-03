@@ -1,27 +1,33 @@
 import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from '@/App/constants/studentConstants';
-import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
+import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
+import Text from '@/Core/components/common/Text/Text';
 import Typography from '@/Core/components/common/Text/Typography';
 import { Menu } from '@headlessui/react';
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { DocumentTextIcon, IdentificationIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
+import { Fragment, Suspense, lazy, useState } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
-import { PencilSquareIcon } from '@heroicons/react/24/outline';
-import LoadingData from '../Shared/LoadingData';
 import EmptyStateSection from '../Shared/EmptyStateSection';
-
+import LoadingData from '../Shared/LoadingData';
 const ViewReport = lazy(() => import('./components/ViewReport'));
 const ViewForm = lazy(() => import('./components/ViewForm'));
 const ViewCv = lazy(() => import('./components/ViewCv'));
 const Modal = lazy(() => import('@/Core/components/common/Modal'));
 
-export const VerticalList = (props) => (
-	<ul {...props} tw='flex flex-col gap-3'>
-		{props.children}
-	</ul>
-);
+const handleGetInternStatusStyle = (value) => {
+	let style = null;
+	const checkstyle = Object.entries(StudentStatusGroupEnum).map(([k, v]) => {
+		const findItem = v.find((item) => StudentStatusEnum[value] == item);
+		if (findItem) {
+			style = k;
+			return;
+		}
+	});
+	return style;
+};
 
 const StudentInfoPage = () => {
 	const user = useSelector((state) => state.auth?.user);
@@ -34,28 +40,28 @@ const StudentInfoPage = () => {
 	});
 
 	const dataRegisterInfomation = [
-		{ label: 'Họ và tên :', value: data?.name },
-		{ label: 'Khóa học :', value: data?.course },
-		{ label: 'Ngành học :', value: data?.major?.name },
+		{ label: 'Họ và tên', value: data?.name },
+		{ label: 'Khóa học', value: data?.course },
+		{ label: 'Ngành học', value: data?.major?.name },
 
-		{ label: 'Email :', value: data?.email },
+		{ label: 'Email', value: data?.email },
 		{
-			label: 'Lựa chọn :',
+			label: 'Lựa chọn',
 			value: data?.support == 1 || data?.support == 0 ? InternSupportType[data?.support] : 'Chưa có thông tin'
 		},
 		{
-			label: 'Công ty đã chọn :',
+			label: 'Công ty đã chọn',
 			value:
 				data?.support === 1 ? data?.business?.name : data?.support === 0 ? data?.nameCompany : 'Chưa có thông tin'
 		},
 		{
-			label: 'Trạng thái sinh viên :',
+			label: 'Trạng thái sinh viên',
 			value: (
 				<>
 					{
-						<span className={`text-${handleGetInternStatusStyle(data?.statusCheck)}`}>
+						<Badge size='md' variant={handleGetInternStatusStyle(data?.statusCheck)}>
 							{StudentStatusEnum[data?.statusCheck]}
-						</span>
+						</Badge>
 					}
 				</>
 			)
@@ -83,35 +89,40 @@ const StudentInfoPage = () => {
 		return <LoadingData />;
 	}
 	return (
-		<>
-			<WrapLayoutInfoUser>
-				<LayoutInfoUser>
-					<VerticalList className='text-gray-500'>
-						<Title>Thông Tin Đăng Ký</Title>
+		<Fragment>
+			<Grid>
+				<Grid.Col>
+					<Typography level={6} className='inline-flex items-center gap-2'>
+						<IdentificationIcon className='h-6 w-6' /> Thông tin sinh viên
+					</Typography>
+					<List className='py-3 text-base-content'>
 						{dataRegisterInfomation.map((item) => (
-							<li key={item.label} className='flex gap-1 '>
-								{item.label}
-								<Text>{item.value}</Text>
-							</li>
+							<List.Item key={item.label}>
+								<Text>{item.label}</Text>
+								<Text className='font-medium'>{item.value}</Text>
+							</List.Item>
 						))}
-					</VerticalList>
-				</LayoutInfoUser>
+					</List>
+				</Grid.Col>
 
-				<LayoutFormSubmitted>
-					<Title>Các Form Đã Nộp</Title>
-					<WrapMenu>
-						<Menu>
-							{!(data?.CV || data?.form || data?.report || data?.nameCompany) && (
-								<EmptyStateSection title='Chưa có form nào được nộp' />
-							)}
-							{formSubmittedRoute.map((item) => (
-								<Menu.Item
-									key={item.label}
-									className='w-full  rounded-md p-3 text-start hover:bg-gray-100  hover:text-primary'>
-									<>
+				<Grid.Col>
+					{!(data?.CV || data?.form || data?.report || data?.nameCompany) ? (
+						<EmptyStateSection
+							title='Bạn chưa nộp form nào.'
+							message='Thông tin chi tiết các form sẽ được hiển thị sau khi đăng ký thành công.'
+						/>
+					) : (
+						<Fragment>
+							<Typography level={6} className='inline-flex items-center gap-2'>
+								<DocumentTextIcon className='h-6 w-6' /> Các form đã nộp
+							</Typography>
+							<Menu as={'ol'} className='flex w-full flex-col gap-1 py-3'>
+								{formSubmittedRoute.map((item) => (
+									<Menu.Item as='li' key={item.label} className='w-full'>
 										{item.condition && (
 											<Button
-												variant='outline'
+												variant='primary'
+												className='w-full'
 												onClick={() => {
 													setModalContent(item.content);
 													setTitle(item.label);
@@ -120,38 +131,42 @@ const StudentInfoPage = () => {
 												{item.label}
 											</Button>
 										)}
-									</>
-								</Menu.Item>
-							))}
-						</Menu>
-					</WrapMenu>
-				</LayoutFormSubmitted>
-			</WrapLayoutInfoUser>
+									</Menu.Item>
+								))}
+							</Menu>
+						</Fragment>
+					)}
+				</Grid.Col>
+			</Grid>
 
 			<div className='bg-gray-50 p-4'>
 				<Typography level={6} className='flex items-center gap-1  text-lg font-medium '>
 					<PencilSquareIcon className='h-5 w-5' />
 					Ghi chú
 				</Typography>
-				<Note>{data?.note}</Note>
+				<TextNote>{data?.note}</TextNote>
 			</div>
 
 			{openState && (
 				<Suspense fallback={<LoadingProgressBar />}>
 					<Modal openState={openState} onOpenStateChange={setOpenState} title={title}>
-						{modalContent}
+						<Modal.Content>{modalContent}</Modal.Content>
 					</Modal>
 				</Suspense>
 			)}
-		</>
+		</Fragment>
 	);
 };
-const Title = tw.h1`mb-5  text-lg font-medium text-primary`;
-const Text = tw.p`font-medium`;
-const WrapMenu = tw.div`mt-8 flex flex-col  gap-3`;
+
+const TextNote = tw.div`mt-2 h-52 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200`;
+const Grid = tw.section`mb-8 grid grid-cols-[1.5fr,1fr] divide-x divide-gray-200`;
+const List = tw.ul`flex flex-col divide-y divide-gray-100`;
+Grid.Col = tw.div`divide-y divide-gray-200 flex flex-col [&>*]:p-3`;
+List.Item = tw.li`py-2 px-1 inline-grid grid-cols-2 items-baseline`;
+Modal.Content = tw.div`min-w-[576px] w-full max-w-full`;
 
 const Note = tw.div`mt-2  h-52 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200`;
-export const handleGetInternStatusStyle = (value) => {
+const handleGetInternStatusStyle = (value) => {
 	let style = null;
 	const checkstyle = Object.entries(StudentStatusGroupEnum).map(([k, v]) => {
 		const findItem = v.find((item) => StudentStatusEnum[value] == item);

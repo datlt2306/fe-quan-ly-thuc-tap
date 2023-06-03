@@ -5,7 +5,7 @@ import { newStudentSchema } from '@/App/schemas/studentSchema';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
-import { AllowedFileExt } from '@/Core/constants/allowedFileType';
+import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
 import HttpStatusCode from '@/Core/constants/httpStatus';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import getFileExtension from '@/Core/utils/getFileExtension';
@@ -44,17 +44,19 @@ const StudentListPage = () => {
 			toast.warn('Vui lòng nhập thông tin đầy đủ !');
 			return;
 		}
-		const newStudentList = excelData.map((obj) => ({
-			name: obj[StudentColumnAccessors.name],
-			mssv: obj[StudentColumnAccessors.mssv],
-			course: obj[StudentColumnAccessors.course],
-			email: obj[StudentColumnAccessors.email],
-			phoneNumber: obj[StudentColumnAccessors.phoneNumber],
-			majorCode: obj[StudentColumnAccessors.majorCode],
-			statusStudent: obj[StudentColumnAccessors.statusStudent],
-			smester_id: currentSemester,
-			campus_id: currentCampus?._id
-		}));
+		const newStudentList = excelData
+			.map((obj) => ({
+				name: obj[StudentColumnAccessors.name],
+				mssv: obj[StudentColumnAccessors.mssv],
+				course: obj[StudentColumnAccessors.course],
+				email: obj[StudentColumnAccessors.email],
+				phoneNumber: obj[StudentColumnAccessors.phoneNumber],
+				majorCode: obj[StudentColumnAccessors.majorCode],
+				statusStudent: obj[StudentColumnAccessors.statusStudent],
+				smester_id: currentSemester,
+				campus_id: currentCampus?._id
+			}))
+			.filter((student) => Object.keys(student).length === 9);
 		try {
 			toastId.current = toast.loading('Đang tải lên dữ liệu ...');
 			const payload = await newStudentSchema.validate(newStudentList);
@@ -65,7 +67,9 @@ const StudentListPage = () => {
 			});
 			if (error) {
 				const message =
-					error?.status === HttpStatusCode.CONFLICT ? 'Đã có sinh viên tồn tại trong hệ thống !' : 'Lỗi server !';
+					error?.status === HttpStatusCode.CONFLICT
+						? 'Đã có sinh viên tồn tại trong hệ thống !'
+						: 'Đã có lỗi xảy ra, vui lòng kiểm tra lại dữ liệu tải lên';
 
 				toast.update(toastId.current, {
 					type: 'error',
@@ -101,7 +105,7 @@ const StudentListPage = () => {
 	const handleImportStudents = useCallback(
 		(file) => {
 			const fileExtension = getFileExtension(file);
-			if (fileExtension !== AllowedFileExt.XLSX) {
+			if (fileExtension !== AllowedFileExtension.XLSX) {
 				toast.error('File import không hợp lệ');
 				fileInputRef.current.value = null;
 				return;

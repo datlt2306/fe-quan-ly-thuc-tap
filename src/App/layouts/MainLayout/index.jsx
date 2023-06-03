@@ -7,7 +7,12 @@ import tw from 'twin.macro';
 import DesktopSidebar from './components/DesktopSidebar';
 import MobileSidebar from './components/MobileSidebar';
 import Navbar from './components/Navbar';
-import { managerNavigation, staffNavigation, studentNavigation } from './constants/navigationConstants';
+import {
+	managerNavigation,
+	staffNavigation,
+	studentNavigation,
+	adminNavigation
+} from './constants/navigationConstants';
 import UnsupportScreen from '@/Core/components/customs/UnsupportScreen';
 import ErrorBoundary from '@/Core/components/error/ErrorBoundary';
 
@@ -25,6 +30,8 @@ const MainLayout = () => {
 				return staffNavigation;
 			case UserRoleEnum.MANAGER:
 				return managerNavigation;
+			case UserRoleEnum.ADMIN:
+				return adminNavigation;
 			default:
 				return [];
 		}

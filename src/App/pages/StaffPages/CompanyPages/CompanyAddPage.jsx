@@ -1,18 +1,16 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
-import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
-import tw from 'twin.macro';
-import Button from '@/Core/components/common/Button';
-import { companySchema } from '@/App/schemas/companySchema';
 import { useAddCompanyMutation } from '@/App/providers/apis/businessApi';
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { companySchema } from '@/App/schemas/companySchema';
+import Button from '@/Core/components/common/Button';
+import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
+import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
 import { StaffPaths } from '@/Core/constants/routePaths';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import tw from 'twin.macro';
 
 const AddBusinessForm = () => {
 	const navigate = useNavigate();
@@ -68,8 +66,8 @@ const AddBusinessForm = () => {
 					/>
 					<InputFieldControl control={control} name='address' label='Địa Chỉ' placeholder='Hà Nội ...' />
 					<Desktop>
-						<Button variant='primary' type='submit' disabled={isLoading}>
-							{isLoading && <LoadingSpinner size='sm' variant='primary' />} Thêm mới
+						<Button variant='primary' type='submit' disabled={isLoading} loading={isLoading}>
+							Thêm mới
 						</Button>
 					</Desktop>
 				</FlexLetf>
@@ -92,8 +90,8 @@ const AddBusinessForm = () => {
 				</FlexRight>
 			</Flex>
 			<Mobile>
-				<Button variant='primary' type='submit' disabled={isLoading}>
-					{isLoading && <LoadingSpinner size='sm' variant='primary' />} Thêm mới
+				<Button variant='primary' type='submit' disabled={isLoading} loading={isLoading}>
+					Thêm mới
 				</Button>
 			</Mobile>
 		</Form>

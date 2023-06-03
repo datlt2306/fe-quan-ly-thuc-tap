@@ -46,11 +46,36 @@ const staffListApi = createApi({
 				return { url: '/manager/' + id, method: 'DELETE' };
 			},
 			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
+		}),
+		getAllManager: build.query({
+			query: () => {
+				return { url: '/admin/manager', method: 'GET' };
+			},
+			providesTags: Object.values(TagTypes)
+		}),
+		addManager: build.mutation({
+			query: (payload) => {
+				return { url: '/admin/manager', method: 'POST', data: payload };
+			},
+			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
+		}),
+		updateManager: build.mutation({
+			query: ({ id, payload }) => {
+				return { url: '/admin/manager/' + id, method: 'PATCH', data: payload };
+			},
+			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		})
 	})
 });
 
-export const { useGetAllStaffQuery, useUpdateStaffMutation, useAddStaffMutation, useDeleteStaffMutation } =
-	staffListApi;
+export const {
+	useGetAllStaffQuery,
+	useUpdateStaffMutation,
+	useAddStaffMutation,
+	useDeleteStaffMutation,
+	useGetAllManagerQuery,
+	useAddManagerMutation,
+	useUpdateManagerMutation
+} = staffListApi;
 
 export default staffListApi;
