@@ -26,7 +26,6 @@ const staffListApi = createApi({
 					}));
 				return response;
 			},
-
 			providesTags: Object.values(TagTypes)
 		}),
 		updateStaff: build.mutation({

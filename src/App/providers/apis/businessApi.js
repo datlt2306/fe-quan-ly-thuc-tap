@@ -1,33 +1,40 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import axiosBaseQuery from '../axiosBaseQuery';
 
+/**
+ * @enum
+ */
+const TagTypes = {
+	BUSINESS: 'Business'
+};
+
 const businessApi = createApi({
 	reducerPath: 'businessApi',
 	baseQuery: axiosBaseQuery(),
-	tagTypes: ['Business'],
+	tagTypes: Object.values(TagTypes),
 	endpoints: (build) => ({
 		getAllCompany: build.query({
 			query: (params) => ({ url: '/business', method: 'GET', params }),
-			providesTags: ['Business']
+			providesTags: Object.values(TagTypes)
 		}),
 		getOneCompany: build.query({
 			query: (payload) => ({ url: `/business/${payload.id}`, method: 'GET' })
 		}),
 		addCompany: build.mutation({
 			query: (payload) => ({ url: '/business', method: 'PUT', data: payload }),
-			invalidatesTags: ['Business']
+			invalidatesTags: Object.values(TagTypes)
 		}),
 		addArrayCompany: build.mutation({
 			query: (payload) => ({ url: '/business', method: 'PUT', data: payload }),
-			invalidatesTags: ['Business']
+			invalidatesTags: Object.values(TagTypes)
 		}),
 		updateCompany: build.mutation({
 			query: (payload) => ({ url: `/business/${payload.id}`, method: 'PATCH', data: payload.data }),
-			invalidatesTags: ['Business']
+			invalidatesTags: Object.values(TagTypes)
 		}),
 		deleteCompany: build.mutation({
 			query: (payload) => ({ url: `/business/${payload.id}`, method: 'DELETE' }),
-			invalidatesTags: ['Business']
+			invalidatesTags: Object.values(TagTypes)
 		})
 	})
 });

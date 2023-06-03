@@ -18,6 +18,9 @@ const semesterApi = createApi({
 			query: (params) => ({ url: '/semester', method: 'GET', params }),
 			providesTags: [TagTypes.SEMESTERS]
 		}),
+		getDefaultSemster: build.query({
+			query: (params) => ({ url: '/semester/default', method: 'GET', params })
+		}),
 		addSemester: build.mutation({
 			query: (payload) => {
 				return { url: '/semester', method: 'POST', data: payload };
@@ -32,6 +35,7 @@ const semesterApi = createApi({
 		})
 	})
 });
-export const { useGetAllSemestersQuery, useAddSemesterMutation, useUpdateSemesterMutation } = semesterApi;
+export const { useGetAllSemestersQuery, useAddSemesterMutation, useUpdateSemesterMutation, useGetDefaultSemsterQuery } =
+	semesterApi;
 
 export default semesterApi;

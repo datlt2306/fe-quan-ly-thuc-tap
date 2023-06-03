@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import React from 'react';
+import Text from '../Text/Text';
 
 const Badge = ({ variant, size = 'sm', ...props }) => {
 	return (
-		<span
-			className={classNames('inline-flex items-center gap-x-1.5 rounded-sm  font-semibold', {
+		<Text
+			className={classNames('inline-flex items-center gap-x-1.5 rounded-sm font-semibold', {
 				'bg-primary/10 text-primary': variant === 'primary',
 				'bg-success/10 text-success': variant === 'success',
 				'bg-info/10 text-info': variant === 'info',
@@ -16,7 +16,7 @@ const Badge = ({ variant, size = 'sm', ...props }) => {
 				'px-2.5 py-1.5 text-base': size === 'lg'
 			})}>
 			{props.children}
-		</span>
+		</Text>
 	);
 };
 

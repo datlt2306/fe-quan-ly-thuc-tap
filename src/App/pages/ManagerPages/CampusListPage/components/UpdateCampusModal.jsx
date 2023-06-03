@@ -78,7 +78,6 @@ const UpdateCampusModal = ({ campusData, onOpenStateChange, openState, curCampus
 				<InputFieldControl name='name' control={control} label='Tên cơ sở' />
 
 				<Button type='submit' size='md' variant='primary' disabled={isLoading} loading={isLoading}>
-					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Cập nhật
 				</Button>
 			</Modal.Form>

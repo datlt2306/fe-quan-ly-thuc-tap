@@ -4,18 +4,19 @@ import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 import { recordSchema } from '@/App/schemas/recordSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
 import Typography from '@/Core/components/common/Text/Typography';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState, useRef, Fragment } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import EmptyStateSection from '../Shared/EmptyStateSection';
-import SuccessStateSection from '../Shared/SuccessStateSection';
 import LoadingData from '../Shared/LoadingData';
+import SuccessStateSection from '../Shared/SuccessStateSection';
+import Text from '@/Core/components/common/Text/Text';
+
 const RecordPage = () => {
 	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery({ typeNumber: 2 });
 	const navigate = useNavigate();
@@ -66,7 +67,7 @@ const RecordPage = () => {
 			{deadlineCheck ? (
 				statusCheck.includes(data?.statusCheck) ? (
 					<Container>
-						<Typography level={4} color='text-primary'>
+						<Typography level={5} className='mb-6'>
 							Nộp biên bản
 						</Typography>
 						<List>

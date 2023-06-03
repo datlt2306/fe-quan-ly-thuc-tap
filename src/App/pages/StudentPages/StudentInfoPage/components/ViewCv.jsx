@@ -1,11 +1,10 @@
-import Button from '@/Core/components/common/Button';
-import { List } from '..';
 import { InternSupportType } from '@/App/constants/studentConstants';
-import tw from 'twin.macro';
-import FormRequestSupport from './FormRequestSupport';
-import { Fragment } from 'react';
+import Button from '@/Core/components/common/Button';
 import Text from '@/Core/components/common/Text/Text';
 import { EyeIcon } from '@heroicons/react/24/outline';
+import { Fragment } from 'react';
+import { List } from '..';
+import FormRequestSupport from './FormRequestSupport';
 
 const ViewCv = ({ data: user, setOpenState }) => {
 	const dataInfoCompany = [

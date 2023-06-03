@@ -1,7 +1,6 @@
 import { formSignUpSchoolSupportSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import FileUploadFieldControl from '@/Core/components/common/FormControl/FileUploadFieldControl';
-
 import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
 import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
 import ComboBoxFieldControl from '@/Core/components/common/FormControl/ComboBoxFieldControl';

@@ -1,5 +1,4 @@
 import { List } from '..';
-
 import Button from '@/Core/components/common/Button';
 import { InternSupportType } from '@/App/constants/studentConstants';
 import formatDate from '@/Core/utils/formatDate';
@@ -7,6 +6,7 @@ import FormRequestSupport from './FormRequestSupport';
 import Text from '@/Core/components/common/Text/Text';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
+
 const ViewForm = ({ data: user, setOpenState }) => {
 	const dataViewForm = [
 		{

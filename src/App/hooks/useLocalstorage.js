@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import isJSON from '@/Core/utils/checkJsonType';
-// Hook
+
+/**
+ *
+ * @param {string} key
+ * @param {unknown} initialValue
+ * @returns {[ any, Dispatch<any>]}
+ */
 export default function useLocalStorage(key, initialValue) {
 	const [storedValue, setStoredValue] = useState(() => {
 		const value = localStorage.getItem(key);

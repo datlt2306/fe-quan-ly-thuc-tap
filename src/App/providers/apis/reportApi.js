@@ -1,14 +1,17 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import axiosBaseQuery from '../axiosBaseQuery';
 
+/**
+ * @enum
+ */
+const TagTypes = {};
+
 const reportApi = createApi({
 	reducerPath: 'reportApi',
 	baseQuery: axiosBaseQuery(),
-	tagTypes: ['Report'],
 	endpoints: (build) => ({
 		uploadForm: build.mutation({
-			query: (payload) => ({ url: '/upload/form', method: 'PATCH', data: payload }),
-			invalidatesTags: ['Report']
+			query: (payload) => ({ url: '/upload/form', method: 'PATCH', data: payload })
 		}),
 		uploadReport: build.mutation({
 			query: (payload) => ({ url: '/upload/report', method: 'PATCH', data: payload })
