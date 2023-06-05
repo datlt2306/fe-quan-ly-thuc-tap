@@ -1,4 +1,5 @@
-import { useGetAllManagerQuery, useDeleteStaffMutation } from '@/App/providers/apis/staffListApi';
+import useServerPagination from '@/App/hooks/useServerPagination';
+import { useDeleteStaffMutation, useGetAllManagerQuery } from '@/App/providers/apis/staffListApi';
 import { staffDataValidator } from '@/App/schemas/staffSchema';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
@@ -19,8 +20,13 @@ const ManagerListPage = () => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [user, setUser] = useState();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
-	const { data, isLoading } = useGetAllManagerQuery({ limit: 10000 });
-	const tableData = useMemo(() => data?.data.map((item, index) => ({ ...item, index: index + 1 })) ?? [], [data]);
+	const { paginationState, handlePaginate } = useServerPagination();
+	const { data, isLoading } = useGetAllManagerQuery({
+		page: paginationState?.pageIndex,
+		limit: paginationState?.pageSize
+	});
+	const tableData = useMemo(() => data?.data ?? [], [data]);
+
 	const { reset } = useForm({
 		resolver: yupResolver(staffDataValidator)
 	});
@@ -96,7 +102,12 @@ const ManagerListPage = () => {
 								title={'Xóa nhân viên'}
 								description={'Bạn muốn xóa nhân viên này ?'}
 								onConfirm={() => onDeleteSubmit(row.original._id)}>
-								<Button size='xs' variant='ghost' className='text-error' shape='square'>
+								<Button
+									size='xs'
+									variant='ghost'
+									className='text-error'
+									shape='square'
+									disabled={row.original?._id === currentUser.id}>
 									<TrashIcon className='h-4 w-4' />
 								</Button>
 							</PopConfirm>
@@ -132,7 +143,20 @@ const ManagerListPage = () => {
 					</Button>
 				</ButtonList>
 
-				<ReactTable loading={isLoading} columns={columnsData} data={tableData} />
+				<ReactTable
+					loading={isLoading}
+					columns={columnsData}
+					data={tableData}
+					serverSidePagination={true}
+					serverPaginationProps={{
+						...paginationState,
+						pageIndex: data?.page,
+						totalPages: data?.totalPages,
+						canNextPage: data?.hasNextPage,
+						canPreviousPage: data?.hasPrevPage
+					}}
+					onServerPaginate={handlePaginate}
+				/>
 			</Box>
 		</Fragment>
 	);

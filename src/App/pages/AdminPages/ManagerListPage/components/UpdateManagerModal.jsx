@@ -9,11 +9,12 @@ import Modal from '@/Core/components/common/Modal';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 
 const UpdateManagerModal = ({ userData, onOpenStateChange, openState, users }) => {
-	const { data: campus, isLoading: campusLoading } = useGetAllCampusQuery();
+	const campusList = useSelector((state) => state.campus?.campusList);
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(managerDataValidator),
 		defaultValues: userData
@@ -60,7 +61,7 @@ const UpdateManagerModal = ({ userData, onOpenStateChange, openState, users }) =
 					label='Chọn cơ sở'
 					control={control}
 					name='campus_id'
-					options={campus?.listCampus.map((item) => ({
+					options={campusList.map((item) => ({
 						label: item.name,
 						value: item._id
 					}))}

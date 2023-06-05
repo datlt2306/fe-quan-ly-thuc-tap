@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { useGetAllCampusQuery } from '@/App/providers/apis/campusApi';
 import { useAddManagerMutation } from '@/App/providers/apis/staffListApi';
 import { managerDataValidator } from '@/App/schemas/staffSchema';
 import Button from '@/Core/components/common/Button';
@@ -10,11 +9,12 @@ import SlideOver from '@/Core/components/common/SlideOver';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 
 const AddManagerSlideOver = ({ onOpen, open }) => {
-	const { data: campus, isLoading: campusLoading } = useGetAllCampusQuery();
+	const campusList = useSelector((state) => state.campus?.campusList);
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(managerDataValidator),
 		defaultValue: managerDataValidator.getDefault()
@@ -47,7 +47,7 @@ const AddManagerSlideOver = ({ onOpen, open }) => {
 					label='Chọn cơ sở'
 					control={control}
 					name='campus_id'
-					options={campus?.listCampus.map((item) => ({
+					options={campusList.map((item) => ({
 						label: item.name,
 						value: item._id
 					}))}
