@@ -20,7 +20,7 @@ import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
 const StudentListPage = () => {
 	const { currentCampus } = useSelector((state) => state.campus);
 	const [handleImportFile] = useImportFromExcel();
-	const { handleExportFile } = useExportToExcel();
+	const [handleExportFile] = useExportToExcel();
 	const [addStudents] = useAddStudentsMutation();
 	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useState();
@@ -148,7 +148,7 @@ const StudentListPage = () => {
 						className='min-w-[12rem] capitalize sm:text-sm'
 						onChange={(e) => setCurrentSemester(e.target.value)}
 						value={currentSemester}>
-						<Option>All</Option>
+						<Option value=''>All</Option>
 						{Array.isArray(listSemesters) &&
 							listSemesters?.map((semester) => (
 								<Option key={semester._id} value={semester._id}>

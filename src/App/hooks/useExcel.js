@@ -31,7 +31,7 @@ export const useImportFromExcel = () => {
 
 				const mappedSheetData = mapExcelData(filteredData);
 				/* Excute callback after importing file */
-				if (callback instanceof Function) {
+				if (callback && callback instanceof Function) {
 					callback(mappedSheetData);
 				}
 			};
@@ -46,6 +46,9 @@ export const useImportFromExcel = () => {
 	return [handleImportFile, importState];
 };
 
+/**
+ * @returns {[handleExportFile: ({ fileName, data }) => any, exportState: {isSuccess: boolean, isError: boolean}]}
+ */
 export const useExportToExcel = () => {
 	const [exportState, setExportState] = useState({
 		isSuccess: false,
@@ -69,7 +72,7 @@ export const useExportToExcel = () => {
 				isSuccess: true,
 				isError: false
 			});
-			return XLSX.writeFile(workbook, fileName + AllowedFileExtension.XLSX);
+			return XLSX.writeFile(workbook, fileName + '.' + AllowedFileExtension.XLSX);
 		} catch (error) {
 			setExportState({
 				isSuccess: false,
@@ -77,5 +80,5 @@ export const useExportToExcel = () => {
 			});
 		}
 	};
-	return { handleExportFile, exportState };
+	return [handleExportFile, exportState];
 };

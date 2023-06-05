@@ -9,7 +9,7 @@ import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon } from '@
 const DesktopButtonGroup = ({ tableData, handleImport, handleExport, canImport }, ref) => {
 	const localRef = useRef(null);
 	const fileInputRef = ref || localRef;
-	const { handleExportFile } = useExportToExcel();
+	const [handleExportFile] = useExportToExcel();
 
 	return (
 		<ButtonList>

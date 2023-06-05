@@ -14,7 +14,7 @@ import {
 const MobileDropdownButtonGroup = forwardRef(({ tableData, handleImport, handleExport, canImport }, ref) => {
 	const localRef = useRef(null);
 	const fileInputRef = ref || localRef;
-	const { handleExportFile } = useExportToExcel();
+	const [handleExportFile] = useExportToExcel();
 
 	const getMenuItemClassNames = () =>
 		classNames({
@@ -23,7 +23,7 @@ const MobileDropdownButtonGroup = forwardRef(({ tableData, handleImport, handleE
 
 	return (
 		<Menu as='div' className='relative hidden sm:block md:block'>
-			<Menu.Button as={Fragment}>
+			<Menu.Button as={Fragment} className=''>
 				<Button variant='ghost' size='sm' shape='square'>
 					<EllipsisHorizontalIcon className='h-6 w-6' />
 				</Button>
@@ -36,7 +36,7 @@ const MobileDropdownButtonGroup = forwardRef(({ tableData, handleImport, handleE
 				leave='transition ease-in duration-150'
 				leaveFrom='opacity-100 translate-y-0'
 				leaveTo='opacity-0 translate-x-1'>
-				<Menu.Items className='absolute right-0 top-0 z-50 mr-12 flex flex-col rounded-md bg-white shadow [&>:first-child]:rounded-t-[inherit] [&>:last-child]:rounded-b-[inherit]'>
+				<Menu.Items className='absolute right-0 top-0 z-50 mr-12 flex flex-col rounded-md bg-white shadow focus:outline-none [&>:first-child]:rounded-t-[inherit] [&>:last-child]:rounded-b-[inherit]'>
 					<Menu.Item
 						as='label'
 						htmlFor='file-input'
