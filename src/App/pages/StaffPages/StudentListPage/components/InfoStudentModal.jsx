@@ -58,7 +58,7 @@ const InfoStudentModal = ({ id, onOpenStateChange, openState }) => {
 		{ label: 'Mã số thuế', value: formSchoolSupport ? student?.business?.tax_code : student?.taxCode },
 		{ label: 'Vị trí thực tập', value: student?.dream },
 		{ label: 'SĐT công ty', value: student?.phoneNumberCompany },
-		{ label: 'Tên người tiếp nhận', value: student?.nameEnterprise },
+		{ label: 'Tên người tiếp nhận', value: student?.employer },
 		{ label: 'Email người tiếp nhận', value: student?.emailEnterprise },
 		{ label: 'Ngày bắt đầu thực tập', value: student?.internshipTime ? formatDate(student?.internshipTime) : null },
 		{
