@@ -10,7 +10,7 @@ import Typography from '@/Core/components/common/Text/Typography';
 import formatDate from '@/Core/utils/formatDate';
 import { yupResolver } from '@hookform/resolvers/yup';
 import moment from 'moment';
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -20,33 +20,34 @@ import EmptyStateSection from '../Shared/EmptyStateSection';
 import LoadingData from '../Shared/LoadingData';
 import SuccessStateSection from '../Shared/SuccessStateSection';
 import FormControl from '@/Core/components/common/FormControl/FormControl';
+import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 
 const ReportPage = () => {
-	// check the student's status to open the form
-	// 6: "Đang thực tập", 8: "Sửa báo cáo"
-	const statusCheck = [6, 8];
-
 	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery({ typeNumber: 3 });
 	const deadlineCheck =
 		times && times?.time?.endTime > new Date().getTime() && times?.time?.startTime < new Date().getTime();
-
-	const convertTime = (date) => {
-		if (typeof date !== 'string') return '';
-		return date ? moment(date.substring(0, 10), 'YYYY-MM-DD').format('DD/MM/YYYY') : '';
-	};
-
 	const navigate = useNavigate();
-
 	const { user } = useSelector((state) => state.auth);
-	const { data, isLoading: getUserLoading } = useGetOneStudentQuery(user?.id);
+	const { data: student, isLoading: getUserLoading } = useGetOneStudentQuery(user?.id);
 	const [chosenFile, setChosenFile] = useState(null);
 	const [handleSubmitForm, { isLoading }] = useUploadReportMutation();
-
 	const fileInputRef = useRef(null);
-
-	const { handleSubmit, control } = useForm({
+	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(reportSchema)
 	});
+
+	useEffect(() => {
+		reset({
+			endInternShipTime: moment(new Date(student?.endInternShipTime)).format('YYYY-MM-DD'),
+			resultScore: +student?.resultScore ?? '',
+			attitudePoint: +student?.attitudePoint ?? '',
+			signTheContract: student?.signTheContract ?? ''
+		});
+	}, [student]);
+
+	// check the student's status to open the form
+	// 6: "Đang thực tập", 8: "Sửa báo cáo"
+	const statusCheck = [6, 8];
 
 	const onSubmit = async (value) => {
 		const formData = new FormData();
@@ -55,15 +56,15 @@ const ReportPage = () => {
 		formData.append('resultScore', value.resultScore);
 		formData.append('attitudePoint', value.attitudePoint);
 		formData.append('signTheContract', value.signTheContract);
-		formData.append('_id', data._id);
-		formData.append('mssv', data.mssv);
-		formData.append('email', data.email);
-		formData.append('nameCompany', data?.support === 1 ? data?.business?.name : data?.nameCompany);
+		formData.append('_id', student._id);
+		formData.append('mssv', student.mssv);
+		formData.append('email', student.email);
+		formData.append('nameCompany', student?.support === 1 ? student?.business?.name : student?.nameCompany);
 		formData.append('typeNumber', 3);
-		const result = await handleSubmitForm(formData);
-		if (result?.error) {
+
+		const { error } = await handleSubmitForm(formData);
+		if (error) {
 			toast.error('Nộp báo cáo thất bại!');
-			navigate('/');
 			return;
 		}
 		toast.success('Nộp báo cáo thành công');
@@ -75,27 +76,27 @@ const ReportPage = () => {
 	return (
 		<Fragment>
 			{deadlineCheck ? (
-				statusCheck.includes(data?.statusCheck) ? (
+				statusCheck.includes(student?.statusCheck) ? (
 					<Container>
 						<Typography level={5} className='mb-6'>
 							Nộp báo cáo
 						</Typography>
 						<List>
 							<List.Item>
-								Họ và tên: <Text className='font-medium'>{data && data?.name}</Text>
+								Họ và tên: <Text className='font-medium'>{student && student?.name}</Text>
 							</List.Item>
 							<List.Item>
-								Mã sinh viên: <Text className='font-medium'>{data && data?.mssv}</Text>
+								Mã sinh viên: <Text className='font-medium'>{student && student?.mssv}</Text>
 							</List.Item>
 							<List.Item>
 								Tên doanh nghiệp:
 								<Text className='font-medium'>
-									{data && data?.support === 1 ? data?.business?.name : data?.nameCompany}
+									{student && student?.support === 1 ? student?.business?.name : student?.nameCompany}
 								</Text>
 							</List.Item>
 						</List>
 						<Form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
-							<Form.Grid>
+							<Form.Group>
 								<InputFieldControl
 									label='Điểm kết quả'
 									placeholder='Nhập điểm kết quả thực tập'
@@ -108,11 +109,11 @@ const ReportPage = () => {
 									control={control}
 									name='attitudePoint'
 								/>
-							</Form.Grid>
-							<Form.Grid>
+							</Form.Group>
+							<Form.Group>
 								<FormControl>
 									<Text as='label'>Thời gian bắt đầu thực tập:</Text>
-									<Input readOnly value={data && formatDate(data?.internshipTime)} />
+									<Input readOnly value={student && formatDate(student?.internshipTime)} />
 								</FormControl>
 								<InputFieldControl
 									label='Thời gian kết thúc thực tập'
@@ -120,8 +121,8 @@ const ReportPage = () => {
 									name='endInternShipTime'
 									type='date'
 								/>
-							</Form.Grid>
-							<Form.Grid>
+							</Form.Group>
+							<Form.Group>
 								<RadioGroup>
 									<Text className='font-medium'>Đề xuất ký HĐLĐ với doanh nghiệp</Text>
 									<RadioFieldControl
@@ -142,18 +143,19 @@ const ReportPage = () => {
 									type='file'
 									onChange={(e) => setChosenFile(e.target.files[0])}
 								/>
-							</Form.Grid>
+							</Form.Group>
 							<Button
 								variant='primary'
 								className='w-auto'
 								type='submit'
 								disabled={isLoading}
-								loading={isLoading}>
+								loading={isLoading}
+								icon={ArrowUpTrayIcon}>
 								Nộp báo cáo
 							</Button>
 						</Form>
 					</Container>
-				) : data?.report ? (
+				) : student?.report ? (
 					<SuccessStateSection title={'Bạn đã nộp báo cáo thành công!'} />
 				) : (
 					<EmptyStateSection title={'Bạn chưa đủ điều kiện nộp báo cáo'} />
@@ -171,7 +173,7 @@ const List = tw.ol`flex flex-col gap-2 bg-gray-50 p-4 mb-6`;
 const Form = tw.form`flex flex-col gap-6`;
 const Container = tw.div`max-w-2xl text-base-content md:mx-auto`;
 const RadioGroup = tw.div`flex flex-col gap-1`;
-Form.Grid = tw.div`grid grid-cols-2 gap-6 sm:grid-cols-1`;
+Form.Group = tw.div`grid grid-cols-2 gap-6 sm:grid-cols-1`;
 List.Item = tw.li`whitespace-nowrap text-base-content inline-flex items-baseline gap-2`;
 
 export default ReportPage;
