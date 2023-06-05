@@ -14,7 +14,7 @@ import { useExportToExcel } from '@/App/hooks/useExcel';
 const MobileDropdownButtonGroup = ({ tableData, handleImport, handleExport, canImport }, ref) => {
 	const localRef = useRef(null);
 	const fileInputRef = ref || localRef;
-	const { handleExportFile } = useExportToExcel();
+	const [handleExportFile] = useExportToExcel();
 
 	const getMenuItemClassNames = () =>
 		classNames({
