@@ -22,7 +22,7 @@ const AddStaffSlideOver = ({ onOpen, open }) => {
 	const [handleAddNewStaff, { isLoading }] = useAddStaffMutation();
 
 	const onAddSubmit = async (data) => {
-		const { error } = await handleAddNewStaff(data);
+		const { error } = await handleAddNewStaff({ ...data, role: 1 });
 		if (error) {
 			onOpen(!open);
 			reset();
@@ -42,15 +42,6 @@ const AddStaffSlideOver = ({ onOpen, open }) => {
 			<Form onSubmit={handleSubmit(onAddSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên nhân viên' />
 				<InputFieldControl name='email' control={control} label='Email nhân viên' />
-				<SelectFieldControl
-					label='Quyền hạn nhân viên'
-					control={control}
-					name='role'
-					options={Object.keys(RoleStaffEnum).map((role) => ({
-						label: RoleStaffEnum[role],
-						value: role.toString()
-					}))}
-				/>
 				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
 					{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 					Thêm
