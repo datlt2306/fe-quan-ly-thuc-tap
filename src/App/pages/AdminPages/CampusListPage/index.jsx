@@ -1,39 +1,35 @@
 /* eslint-disable react/prop-types */
 import { useDeleteCampusMutation, useGetAllCampusQuery } from '@/App/providers/apis/campusApi';
-import { useForm } from 'react-hook-form';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
-import { Fragment, useMemo, useState } from 'react';
-import tw from 'twin.macro';
-import Button from '@/Core/components/common/Button';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
-import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
-import AddCampusSlideOver from './components/AddCampusSlideOver';
 import { campusDataValidator } from '@/App/schemas/campusSchema';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { toast } from 'react-toastify';
-import UpdateCampusModal from './components/UpdateCampusModal';
+import Button from '@/Core/components/common/Button';
+import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
+import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { PlusIcon } from '@heroicons/react/20/solid';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Fragment, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import tw from 'twin.macro';
+import AddCampusSlideOver from './components/AddCampusSlideOver';
+import UpdateCampusModal from './components/UpdateCampusModal';
+import Text from '@/Core/components/common/Text/Text';
 
 const CampusListPage = () => {
+	const [handleRemoveCampus] = useDeleteCampusMutation();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const [modal, setModal] = useState(false);
 	const [campus, setCampus] = useState();
+	const { data: campusList } = useGetAllCampusQuery();
+
 	const { reset } = useForm({
 		resolver: yupResolver(campusDataValidator)
 	});
-	const { data: managers, isLoading } = useGetAllCampusQuery();
 
-	const tableData = useMemo(() => {
-		return Array.isArray(managers?.listCampus)
-			? managers?.listCampus?.map((user, index) => ({ ...user, index: index + 1 }))
-			: [];
-	}, [managers]);
-
-	const [handleRemoveCampus] = useDeleteCampusMutation();
+	const tableData = useMemo(() => campusList ?? [], [campusList]);
 
 	const onDeleteSubmit = async (id) => {
 		const result = await handleRemoveCampus(id);
-
 		if (result?.data?.statusCode) {
 			toast.error('Xóa không thành công!');
 			return;
@@ -57,7 +53,8 @@ const CampusListPage = () => {
 			},
 			{
 				Header: 'Tên cơ sở',
-				accessor: 'name'
+				accessor: 'name',
+				Cell: ({ value }) => <Text className='capitalize'>{value}</Text>
 			},
 			{
 				Header: 'Thao tác',
@@ -123,7 +120,7 @@ const CampusListPage = () => {
 					</Button>
 				</ButtonList>
 
-				<ReactTable columns={columnsData} data={tableData} loading={isLoading} />
+				<ReactTable columns={columnsData} data={tableData} />
 			</Box>
 		</Fragment>
 	);
