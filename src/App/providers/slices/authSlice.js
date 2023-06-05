@@ -26,7 +26,12 @@ const authSlice = createSlice({
 						displayName: payload.name,
 						email: payload.manager?.email,
 						picture: payload.picture,
-						role: payload.manager?.role === 1 ? UserRoleEnum.STAFF : UserRoleEnum.MANAGER
+						role:
+							payload.manager?.role === 1
+								? UserRoleEnum.STAFF
+								: payload.manager?.role === 2
+								? UserRoleEnum.MANAGER
+								: UserRoleEnum.ADMIN
 					}
 				};
 			}

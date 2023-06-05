@@ -15,6 +15,9 @@ const campusApi = createApi({
 	endpoints: (build) => ({
 		getAllCampus: build.query({
 			query: (params) => ({ url: '/campus', method: 'GET', params }),
+			transformResponse: (response) => {
+				return Array.isArray(response) ? response.map((campus, index) => ({ ...campus, index: index + 1 })) : [];
+			},
 			providesTags: Object.values(TagTypes)
 		}),
 		addCampus: build.mutation({

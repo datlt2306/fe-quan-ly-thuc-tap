@@ -16,56 +16,50 @@ const staffListApi = createApi({
 	endpoints: (build) => ({
 		getAllStaff: build.query({
 			query: (params) => ({ url: '/manager', method: 'GET', params }),
-			transformResponse: (response, meta, arg) => {
-				const { limit, page } = arg;
-				if (response && Array.isArray(response.data))
-					response.data = response.data.map((staff, index) => ({
-						...staff,
-						index: getPaginationIndex(limit, page, index),
-						role: RoleStaffEnum[staff.role]
-					}));
-				return response;
-			},
+			transformResponse: (response, _meta, arg) => transformResponseData(response, arg),
 			providesTags: Object.values(TagTypes)
 		}),
 		updateStaff: build.mutation({
-			query: ({ id, payload }) => {
-				return { url: '/manager/' + id, method: 'PATCH', data: payload };
-			},
+			query: ({ id, payload }) => ({ url: '/manager/' + id, method: 'PATCH', data: payload }),
 			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		addStaff: build.mutation({
-			query: (payload) => {
-				return { url: '/manager', method: 'POST', data: payload };
-			},
+			query: (payload) => ({ url: '/manager', method: 'POST', data: payload }),
 			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		deleteStaff: build.mutation({
-			query: (id) => {
-				return { url: '/manager/' + id, method: 'DELETE' };
-			},
+			query: (id) => ({ url: '/manager/' + id, method: 'DELETE' }),
 			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		getAllManager: build.query({
-			query: (params) => {
-				return { url: '/admin/manager', method: 'GET', params };
-			},
+			query: (params) => ({ url: '/admin/manager', method: 'GET', params }),
+			transformResponse: (response, _meta, arg) => transformResponseData(response, arg),
 			providesTags: Object.values(TagTypes)
 		}),
 		addManager: build.mutation({
-			query: (payload) => {
-				return { url: '/admin/manager', method: 'POST', data: payload };
-			},
+			query: (payload) => ({ url: '/admin/manager', method: 'POST', data: payload }),
 			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		updateManager: build.mutation({
-			query: ({ id, payload }) => {
-				return { url: '/admin/manager/' + id, method: 'PATCH', data: payload };
-			},
+			query: ({ id, payload }) => ({ url: '/admin/manager/' + id, method: 'PATCH', data: payload }),
 			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		})
 	})
 });
+
+const transformResponseData = (response, arg) => {
+	{
+		const { limit, page } = arg;
+		if (!limit || !page) return response;
+		if (response && Array.isArray(response.data))
+			response.data = response.data.map((staff, index) => ({
+				...staff,
+				index: getPaginationIndex(limit, page, index),
+				role: RoleStaffEnum[staff.role]
+			}));
+		return response;
+	}
+};
 
 export const {
 	useGetAllStaffQuery,
