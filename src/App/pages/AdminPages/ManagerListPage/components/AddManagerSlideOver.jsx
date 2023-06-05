@@ -47,7 +47,7 @@ const AddManagerSlideOver = ({ onOpen, open }) => {
 					label='Chọn cơ sở'
 					control={control}
 					name='campus_id'
-					options={campus?.listCampus.map((item) => ({
+					options={campus?.map((item) => ({
 						label: item.name,
 						value: item._id
 					}))}

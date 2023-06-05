@@ -21,13 +21,11 @@ const CampusListPage = () => {
 	const { reset } = useForm({
 		resolver: yupResolver(campusDataValidator)
 	});
-	const { data: managers, isLoading } = useGetAllCampusQuery();
+	const { data: campusData, isLoading } = useGetAllCampusQuery();
 
 	const tableData = useMemo(() => {
-		return Array.isArray(managers?.listCampus)
-			? managers?.listCampus?.map((user, index) => ({ ...user, index: index + 1 }))
-			: [];
-	}, [managers]);
+		return Array.isArray(campusData) ? campusData?.map((user, index) => ({ ...user, index: index + 1 })) : [];
+	}, [campusData]);
 
 	const [handleRemoveCampus] = useDeleteCampusMutation();
 

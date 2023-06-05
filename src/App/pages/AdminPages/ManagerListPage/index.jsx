@@ -20,7 +20,9 @@ const ManagerListPage = () => {
 	const [user, setUser] = useState();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const { data, isLoading } = useGetAllManagerQuery({ limit: 10000 });
-	const tableData = useMemo(() => data?.data.map((item, index) => ({ ...item, index: index + 1 })) ?? [], [data]);
+	const tableData = useMemo(() => {
+		return Array.isArray(data?.data) ? data?.data?.map((item, index) => ({ ...item, index: index + 1 })) : [];
+	}, [data]);
 	const { reset } = useForm({
 		resolver: yupResolver(staffDataValidator)
 	});
