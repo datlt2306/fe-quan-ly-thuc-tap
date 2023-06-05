@@ -18,8 +18,8 @@ const staffListApi = createApi({
 			query: (params) => ({ url: '/manager', method: 'GET', params }),
 			transformResponse: (response, meta, arg) => {
 				const { limit, page } = arg;
-				if (response && Array.isArray(response.list))
-					response.list = response.list.map((staff, index) => ({
+				if (response && Array.isArray(response.data))
+					response.data = response.data.map((staff, index) => ({
 						...staff,
 						index: getPaginationIndex(limit, page, index),
 						role: RoleStaffEnum[staff.role]

@@ -22,19 +22,19 @@ const businessApi = createApi({
 		}),
 		addCompany: build.mutation({
 			query: (payload) => ({ url: '/business', method: 'PUT', data: payload }),
-			invalidatesTags: Object.values(TagTypes)
+			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		addArrayCompany: build.mutation({
 			query: (payload) => ({ url: '/business', method: 'PUT', data: payload }),
-			invalidatesTags: Object.values(TagTypes)
+			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		updateCompany: build.mutation({
 			query: (payload) => ({ url: `/business/${payload.id}`, method: 'PATCH', data: payload.data }),
-			invalidatesTags: Object.values(TagTypes)
+			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		}),
 		deleteCompany: build.mutation({
 			query: (payload) => ({ url: `/business/${payload.id}`, method: 'DELETE' }),
-			invalidatesTags: Object.values(TagTypes)
+			invalidatesTags: (_result, error, _data) => (error ? [] : Object.values(TagTypes))
 		})
 	})
 });

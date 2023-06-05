@@ -26,7 +26,7 @@ const StaffListPage = () => {
 		limit: paginationState?.pageSize
 	});
 
-	const tableData = useMemo(() => staffList?.list ?? [], [staffList]);
+	const tableData = useMemo(() => staffList?.data ?? [], [staffList]);
 
 	const { reset } = useForm({
 		resolver: yupResolver(staffDataValidator)
