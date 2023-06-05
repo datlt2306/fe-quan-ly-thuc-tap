@@ -20,9 +20,11 @@ const CompanyListPage = () => {
 	const campus = useSelector((state) => state.campus);
 	const { data: semesterData } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
 	const [currentSemester, setCurrentSemester] = useState();
+
 	useEffect(() => {
 		setCurrentSemester(semesterData?.defaultSemester?._id);
 	}, [semesterData]);
+
 	const { data: company, isLoading: companyLoading } = useGetAllCompanyQuery(
 		{ limit: 1000, semester_id: currentSemester },
 		{ refetchOnMountOrArgChange: true }
@@ -161,7 +163,7 @@ const CompanyListPage = () => {
 		<div>
 			{deadlineCheck ? (
 				<div>
-					<ReactTable columns={columnsData} data={company?.list || []} loading={companyLoading} />
+					<ReactTable columns={columnsData} data={company?.data ?? []} loading={companyLoading} />
 					<Modal openState={modal} onOpenStateChange={setModal} title={dataModal?.title}>
 						<p className='text-base-content'>{dataModal?.data}</p>
 					</Modal>
