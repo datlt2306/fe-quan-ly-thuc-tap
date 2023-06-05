@@ -29,7 +29,7 @@ const ViewCv = ({ data: user, setOpenState }) => {
 
 	return (
 		<Fragment>
-			<List className='w-full max-w-xl'>
+			<List className='mb-6 w-full max-w-xl'>
 				{dataFormInterShip.map((item) => (
 					<List.Item key={item.label}>
 						<Text>{item.label}</Text>
@@ -44,8 +44,15 @@ const ViewCv = ({ data: user, setOpenState }) => {
 						</List.Item>
 						<List.Item>
 							<Text>CV</Text>
-							<Button as='a' href={user?.CV} target='_blank' shape='pill'>
-								<EyeIcon className='h-4 w-4' /> Preview
+							<Button
+								as='a'
+								href={user?.CV}
+								size='sm'
+								className='w-fit'
+								variant='outline'
+								target='_blank'
+								icon={EyeIcon}>
+								Preview
 							</Button>
 						</List.Item>
 					</Fragment>

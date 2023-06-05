@@ -72,7 +72,7 @@ const UpdateReviewModal = ({
 	);
 };
 
-Modal.Form = tw.form`flex w-[320px] flex-col items-stretch gap-6`;
+Modal.Form = tw.form`flex min-w-[384px] flex-col items-stretch gap-6`;
 Modal.Actions = tw.div`flex items-center justify-end gap-1`;
 
 export default UpdateReviewModal;

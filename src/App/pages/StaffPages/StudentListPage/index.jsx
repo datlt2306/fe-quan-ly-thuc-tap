@@ -183,7 +183,7 @@ const StudentListPage = () => {
 	);
 };
 
-const Container = tw.div`flex flex-col gap-6 h-full `;
+const Container = tw.div`flex flex-col gap-6 h-fit`;
 const Box = tw.div`flex items-center justify-between lg:flex-row-reverse`;
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
 
