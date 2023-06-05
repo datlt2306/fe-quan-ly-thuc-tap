@@ -39,7 +39,12 @@ const CompanyListPage = () => {
 		limit: 1000,
 		semester_id: currentSemester
 	});
+	const tableData = useMemo(() => company?.data ?? [], [company]);
 
+	const [handleImportFile] = useImportFromExcel();
+	const { handleExportFile } = useExportToExcel();
+	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
+	const fileInputRef = useRef(null);
 	useEffect(() => {
 		setCurrentSemester(defaultSemester?._id);
 	}, [defaultSemester]);
@@ -47,14 +52,8 @@ const CompanyListPage = () => {
 	const handleChangeSemester = (id) => {
 		setCurrentSemester(id);
 	};
-	useEffect(() => {
-		setCurrentSemester(defaultSemester?._id);
-	}, [defaultSemester]);
-
-	const tableData = useMemo(() => company?.list ?? [], [company]);
 
 	// hanle delete company
-
 	const onDeleteSubmit = async (id) => {
 		const result = await handleDeleteCompany({ id });
 		if (result?.error) {
@@ -63,13 +62,6 @@ const CompanyListPage = () => {
 		}
 		toast.success('Đã xóa doanh nghiệp thành công');
 	};
-
-	// handle export, import
-	const [handleImportFile] = useImportFromExcel();
-	const { handleExportFile } = useExportToExcel();
-	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
-	const fileInputRef = useRef(null);
-	const fileInputRefMobile = useRef(null);
 
 	// Callback function will be executed after import file excel
 	const importExcelDataCallback = (excelData) => {
@@ -115,12 +107,10 @@ const CompanyListPage = () => {
 		if (fileExtension !== AllowedFileExtension.XLSX) {
 			toast.error('File import không hợp lệ');
 			fileInputRef.current.value = null;
-			fileInputRefMobile.current.value = null;
 			return;
 		}
 		handleImportFile(file, importExcelDataCallback);
 		fileInputRef.current.value = null; // reset input file after imported
-		fileInputRefMobile.current.value = null; // reset input file after imported
 	};
 
 	const handleExportDataToExcel = () => {
@@ -321,12 +311,12 @@ const CompanyListPage = () => {
 					handleExport={handleExportDataToExcel}
 					handleImport={handleImportCompanies}
 					canImport={currentSemester === defaultSemester?._id}
-					ref={fileInputRefMobile}
+					ref={fileInputRef}
 				/>
 			</Box>
 			<ReactTable columns={columnsData} data={tableData || []} loading={companyLoading} />
 			<Modal openState={modal} onOpenStateChange={setModal} title={dataModal?.title}>
-				<p className='text-base-content'>{dataModal?.data}</p>
+				<Text className='text-base-content'>{dataModal?.data}</Text>
 			</Modal>
 		</Container>
 	);
