@@ -3,14 +3,14 @@ import { useUpdateMajorMutation } from '@/App/providers/apis/majorApi';
 import { majorSchema } from '@/App/schemas/majorSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
-import SlideOver from '@/Core/components/common/SlideOver';
+import Modal from '@/Core/components/common/Modal';
 import capitalizeString from '@/Core/utils/capitalizeString';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 
-const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
+const UpdateMajorSlideOver = ({ major, onOpenStateChange: handleOpenStateChange, open, title, majors }) => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(majorSchema),
 		values: {
@@ -30,33 +30,33 @@ const UpdateMajorSlideOver = ({ major, onOpen, open, panelTitle, majors }) => {
 		);
 		if (checkMajorsDuplicate) {
 			toast.error('Mã và Tên chuyên ngành không được trùng với dữ liệu đã có');
-			onOpen();
+			handleOpenStateChange();
 			return;
 		}
 		const result = await handleUpdateMajor({ data: { name, majorCode }, id: major?._id });
 		if (result?.error) {
-			onOpen();
+			handleOpenStateChange();
 			toast.error('Sửa chuyên ngành không thành công!');
 			return;
 		}
-		onOpen();
+		handleOpenStateChange();
 		reset();
 		toast.success('Sửa chuyên ngành thành công!');
 	};
 
 	return (
-		<SlideOver open={open} onOpen={onOpen} panelTitle={panelTitle}>
-			<Form onSubmit={handleSubmit(onUpdateSubmit)}>
+		<Modal openState={open} onOpenStateChange={handleOpenStateChange} title={title}>
+			<Modal.Form onSubmit={handleSubmit(onUpdateSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên chuyên ngành' />
 				<InputFieldControl name='majorCode' control={control} label='Mã chuyên ngành' />
 				<Button type='submit' variant='primary' size='md' disabled={isLoading} loading={isLoading}>
 					Sửa
 				</Button>
-			</Form>
-		</SlideOver>
+			</Modal.Form>
+		</Modal>
 	);
 };
 
-const Form = tw.form`flex flex-col gap-6`;
+Modal.Form = tw.form`flex flex-col gap-6 min-w-[320px] max-w-full`;
 
 export default UpdateMajorSlideOver;
