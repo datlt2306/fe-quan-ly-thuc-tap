@@ -1,22 +1,17 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import { useDeleteMajorMutation, useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import Button from '@/Core/components/common/Button';
-import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { Fragment, Suspense, lazy, useCallback, useMemo, useState } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-
-const UpdateMajorSlideOver = lazy(() => import('./components/UpdateMajorSlideOver'));
-const AddMajorSlideOver = lazy(() => import('./components/AddMajorSlideOver'));
+import AddMajorSlideOver from './components/AddMajorSlideOver';
+import UpdateMajorSlideOver from './components/UpdateMajorSlideOver';
 
 const MajorListPage = () => {
 	const [major, setMajor] = useState();
-
 	const { data: majors, isLoading } = useGetAllMajorQuery();
 	const [handleRemoveMajor] = useDeleteMajorMutation();
 
@@ -121,25 +116,20 @@ const MajorListPage = () => {
 
 	return (
 		<Fragment>
-			<Suspense fallback={<LoadingProgressBar />}>
-				{slideOverVisibility.AddSlide && (
-					<AddMajorSlideOver
-						majors={majors}
-						open={slideOverVisibility.AddSlide}
-						onOpen={handleAddSlideOver}
-						panelTitle={'Thêm ngành học'}
-					/>
-				)}
-				{slideOverVisibility.UpdateSlide && (
-					<UpdateMajorSlideOver
-						major={major}
-						majors={majors}
-						open={slideOverVisibility.UpdateSlide}
-						onOpen={handleUpdateSlideOver}
-						panelTitle={'Sửa ngành học'}
-					/>
-				)}
-			</Suspense>
+			<AddMajorSlideOver
+				majors={majors}
+				open={slideOverVisibility.AddSlide}
+				onOpen={handleAddSlideOver}
+				panelTitle={'Thêm ngành học'}
+			/>
+
+			<UpdateMajorSlideOver
+				major={major}
+				majors={majors}
+				open={slideOverVisibility.UpdateSlide}
+				onOpenStateChange={handleUpdateSlideOver}
+				title={'Sửa ngành học'}
+			/>
 
 			<Box>
 				<ButtonList>
