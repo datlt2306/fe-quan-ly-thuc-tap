@@ -40,10 +40,10 @@ const CompanyListPage = () => {
 		semester_id: currentSemester
 	});
 	const tableData = useMemo(() => company?.data ?? [], [company]);
-
 	const [handleImportFile] = useImportFromExcel();
-	const { handleExportFile } = useExportToExcel();
+	const [handleExportFile] = useExportToExcel();
 	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
+
 	const fileInputRef = useRef(null);
 	useEffect(() => {
 		setCurrentSemester(defaultSemester?._id);
@@ -268,7 +268,6 @@ const CompanyListPage = () => {
 						cancelText='Cancel'
 						title={'Xóa công ty'}
 						description={'Bạn muốn xóa công ty này ?'}
-						// onCancel={() => toast.info("Cancelled")}
 						onConfirm={() => onDeleteSubmit(value)}>
 						<Button size='sm' variant='ghost' className='text-error' shape='square'>
 							<TrashIcon className='h-4 w-4' />
