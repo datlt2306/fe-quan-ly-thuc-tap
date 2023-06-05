@@ -10,7 +10,7 @@ export const Radio = forwardRef(({ onChange: handleChange, ...props }, ref) => (
 		onChange={(e) => handleChange(e)}
 		ref={ref}
 		type='radio'
-		tw='border-gray-300 text-primary duration-300 focus:ring-primary'
+		tw='border-gray-300 text-primary duration-300 focus:ring-primary '
 	/>
 ));
 
@@ -39,6 +39,7 @@ const RadioFieldControl = ({ control, name, options, onChange: handleChange, ...
 									handleChange(event);
 								}
 							}}
+							checked={option.value == field.value}
 							value={option.value}
 						/>
 					</Label>
@@ -50,6 +51,6 @@ const RadioFieldControl = ({ control, name, options, onChange: handleChange, ...
 };
 
 const Label = tw.label`flex items-center gap-2`;
-const RadioGroup = tw.div`flex items-center gap-3`;
+const RadioGroup = tw.div`flex items-center gap-6`;
 
 export default RadioFieldControl;
