@@ -13,7 +13,7 @@ const ViewCv = ({ data: user, setOpenState }) => {
 		{ label: 'Mã số thuế:', value: user?.taxCode },
 		{ label: 'Chức vụ người tiếp nhận:', value: user?.position },
 		{ label: 'SĐT doanh nghiệp:', value: user?.phoneNumberCompany },
-		{ label: 'Tên người tiếp nhận:', value: user?.nameEnterprise },
+		{ label: 'Tên người tiếp nhận:', value: user?.employer },
 		{ label: 'Email người tiếp nhận:', value: user?.emailEnterprise }
 	];
 	const dataFormInterShip = [
