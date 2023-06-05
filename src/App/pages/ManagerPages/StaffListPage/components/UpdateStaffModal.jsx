@@ -55,15 +55,6 @@ const UpdateStaffModal = ({ userData, onOpenStateChange, openState, users }) => 
 			<Modal.Form onSubmit={handleSubmit(onUpdateSubmit)}>
 				<InputFieldControl name='name' control={control} label='Tên nhân viên' />
 				<InputFieldControl name='email' control={control} label='Email nhân viên' />
-				<SelectFieldControl
-					label='Quyền hạn nhân viên'
-					control={control}
-					name='role'
-					options={Object.keys(RoleStaffEnum).map((role) => ({
-						label: RoleStaffEnum[role],
-						value: role.toString()
-					}))}
-				/>
 				<Button type='submit' size='md' variant='primary' disabled={isLoading} loading={isLoading}>
 					Cập nhật
 				</Button>

@@ -11,8 +11,7 @@ export const staffDataValidator = object({
 			}
 			return true;
 		})
-		.required('Vui lòng nhập đầy đủ email của nhân viên'),
-	role: string().required('Quyền hạn là bắt buộc')
+		.required('Vui lòng nhập đầy đủ email của nhân viên')
 });
 
 export const managerDataValidator = object({
