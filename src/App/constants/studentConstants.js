@@ -82,3 +82,12 @@ export const StudentReviewTypeEnum = {
 	REVIEW_REPORT: 'report',
 	REVIEW_RECORD: 'record'
 };
+
+/**
+ * @enum
+ */
+export const RequestSupportType = {
+	INTERN_REGISTRATION: 'narrow',
+	REPORT: 'report',
+	RECORD: 'form'
+};
