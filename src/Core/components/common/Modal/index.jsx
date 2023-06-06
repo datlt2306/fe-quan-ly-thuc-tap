@@ -1,6 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import Button from '../Button';
 
 export default function Modal({ openState, onOpenStateChange, title, children }) {
 	return (
@@ -29,7 +28,7 @@ export default function Modal({ openState, onOpenStateChange, title, children })
 							leaveTo='opacity-0 scale-95'>
 							<Dialog.Panel className='relative w-auto min-w-fit max-w-md transform rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all'>
 								{!!title && (
-									<Dialog.Title as='h3' className='mb-6 text-lg font-medium leading-6 text-base-content'>
+									<Dialog.Title as='h3' className='mb-6 text-lg font-medium leading-6'>
 										{title}
 									</Dialog.Title>
 								)}
