@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import axiosBaseQuery from '../axiosBaseQuery';
 import { InternSupportType, StudentStatusEnum } from '@/App/constants/studentConstants';
-import formatDate from '@/Core/utils/formatDate';
+import { formatDate } from '@/Core/utils/formatDate';
 
 /**
  * @enum

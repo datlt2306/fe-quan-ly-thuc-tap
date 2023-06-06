@@ -3,14 +3,16 @@ import { useUploadReportMutation } from '@/App/providers/apis/reportApi';
 import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
 import { reportSchema } from '@/App/schemas/reportSchema';
 import Button from '@/Core/components/common/Button';
+import FormControl from '@/Core/components/common/FormControl/FormControl';
 import InputFieldControl, { Input } from '@/Core/components/common/FormControl/InputFieldControl';
 import RadioFieldControl from '@/Core/components/common/FormControl/RadioFieldControl';
 import Text from '@/Core/components/common/Text/Text';
 import Typography from '@/Core/components/common/Text/Typography';
-import formatDate from '@/Core/utils/formatDate';
+import { formatDate } from '@/Core/utils/formatDate';
+import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import moment from 'moment';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -19,9 +21,20 @@ import tw from 'twin.macro';
 import EmptyStateSection from '../Shared/EmptyStateSection';
 import LoadingData from '../Shared/LoadingData';
 import SuccessStateSection from '../Shared/SuccessStateSection';
-import FormControl from '@/Core/components/common/FormControl/FormControl';
-import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
-import { StudentStatusEnum } from '@/App/constants/studentConstants';
+
+/**
+ * @constant
+ * @description Trạng thái sinh viên có thể mở form:
+ * @kind 6: Đang thực tập
+ * @kind 8: Sửa báo cáo
+ */
+const StatusToOpenTheForm = [6, 8];
+
+/**
+ * @constant
+ * @description Trạng thái sinh viên đã hoàn thành thưc tập
+ */
+const InternCompletionStatus = 9;
 
 const ReportPage = () => {
 	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery({ typeNumber: 3 });
@@ -29,26 +42,24 @@ const ReportPage = () => {
 		times && times?.time?.endTime > new Date().getTime() && times?.time?.startTime < new Date().getTime();
 	const navigate = useNavigate();
 	const { user } = useSelector((state) => state.auth);
-	const { data: student, isLoading: getUserLoading } = useGetOneStudentQuery(user?.id);
+	const { data: student } = useGetOneStudentQuery(user?.id);
 	const [chosenFile, setChosenFile] = useState(null);
 	const [handleSubmitForm, { isLoading }] = useUploadReportMutation();
-	const fileInputRef = useRef(null);
 	const { handleSubmit, control, reset } = useForm({
-		resolver: yupResolver(reportSchema)
+		resolver: yupResolver(reportSchema),
+		context: { startInternshipTime: student?.internshipTime }
 	});
 
 	useEffect(() => {
-		reset({
-			endInternShipTime: moment(new Date(student?.endInternShipTime)).format('YYYY-MM-DD'),
-			resultScore: student?.resultScore,
-			attitudePoint: student?.attitudePoint,
-			signTheContract: student?.signTheContract && student?.signTheContract
-		});
+		/* If student has to edit report -> reset to previous form value */
+		if (student?.statusCheck === 8)
+			reset({
+				endInternShipTime: moment(student?.endInternShipTime).format('YYYY-MM-DD'),
+				resultScore: student?.resultScore,
+				attitudePoint: student?.attitudePoint,
+				signTheContract: student?.signTheContract
+			});
 	}, [student]);
-
-	// check the student's status to open the form
-	// 6: "Đang thực tập", 8: "Sửa báo cáo"
-	const statusCheck = [6, 8];
 
 	const onSubmit = async (value) => {
 		const formData = new FormData();
@@ -77,7 +88,7 @@ const ReportPage = () => {
 	return (
 		<Fragment>
 			{deadlineCheck ? (
-				statusCheck.includes(student?.statusCheck) ? (
+				StatusToOpenTheForm.includes(student?.statusCheck) ? (
 					<Container>
 						<Typography level={5} className='mb-6'>
 							Nộp báo cáo
@@ -113,8 +124,8 @@ const ReportPage = () => {
 							</Form.Group>
 							<Form.Group>
 								<FormControl>
-									<Text as='label'>Thời gian bắt đầu thực tập:</Text>
-									<Input readOnly value={student && formatDate(student?.internshipTime)} />
+									<Text as='label'>Thời gian bắt đầu thực tập</Text>
+									<Input readOnly value={formatDate(student?.internshipTime)} />
 								</FormControl>
 								<InputFieldControl
 									label='Thời gian kết thúc thực tập'
@@ -137,7 +148,6 @@ const ReportPage = () => {
 									/>
 								</RadioGroup>
 								<InputFieldControl
-									ref={fileInputRef}
 									label='Upload báo cáo (PDF)'
 									control={control}
 									name='file'
@@ -160,7 +170,7 @@ const ReportPage = () => {
 					<SuccessStateSection
 						title={'Bạn đã nộp báo cáo thành công!'}
 						message={
-							student.statusCheck === 9
+							student.statusCheck === InternCompletionStatus
 								? 'Bạn đã hoàn thành thực tập.'
 								: 'Báo cáo sẽ được phòng QHDN review và xác nhận lại cho sinh viên.'
 						}
