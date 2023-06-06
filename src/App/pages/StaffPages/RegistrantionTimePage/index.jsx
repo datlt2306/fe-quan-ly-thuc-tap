@@ -6,7 +6,7 @@ import InputFieldControl from '@/Core/components/common/FormControl/InputFieldCo
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
 import Modal from '@/Core/components/common/Modal';
 import Table from '@/Core/components/common/Table/CoreTable';
-import { CalendarDaysIcon } from '@heroicons/react/24/outline';
+import { CalendarDaysIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import moment from 'moment';
 import React, { useState, useEffect, Fragment } from 'react';
@@ -166,11 +166,11 @@ const RegistrantionTimePage = () => {
 						))}
 				</Table.Body>
 			</Table>
-			<Modal openState={modal} onOpenStateChange={setModal}>
+			<Modal openState={modal} onOpenStateChange={setModal} title='Đặt thời gian'>
 				<Modal.Form onSubmit={handleSubmit(onSubmit)}>
 					<InputFieldControl type='date' control={control} name='startTime' label='Start date' />
 					<InputFieldControl type='date' control={control} name='endTime' label='End date' />
-					<Button type='submit' variant='primary'>
+					<Button type='submit' variant='primary' icon={ClockIcon}>
 						Đặt thời gian
 					</Button>
 				</Modal.Form>
@@ -182,6 +182,6 @@ const RegistrantionTimePage = () => {
 const Box = tw.div`flex justify-between items-center mb-8 bg-gray-50 px-3 py-4`;
 const Item = tw.div``;
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
-Modal.Form = tw.form`grid gap-6`;
+Modal.Form = tw.form`grid gap-6 min-w-[384px]`;
 
 export default RegistrantionTimePage;
