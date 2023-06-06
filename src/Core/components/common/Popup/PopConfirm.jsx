@@ -5,7 +5,15 @@ import tw from 'twin.macro';
 
 const ButtonGroup = tw.div`flex items-center gap-1`;
 
-const PopConfirm = ({ onConfirm, onCancel, title = '', description, children, okText = 'Ok', cancelText = 'Hủy' }) => {
+const PopConfirm = ({
+	onConfirm,
+	onCancel,
+	title = '',
+	description,
+	children,
+	okText = 'Ok',
+	cancelText = 'Cancel'
+}) => {
 	const handleConfirm = useCallback((done) => {
 		if (onConfirm) {
 			onConfirm();

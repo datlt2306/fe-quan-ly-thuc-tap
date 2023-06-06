@@ -22,7 +22,7 @@
 	}
 
 	.btn {
-		@apply inline-flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] bg-gray-50 font-semibold text-base-content outline-none duration-200 hover:bg-gray-50 focus:active:animate-[pulse_ease-in-out_0.3s];
+		@apply inline-flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] bg-gray-50 font-semibold text-base-content outline-none duration-200 hover:bg-gray-50 focus:active:animate-[pulse_ease-in-out_0.5s];
 	}
 
 	.btn-primary {
