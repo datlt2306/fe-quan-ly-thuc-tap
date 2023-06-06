@@ -70,7 +70,7 @@ const StudentInfoPage = () => {
 
 	const formSubmittedRoute = [
 		{
-			condition: data?.CV || data?.nameCompany,
+			condition: (data?.CV || data?.nameCompany) && data?.statusCheck !== 10,
 			label: 'Form Đăng ký Thực Tập',
 			content: <ViewCv setOpenState={setOpenState} data={data} />
 		},
@@ -106,7 +106,7 @@ const StudentInfoPage = () => {
 				</Grid.Col>
 
 				<Grid.Col>
-					{!(data?.CV || data?.form || data?.report || data?.nameCompany) ? (
+					{!(data?.CV || data?.form || data?.report || data?.nameCompany) && data?.statusCheck == 10 ? (
 						<EmptyStateSection
 							title='Bạn chưa nộp form nào.'
 							message='Thông tin chi tiết các form sẽ được hiển thị sau khi đăng ký thành công.'
