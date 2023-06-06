@@ -118,12 +118,16 @@ const ReactTable = ({
 			: gotoPage(pageCount - 1);
 	};
 	const changePageSize = (value) => {
-		serverSidePagination
-			? dispatch({
-					type: PaginationActionEnums.CHANGE_PAGE_SIZE,
-					payload: value
-			  })
-			: setPageSize(value);
+		if (serverSidePagination) {
+			if (serverPaginationProps.pageIndex >= serverPaginationProps.totalPages) gotoPreviousPage();
+			dispatch({
+				type: PaginationActionEnums.CHANGE_PAGE_SIZE,
+				payload: value
+			});
+			return;
+		}
+
+		setPageSize(value);
 	};
 
 	return (
