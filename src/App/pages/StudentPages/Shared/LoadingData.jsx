@@ -3,7 +3,7 @@ import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner'
 
 const LoadingData = () => {
 	return (
-		<div className='flex items-center justify-center gap-2'>
+		<div className='flex items-center justify-center'>
 			<LoadingSpinner variant={'primary'} size='md' />
 		</div>
 	);

@@ -22,7 +22,7 @@ const ViewForm = ({ data: user, setOpenState }) => {
 		{ label: 'Vị trí thực tập', value: user?.dream },
 		{ label: 'Ngày bắt đầu', value: formatDate(user?.internshipTime) },
 		{
-			label: 'Biên bản thực tập:',
+			label: 'Biên bản thực tập',
 			value: user?.form && (
 				<Button variant='outline' size='sm' as='a' href={user?.form} target='_blank' icon={EyeIcon}>
 					Preview

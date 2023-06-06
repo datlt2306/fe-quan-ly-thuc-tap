@@ -8,13 +8,13 @@ import FormRequestSupport from './FormRequestSupport';
 
 const ViewCv = ({ data: user, setOpenState }) => {
 	const dataInfoCompany = [
-		{ label: 'Tên công ty:', value: user?.nameCompany },
-		{ label: 'Địa chỉ thực tập:', value: user?.addressCompany },
-		{ label: 'Mã số thuế:', value: user?.taxCode },
-		{ label: 'Chức vụ người tiếp nhận:', value: user?.position },
-		{ label: 'SĐT doanh nghiệp:', value: user?.phoneNumberCompany },
-		{ label: 'Tên người tiếp nhận:', value: user?.employer },
-		{ label: 'Email người tiếp nhận:', value: user?.emailEnterprise }
+		{ label: 'Tên công ty', value: user?.nameCompany },
+		{ label: 'Địa chỉ thực tập', value: user?.addressCompany },
+		{ label: 'Mã số thuế', value: user?.taxCode },
+		{ label: 'Chức vụ người tiếp nhận', value: user?.position },
+		{ label: 'SĐT doanh nghiệp', value: user?.phoneNumberCompany },
+		{ label: 'Tên người tiếp nhận', value: user?.employer },
+		{ label: 'Email người tiếp nhận', value: user?.emailEnterprise }
 	];
 	const dataFormInterShip = [
 		{ label: 'Kiểu đăng ký', value: InternSupportType[+user?.support] ?? null },
