@@ -39,7 +39,7 @@ const InputFieldControl = ({ control, name, label, disabled, rules, type = 'text
 					}
 				}}
 				className={classNames({ 'ring-error': !!error })}
-				value={field.value}
+				value={field.value || ''}
 				disabled={disabled}
 				ref={(e) => {
 					field.ref(e);
