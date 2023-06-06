@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-import SharedFields, { SharedDefaultValues } from './SharedFields';
+import SharedFields from './SharedFields';
 
 const FormSchoolSupport = ({ selectedOption, user }) => {
 	const navigate = useNavigate();
@@ -24,7 +24,9 @@ const FormSchoolSupport = ({ selectedOption, user }) => {
 		defaultValues: formSignUpSchoolSupportSchema.getDefault(),
 		values: user?.support == 1 &&
 			user?.statusCheck == 1 && {
-				...SharedDefaultValues({ user }),
+				phoneNumber: user?.phoneNumber,
+				address: user?.address,
+				dream: user?.dream,
 				business: user?.business?._id
 			}
 	});

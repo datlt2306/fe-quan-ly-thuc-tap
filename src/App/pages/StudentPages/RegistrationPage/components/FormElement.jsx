@@ -26,13 +26,17 @@ const FormElement = ({ student }) => {
 		{ typeNumber: selectedOption || 0 },
 		{ refetchOnMountOrArgChange: true }
 	);
+	useEffect(() => {
+		if (student?.support) {
+			setSelectedOption(student?.support);
+		}
+	}, [student?.support]);
 
 	useEffect(() => {
 		if (times?.time) {
 			setDeadLine(times?.time);
 		}
 	}, [times]);
-
 	//click vào form nào thì lấy value của form đó
 	const handleFormChange = useCallback((value) => {
 		setSelectedOption(value);
@@ -49,6 +53,7 @@ const FormElement = ({ student }) => {
 	if (isLoading) {
 		return <LoadingData />;
 	}
+
 	return (
 		<Fragment>
 			{deadlineCheck ? (
@@ -65,6 +70,8 @@ const FormElement = ({ student }) => {
 									name='radio'
 									id={index}
 									value={item.value}
+									disabled={student?.support == 1 && true}
+									checked={student?.support || selectedOption === item.value}
 									onChange={() => handleFormChange(item.value)}
 								/>
 								<Text as='label' level={6} className='text-base' htmlFor={index}>

@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-import SharedFields, { SharedDefaultValues } from './SharedFields';
+import SharedFields from './SharedFields';
 
 const FieldsFormSelfFinding = [
 	{
@@ -52,19 +52,7 @@ const FormSelfFinding = ({ selectedOption, user }) => {
 
 	const { control, handleSubmit } = useForm({
 		resolver: yupResolver(formSignUpSelfFindingSchema),
-		defaultValues: formSignUpSelfFindingSchema.getDefault(),
-		values: user?.support == 0 &&
-			user?.statusCheck == 1 && {
-				...SharedDefaultValues({ user }),
-				business: user?.nameCompany,
-				addressCompany: user?.addressCompany,
-				phoneNumberCompany: user?.phoneNumberCompany,
-				taxCode: user?.taxCode,
-				employer: user?.employer,
-				emailEnterprise: user?.emailEnterprise,
-				position: user?.position,
-				nameCompany: user?.nameCompany
-			}
+		defaultValues: formSignUpSelfFindingSchema.getDefault()
 	});
 	const [hanldeUploadCvMutation, { isLoading }] = useUploadCvMutation();
 

@@ -50,11 +50,4 @@ const ReadOnlyField = ({ title, value }) => {
 	);
 };
 
-export const SharedDefaultValues = ({ user }) => {
-	return {
-		phoneNumber: user?.phoneNumber,
-		address: user?.address,
-		dream: user?.dream
-	};
-};
 export default SharedFields;
