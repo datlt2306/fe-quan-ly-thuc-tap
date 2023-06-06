@@ -21,7 +21,7 @@ const RecordPage = () => {
 	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery({ typeNumber: 2 });
 	const navigate = useNavigate();
 	const { user } = useSelector((state) => state.auth);
-	const { data, isLoading: getUserLoading } = useGetOneStudentQuery(user?.id);
+	const { data: student, isLoading: getUserLoading } = useGetOneStudentQuery(user?.id);
 	const [file, setFile] = useState(null);
 	const [handleSubmitForm, { isLoading }] = useUploadFormMutation();
 	const fileInputRef = useRef(null);
@@ -41,11 +41,11 @@ const RecordPage = () => {
 	const handleSubmitRecord = async (value) => {
 		const formData = new FormData();
 		formData.append('file', file);
-		formData.append('nameCompany', data?.support === 1 ? data?.business?.name : data?.nameCompany);
+		formData.append('nameCompany', student?.support === 1 ? student?.business?.name : student?.nameCompany);
 		formData.append('internshipTime', value.date);
-		formData.append('mssv', data.mssv);
-		formData.append('email', data.email);
-		formData.append('_id', data._id);
+		formData.append('mssv', student.mssv);
+		formData.append('email', student.email);
+		formData.append('_id', student._id);
 		formData.append('typeNumber', 2);
 
 		const result = await handleSubmitForm(formData);
@@ -65,22 +65,22 @@ const RecordPage = () => {
 	return (
 		<Fragment>
 			{deadlineCheck ? (
-				statusCheck.includes(data?.statusCheck) ? (
+				statusCheck.includes(student?.statusCheck) ? (
 					<Container>
 						<Typography level={5} className='mb-6'>
 							Nộp biên bản
 						</Typography>
 						<List>
 							<List.Item>
-								Họ và tên: <Text className='font-medium'>{data && data?.name}</Text>
+								Họ và tên: <Text className='font-medium'>{student && student?.name}</Text>
 							</List.Item>
 							<List.Item>
-								Mã sinh viên: <Text className='font-medium'>{data && data?.mssv}</Text>
+								Mã sinh viên: <Text className='font-medium'>{student && student?.mssv}</Text>
 							</List.Item>
 							<List.Item>
 								Tên doanh nghiệp:
 								<Text className='font-medium'>
-									{data && data?.support === 1 ? data?.business?.name : data?.nameCompany}
+									{student && student?.support === 1 ? student?.business?.name : student?.nameCompany}
 								</Text>
 							</List.Item>
 						</List>
@@ -99,8 +99,15 @@ const RecordPage = () => {
 							</Button>
 						</Form>
 					</Container>
-				) : data?.form ? (
-					<SuccessStateSection title={'Bạn đã nộp biên bản thành công!'} />
+				) : student?.form ? (
+					<SuccessStateSection
+						title={'Bạn đã nộp biên bản thành công!'}
+						message={
+							student.statusCheck === 4
+								? 'Báo cáo sẽ được phòng QHDN review và xác nhận lại cho sinh viên.'
+								: 'Biên bản thực tập của bạn đã được phòng QHDN tiếp nhận.'
+						}
+					/>
 				) : (
 					<EmptyStateSection title={'Bạn chưa đủ điều kiện nộp biên bản'} className='h-full' />
 				)

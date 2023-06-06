@@ -21,6 +21,7 @@ import LoadingData from '../Shared/LoadingData';
 import SuccessStateSection from '../Shared/SuccessStateSection';
 import FormControl from '@/Core/components/common/FormControl/FormControl';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
+import { StudentStatusEnum } from '@/App/constants/studentConstants';
 
 const ReportPage = () => {
 	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery({ typeNumber: 3 });
@@ -39,9 +40,9 @@ const ReportPage = () => {
 	useEffect(() => {
 		reset({
 			endInternShipTime: moment(new Date(student?.endInternShipTime)).format('YYYY-MM-DD'),
-			resultScore: +student?.resultScore ?? '',
-			attitudePoint: +student?.attitudePoint ?? '',
-			signTheContract: student?.signTheContract ?? ''
+			resultScore: student?.resultScore,
+			attitudePoint: student?.attitudePoint,
+			signTheContract: student?.signTheContract && student?.signTheContract
 		});
 	}, [student]);
 
@@ -156,7 +157,14 @@ const ReportPage = () => {
 						</Form>
 					</Container>
 				) : student?.report ? (
-					<SuccessStateSection title={'Bạn đã nộp báo cáo thành công!'} />
+					<SuccessStateSection
+						title={'Bạn đã nộp báo cáo thành công!'}
+						message={
+							student.statusCheck === 9
+								? 'Bạn đã hoàn thành thực tập.'
+								: 'Báo cáo sẽ được phòng QHDN review và xác nhận lại cho sinh viên.'
+						}
+					/>
 				) : (
 					<EmptyStateSection title={'Bạn chưa đủ điều kiện nộp báo cáo'} />
 				)
