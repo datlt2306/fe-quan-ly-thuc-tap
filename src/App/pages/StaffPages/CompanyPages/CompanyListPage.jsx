@@ -1,4 +1,10 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { CalendarDaysIcon, EyeIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
+import useServerPagination from '@/App/hooks/useServerPagination';
 import {
 	useAddArrayCompanyMutation,
 	useDeleteCompanyMutation,
@@ -8,7 +14,6 @@ import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { companyArraySchema } from '@/App/schemas/companySchema';
 import Button from '@/Core/components/common/Button';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
-import Modal from '@/Core/components/common/Modal';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
@@ -17,41 +22,36 @@ import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
 import { StaffPaths } from '@/Core/constants/routePaths';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import getFileExtension from '@/Core/utils/getFileExtension';
-import { CalendarDaysIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import tw from 'twin.macro';
+import CompanyDetailModal from './components/CompanyDetailModal';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
 import { columnAccessors } from './constants';
 
 const CompanyListPage = () => {
-	const [modal, setModal] = useState(false);
-	const [dataModal, setDataModal] = useState({});
-	const { data: majors } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
-	const campus = useSelector((state) => state.campus);
-	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
-	const [currentSemester, setCurrentSemester] = useState(defaultSemester?._id);
 	const [handleDeleteCompany] = useDeleteCompanyMutation();
-	const { data: company, isLoading: companyLoading } = useGetAllCompanyQuery({
-		limit: 1000,
-		semester_id: currentSemester
-	});
-	const tableData = useMemo(() => company?.data ?? [], [company]);
 	const [handleImportFile] = useImportFromExcel();
 	const [handleExportFile] = useExportToExcel();
 	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
-
+	const [modalState, setModalState] = useState(false);
+	const [dataModal, setDataModal] = useState({});
+	const campus = useSelector((state) => state.campus);
+	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
+	const [currentSemester, setCurrentSemester] = useState(defaultSemester?._id);
+	const { paginationState, handlePaginate } = useServerPagination();
 	const fileInputRef = useRef(null);
+	const { data: majors } = useGetAllMajorQuery(undefined, { refetchOnMountOrArgChange: true });
+	const { data: companies, isLoading: companyLoading } = useGetAllCompanyQuery({
+		page: paginationState?.pageIndex,
+		limit: paginationState?.pageSize,
+		semester_id: currentSemester
+	});
+	const tableData = useMemo(() => companies?.data ?? [], [companies]);
+	console.log('tableData :>> ', tableData);
+
 	useEffect(() => {
 		setCurrentSemester(defaultSemester?._id);
 	}, [defaultSemester]);
-
-	const handleChangeSemester = (id) => {
-		setCurrentSemester(id);
-	};
 
 	// hanle delete company
 	const onDeleteSubmit = async (id) => {
@@ -102,48 +102,49 @@ const CompanyListPage = () => {
 	};
 
 	// Get file from device and execute callback to add new companies
-	const handleImportCompanies = (file) => {
-		const fileExtension = getFileExtension(file);
-		if (fileExtension !== AllowedFileExtension.XLSX) {
-			toast.error('File import không hợp lệ');
-			fileInputRef.current.value = null;
-			return;
-		}
-		handleImportFile(file, importExcelDataCallback);
-		fileInputRef.current.value = null; // reset input file after imported
-	};
-
-	const handleExportDataToExcel = () => {
-		if (!tableData.length) {
-			toast.warn('Chưa có dữ liệu để xuất file !');
-			return;
-		}
-		const newData = tableData.map((company, index) => {
-			return {
-				...company,
-				major: company.major.name,
-				campus_id: campus?.campusList?.listCampus?.find((item) => item._id === company.campus_id).name,
-				semester_id: listSemesters.find((item) => item._id === company.semester_id).name,
-				index: index + 1
-			};
-		});
-		const exportedData = convertToExcelData({
-			data: newData,
-			columnKeysAccessor: columnAccessors
-		});
-		if (!exportedData) {
-			toast.error('Export dữ liệu thất bại !');
-			return;
-		}
-		handleExportFile({ data: exportedData, fileName: 'Danh sách doanh nghiệp' });
-	};
+	const handleImportCompanies = useCallback(
+		(file) => {
+			const fileExtension = getFileExtension(file);
+			if (fileExtension !== AllowedFileExtension.XLSX) {
+				toast.error('File import không hợp lệ');
+				fileInputRef.current.value = null;
+				return;
+			}
+			handleImportFile(file, importExcelDataCallback);
+			fileInputRef.current.value = null; // reset input file after imported
+		},
+		[currentSemester]
+	);
+	const handleExportDataToExcel = useCallback(
+		(data) => {
+			if (!tableData.length) {
+				toast.warn('Chưa có dữ liệu để xuất file !');
+				return;
+			}
+			const exportData = tableData.map((company) => {
+				return {
+					...company,
+					major: company.major?.name
+				};
+			});
+			const exportedData = convertToExcelData({
+				data: exportData,
+				columnKeysAccessor: columnAccessors
+			});
+			if (!exportedData) {
+				toast.error('Export dữ liệu thất bại !');
+				return;
+			}
+			handleExportFile({ data: exportedData, fileName: 'Danh sách doanh nghiệp' });
+		},
+		[tableData]
+	);
 
 	// Define columns of table
 	const columnsData = [
 		{
 			Header: columnAccessors.index,
-			accessor: 'STT',
-			Cell: ({ row }) => <Text className='font-medium'>{row.index + 1}</Text>
+			accessor: 'index'
 		},
 		{
 			Header: columnAccessors.name,
@@ -195,83 +196,38 @@ const CompanyListPage = () => {
 			Cell: ({ value }) => <Text className='whitespace-normal'>{value}</Text>
 		},
 		{
-			Header: columnAccessors.requirement,
-			accessor: 'requirement',
-			Filter: InputColumnFilter,
-			Cell: ({ value }) => (
-				<Button
-					variant='ghost'
-					size='sm'
-					className='font-normal'
-					onClick={() => {
-						setDataModal({ data: value, title: columnAccessors.requirement });
-						setModal(!modal);
-					}}>
-					Chi tiết
-				</Button>
-			)
-		},
-		{
-			Header: columnAccessors.description,
-			accessor: 'description',
-			Filter: InputColumnFilter,
-			Cell: ({ value }) => (
-				<Button
-					variant='ghost'
-					size='sm'
-					className='font-normal'
-					onClick={() => {
-						setDataModal({ data: value, title: columnAccessors.description });
-						setModal(!modal);
-					}}>
-					Chi tiết
-				</Button>
-			)
-		},
-		{
-			Header: columnAccessors.benefit,
-			accessor: 'benefit',
-			Filter: InputColumnFilter,
-			Cell: ({ value }) => (
-				<Button
-					variant='ghost'
-					size='sm'
-					className='font-normal'
-					onClick={() => {
-						setDataModal({ data: value, title: columnAccessors.benefit });
-						setModal(!modal);
-					}}>
-					Chi tiết
-				</Button>
-			)
-		},
-		{
 			Header: 'Thao tác',
 			accessor: '_id',
 			canFilter: false,
 			canSort: false,
 			filterable: false,
 			isSort: false,
-			Cell: ({ value }) => (
+			Cell: ({ value, row }) => (
 				<ActionList>
+					<Button
+						size='sm'
+						shape='square'
+						variant='ghost'
+						icon={EyeIcon}
+						onClick={() => {
+							setModalState(!modalState);
+							setDataModal({ data: row.original, title: row.original?.name });
+						}}
+					/>
 					<Button
 						as={Link}
 						to={StaffPaths.COMPANY_UPDATE.replace(':id', value)}
-						type='button'
 						size='sm'
 						shape='square'
-						variant='ghost'>
-						<PencilSquareIcon className='h-4 w-4' />
-					</Button>
+						variant='ghost'
+						icon={PencilSquareIcon}
+					/>
+
 					<PopConfirm
-						okText='Ok'
-						cancelText='Cancel'
 						title={'Xóa công ty'}
 						description={'Bạn muốn xóa công ty này ?'}
 						onConfirm={() => onDeleteSubmit(value)}>
-						<Button size='sm' variant='ghost' className='text-error' shape='square'>
-							<TrashIcon className='h-4 w-4' />
-						</Button>
+						<Button size='sm' variant='ghost' className='text-error' shape='square' icon={TrashIcon} />
 					</PopConfirm>
 				</ActionList>
 			)
@@ -289,10 +245,11 @@ const CompanyListPage = () => {
 					</label>
 					<Select
 						className='min-w-[12rem] capitalize sm:text-sm'
-						onChange={(e) => handleChangeSemester(e.target.value)}>
+						defaultValue={currentSemester}
+						onChange={(e) => setCurrentSemester(e.target.value)}>
 						{Array.isArray(listSemesters) &&
 							listSemesters.map((item, index) => (
-								<Option value={item._id} key={index} selected={currentSemester === item._id}>
+								<Option value={item._id} key={index}>
 									{item.name}
 								</Option>
 							))}
@@ -313,15 +270,26 @@ const CompanyListPage = () => {
 					ref={fileInputRef}
 				/>
 			</Box>
-			<ReactTable columns={columnsData} data={tableData || []} loading={companyLoading} />
-			<Modal openState={modal} onOpenStateChange={setModal} title={dataModal?.title}>
-				<Text className='text-base-content'>{dataModal?.data}</Text>
-			</Modal>
+			<CompanyDetailModal modalData={dataModal} openState={modalState} onOpenStateChange={setModalState} />
+			<ReactTable
+				columns={columnsData}
+				data={tableData}
+				loading={companyLoading}
+				serverSidePagination={true}
+				serverPaginationProps={{
+					...paginationState,
+					pageIndex: companies?.page,
+					totalPages: companies?.totalPages,
+					canNextPage: companies?.hasNextPage,
+					canPreviousPage: companies?.hasPrevPage
+				}}
+				onServerPaginate={handlePaginate}
+			/>
 		</Container>
 	);
 };
 
-const ActionList = tw.div`flex items-stretch gap-1`;
+const ActionList = tw.div`flex items-stretch`;
 const Container = tw.div`flex flex-col gap-6 h-full `;
 const Box = tw.div`flex items-center justify-between lg:flex-row-reverse`;
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
