@@ -15,13 +15,14 @@ yup.addMethod(yup.array, 'unique', function (message, mapper = (a) => a) {
 export const newStudentSchema = yup
 	.array(
 		yup.object({
-			mssv: yup.string().trim().required('Vui lòng nhập đầy đủ mã sinh viên'),
+			mssv: yup.string().trim().uppercase().required('Vui lòng nhập đầy đủ mã sinh viên'),
 			name: yup.string().trim().required('Vui lòng nhập đầy đủ tên sinh viên'),
 			course: yup.string().trim().required('Vui lòng nhập đầy đủ khóa nhập học của sinh viên'),
 			majorCode: yup.string().trim().required('Vui lòng nhập đầy đủ mã ngành của sinh viên'),
 			email: yup
 				.string()
 				.trim()
+				.lowercase()
 				.matches(/^[\w-\.]+@fpt\.edu\.vn$/, { message: 'Email sinh viên không đúng định dạng' })
 				.required('Vui lòng nhập đầy đủ email của sinh viên'),
 			phoneNumber: yup
