@@ -1,4 +1,4 @@
-import formatDate from '@/Core/utils/formatDate';
+import { formatDate } from '@/Core/utils/formatDate';
 import { List } from '..';
 import Button from '@/Core/components/common/Button';
 import FormRequestSupport from './FormRequestSupport';
