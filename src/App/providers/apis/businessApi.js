@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import axiosBaseQuery from '../axiosBaseQuery';
+import getPaginationIndex from '@/Core/utils/getPaginationIndex';
 
 /**
  * @enum
@@ -15,6 +16,7 @@ const businessApi = createApi({
 	endpoints: (build) => ({
 		getAllCompany: build.query({
 			query: (params) => ({ url: '/business', method: 'GET', params }),
+			transformResponse: (response, _meta, arg) => transformResponseData(response, arg),
 			providesTags: Object.values(TagTypes)
 		}),
 		getOneCompany: build.query({
@@ -38,6 +40,20 @@ const businessApi = createApi({
 		})
 	})
 });
+
+const transformResponseData = (response, arg) => {
+	const { limit, page } = arg;
+	if (!limit || !page) return response;
+	if (response && Array.isArray(response.data)) {
+		response.data = response.data.map((company, index) => ({
+			...company,
+			campus_id: company.campus_id?.name,
+			semester_id: company.semester_id?.name ? company.semester_id?.name?.toUpperCase() : company.semester_id?.name,
+			index: getPaginationIndex(limit, page, index)
+		}));
+	}
+	return response;
+};
 
 export const {
 	useGetAllCompanyQuery,

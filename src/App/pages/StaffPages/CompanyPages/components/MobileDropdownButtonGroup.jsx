@@ -7,11 +7,11 @@ import {
 	EllipsisHorizontalIcon
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
-import { Fragment, forwardRef, useRef } from 'react';
+import { Fragment, forwardRef, memo, useRef } from 'react';
 import { excelSampleData } from '../mocks';
 import { useExportToExcel } from '@/App/hooks/useExcel';
 
-const MobileDropdownButtonGroup = ({ tableData, handleImport, handleExport, canImport }, ref) => {
+const MobileDropdownButtonGroup = forwardRef(({ tableData, handleImport, handleExport, canImport }, ref) => {
 	const localRef = useRef(null);
 	const fileInputRef = ref || localRef;
 	const [handleExportFile] = useExportToExcel();
@@ -70,6 +70,6 @@ const MobileDropdownButtonGroup = ({ tableData, handleImport, handleExport, canI
 			</Transition>
 		</Menu>
 	);
-};
+});
 
-export default forwardRef(MobileDropdownButtonGroup);
+export default memo(MobileDropdownButtonGroup);

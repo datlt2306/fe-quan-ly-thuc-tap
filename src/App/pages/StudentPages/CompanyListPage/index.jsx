@@ -1,6 +1,6 @@
 import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
 import { useGetAllSemestersQuery } from '@/App/providers/apis/semesterApi';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { columnAccessors } from '../../StaffPages/CompanyPages/constants';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
@@ -10,6 +10,9 @@ import Modal from '@/Core/components/common/Modal';
 import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
 import LoadingData from '../Shared/LoadingData';
 import EmptyStateSection from '../Shared/EmptyStateSection';
+import tw from 'twin.macro';
+import Text from '@/Core/components/common/Text/Text';
+import useServerPagination from '@/App/hooks/useServerPagination';
 
 const CompanyListPage = () => {
 	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery({ typeNumber: 1 });
@@ -20,13 +23,14 @@ const CompanyListPage = () => {
 	const campus = useSelector((state) => state.campus);
 	const { data: semesterData } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
 	const [currentSemester, setCurrentSemester] = useState();
+	const { handlePaginate, paginationState } = useServerPagination();
 
 	useEffect(() => {
 		setCurrentSemester(semesterData?.defaultSemester?._id);
 	}, [semesterData]);
 
-	const { data: company, isLoading: companyLoading } = useGetAllCompanyQuery(
-		{ limit: 1000, semester_id: currentSemester },
+	const { data: companies, isLoading: companyLoading } = useGetAllCompanyQuery(
+		{ limit: paginationState.pageSize, page: paginationState.pageIndex, semester_id: currentSemester },
 		{ refetchOnMountOrArgChange: true }
 	);
 
@@ -34,8 +38,7 @@ const CompanyListPage = () => {
 		() => [
 			{
 				Header: columnAccessors.index,
-				accessor: 'STT',
-				Cell: ({ row }) => <span className='font-medium'>{row.index + 1}</span>
+				accessor: 'index'
 			},
 			{
 				Header: columnAccessors.business_code,
@@ -43,7 +46,7 @@ const CompanyListPage = () => {
 				Filter: InputColumnFilter,
 				filterable: true,
 				sortable: true,
-				Cell: ({ value }) => <span className='font-medium uppercase'>{value}</span>
+				Cell: ({ value }) => <Text className='font-medium uppercase'>{value}</Text>
 			},
 			{
 				Header: columnAccessors.tax_code,
@@ -51,32 +54,20 @@ const CompanyListPage = () => {
 				Filter: InputColumnFilter,
 				filterable: true,
 				sortable: true,
-				Cell: ({ value }) => <span className='font-medium uppercase'>{value}</span>
+				Cell: ({ value }) => <Text className='font-medium uppercase'>{value}</Text>
 			},
 			{
 				Header: columnAccessors.name,
 				accessor: 'name',
 				Filter: InputColumnFilter,
 				filterable: true,
-				sortable: true,
-				canSort: true,
-				canFilter: true,
-				Cell: ({ value }) => (
-					<div className='w-full max-w-xs overflow-hidden'>
-						<p className='overflow-ellipsis whitespace-normal'>{value}</p>
-					</div>
-				)
+				sortable: true
 			},
 			{
 				Header: columnAccessors.internship_position,
 				accessor: 'internship_position',
 				Filter: InputColumnFilter,
-				filterable: true,
-				Cell: ({ value }) => (
-					<div className='w-full max-w-xs overflow-hidden'>
-						<p className='overflow-ellipsis whitespace-normal'>{value}</p>
-					</div>
-				)
+				filterable: true
 			},
 			{
 				Header: columnAccessors.amount,
@@ -96,57 +87,18 @@ const CompanyListPage = () => {
 				accessor: 'address',
 				Filter: InputColumnFilter,
 				filterable: true,
-				Cell: ({ value }) => (
-					<div className='max-w- w-full overflow-hidden'>
-						<p className='overflow-ellipsis whitespace-normal'>{value}</p>
-					</div>
-				)
+				Cell: ({ value }) => <Text className='truncate whitespace-normal'>{value}</Text>
 			},
 			{
-				Header: columnAccessors.requirement,
-				accessor: 'requirement',
-				Filter: InputColumnFilter,
-				Cell: ({ value }) => (
+				Header: 'Chi tiết',
+				accessor: '',
+				Cell: ({ row }) => (
 					<Button
 						variant='ghost'
 						size='sm'
 						className='font-normal'
 						onClick={() => {
-							setDataModal({ data: value, title: columnAccessors.requirement });
-							setModal(!modal);
-						}}>
-						Chi tiết
-					</Button>
-				)
-			},
-			{
-				Header: columnAccessors.description,
-				accessor: 'description',
-				Filter: InputColumnFilter,
-				Cell: ({ value }) => (
-					<Button
-						variant='ghost'
-						size='sm'
-						className='font-normal'
-						onClick={() => {
-							setDataModal({ data: value, title: columnAccessors.description });
-							setModal(!modal);
-						}}>
-						Chi tiết
-					</Button>
-				)
-			},
-			{
-				Header: columnAccessors.benefit,
-				accessor: 'benefit',
-				Filter: InputColumnFilter,
-				Cell: ({ value }) => (
-					<Button
-						variant='ghost'
-						size='sm'
-						className='font-normal'
-						onClick={() => {
-							setDataModal({ data: value, title: columnAccessors.benefit });
+							setDataModal({ data: row.original, title: row.original?.name });
 							setModal(!modal);
 						}}>
 						Chi tiết
@@ -160,19 +112,51 @@ const CompanyListPage = () => {
 		return <LoadingData />;
 	}
 	return (
-		<div>
+		<Container>
 			{deadlineCheck ? (
-				<div>
-					<ReactTable columns={columnsData} data={company?.data ?? []} loading={companyLoading} />
-					<Modal openState={modal} onOpenStateChange={setModal} title={dataModal?.title}>
-						<p className='text-base-content'>{dataModal?.data}</p>
+				<Fragment>
+					<Modal openState={modal} onOpenStateChange={setModal} title={dataModal.title}>
+						<Modal.Content>
+							<List>
+								<List.Item>{columnAccessors.requirement}</List.Item>
+								<List.Item>{dataModal.data?.requirement || 'Không có'}</List.Item>
+							</List>
+							<List>
+								<List.Item>{columnAccessors.description}</List.Item>
+								<List.Item>{dataModal.data?.description || 'Không có'}</List.Item>
+							</List>
+							<List>
+								<List.Item>{columnAccessors.benefit}</List.Item>
+								<List.Item>{dataModal.data?.benefit || 'Không có'}</List.Item>
+							</List>
+						</Modal.Content>
 					</Modal>
-				</div>
+
+					<ReactTable
+						columns={columnsData}
+						data={companies?.data ?? []}
+						loading={companyLoading}
+						serverSidePagination={true}
+						serverPaginationProps={{
+							...paginationState,
+							pageIndex: companies?.page,
+							totalPages: companies?.totalPages,
+							canNextPage: companies?.hasNextPage,
+							canPreviousPage: companies?.hasPrevPage
+						}}
+						onServerPaginate={handlePaginate}
+					/>
+				</Fragment>
 			) : (
 				<EmptyStateSection title={'Thời gian hiển thị thông tin tuyển dụng đã kết thúc'} />
 			)}
-		</div>
+		</Container>
 	);
 };
+
+const Container = tw.div`h-full`;
+const List = tw.ol`grid grid-cols-[1fr,3fr] [&>:first-child]:(font-medium)`;
+List.Item = tw.li`whitespace-normal first-letter:uppercase p-4`;
+Modal.Content = tw.div`flex flex-col items-stretch divide-y divide-gray-200 max-w-2xl`;
 
 export default CompanyListPage;
