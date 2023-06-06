@@ -129,7 +129,7 @@ const StaffListPage = () => {
 				onOpenStateChange={setIsEditing}
 				title={'Sửa nhân viên'}
 				userData={user}
-				users={staffList}
+				users={staffList?.data ?? []}
 			/>
 			<Box>
 				<ButtonList>
