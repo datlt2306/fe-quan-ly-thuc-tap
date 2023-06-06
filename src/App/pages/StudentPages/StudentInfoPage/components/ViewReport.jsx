@@ -8,17 +8,17 @@ import { Fragment } from 'react';
 
 const ViewReport = ({ data: user, setOpenState }) => {
 	const initDataViewReport = [
-		{ label: 'Họ tên:', value: user?.name },
+		{ label: 'Họ tên', value: user?.name },
 		{
-			label: 'Tên công ty:',
+			label: 'Tên công ty',
 			value: user?.business?.name || user?.nameCompany
 		},
-		{ label: 'Điểm kết quả:', value: user?.resultScore },
-		{ label: 'Điểm thái độ:', value: user?.attitudePoint },
-		{ label: 'Thời gian bắt đầu:', value: formatDate(user?.internshipTime) },
-		{ label: 'Thời gian kết thúc:', value: formatDate(user?.endInternShipTime) },
+		{ label: 'Điểm kết quả', value: user?.resultScore },
+		{ label: 'Điểm thái độ', value: user?.attitudePoint },
+		{ label: 'Thời gian bắt đầu', value: formatDate(user?.internshipTime) },
+		{ label: 'Thời gian kết thúc', value: formatDate(user?.endInternShipTime) },
 		{
-			label: 'Báo cáo:',
+			label: 'Báo cáo',
 			value: user?.['report'] && (
 				<Button as='a' href={user?.report} target='_blank' size='sm' variant='outline' icon={EyeIcon}>
 					Preview
