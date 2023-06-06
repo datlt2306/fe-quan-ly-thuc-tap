@@ -22,7 +22,7 @@
 	}
 
 	.btn {
-		@apply inline-flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] bg-gray-50 font-semibold text-base-content outline-none duration-300 hover:bg-gray-50 focus:active:scale-95;
+		@apply inline-flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] bg-gray-50 font-semibold text-base-content outline-none duration-200 hover:bg-gray-50 focus:active:animate-[pulse_ease-in-out_0.3s];
 	}
 
 	.btn-primary {
@@ -72,7 +72,7 @@
 	}
 
 	.loading {
-		@apply pointer-events-none animate-spin rounded-full border-[3px] border-gray-100;
+		@apply pointer-events-none animate-spin rounded-full border-[3px] border-gray-200 border-r-white border-t-white;
 	}
 	.loading-sm {
 		@apply h-4 w-4;
@@ -84,10 +84,10 @@
 		@apply h-8 w-8;
 	}
 	.loading-primary {
-		@apply border-r-primary border-t-primary;
+		@apply !border-r-primary !border-t-primary;
 	}
 	.loading-secondary {
-		@apply border-r-secondary border-t-secondary;
+		@apply !border-r-secondary !border-t-secondary;
 	}
 	input[type='file'] {
 		@apply file:btn file:btn-sm rounded-md border-none p-1 shadow-none outline-none ring-0 file:border-none file:bg-base-content file:text-sm file:text-white focus:border-none focus:outline-none file:focus:border-none file:focus:outline-none file:hover:bg-base-content-active;
