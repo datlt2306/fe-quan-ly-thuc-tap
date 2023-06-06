@@ -12,6 +12,7 @@ import moment from 'moment';
 import React, { useMemo, useState, useEffect } from 'react';
 import tw from 'twin.macro';
 import { RequestStudentStatusEnum } from '@/App/constants/requestStudents';
+import { RequestSupportType } from '@/App/constants/studentConstants';
 
 const index = () => {
 	const { data, refetch, isLoading } = useGetRequestOfStudentQuery();
@@ -34,9 +35,14 @@ const index = () => {
 				accessor: 'userId.name',
 				Filter: InputColumnFilter,
 				filterable: true,
-				sortable: true,
-				canSort: true,
-				canFilter: true
+				sortable: true
+			},
+			{
+				Header: 'MSSV',
+				accessor: 'userId.mssv',
+				Filter: InputColumnFilter,
+				filterable: true,
+				sortable: true
 			},
 			{
 				Header: 'Loại',
@@ -44,9 +50,16 @@ const index = () => {
 				Filter: SelectColumnFilter,
 				filterable: true,
 				Cell: ({ value }) => {
-					if (value === 'narrow') return <div>Đăng ký thực tập</div>;
-					if (value === 'report') return <div>Báo cáo</div>;
-					if (value === 'form') return <div>Biên bản</div>;
+					switch (value) {
+						case RequestSupportType.INTERN_REGISTRATION:
+							return 'Đăng ký thực tập';
+						case RequestSupportType.RECORD:
+							return 'Biên bản';
+						case RequestSupportType.REPORT:
+							return 'Báo cáo';
+						default:
+							return null;
+					}
 				}
 			},
 			{
