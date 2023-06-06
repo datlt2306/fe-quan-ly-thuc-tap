@@ -7,7 +7,7 @@ import Text from '@/Core/components/common/Text/Text';
 import Typography from '@/Core/components/common/Text/Typography';
 import { Menu } from '@headlessui/react';
 import { DocumentTextIcon, IdentificationIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
-import { Fragment, Suspense, lazy, useState } from 'react';
+import { Fragment, Suspense, lazy, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import EmptyStateSection from '../Shared/EmptyStateSection';
@@ -85,6 +85,12 @@ const StudentInfoPage = () => {
 			content: <ViewReport setOpenState={setOpenState} data={data} />
 		}
 	];
+
+	/*Kiểm tra xem người dùng đã nộp "CV","Biên Bản","Báo Cáo" hay chưa và có phải là trạng thái chưa đăng ký hay không */
+	const isFormRegister = useMemo(() => {
+		return !(data?.CV || data?.form || data?.report || data?.nameCompany) && data?.statusCheck == 10;
+	}, [data]);
+
 	if (isLoading) {
 		return <LoadingData />;
 	}
@@ -106,7 +112,7 @@ const StudentInfoPage = () => {
 				</Grid.Col>
 
 				<Grid.Col>
-					{!(data?.CV || data?.form || data?.report || data?.nameCompany) && data?.statusCheck == 10 ? (
+					{isFormRegister ? (
 						<EmptyStateSection
 							title='Bạn chưa nộp form nào.'
 							message='Thông tin chi tiết các form sẽ được hiển thị sau khi đăng ký thành công.'
@@ -139,13 +145,13 @@ const StudentInfoPage = () => {
 				</Grid.Col>
 			</Grid>
 
-			<div className='bg-gray-50 p-4'>
+			<Box>
 				<Typography level={6} className='flex items-center gap-1  text-lg font-medium '>
 					<PencilSquareIcon className='h-5 w-5' />
 					Ghi chú
 				</Typography>
 				<TextNote>{data?.note}</TextNote>
-			</div>
+			</Box>
 
 			{openState && (
 				<Suspense fallback={<LoadingProgressBar />}>
@@ -161,6 +167,7 @@ const StudentInfoPage = () => {
 const TextNote = tw.div`mt-2 h-52 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200`;
 const Grid = tw.section`mb-8 grid grid-cols-[1.5fr,1fr] divide-x divide-gray-200`;
 const List = tw.ul`flex flex-col divide-y divide-gray-100`;
+const Box = tw.div`bg-gray-50 p-4`;
 Grid.Col = tw.div`divide-y divide-gray-200 flex flex-col [&>*]:p-3`;
 List.Item = tw.li`py-2 px-1 inline-grid grid-cols-2 items-baseline`;
 Modal.Content = tw.div`min-w-[576px] w-full max-w-full`;
