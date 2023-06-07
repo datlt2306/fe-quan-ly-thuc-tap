@@ -13,8 +13,9 @@ import React, { useMemo, useState, useEffect } from 'react';
 import tw from 'twin.macro';
 import { RequestStudentStatusEnum } from '@/App/constants/requestStudents';
 import { RequestSupportType } from '@/App/constants/studentConstants';
+import { toast } from 'react-toastify';
 
-const index = () => {
+const StudentSupportPage = () => {
 	const { data, refetch, isLoading } = useGetRequestOfStudentQuery();
 	const [handleAccept] = useResetStudentRequestMutation();
 	const [handleReject] = useRemoveRequestApiMutation();
@@ -22,6 +23,30 @@ const index = () => {
 	useEffect(() => {
 		setTableData(data?.data.filter((item) => item.status === 1));
 	}, [data]);
+
+	const handleAcceptRequest = async (data) => {
+		try {
+			await handleAccept({
+				userId: data?.userId?._id,
+				type: data?.type,
+				id: data?._id
+			});
+			refetch();
+			toast.success('Đã chấp nhận yêu cầu của sinh viên.');
+		} catch (error) {
+			toast.error('Đã có lỗi xảy ra !');
+		}
+	};
+
+	const handleRejectRequest = async (data) => {
+		try {
+			await handleReject(data?._id);
+			refetch();
+			toast.info('Đã từ chối yêu cầu của sinh viên.');
+		} catch (error) {
+			toast.error('Đã có lỗi xảy ra !');
+		}
+	};
 
 	const columnsData = useMemo(
 		() => [
@@ -86,14 +111,7 @@ const index = () => {
 								cancelText='Cancel'
 								title={'Chấp nhận yêu cầu'}
 								description={'Bạn muốn chấp nhận yêu cầu này ?'}
-								onConfirm={async () => {
-									await handleAccept({
-										userId: row.original.userId._id,
-										type: row.original.type,
-										id: row.original._id
-									});
-									refetch();
-								}}>
+								onConfirm={() => handleAcceptRequest(row.original)}>
 								<Button type='button' size='xs' variant='success'>
 									Đồng ý
 								</Button>
@@ -103,10 +121,7 @@ const index = () => {
 								cancelText='Cancel'
 								title={'Từ chối yêu cầu'}
 								description={'Bạn muốn từ chối yêu cầu này ?'}
-								onConfirm={async () => {
-									await handleReject(row.original._id);
-									refetch();
-								}}>
+								onConfirm={() => handleRejectRequest(row.original)}>
 								<Button type='button' size='xs' variant='error'>
 									Từ chối
 								</Button>
@@ -145,4 +160,4 @@ const index = () => {
 const ActionList = tw.div`flex items-stretch gap-1`;
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2 mb-4`;
 
-export default index;
+export default StudentSupportPage;
