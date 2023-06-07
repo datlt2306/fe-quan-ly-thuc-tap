@@ -40,8 +40,7 @@ const FormRequestSupport = ({ formType, setOpenState }) => {
 					<TextareaFieldControl control={control} name='description' />
 					<Form.Action>
 						<Button
-							variant='error'
-							className='hover:bg-red-600'
+							variant='ghost'
 							onClick={() => {
 								setOpen(false);
 								reset();

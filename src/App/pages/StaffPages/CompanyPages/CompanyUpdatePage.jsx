@@ -57,10 +57,9 @@ const UpdateBusinessForm = () => {
 		navigate(StaffPaths.COMPANY_LIST);
 	};
 	return (
-		<Form onSubmit={handleSubmit(onHandleUpdate)}>
-			<Title>Cập Nhật Doanh Nghiệp</Title>
-			<Flex>
-				<FlexLetf>
+		<Container>
+			<Form onSubmit={handleSubmit(onHandleUpdate)}>
+				<Form.Group>
 					<InputFieldControl
 						control={control}
 						name='name'
@@ -68,6 +67,8 @@ const UpdateBusinessForm = () => {
 						placeholder='Công ty TNHH ...'
 					/>
 					<InputFieldControl control={control} name='tax_code' label='Mã Số Thuế' placeholder='0123456789 ...' />
+				</Form.Group>
+				<Form.Group>
 					<InputFieldControl
 						control={control}
 						name='business_code'
@@ -80,6 +81,8 @@ const UpdateBusinessForm = () => {
 						label='Vị Trí Thực Tập'
 						placeholder='Intern ...'
 					/>
+				</Form.Group>
+				<Form.Group>
 					<InputFieldControl control={control} name='amount' label='Số Lượng' placeholder='Số ...' type='number' />
 					<SelectFieldControl
 						name='major'
@@ -88,45 +91,51 @@ const UpdateBusinessForm = () => {
 						options={Array.isArray(major) && major.map((item) => ({ value: item._id, label: item.name }))}
 					/>
 					<InputFieldControl control={control} name='address' label='Địa Chỉ' placeholder='Hà Nội ...' />
-					<Desktop>
-						<Button variant='primary' type='submit' disabled={isLoading}>
-							{isLoading && <LoadingSpinner size='sm' variant='primary' />} Cập nhật
-						</Button>
-					</Desktop>
-				</FlexLetf>
-				<FlexRight>
+				</Form.Group>
+				<Form.Group>
 					<TextareaFieldControl
 						control={control}
 						name='requirement'
 						label='Yêu Cầu'
+						resizable={false}
 						placeholder='Sinh viên đi thực tập ...'
 					/>
 
 					<TextareaFieldControl
+						resizable={false}
 						control={control}
+						name='benefit'
+						label='Quyền Lợi'
+						placeholder='Có cơ hội ...'
+					/>
+				</Form.Group>
+				<Form.Group>
+					<TextareaFieldControl
+						control={control}
+						resizable={false}
 						name='description'
 						label='Mô tả'
 						placeholder='Trách nghiệm, nhiệt tình ...'
 					/>
-
-					<TextareaFieldControl control={control} name='benefit' label='Quyền Lợi' placeholder='Có cơ hội ...' />
-				</FlexRight>
-			</Flex>
-			<Mobile>
-				<Button variant='primary' type='submit' disabled={isLoading}>
-					{isLoading && <LoadingSpinner size='sm' variant='primary' />} Cập nhật
-				</Button>
-			</Mobile>
-		</Form>
+				</Form.Group>
+				<Form.Group>
+					<Button
+						variant='primary'
+						type='submit'
+						className='w-fit'
+						size='md'
+						disabled={isLoading}
+						loading={isLoading}>
+						Cập nhật
+					</Button>
+				</Form.Group>
+			</Form>
+		</Container>
 	);
 };
 
-const Form = tw.form``;
-const Flex = tw.div`grid grid-cols-2 gap-8 sm:grid-cols-1 resize-none`;
-const FlexLetf = tw.div`grid grid-cols-1 gap-4 grow h-[600px] lg:sticky top-[100px]`;
-const FlexRight = tw.div`grid grid-cols-1 gap-4 grow`;
-const Desktop = tw.div`self-center mt-4 sm:hidden`;
-const Mobile = tw.div`self-center mt-4 hidden sm:block`;
-const Title = tw.div`mb-8 text-primary text-xl font-bold`;
+const Container = tw.div`h-fit max-w-3xl md:(max-w-xl mx-auto) px-6 py-3`;
+const Form = tw.form`flex flex-col gap-6`;
+Form.Group = tw.div`flex grow gap-6 md:flex-wrap [&>*]:(basis-auto w-full)`;
 
 export default UpdateBusinessForm;

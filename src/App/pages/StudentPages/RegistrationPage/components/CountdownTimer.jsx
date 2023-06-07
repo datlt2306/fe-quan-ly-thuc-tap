@@ -18,7 +18,7 @@ const CountdownTimer = ({ targetDate }) => {
 		return (
 			<Box>
 				<Text>Thời gian đăng ký còn lại:</Text>
-				<Text className='text-lg font-medium tracking-wide'>
+				<Text className='font-semibold tracking-wide'>
 					{days} ngày : {hours} giờ : {minutes} phút : {seconds} giây
 				</Text>
 			</Box>
