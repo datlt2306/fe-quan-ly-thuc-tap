@@ -24,6 +24,7 @@ const AddMajorSlideOver = ({ onOpen, open, panelTitle, majors }) => {
 
 		if (checkDuplicate) {
 			toast.error('Mã và Tên chuyên ngành không được trùng với dữ liệu đã có');
+			reset();
 			onOpen();
 			return;
 		}
@@ -33,6 +34,7 @@ const AddMajorSlideOver = ({ onOpen, open, panelTitle, majors }) => {
 		});
 		if (result?.error) {
 			onOpen();
+			reset();
 			toast.error('Thêm chuyên ngành không thành công!');
 			return;
 		}

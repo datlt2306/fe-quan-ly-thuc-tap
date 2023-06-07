@@ -30,12 +30,14 @@ const UpdateMajorSlideOver = ({ major, onOpenStateChange: handleOpenStateChange,
 		);
 		if (checkMajorsDuplicate) {
 			toast.error('Mã và Tên chuyên ngành không được trùng với dữ liệu đã có');
+			reset();
 			handleOpenStateChange();
 			return;
 		}
 		const result = await handleUpdateMajor({ data: { name, majorCode }, id: major?._id });
 		if (result?.error) {
 			handleOpenStateChange();
+			reset();
 			toast.error('Sửa chuyên ngành không thành công!');
 			return;
 		}
