@@ -56,7 +56,7 @@ const FormSchoolSupport = ({ selectedOption, user }) => {
 	};
 	return (
 		<Form onSubmit={handleSubmit(handleFormSchoolSupport)}>
-			<Form.Grid>
+			<Form.Group>
 				<SharedFields control={control} student={user} />
 				<ComboBoxFieldControl
 					loading={loadingBusiness}
@@ -71,15 +71,15 @@ const FormSchoolSupport = ({ selectedOption, user }) => {
 					}
 				/>
 				<FileUploadFieldControl label='Upload CV (PDF)' className='w-full' control={control} name='CV' />
-			</Form.Grid>
-			<Button type='submit' variant='primary' className='mt-2' disabled={isLoading} loading={isLoading}>
+			</Form.Group>
+			<Button type='submit' variant='primary' className='w-fit' disabled={isLoading} loading={isLoading}>
 				Đăng ký
 			</Button>
 		</Form>
 	);
 };
 
-const Form = tw.form``;
-Form.Grid = tw.form`grid-cols-2 grid gap-6 mb-6`;
+const Form = tw.form`flex flex-col gap-6`;
+Form.Group = tw.form`grid-cols-2 grid gap-6`;
 
 export default FormSchoolSupport;

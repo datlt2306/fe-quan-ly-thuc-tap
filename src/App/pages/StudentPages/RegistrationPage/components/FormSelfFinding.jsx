@@ -74,11 +74,11 @@ const FormSelfFinding = ({ selectedOption, user }) => {
 	};
 	return (
 		<Form onSubmit={handleSubmit(handleFormSelfFinding)}>
-			<Form.Grid>
+			<Form.Group>
 				<SharedFields control={control} student={user} inputFields={FieldsFormSelfFinding} />
-			</Form.Grid>
+			</Form.Group>
 
-			<Button type='submit' variant='primary' disabled={isLoading} className='w-auto'>
+			<Button type='submit' variant='primary' disabled={isLoading} className='w-fit'>
 				{isLoading && <LoadingSpinner size='sm' variant='primary' />}
 				Đăng ký
 			</Button>
@@ -86,7 +86,7 @@ const FormSelfFinding = ({ selectedOption, user }) => {
 	);
 };
 
-const Form = tw.form``;
-Form.Grid = tw.form`grid-cols-3 sm:grid-cols-1 md:grid-cols-2 grid gap-6 mb-6`;
+const Form = tw.form`flex flex-col gap-6`;
+Form.Group = tw.form`grid-cols-3 sm:grid-cols-1 md:grid-cols-2 grid gap-6`;
 
 export default FormSelfFinding;
