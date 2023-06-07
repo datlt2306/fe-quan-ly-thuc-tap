@@ -7,7 +7,7 @@ const requestStudentsApi = createApi({
 	endpoints: (build) => ({
 		getRequestOfStudent: build.query({
 			query: () => {
-				return { url: `/getRequest`, method: 'GET' };
+				return { url: `/request`, method: 'GET' };
 			}
 		}),
 		requestOfStudent: build.mutation({
