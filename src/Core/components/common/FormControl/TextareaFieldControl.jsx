@@ -22,22 +22,17 @@ const TextareaFieldControl = forwardRef(
 		const resolvedRef = ref || textareaRef;
 		const id = useId();
 
-		useEffect(() => {
-			const textarea = resolvedRef.current;
-			const handleInput = () => {
-				textarea.style.height = 'auto';
-				textarea.style.height = `${textarea.scrollHeight}px`;
-			};
-			textarea.addEventListener('input', handleInput);
-			return () => {
-				textarea.removeEventListener('input', handleInput);
-			};
-		}, []);
+		const handleInput = (e) => {
+			if (resizable) {
+				e.target.style.height = 'auto';
+				e.target.style.height = `${e.target.scrollHeight}px`;
+			}
+		};
 
 		return (
 			<FormControl>
 				{label && (
-					<Text as='label' className='font-medium text-base-content' htmlFor={id}>
+					<Text as='label' className='font-semibold text-base-content' htmlFor={id}>
 						{label}
 					</Text>
 				)}
@@ -48,9 +43,13 @@ const TextareaFieldControl = forwardRef(
 						field.onChange(e);
 						if (handleChange) handleChange(e);
 					}}
+					onInput={(e) => handleInput(e)}
 					value={field.value}
 					disabled={disabled}
-					className={classNames({ 'resize-none': !resizable, 'ring-error': !!error })}
+					className={classNames({
+						'resize-none': !resizable,
+						'ring-error': !!error
+					})}
 					rows={rows}
 					ref={(e) => {
 						field.ref(e);
@@ -63,6 +62,6 @@ const TextareaFieldControl = forwardRef(
 	}
 );
 
-const Textarea = tw.textarea`block w-full rounded-md border-0 duration-300 px-2.5 py-1.5 text-base-content outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`;
+const Textarea = tw.textarea`scrollbar-none block w-full rounded-md border-0 duration-300 px-2.5 py-2 text-base-content outline-none shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6`;
 
 export default TextareaFieldControl;

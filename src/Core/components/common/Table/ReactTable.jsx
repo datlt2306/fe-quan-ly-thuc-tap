@@ -17,7 +17,6 @@ import { Option, Select } from '../FormControl/SelectFieldControl';
 import Text from '../Text/Text';
 import Table from './CoreTable';
 import { GlobalFilter } from './ReactTableFilters';
-// import { useSearchParams } from 'react-router-dom';
 
 function fuzzyTextFilterFn(rows, id, filterValue) {
 	return matchSorter(rows, filterValue, { keys: [(row) => row.values[id]] });
@@ -148,7 +147,7 @@ const ReactTable = ({
 
 			{/* Table data */}
 			<Body isEmpty={isEmptyData}>
-				<Table {...getTableProps()}>
+				<Table className='overflow-y-hidden' {...getTableProps()}>
 					<Table.Header sticky={true}>
 						{headerGroups.map((headerGroup) => (
 							<Table.Row {...headerGroup.getHeaderGroupProps()}>
