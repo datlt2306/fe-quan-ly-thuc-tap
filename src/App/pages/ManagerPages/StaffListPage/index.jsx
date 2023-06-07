@@ -123,7 +123,12 @@ const StaffListPage = () => {
 
 	return (
 		<Fragment>
-			<AddStaffSlideOver open={slideOverVisibility} onOpen={setSlideOverVisibility} panelTitle={'Thêm nhân viên'} />
+			<AddStaffSlideOver
+				openState={slideOverVisibility}
+				onOpenStateChange={setSlideOverVisibility}
+				formContext={staffList?.data}
+				panelTitle={'Thêm nhân viên'}
+			/>
 			<UpdateStaffModal
 				openState={isEditing}
 				onOpenStateChange={setIsEditing}
