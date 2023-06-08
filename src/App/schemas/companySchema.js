@@ -1,57 +1,71 @@
-import { object, string, number, array } from 'yup';
+import * as yup from 'yup';
+import './customYupMethods';
 
-export const companySchema = object({
-	name: string()
-		.required('Vui lòng nhập đầy đủ tên doanh nghiệp')
-		.test('no-whitespace', 'Chuỗi không thể chứa toàn khoảng trắng', (value) => !/^\s+$/.test(value)),
-	tax_code: string()
-		.required('Vui lòng nhập đầy đủ mã số thuế')
-		.test('no-whitespace', 'Chuỗi không thể chứa toàn khoảng trắng', (value) => !/^\s+$/.test(value)),
-	internship_position: string()
-		.required('Vui lòng nhập đầy đủ vị trí thực tập')
-		.test('no-whitespace', 'Chuỗi không thể chứa toàn khoảng trắng', (value) => !/^\s+$/.test(value)),
-	major: string().required('Vui lòng chọn ngành'),
-	amount: number()
+export const companySchema = yup.object({
+	name: yup.string().trim().required('Vui lòng nhập đầy đủ tên doanh nghiệp'),
+	tax_code: yup
+		.string()
+		.trim()
+		.test({
+			message: 'Đã có công ty với mã số thuế này',
+			test: function (value, { options: { context } }) {
+				console.log('context.companiesList :>> ', context);
+				const result = Array.isArray(context.companiesList)
+					? !context.companiesList.some(
+							(company) => company.tax_code === value && this.parent.name !== company.name
+					  )
+					: false;
+				console.log('result :>> ', result);
+				return result;
+			}
+		})
+		.required('Vui lòng nhập đầy đủ mã số thuế'),
+	internship_position: yup.string().trim().required('Vui lòng nhập đầy đủ vị trí thực tập'),
+	major: yup.string().required('Vui lòng chọn ngành'),
+	amount: yup
+		.number()
 		.typeError('Vui lòng nhập số nguyên dương')
 		.required('Vui lòng nhập số lượng')
 		.positive('Vui lòng nhập số nguyên dương')
 		.integer('Vui lòng nhập số nguyên dương'),
-	address: string()
-		.required('Vui lòng nhập đầy đủ địa chỉ')
-		.test('no-whitespace', 'Chuỗi không thể chứa toàn khoảng trắng', (value) => !/^\s+$/.test(value)),
-	business_code: string()
-		.required('Vui lòng nhập đầy đủ mã doanh nghiệp')
-		.test('no-whitespace', 'Chuỗi không thể chứa toàn khoảng trắng', (value) => !/^\s+$/.test(value)),
-	requirement: string(),
-	description: string(),
-	benefit: string()
+	address: yup.string().trim().required('Vui lòng nhập đầy đủ địa chỉ'),
+	business_code: yup
+		.string()
+		.test({
+			message: 'Công ty đã có mã tuyển dụng này',
+			test: function (value, { options: { context } }) {
+				const result = Array.isArray(context.companiesList)
+					? !context.companiesList
+							.filter((company) => company._id !== context.id)
+							.some((company) => company.business_code === value && this.parent.tax_code === company.tax_code)
+					: false;
+				return result;
+			}
+		})
+		.required('Vui lòng nhập đầy đủ mã doanh nghiệp'),
+	requirement: yup.string(),
+	description: yup.string(),
+	benefit: yup.string()
 });
 
-export const companyArraySchema = array(
-	object({
-		name: string()
-			.required('Vui lòng nhập đầy đủ tên doanh nghiệp')
-			.test('no-whitespace', 'Chuỗi không thể chứa toàn khoảng trắng', (value) => !/^\s+$/.test(value)),
-		tax_code: string()
-			.required('Vui lòng nhập đầy đủ mã số thuế')
-			.test('no-whitespace', 'Chuỗi không thể chứa toàn khoảng trắng', (value) => !/^\s+$/.test(value)),
-		internship_position: string()
-			.required('Vui lòng nhập đầy đủ vị trí thực tập')
-			.test('no-whitespace', 'Chuỗi không thể chứa toàn khoảng trắng', (value) => !/^\s+$/.test(value)),
-		major: string().required('Vui lòng chọn ngành'),
-		amount: number()
-			.typeError('Vui lòng nhập số nguyên dương')
-			.required('Vui lòng nhập số lượng')
-			.positive('Vui lòng nhập số nguyên dương')
-			.integer('Vui lòng nhập số nguyên dương'),
-		address: string()
-			.required('Vui lòng nhập đầy đủ địa chỉ')
-			.test('no-whitespace', 'Chuỗi không thể chứa toàn khoảng trắng', (value) => !/^\s+$/.test(value)),
-		business_code: string()
-			.required('Vui lòng nhập đầy đủ mã doanh nghiệp')
-			.test('no-whitespace', 'Chuỗi không thể chứa toàn khoảng trắng', (value) => !/^\s+$/.test(value)),
-		requirement: string(),
-		description: string(),
-		benefit: string()
-	})
-);
+export const companyArraySchema = yup
+	.array(
+		yup.object({
+			name: yup.string().required('Vui lòng nhập đầy đủ tên doanh nghiệp').trim(),
+			tax_code: yup.string().trim().required('Vui lòng nhập đầy đủ mã số thuế'),
+			internship_position: yup.string().trim().required('Vui lòng nhập đầy đủ vị trí thực tập'),
+			major: yup.string().required('Vui lòng chọn ngành'),
+			amount: yup
+				.number()
+				.typeError('Vui lòng nhập số nguyên dương')
+				.required('Vui lòng nhập số lượng')
+				.positive('Vui lòng nhập số nguyên dương')
+				.integer('Vui lòng nhập số nguyên dương'),
+			address: yup.string().trim().required('Vui lòng nhập đầy đủ địa chỉ'),
+			business_code: yup.string().trim().required('Vui lòng nhập đầy đủ mã doanh nghiệp'),
+			requirement: yup.string(),
+			description: yup.string(),
+			benefit: yup.string()
+		})
+	)
+	.unique('Mã tuyển dụng không được trùng', (value) => value.business_code);
