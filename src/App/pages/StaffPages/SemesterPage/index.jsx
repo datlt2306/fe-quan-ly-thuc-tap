@@ -3,7 +3,7 @@ import { useGetAllSemestersQuery } from '@/App/providers/apis/semesterApi';
 import Button from '@/Core/components/common/Button';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/20/solid';
-import React, { Fragment, useMemo, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import { useForm } from 'react-hook-form';
@@ -21,6 +21,11 @@ const SemesterPage = () => {
 	const { reset } = useForm({
 		resolver: yupResolver(campusDataValidator)
 	});
+	const [canCreateSemester, setCanCreateSemester] = useState(false);
+
+	useEffect(() => {
+		setCanCreateSemester(!!semesters?.defaultSemester === false);
+	}, [semesters]);
 
 	const tableData = useMemo(() => {
 		return Array.isArray(semesters?.listSemesters)
@@ -106,7 +111,7 @@ const SemesterPage = () => {
 				<ButtonList>
 					<Button
 						type='button'
-						variant='primary'
+						variant={canCreateSemester ? 'primary' : 'disabled'}
 						size='sm'
 						onClick={() => {
 							reset();
