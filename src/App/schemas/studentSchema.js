@@ -1,16 +1,10 @@
 import * as yup from 'yup';
 import { StudentSchoolingStatus } from '../constants/studentConstants';
-
+import './customYupMethods';
 /**
  * * Email manager: /^[A-Z0-9._%+-]+@fe\.edu\.vn$/i
  * * Email sinh viên: /^[\w-\.]+@fpt\.edu\.vn$/
  */
-
-yup.addMethod(yup.array, 'unique', function (message, mapper = (a) => a) {
-	return this.test('unique', message, function (list) {
-		return list.length === new Set(list.map(mapper)).size;
-	});
-});
 
 export const newStudentSchema = yup
 	.array(

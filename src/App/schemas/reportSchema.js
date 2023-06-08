@@ -18,7 +18,6 @@ export const reportSchema = object().shape({
 		.test({
 			message: 'Ngày bắt đầu phải lớn hơn ngày kết thúc',
 			test: (value, { options: { context } }) => {
-				console.log('startTime :>> ', context);
 				return value > context?.startInternshipTime;
 			}
 		})
