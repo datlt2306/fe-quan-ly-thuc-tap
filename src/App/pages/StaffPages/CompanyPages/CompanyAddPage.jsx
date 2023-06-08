@@ -1,4 +1,4 @@
-import { useAddCompanyMutation } from '@/App/providers/apis/businessApi';
+import { useAddCompanyMutation, useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
 import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { companySchema } from '@/App/schemas/companySchema';
 import Button from '@/Core/components/common/Button';
@@ -10,6 +10,7 @@ import { StaffPaths } from '@/Core/constants/routePaths';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
@@ -19,14 +20,16 @@ const AddBusinessForm = () => {
 
 	// get list campus and major
 	const { data: major } = useGetAllMajorQuery(null, { refetchOnMountOrArgChange: true });
-
+	const defaultSemester = useSelector((state) => state.semester?.defaultSemester);
+	const { data: allCompanies } = useGetAllCompanyQuery({ semester_id: defaultSemester?._id });
 	// handle add new company
 	const { handleSubmit, control } = useForm({
-		resolver: yupResolver(companySchema)
+		resolver: yupResolver(companySchema),
+		context: { companiesList: allCompanies }
 	});
 	const [handleAddCompany, { isLoading }] = useAddCompanyMutation();
 	const onSubmit = async (data) => {
-		const result = await handleAddCompany([data]);
+		const result = await handleAddCompany([{ ...data, semester_id: defaultSemester?._id }]);
 		if (result?.error) {
 			toast.error('Thêm mới thất bại');
 			return;
@@ -51,12 +54,7 @@ const AddBusinessForm = () => {
 					<InputFieldControl control={control} name='tax_code' label='Mã Số Thuế' placeholder='0123456789 ...' />
 				</Form.Group>
 				<Form.Group>
-					<InputFieldControl
-						control={control}
-						name='business_code'
-						label='Mã Doanh Nghiệp'
-						placeholder='TT01 ...'
-					/>
+					<InputFieldControl control={control} name='business_code' label='Mã Tuyển Dụng' placeholder='TT01 ...' />
 					<InputFieldControl
 						control={control}
 						name='internship_position'

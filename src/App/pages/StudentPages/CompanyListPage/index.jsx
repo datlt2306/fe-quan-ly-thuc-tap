@@ -1,18 +1,17 @@
 import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
-import { useGetAllSemestersQuery } from '@/App/providers/apis/semesterApi';
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { columnAccessors } from '../../StaffPages/CompanyPages/constants';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
-import Button from '@/Core/components/common/Button';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
-import Modal from '@/Core/components/common/Modal';
 import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
-import LoadingData from '../Shared/LoadingData';
-import EmptyStateSection from '../Shared/EmptyStateSection';
-import tw from 'twin.macro';
+import { useGetAllSemestersQuery } from '@/App/providers/apis/semesterApi';
+import Button from '@/Core/components/common/Button';
+import Modal from '@/Core/components/common/Modal';
+import ReactTable from '@/Core/components/common/Table/ReactTable';
+import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
 import Text from '@/Core/components/common/Text/Text';
-import useServerPagination from '@/App/hooks/useServerPagination';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import tw from 'twin.macro';
+import { columnAccessors } from '../../StaffPages/CompanyPages/constants';
+import EmptyStateSection from '../Shared/EmptyStateSection';
+import LoadingData from '../Shared/LoadingData';
 
 const CompanyListPage = () => {
 	const { data: times, isLoading: getTimeLoading } = useGetSetTimeQuery({ typeNumber: 1 });
@@ -23,16 +22,12 @@ const CompanyListPage = () => {
 	const campus = useSelector((state) => state.campus);
 	const { data: semesterData } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
 	const [currentSemester, setCurrentSemester] = useState();
-	const { handlePaginate, paginationState } = useServerPagination();
 
 	useEffect(() => {
 		setCurrentSemester(semesterData?.defaultSemester?._id);
 	}, [semesterData]);
 
-	const { data: companies, isLoading: companyLoading } = useGetAllCompanyQuery(
-		{ limit: paginationState.pageSize, page: paginationState.pageIndex, semester_id: currentSemester },
-		{ refetchOnMountOrArgChange: true }
-	);
+	const { data: companies, isLoading: companyLoading } = useGetAllCompanyQuery({ semester_id: currentSemester });
 
 	const columnsData = useMemo(
 		() => [
@@ -132,20 +127,7 @@ const CompanyListPage = () => {
 						</Modal.Content>
 					</Modal>
 
-					<ReactTable
-						columns={columnsData}
-						data={companies?.data ?? []}
-						loading={companyLoading}
-						serverSidePagination={true}
-						serverPaginationProps={{
-							...paginationState,
-							pageIndex: companies?.page,
-							totalPages: companies?.totalPages,
-							canNextPage: companies?.hasNextPage,
-							canPreviousPage: companies?.hasPrevPage
-						}}
-						onServerPaginate={handlePaginate}
-					/>
+					<ReactTable columns={columnsData} data={companies ?? []} loading={companyLoading} />
 				</Fragment>
 			) : (
 				<EmptyStateSection title={'Thời gian hiển thị thông tin tuyển dụng đã kết thúc'} />

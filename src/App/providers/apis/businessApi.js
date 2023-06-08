@@ -42,17 +42,15 @@ const businessApi = createApi({
 });
 
 const transformResponseData = (response, arg) => {
-	const { limit, page } = arg;
-	if (!limit || !page) return response;
-	if (response && Array.isArray(response.data)) {
-		response.data = response.data.map((company, index) => ({
+	if (response && Array.isArray(response)) {
+		return response.map((company, index) => ({
 			...company,
 			campus_id: company.campus_id?.name,
 			semester_id: company.semester_id?.name ? company.semester_id?.name?.toUpperCase() : company.semester_id?.name,
-			index: getPaginationIndex(limit, page, index)
+			index: index + 1
 		}));
 	}
-	return response;
+	return [];
 };
 
 export const {

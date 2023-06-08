@@ -1,24 +1,28 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {
+	useGetAllCompanyQuery,
+	useGetOneCompanyQuery,
+	useUpdateCompanyMutation
+} from '@/App/providers/apis/businessApi';
+import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
+import { companySchema } from '@/App/schemas/companySchema';
+import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
-import tw from 'twin.macro';
-import Button from '@/Core/components/common/Button';
-import { companySchema } from '@/App/schemas/companySchema';
-import { useGetOneCompanyQuery, useUpdateCompanyMutation } from '@/App/providers/apis/businessApi';
-import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
-import { toast } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
 import { StaffPaths } from '@/Core/constants/routePaths';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import tw from 'twin.macro';
 
 const UpdateBusinessForm = () => {
 	const navigate = useNavigate();
-
-	// get id and get default company
 	const { id } = useParams();
+	const defaultSemester = useSelector((state) => state.semester?.defaultSemester);
+	const { data: allCompanies } = useGetAllCompanyQuery({ semester_id: defaultSemester });
 	const { data: company } = useGetOneCompanyQuery({ id }, { refetchOnMountOrArgChange: true });
 
 	// get major
@@ -26,7 +30,8 @@ const UpdateBusinessForm = () => {
 
 	// set default value and form control
 	const { handleSubmit, control, reset } = useForm({
-		resolver: yupResolver(companySchema)
+		resolver: yupResolver(companySchema),
+		context: { companiesList: allCompanies, id: id }
 	});
 	useEffect(() => {
 		if (company) {
@@ -69,12 +74,7 @@ const UpdateBusinessForm = () => {
 					<InputFieldControl control={control} name='tax_code' label='Mã Số Thuế' placeholder='0123456789 ...' />
 				</Form.Group>
 				<Form.Group>
-					<InputFieldControl
-						control={control}
-						name='business_code'
-						label='Mã Doanh Nghiệp'
-						placeholder='TT01 ...'
-					/>
+					<InputFieldControl control={control} name='business_code' label='Mã Tuyển Dụng' placeholder='TT01 ...' />
 					<InputFieldControl
 						control={control}
 						name='internship_position'

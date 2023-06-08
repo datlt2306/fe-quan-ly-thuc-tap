@@ -1,10 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { CalendarDaysIcon, EyeIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
-import useServerPagination from '@/App/hooks/useServerPagination';
 import {
 	useAddArrayCompanyMutation,
 	useDeleteCompanyMutation,
@@ -22,6 +16,11 @@ import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
 import { StaffPaths } from '@/Core/constants/routePaths';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import getFileExtension from '@/Core/utils/getFileExtension';
+import { CalendarDaysIcon, EyeIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import CompanyDetailModal from './components/CompanyDetailModal';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
@@ -35,19 +34,14 @@ const CompanyListPage = () => {
 	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
 	const [modalState, setModalState] = useState(false);
 	const [dataModal, setDataModal] = useState({});
-	const campus = useSelector((state) => state.campus);
 	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useState(defaultSemester?._id);
-	const { paginationState, handlePaginate } = useServerPagination();
 	const fileInputRef = useRef(null);
-	const { data: majors } = useGetAllMajorQuery(undefined, { refetchOnMountOrArgChange: true });
+	const { data: majors } = useGetAllMajorQuery();
 	const { data: companies, isLoading: companyLoading } = useGetAllCompanyQuery({
-		page: paginationState?.pageIndex,
-		limit: paginationState?.pageSize,
 		semester_id: currentSemester
 	});
-	const tableData = useMemo(() => companies?.data ?? [], [companies]);
-	console.log('tableData :>> ', tableData);
+	const tableData = useMemo(() => companies ?? [], [companies]);
 
 	useEffect(() => {
 		setCurrentSemester(defaultSemester?._id);
@@ -62,13 +56,13 @@ const CompanyListPage = () => {
 		}
 		toast.success('Đã xóa doanh nghiệp thành công');
 	};
-
 	// Callback function will be executed after import file excel
-	const importExcelDataCallback = (excelData) => {
-		if (!excelData.length) {
-			toast.warn('Vui lòng nhập thông tin đầy đủ!');
-		}
-		if (excelData.length) {
+	const importExcelDataCallback = async (excelData) => {
+		try {
+			if (!excelData.length) {
+				toast.warn('Vui lòng nhập thông tin đầy đủ!');
+			}
+
 			const newCompanyList = excelData.map((obj) => ({
 				name: obj[columnAccessors.name],
 				business_code: obj[columnAccessors.business_code],
@@ -79,25 +73,26 @@ const CompanyListPage = () => {
 				address: obj[columnAccessors.address],
 				requirement: obj[columnAccessors.requirement],
 				description: obj[columnAccessors.description],
-				benefit: obj[columnAccessors.benefit]
+				benefit: obj[columnAccessors.benefit],
+				semester_id: currentSemester
 			}));
-			const newData = newCompanyList?.map((item) => ({
+
+			const payload = newCompanyList?.map((item) => ({
 				...item,
-				major: majors?.find((majorItem) => majorItem.majorCode === item.major)?._id
+				major: majors?.find((majorItem) => majorItem.majorCode == item.major)?._id
 			}));
-			companyArraySchema
-				.validate(newData)
-				.then(async (data) => {
-					const response = await handleAddArrayCompany(data);
-					if (response?.error) {
-						toast.error('Import công ty thất bại');
-					} else {
-						toast.success('Import công ty thành công');
-					}
-				})
-				.catch((error) => {
-					toast.error(error?.message);
-				});
+
+			const value = await companyArraySchema.validate(payload, { context: { companiesList: companies } });
+			const { error } = await handleAddArrayCompany(value);
+			if (error) {
+				toast.error('Import công ty thất bại');
+				return;
+			}
+			toast.success('Import công ty thành công');
+		} catch (error) {
+			toast.error(error.message);
+		} finally {
+			fileInputRef.current.value = null; // reset input file after imported
 		}
 	};
 
@@ -111,17 +106,16 @@ const CompanyListPage = () => {
 				return;
 			}
 			handleImportFile(file, importExcelDataCallback);
-			fileInputRef.current.value = null; // reset input file after imported
 		},
-		[currentSemester]
+		[currentSemester, majors, companies]
 	);
 	const handleExportDataToExcel = useCallback(
 		(data) => {
-			if (!tableData.length) {
+			if (!data.length) {
 				toast.warn('Chưa có dữ liệu để xuất file !');
 				return;
 			}
-			const exportData = tableData.map((company) => {
+			const exportData = data.map((company) => {
 				return {
 					...company,
 					major: company.major?.name
@@ -271,20 +265,7 @@ const CompanyListPage = () => {
 				/>
 			</Box>
 			<CompanyDetailModal modalData={dataModal} openState={modalState} onOpenStateChange={setModalState} />
-			<ReactTable
-				columns={columnsData}
-				data={tableData}
-				loading={companyLoading}
-				serverSidePagination={true}
-				serverPaginationProps={{
-					...paginationState,
-					pageIndex: companies?.page,
-					totalPages: companies?.totalPages,
-					canNextPage: companies?.hasNextPage,
-					canPreviousPage: companies?.hasPrevPage
-				}}
-				onServerPaginate={handlePaginate}
-			/>
+			<ReactTable columns={columnsData} data={tableData} loading={companyLoading} />
 		</Container>
 	);
 };
