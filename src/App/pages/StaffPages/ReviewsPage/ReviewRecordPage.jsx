@@ -3,7 +3,7 @@ import { useGetStudentsToReviewQuery } from '@/App/providers/apis/studentApi';
 import Button from '@/Core/components/common/Button';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import Typography from '@/Core/components/common/Text/Typography';
-import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
+import { ArrowPathIcon, ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { Fragment, useMemo, useState } from 'react';
 import tw from 'twin.macro';
 import InstanceStudentColumns from '../Shared/InstanceStudentColumns';
@@ -13,7 +13,8 @@ const ReviewRecordPage = () => {
 	const {
 		data: studentsListData,
 		isLoading: isLoadingData,
-		isError
+		isFetching,
+		refetch
 	} = useGetStudentsToReviewQuery({ type: StudentReviewTypeEnum.REVIEW_RECORD });
 	const [selectedStudents, setSelectedStudents] = useState([]);
 	const [open, setOpen] = useState(false);
@@ -48,11 +49,20 @@ const ReviewRecordPage = () => {
 			<Container>
 				<Box>
 					<Typography level={6}>Review biên bản sinh viên</Typography>
-					{!!selectedStudents.length && (
-						<Button variant='secondary' size='sm' onClick={() => setOpen(!open)}>
-							<ChatBubbleLeftEllipsisIcon className='h-5 w-5' /> Review
+					<ButtonList>
+						{!!selectedStudents.length && (
+							<Button
+								variant='secondary'
+								size='sm'
+								onClick={() => setOpen(!open)}
+								icon={ChatBubbleLeftEllipsisIcon}>
+								Review
+							</Button>
+						)}
+						<Button variant='primary' size='sm' icon={ArrowPathIcon} onClick={refetch} loading={isFetching}>
+							Reload
 						</Button>
-					)}
+					</ButtonList>
 				</Box>
 
 				<ReactTable
@@ -68,5 +78,6 @@ const ReviewRecordPage = () => {
 
 const Container = tw.div`flex flex-col gap-6`;
 const Box = tw.div`flex justify-between items-center py-4 h-[3rem]`;
+const ButtonList = tw.div`flex items-center gap-1`;
 
 export default ReviewRecordPage;

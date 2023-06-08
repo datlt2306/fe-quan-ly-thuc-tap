@@ -1,3 +1,11 @@
+import { CalendarDaysIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { yupResolver } from '@hookform/resolvers/yup';
+import moment from 'moment';
+import { Fragment, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { TimesConfig } from '@/App/constants/timesConfig';
 import { useGetAllSetTimeQuery, usePutSetTimeMutation } from '@/App/providers/apis/configTimesApi';
 import { useGetAllSemestersQuery } from '@/App/providers/apis/semesterApi';
 import { registrantionTimeSchema } from '@/App/schemas/registrantionTimeSchema';
@@ -6,29 +14,12 @@ import InputFieldControl from '@/Core/components/common/FormControl/InputFieldCo
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
 import Modal from '@/Core/components/common/Modal';
 import Table from '@/Core/components/common/Table/CoreTable';
-import { CalendarDaysIcon, ClockIcon } from '@heroicons/react/24/outline';
-import { yupResolver } from '@hookform/resolvers/yup';
-import moment from 'moment';
-import React, { useState, useEffect, Fragment } from 'react';
-import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import Text from '@/Core/components/common/Text/Text';
+import { formatDate } from '@/Core/utils/formatDate';
 import tw from 'twin.macro';
 import CompareDate from './CompareDate';
-import { toast } from 'react-toastify';
-import { TimesConfig } from '@/App/constants/timesConfig';
-import Typography from '@/Core/components/common/Text/Typography';
-import Text from '@/Core/components/common/Text/Text';
 
 const RegistrantionTimePage = () => {
-	const convertTime = (date) => {
-		if (typeof date !== 'string') return '';
-		return date ? moment(date.substring(0, 10), 'YYYY-MM-DD').format('DD/MM/YYYY') : '';
-	};
-
-	const convertTimeStamp = (date) => {
-		return date ? moment(date).format('DD/MM/YYYY') : '';
-	};
-
 	const [handleSetTime] = usePutSetTimeMutation();
 	const campus = useSelector((state) => state.campus);
 	const { data: semester } = useGetAllSemestersQuery({ campus_id: campus?.currentCampus?._id });
@@ -40,7 +31,10 @@ const RegistrantionTimePage = () => {
 	const handleChangeSemester = (id) => {
 		setSelectedSemester(semester?.listSemesters.find((item) => item._id === id));
 	};
-	const { data } = useGetAllSetTimeQuery({ semester_id: selectedSemester?._id }, { refetchOnMountOrArgChange: true });
+	const { data, isLoading } = useGetAllSetTimeQuery(
+		{ semester_id: selectedSemester?._id },
+		{ refetchOnMountOrArgChange: true }
+	);
 	const [tableData, setTableData] = useState([]);
 	useEffect(() => {
 		setTableData(data?.time);
@@ -94,11 +88,12 @@ const RegistrantionTimePage = () => {
 			<Box>
 				<Item>
 					<SelectBox>
-						<label
+						<Text
+							as='label'
 							htmlFor='semester-list'
 							className='inline-flex items-center gap-2 whitespace-nowrap text-base-content'>
 							<CalendarDaysIcon className='h-6 w-6' /> Kỳ học
-						</label>
+						</Text>
 						<Select
 							className='min-w-[12rem] capitalize sm:text-sm'
 							onChange={(e) => handleChangeSemester(e.target.value)}>
@@ -113,8 +108,8 @@ const RegistrantionTimePage = () => {
 				</Item>
 				<Item className='text-base-content'>
 					Thời gian kỳ:{' '}
-					<Text className='font-medium'>{selectedSemester && convertTime(selectedSemester?.start_time)}</Text> -{' '}
-					<Text className='font-medium'>{selectedSemester && convertTime(selectedSemester?.end_time)}</Text>
+					<Text className='font-medium'>{selectedSemester && formatDate(selectedSemester?.start_time)}</Text> -{' '}
+					<Text className='font-medium'>{selectedSemester && formatDate(selectedSemester?.end_time)}</Text>
 				</Item>
 			</Box>
 			<Table>
@@ -128,17 +123,19 @@ const RegistrantionTimePage = () => {
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
-					{TimesConfig &&
+					{isLoading ? (
+						<Table.Pending prepareRows={5} prepareCols={5} />
+					) : (
+						TimesConfig &&
 						TimesConfig.map((item, index) => (
 							<Table.Row key={index}>
 								<Table.Cell>{item.typeName}</Table.Cell>
 								<Table.Cell>
 									{tableData &&
-										convertTimeStamp(tableData?.find((i) => i.typeNumber === item.typeNumber)?.startTime)}
+										formatDate(tableData?.find((i) => i.typeNumber === item.typeNumber)?.startTime)}
 								</Table.Cell>
 								<Table.Cell>
-									{tableData &&
-										convertTimeStamp(tableData?.find((i) => i.typeNumber === item.typeNumber)?.endTime)}
+									{tableData && formatDate(tableData?.find((i) => i.typeNumber === item.typeNumber)?.endTime)}
 								</Table.Cell>
 								<Table.Cell>
 									{tableData && (
@@ -163,7 +160,8 @@ const RegistrantionTimePage = () => {
 									</Button>
 								</Table.Cell>
 							</Table.Row>
-						))}
+						))
+					)}
 				</Table.Body>
 			</Table>
 			<Modal openState={modal} onOpenStateChange={setModal} title='Đặt thời gian'>
