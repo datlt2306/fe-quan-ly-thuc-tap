@@ -146,8 +146,7 @@ const StudentInfoPage = () => {
 			</Grid>
 
 			<Box>
-				<Typography level={6} className='flex items-center gap-1  text-lg font-medium '>
-					<PencilSquareIcon className='h-5 w-5' />
+				<Typography level={6} className='flex items-center gap-1 !text-lg font-medium underline underline-offset-4'>
 					Ghi chú
 				</Typography>
 				<TextNote>{data?.note}</TextNote>

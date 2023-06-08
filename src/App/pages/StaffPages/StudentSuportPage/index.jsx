@@ -14,15 +14,19 @@ import tw from 'twin.macro';
 import { RequestStudentStatusEnum } from '@/App/constants/requestStudents';
 import { RequestSupportType } from '@/App/constants/studentConstants';
 import { toast } from 'react-toastify';
+import Text from '@/Core/components/common/Text/Text';
 
 const StudentSupportPage = () => {
-	const { data, refetch, isLoading } = useGetRequestOfStudentQuery();
+	const { data: studentRequests, refetch, isLoading } = useGetRequestOfStudentQuery();
 	const [handleAccept] = useResetStudentRequestMutation();
 	const [handleReject] = useRemoveRequestApiMutation();
 	const [tableData, setTableData] = useState([]);
+
 	useEffect(() => {
-		setTableData(data?.data.filter((item) => item.status === 1));
-	}, [data]);
+		setTableData((_prev) =>
+			Array.isArray(studentRequests?.data) ? studentRequests?.data.filter((item) => item.status === 1) : []
+		);
+	}, [studentRequests]);
 
 	const handleAcceptRequest = async (data) => {
 		try {
@@ -53,7 +57,7 @@ const StudentSupportPage = () => {
 			{
 				Header: 'STT',
 				accessor: 'STT',
-				Cell: ({ row }) => <span className='font-medium'>{row.index + 1}</span>
+				Cell: ({ row }) => <Text className='font-medium'>{row.index + 1}</Text>
 			},
 			{
 				Header: 'Tên sinh viên',
@@ -91,14 +95,14 @@ const StudentSupportPage = () => {
 				Header: 'Mô tả',
 				accessor: 'description',
 				Filter: InputColumnFilter,
-				Cell: ({ value }) => <div className='max-w-xs whitespace-normal'>{value}</div>
+				Cell: ({ value }) => <Text className='max-w-xs whitespace-normal'>{value}</Text>
 			},
 			{
 				Header: 'Ngày tạo',
 				accessor: 'createAt',
 				Filter: InputColumnFilter,
 				sortable: true,
-				Cell: ({ value }) => <div>{moment(value.substring(0, 10), 'YYYY-MM-DD').format('DD/MM/YYYY')}</div>
+				Cell: ({ value }) => <Text>{moment(value).format('DD/MM/YYYY')}</Text>
 			},
 			{
 				Header: 'Hành động',
@@ -131,20 +135,21 @@ const StudentSupportPage = () => {
 				}
 			}
 		],
-		[data]
+		[studentRequests]
 	);
 
 	return (
 		<div>
 			<SelectBox>
-				<label
+				<Text
+					as='label'
 					htmlFor='semester-list'
 					className='inline-flex items-center gap-2 whitespace-nowrap text-base-content'>
 					Trạng thái
-				</label>
+				</Text>
 				<Select
 					className='max-w-[12rem] capitalize sm:text-sm'
-					onChange={(e) => setTableData(data?.data.filter((item) => item.status == e.target.value))}>
+					onChange={(e) => setTableData(studentRequests?.data.filter((item) => item.status == e.target.value))}>
 					{Object.entries(RequestStudentStatusEnum).map(([key, value]) => (
 						<Option value={key} key={key} selected={key === 1}>
 							{value}
@@ -152,7 +157,7 @@ const StudentSupportPage = () => {
 					))}
 				</Select>
 			</SelectBox>
-			<ReactTable columns={columnsData} data={tableData || []} loading={isLoading} />
+			<ReactTable columns={columnsData} data={tableData} loading={isLoading} />
 		</div>
 	);
 };
