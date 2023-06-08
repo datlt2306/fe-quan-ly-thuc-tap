@@ -139,15 +139,15 @@ const ReactTable = ({
 					setGlobalFilter={setGlobalFilter}
 				/>
 				{!!filters.length && (
-					<Button size='sm' onClick={() => setAllFilters([])}>
-						<XMarkIcon className='h-3.5 w-3.5' /> Xóa lọc
+					<Button size='sm' onClick={() => setAllFilters([])} icon={XMarkIcon}>
+						Xóa lọc
 					</Button>
 				)}
 			</Header>
 
 			{/* Table data */}
 			<Body isEmpty={isEmptyData}>
-				<Table className='overflow-y-hidden' {...getTableProps()}>
+				<Table {...getTableProps()}>
 					<Table.Header sticky={true}>
 						{headerGroups.map((headerGroup) => (
 							<Table.Row {...headerGroup.getHeaderGroupProps()}>
@@ -185,7 +185,7 @@ const ReactTable = ({
 
 					<Table.Body {...getTableBodyProps()}>
 						{loading ? (
-							<Table.Pending prepareRows={5} prepareCols={columns.length} />
+							<Table.Pending prepareRows={10} prepareCols={columns.length} />
 						) : data.length ? (
 							page.map((row) => {
 								prepareRow(row);
@@ -213,21 +213,32 @@ const ReactTable = ({
 						<ButtonGroup.Item
 							variant={hasPreviousPage ? 'ghost' : 'disabled'}
 							shape='square'
-							onClick={gotoFirstPage}>
-							<ChevronDoubleLeftIcon className='h-4 w-4' />
-						</ButtonGroup.Item>
+							size='sm'
+							onClick={gotoFirstPage}
+							icon={ChevronDoubleLeftIcon}
+						/>
 						<ButtonGroup.Item
 							variant={hasPreviousPage ? 'ghost' : 'disabled'}
 							shape='square'
-							onClick={gotoPreviousPage}>
-							<ChevronLeftIcon className='h-4 w-4' />
-						</ButtonGroup.Item>
-						<ButtonGroup.Item variant={hasNextPage ? 'ghost' : 'disabled'} shape='square' onClick={gotoNextPage}>
-							<ChevronRightIcon className='h-4 w-4' />
-						</ButtonGroup.Item>
-						<ButtonGroup.Item variant={hasNextPage ? 'ghost' : 'disabled'} shape='square' onClick={gotoLastPage}>
-							<ChevronDoubleRightIcon className='h-4 w-4' />
-						</ButtonGroup.Item>
+							size='sm'
+							onClick={gotoPreviousPage}
+							icon={ChevronLeftIcon}
+						/>
+
+						<ButtonGroup.Item
+							variant={hasNextPage ? 'ghost' : 'disabled'}
+							shape='square'
+							size='sm'
+							onClick={gotoNextPage}
+							icon={ChevronRightIcon}
+						/>
+						<ButtonGroup.Item
+							variant={hasNextPage ? 'ghost' : 'disabled'}
+							shape='square'
+							size='sm'
+							onClick={gotoLastPage}
+							icon={ChevronDoubleRightIcon}
+						/>
 					</ButtonGroup>
 				</Footer.Item>
 
@@ -241,7 +252,7 @@ const ReactTable = ({
 				</Footer.Item>
 
 				<Footer.Item>
-					<label htmlFor='page-size-select' className='flex items-center gap-2 whitespace-nowrap'>
+					<Text as='label' htmlFor='page-size-select' className='flex items-center gap-2 whitespace-nowrap'>
 						Hiển thị
 						<Select
 							id='page-size-select'
@@ -254,7 +265,7 @@ const ReactTable = ({
 								</Option>
 							))}
 						</Select>
-					</label>
+					</Text>
 				</Footer.Item>
 			</Footer>
 		</Wrapper>
@@ -262,21 +273,21 @@ const ReactTable = ({
 };
 
 // Styled components
-const Wrapper = tw.div`flex flex-col items-stretch`;
-const Header = tw.div`flex items-center justify-between bg-gray-50 p-4`;
+const Wrapper = tw.div`flex flex-col items-stretch bg-white isolate`;
+const Header = tw.div`flex items-center justify-between bg-gray-50 p-4 z-0`;
 const Body = ({ isEmpty, ...props }) => (
 	<div
 		{...props}
-		className={classNames('relative h-fit overflow-x-auto overscroll-x-auto', {
-			'pb-10 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
+		className={classNames('overflow-x-auto', {
+			'py-10 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
 			'scrollbar-none': !isEmpty
 		})}>
 		{props.children}
 	</div>
 );
 const HeaderCell = tw.div`flex h-12 items-center justify-between gap-6`;
-HeaderCell.Actions = tw.div`flex items-center gap-px`;
 const Footer = tw.div`flex w-full items-stretch bg-gray-50 p-3 divide-x divide-gray-300 [&>:first-child]:!pl-0 [&>:last-child]:!pr-0`;
+HeaderCell.Actions = tw.div`flex items-center gap-px`;
 Footer.Item = tw.div`px-6`;
 
 export default memo(ReactTable);

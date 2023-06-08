@@ -56,7 +56,7 @@ const Button = (
 			{props.icon && !loading && (
 				<props.icon
 					className={classNames('aspect-square', {
-						'h-4': size === 'xs' || size === 'sm',
+						'h-4': !size || size === 'xs' || size === 'sm',
 						'h-6': size === 'md' || size === 'lg'
 					})}
 				/>
