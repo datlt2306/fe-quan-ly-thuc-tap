@@ -107,6 +107,7 @@ const StaffListPage = () => {
 								okText='Ok'
 								cancelText='Cancel'
 								title={'Xóa nhân viên'}
+								position='right'
 								description={'Bạn muốn xóa nhân viên này ?'}
 								onConfirm={() => onDeleteSubmit(row.original._id)}>
 								<Button size='xs' variant='ghost' className='text-error' shape='square'>
