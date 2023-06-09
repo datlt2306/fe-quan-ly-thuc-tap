@@ -27,7 +27,7 @@ const AddManagerSlideOver = ({ onOpen, open }) => {
 		if (error) {
 			onOpen(!open);
 			reset();
-			toast.error(error?.data?.message);
+			toast.error('Đã có lỗi xảy ra !');
 			return;
 		}
 		onOpen(!open);
