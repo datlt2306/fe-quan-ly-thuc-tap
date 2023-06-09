@@ -5,6 +5,7 @@ import SelectFieldControl from '@/Core/components/common/FormControl/SelectField
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
 import Modal from '@/Core/components/common/Modal';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -18,9 +19,13 @@ const UpdateReviewModal = ({
 }) => {
 	const [updateStatus, { isLoading, isSuccess }] = useUpdateReviewMutation();
 	const { email: reviewerEmail } = useSelector((state) => state.auth?.user);
-	const { control, handleSubmit } = useForm({
+	const { control, handleSubmit, reset } = useForm({
 		resolver: yupResolver(reviewSchema)
 	});
+
+	useEffect(() => {
+		reset();
+	}, [openState]);
 
 	const handleReview = async (data) => {
 		try {
