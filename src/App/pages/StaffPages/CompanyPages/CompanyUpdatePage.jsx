@@ -38,7 +38,7 @@ const UpdateBusinessForm = () => {
 			reset({
 				name: company.name,
 				internship_position: company.internship_position,
-				major: company.major,
+				major: company.major?._id,
 				amount: company.amount,
 				address: company.address,
 				tax_code: company.tax_code,

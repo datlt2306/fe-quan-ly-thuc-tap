@@ -133,7 +133,6 @@ const CompanyListPage = () => {
 		},
 		[tableData]
 	);
-
 	// Define columns of table
 	const columnsData = [
 		{

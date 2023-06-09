@@ -1,30 +1,34 @@
+import { RequestSupportType, StudentSupportStatus } from '@/App/constants/studentConstants';
 import {
 	useGetRequestOfStudentQuery,
 	useRemoveRequestApiMutation,
 	useResetStudentRequestMutation
 } from '@/App/providers/apis/requestStudentsApi';
 import Button from '@/Core/components/common/Button';
-import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
-import moment from 'moment';
-import React, { useMemo, useState, useEffect } from 'react';
-import tw from 'twin.macro';
-import { RequestStudentStatusEnum } from '@/App/constants/requestStudents';
-import { RequestSupportType } from '@/App/constants/studentConstants';
-import { toast } from 'react-toastify';
 import Text from '@/Core/components/common/Text/Text';
+import { formatDate } from '@/Core/utils/formatDate';
+import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
+import tw from 'twin.macro';
 
 const StudentSupportPage = () => {
-	const { data: studentRequests, refetch, isLoading } = useGetRequestOfStudentQuery();
+	const {
+		data: studentRequests,
+		refetch,
+		isLoading
+	} = useGetRequestOfStudentQuery(undefined, { refetchOnMountOrArgChange: true });
 	const [handleAccept] = useResetStudentRequestMutation();
 	const [handleReject] = useRemoveRequestApiMutation();
 	const [tableData, setTableData] = useState([]);
 
 	useEffect(() => {
 		setTableData((_prev) =>
-			Array.isArray(studentRequests?.data) ? studentRequests?.data.filter((item) => item.status === 1) : []
+			Array.isArray(studentRequests)
+				? studentRequests.filter((item) => item.status === StudentSupportStatus.IN_PROCESS)
+				: []
 		);
 	}, [studentRequests]);
 
@@ -35,8 +39,8 @@ const StudentSupportPage = () => {
 				type: data?.type,
 				id: data?._id
 			});
-			refetch();
 			toast.success('Đã chấp nhận yêu cầu của sinh viên.');
+			refetch();
 		} catch (error) {
 			toast.error('Đã có lỗi xảy ra !');
 		}
@@ -52,8 +56,8 @@ const StudentSupportPage = () => {
 		}
 	};
 
-	const columnsData = useMemo(
-		() => [
+	const columnsData = useMemo(() => {
+		const column = [
 			{
 				Header: 'STT',
 				accessor: 'STT',
@@ -102,21 +106,21 @@ const StudentSupportPage = () => {
 				accessor: 'createAt',
 				Filter: InputColumnFilter,
 				sortable: true,
-				Cell: ({ value }) => <Text>{moment(value).format('DD/MM/YYYY')}</Text>
+				Cell: ({ value }) => <Text>{formatDate(value)}</Text>
 			},
 			{
 				Header: 'Hành động',
 				accessor: '_id',
 				Cell: ({ row }) => {
 					return (
-						<ActionList className={row.original.status !== 1 ? 'hidden' : ''}>
+						<ButtonList>
 							<PopConfirm
 								okText='Ok'
 								cancelText='Cancel'
 								title={'Chấp nhận yêu cầu'}
 								description={'Bạn muốn chấp nhận yêu cầu này ?'}
 								onConfirm={() => handleAcceptRequest(row.original)}>
-								<Button type='button' size='xs' variant='success'>
+								<Button type='button' size='xs' variant='ghost'>
 									Đồng ý
 								</Button>
 							</PopConfirm>
@@ -130,39 +134,18 @@ const StudentSupportPage = () => {
 									Từ chối
 								</Button>
 							</PopConfirm>
-						</ActionList>
+						</ButtonList>
 					);
 				}
 			}
-		],
-		[studentRequests]
-	);
+		];
 
-	return (
-		<div>
-			<SelectBox>
-				<Text
-					as='label'
-					htmlFor='semester-list'
-					className='inline-flex items-center gap-2 whitespace-nowrap text-base-content'>
-					Trạng thái
-				</Text>
-				<Select
-					className='max-w-[12rem] capitalize sm:text-sm'
-					onChange={(e) => setTableData(studentRequests?.data.filter((item) => item.status == e.target.value))}>
-					{Object.entries(RequestStudentStatusEnum).map(([key, value]) => (
-						<Option value={key} key={key} selected={key === 1}>
-							{value}
-						</Option>
-					))}
-				</Select>
-			</SelectBox>
-			<ReactTable columns={columnsData} data={tableData} loading={isLoading} />
-		</div>
-	);
+		return column;
+	}, [studentRequests, status]);
+
+	return <ReactTable columns={columnsData} data={tableData} loading={isLoading} />;
 };
 
-const ActionList = tw.div`flex items-stretch gap-1`;
-const SelectBox = tw.div`flex basis-1/4 items-center gap-2 mb-4`;
+const ButtonList = tw.div`flex items-center gap-1`;
 
 export default StudentSupportPage;

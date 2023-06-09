@@ -62,7 +62,21 @@ export const companyArraySchema = yup
 				.positive('Vui lòng nhập số nguyên dương')
 				.integer('Vui lòng nhập số nguyên dương'),
 			address: yup.string().trim().required('Vui lòng nhập đầy đủ địa chỉ'),
-			business_code: yup.string().trim().required('Vui lòng nhập đầy đủ mã doanh nghiệp'),
+			business_code: yup
+				.string()
+				.trim()
+				.test({
+					message: 'Đã có công ty có mã tuyển dụng này',
+					test: function (value, { options: { context } }) {
+						const result = Array.isArray(context.companiesList)
+							? !context.companiesList.some(
+									(company) => company.business_code === value && this.parent.tax_code !== company.tax_code
+							  )
+							: false;
+						return result;
+					}
+				})
+				.required('Vui lòng nhập đầy đủ mã doanh nghiệp'),
 			requirement: yup.string(),
 			description: yup.string(),
 			benefit: yup.string()

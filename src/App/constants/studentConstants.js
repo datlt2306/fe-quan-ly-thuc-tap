@@ -91,3 +91,12 @@ export const RequestSupportType = {
 	REPORT: 'report',
 	RECORD: 'form'
 };
+
+/**
+ * @enum
+ */
+export const StudentSupportStatus = {
+	IN_PROCESS: 0,
+	REJECTED: 1,
+	ACCEPTED: 2
+};

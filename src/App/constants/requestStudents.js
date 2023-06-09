@@ -2,7 +2,7 @@
  * @enum
  */
 export const RequestStudentStatusEnum = {
-	1: 'Đang xử lý',
-	2: 'Đồng ý',
-	3: 'Từ chối'
+	0: 'Đang xử lý',
+	1: 'Đồng ý',
+	2: 'Từ chối'
 };
