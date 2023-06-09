@@ -64,11 +64,7 @@ const FormSchoolSupport = ({ selectedOption, user }) => {
 					control={control}
 					name='business'
 					label='Đơn vị thực tập'
-					options={
-						Array.isArray(business?.data)
-							? business.data.map((item) => ({ value: item._id, label: item.name }))
-							: []
-					}
+					options={Array.isArray(business) ? business.map((item) => ({ value: item._id, label: item.name })) : []}
 				/>
 				<FileUploadFieldControl label='Upload CV (PDF)' className='w-full' control={control} name='CV' />
 			</Form.Group>
