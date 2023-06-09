@@ -44,7 +44,7 @@ const UpdateReviewModal = ({
 				reviewerEmail
 			};
 
-			const { error } = updateStatus(data);
+			const { error } = await updateStatus(data);
 			if (error) {
 				toast.error('Đã xảy ra lỗi !');
 				handleOpenStateChange(!openState);
@@ -69,7 +69,7 @@ const UpdateReviewModal = ({
 					label='Ghi chú'
 					placeholder='Ghi chú cho sinh viên ...'
 				/>
-				<Button type='submit' variant='primary' size='md' disabled={isLoading}>
+				<Button type='submit' variant='primary' size='md' disabled={isLoading} loading={isLoading}>
 					Xác nhận
 				</Button>
 			</Modal.Form>
