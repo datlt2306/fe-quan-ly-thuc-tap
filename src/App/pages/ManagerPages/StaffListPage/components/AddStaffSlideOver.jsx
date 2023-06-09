@@ -8,10 +8,13 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 
 const AddStaffSlideOver = ({ onOpenStateChange: handleOpenStateChange, openState, formContext }) => {
+	const currentCampus = useSelector((state) => state.campus?.currentCampus);
+
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(staffDataValidator),
 		context: { users: formContext },
@@ -21,7 +24,7 @@ const AddStaffSlideOver = ({ onOpenStateChange: handleOpenStateChange, openState
 	const [handleAddNewStaff, { isLoading }] = useAddStaffMutation();
 
 	const onAddSubmit = async (data) => {
-		const { error } = await handleAddNewStaff({ ...data, role: 1 });
+		const { error } = await handleAddNewStaff({ ...data, campus_id: currentCampus?._id, role: 1 });
 		if (error) {
 			handleOpenStateChange(!openState);
 			reset();
