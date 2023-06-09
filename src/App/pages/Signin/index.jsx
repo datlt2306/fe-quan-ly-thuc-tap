@@ -25,7 +25,6 @@ export default function SigninPage() {
 
 	// Chọn cơ sở
 	const handleSelectCampus = (campus) => {
-		console.log('campus :>> ', campus);
 		setCurrentCampus(campus);
 		setAllowToLogin(!!campus);
 	};
@@ -43,7 +42,6 @@ export default function SigninPage() {
 			toast.success('Đăng nhập thành công !');
 			navigate('/');
 		} catch (error) {
-			console.log('error :>> ', error);
 			toast.error('Đăng nhập thất bại !');
 		}
 	};
@@ -53,7 +51,7 @@ export default function SigninPage() {
 			<Box>
 				<Image src={Logo} alt='FPT Polytechnic' />
 				<Form>
-					<Select onChange={(e) => handleSelectCampus(e.target.value)}>
+					<Select onChange={(e) => handleSelectCampus(e.target.value)} className='capitalize'>
 						<Option value=''>Chọn cơ sở</Option>
 						{Array.isArray(listCampus) &&
 							listCampus?.map((campus) => (
@@ -76,7 +74,7 @@ export default function SigninPage() {
 					</Button>
 				</Form>
 			</Box>
-			<Footer>© 2020 FPT Polytechic College, Inc. All rights reserved.</Footer>
+			<Footer>© {new Date().getFullYear()} FPT Polytechic College, Inc. All rights reserved.</Footer>
 		</Screen>
 	);
 }
