@@ -2,6 +2,7 @@ import { PaginationActionEnums } from '@/App/hooks/useServerPagination';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import {
 	ArrowDownIcon,
+	ArrowPathIcon,
 	ArrowsUpDownIcon,
 	ChevronDoubleLeftIcon,
 	ChevronDoubleRightIcon,
@@ -32,6 +33,7 @@ fuzzyTextFilterFn.autoRemove = (val) => !val; // Let the table remove the filter
  * @returns React table element
  */
 const ReactTable = ({
+	onHandleRefetch,
 	columns,
 	data,
 	serverSidePagination,
@@ -141,6 +143,15 @@ const ReactTable = ({
 				{!!filters.length && (
 					<Button size='sm' onClick={() => setAllFilters([])} icon={XMarkIcon}>
 						Xóa lọc
+					</Button>
+				)}
+				{!!onHandleRefetch && (
+					<Button
+						variant={loading ? 'disabled' : 'primary'}
+						size='sm'
+						icon={ArrowPathIcon}
+						onClick={onHandleRefetch}>
+						Reload
 					</Button>
 				)}
 			</Header>

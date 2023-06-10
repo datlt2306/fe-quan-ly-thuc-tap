@@ -71,7 +71,8 @@ const ReviewCvPage = () => {
 				<ReactTable
 					data={tableData}
 					columns={columnsData}
-					loading={isLoadingData}
+					loading={isLoadingData || isFetching}
+					onHandleRefetch={refetch}
 					onGetSelectedRows={setSelectedStudents}
 				/>
 			</Container>

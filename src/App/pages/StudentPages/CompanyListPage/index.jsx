@@ -27,7 +27,12 @@ const CompanyListPage = () => {
 		setCurrentSemester(semesterData?.defaultSemester?._id);
 	}, [semesterData]);
 
-	const { data: companies, isLoading: companyLoading } = useGetAllCompanyQuery({ semester_id: currentSemester });
+	const {
+		data: companies,
+		isLoading: companyLoading,
+		refetch,
+		isFetching
+	} = useGetAllCompanyQuery({ semester_id: currentSemester });
 
 	const columnsData = useMemo(
 		() => [
@@ -127,7 +132,12 @@ const CompanyListPage = () => {
 						</Modal.Content>
 					</Modal>
 
-					<ReactTable columns={columnsData} data={companies ?? []} loading={companyLoading} />
+					<ReactTable
+						columns={columnsData}
+						data={companies ?? []}
+						loading={companyLoading || isFetching}
+						onHandleRefetch={refetch}
+					/>
 				</Fragment>
 			) : (
 				<EmptyStateSection title={'Thời gian hiển thị thông tin tuyển dụng đã kết thúc'} />

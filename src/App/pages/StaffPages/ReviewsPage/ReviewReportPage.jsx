@@ -118,7 +118,8 @@ const ReviewReportPage = () => {
 				<ReactTable
 					data={tableData}
 					columns={columnsData}
-					loading={isLoadingData}
+					loading={isLoadingData || isFetching}
+					onHandleRefetch={refetch}
 					onGetSelectedRows={setSelectedStudents}
 					// onUpdateData={updateTableData}
 					// skipPageReset={skipResetPage}

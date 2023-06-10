@@ -18,7 +18,8 @@ const StudentSupportPage = () => {
 	const {
 		data: studentRequests,
 		refetch,
-		isLoading
+		isLoading,
+		isFetching
 	} = useGetRequestOfStudentQuery(undefined, { refetchOnMountOrArgChange: true });
 	const [handleAccept] = useResetStudentRequestMutation();
 	const [handleReject] = useRemoveRequestApiMutation();
@@ -143,7 +144,9 @@ const StudentSupportPage = () => {
 		return column;
 	}, [studentRequests, status]);
 
-	return <ReactTable columns={columnsData} data={tableData} loading={isLoading} />;
+	return (
+		<ReactTable columns={columnsData} data={tableData} loading={isLoading || isFetching} onHandleRefetch={refetch} />
+	);
 };
 
 const ButtonList = tw.div`flex items-center gap-1`;

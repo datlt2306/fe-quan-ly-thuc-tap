@@ -17,7 +17,12 @@ const SemesterPage = () => {
 	const [modal, setModal] = useState(false);
 	const [semester, setSemester] = useState();
 	const { currentCampus } = useSelector((state) => state.campus);
-	const { data: semesters } = useGetAllSemestersQuery({ campus_id: currentCampus?._id });
+	const {
+		data: semesters,
+		isLoading,
+		refetch,
+		isFetching
+	} = useGetAllSemestersQuery({ campus_id: currentCampus?._id });
 	const { reset } = useForm({
 		resolver: yupResolver(campusDataValidator)
 	});
@@ -121,7 +126,12 @@ const SemesterPage = () => {
 					</Button>
 				</ButtonList>
 
-				<ReactTable columns={columnsData} data={tableData} />
+				<ReactTable
+					columns={columnsData}
+					data={tableData}
+					loading={isLoading || isFetching}
+					onHandleRefetch={refetch}
+				/>
 			</Box>
 		</Fragment>
 	);

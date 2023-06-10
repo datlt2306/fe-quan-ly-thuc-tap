@@ -20,7 +20,7 @@ const CampusListPage = () => {
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const [modal, setModal] = useState(false);
 	const [campus, setCampus] = useState();
-	const { data: campusList } = useGetAllCampusQuery();
+	const { data: campusList, isLoading, refetch, isFetching } = useGetAllCampusQuery();
 
 	const { reset } = useForm({
 		resolver: yupResolver(campusDataValidator)
@@ -120,7 +120,12 @@ const CampusListPage = () => {
 					</Button>
 				</ButtonList>
 
-				<ReactTable columns={columnsData} data={tableData} />
+				<ReactTable
+					columns={columnsData}
+					data={tableData}
+					onHandleRefetch={refetch}
+					loading={isLoading || isFetching}
+				/>
 			</Box>
 		</Fragment>
 	);

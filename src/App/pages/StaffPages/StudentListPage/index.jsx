@@ -24,7 +24,12 @@ const StudentListPage = () => {
 	const [addStudents] = useAddStudentsMutation();
 	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useState();
-	const { data: studentsListData, isLoading } = useGetStudentsQuery({ semester: currentSemester });
+	const {
+		data: studentsListData,
+		isLoading,
+		refetch,
+		isFetching
+	} = useGetStudentsQuery({ semester: currentSemester });
 	const fileInputRef = useRef(null);
 	const toastId = useRef(null);
 	const [selectedStudents, setSelectedStudents] = useState([]);
@@ -176,7 +181,8 @@ const StudentListPage = () => {
 			<ReactTable
 				columns={columnsData}
 				data={tableData}
-				loading={isLoading}
+				loading={isLoading || isFetching}
+				onHandleRefetch={refetch}
 				onGetSelectedRows={setSelectedStudents}
 			/>
 		</Container>
