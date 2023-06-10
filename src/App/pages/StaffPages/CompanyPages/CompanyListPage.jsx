@@ -38,7 +38,12 @@ const CompanyListPage = () => {
 	const [currentSemester, setCurrentSemester] = useState(defaultSemester?._id);
 	const fileInputRef = useRef(null);
 	const { data: majors } = useGetAllMajorQuery();
-	const { data: companies, isLoading: companyLoading } = useGetAllCompanyQuery({
+	const {
+		data: companies,
+		isLoading: companyLoading,
+		refetch,
+		isFetching
+	} = useGetAllCompanyQuery({
 		semester_id: currentSemester
 	});
 	const tableData = useMemo(() => companies ?? [], [companies]);
@@ -264,7 +269,12 @@ const CompanyListPage = () => {
 				/>
 			</Box>
 			<CompanyDetailModal modalData={dataModal} openState={modalState} onOpenStateChange={setModalState} />
-			<ReactTable columns={columnsData} data={tableData} loading={companyLoading} />
+			<ReactTable
+				columns={columnsData}
+				data={tableData}
+				loading={companyLoading || isFetching}
+				onHandleRefetch={refetch}
+			/>
 		</Container>
 	);
 };

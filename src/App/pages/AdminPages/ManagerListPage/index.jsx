@@ -21,7 +21,7 @@ const ManagerListPage = () => {
 	const [user, setUser] = useState();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const { paginationState, handlePaginate } = useServerPagination();
-	const { data, isLoading } = useGetAllManagerQuery({
+	const { data, isLoading, refetch, isFetching } = useGetAllManagerQuery({
 		page: paginationState?.pageIndex,
 		limit: paginationState?.pageSize
 	});
@@ -144,7 +144,8 @@ const ManagerListPage = () => {
 				</ButtonList>
 
 				<ReactTable
-					loading={isLoading}
+					onHandleRefetch={refetch}
+					loading={isLoading || isFetching}
 					columns={columnsData}
 					data={tableData}
 					serverSidePagination={true}

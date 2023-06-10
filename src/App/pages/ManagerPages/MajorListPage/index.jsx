@@ -12,7 +12,7 @@ import UpdateMajorSlideOver from './components/UpdateMajorSlideOver';
 
 const MajorListPage = () => {
 	const [major, setMajor] = useState();
-	const { data: majors, isLoading } = useGetAllMajorQuery();
+	const { data: majors, isLoading, refetch, isFetching } = useGetAllMajorQuery();
 	const [handleRemoveMajor] = useDeleteMajorMutation();
 
 	const [slideOverVisibility, setSlideOverVisibility] = useState({
@@ -139,7 +139,12 @@ const MajorListPage = () => {
 					</Button>
 				</ButtonList>
 
-				<ReactTable columns={columnsData} data={tableData} loading={isLoading} />
+				<ReactTable
+					columns={columnsData}
+					data={tableData}
+					loading={isLoading || isFetching}
+					onHandleRefetch={refetch}
+				/>
 			</Box>
 		</Fragment>
 	);

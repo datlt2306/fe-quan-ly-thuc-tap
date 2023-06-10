@@ -21,7 +21,12 @@ const StaffListPage = () => {
 	const [user, setUser] = useState();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
 	const { paginationState, handlePaginate } = useServerPagination();
-	const { data: staffList, isLoading } = useGetAllStaffQuery({
+	const {
+		data: staffList,
+		isLoading,
+		refetch,
+		isFetching
+	} = useGetAllStaffQuery({
 		page: paginationState?.pageIndex,
 		limit: paginationState?.pageSize
 	});
@@ -152,7 +157,8 @@ const StaffListPage = () => {
 				</ButtonList>
 
 				<ReactTable
-					loading={isLoading}
+					onHandleRefetch={refetch}
+					loading={isLoading || isFetching}
 					columns={columnsData}
 					data={tableData}
 					onServerPaginate={handlePaginate}
