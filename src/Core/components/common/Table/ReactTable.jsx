@@ -140,20 +140,22 @@ const ReactTable = ({
 					globalFilter={globalFilter}
 					setGlobalFilter={setGlobalFilter}
 				/>
-				{!!filters.length && (
-					<Button size='sm' onClick={() => setAllFilters([])} icon={XMarkIcon}>
-						Xóa lọc
-					</Button>
-				)}
-				{!!onHandleRefetch && (
-					<Button
-						variant={loading ? 'disabled' : 'primary'}
-						size='sm'
-						icon={ArrowPathIcon}
-						onClick={onHandleRefetch}>
-						Reload
-					</Button>
-				)}
+				<ButtonList>
+					{!!filters.length && (
+						<Button size='sm' onClick={() => setAllFilters([])} icon={XMarkIcon}>
+							Xóa lọc
+						</Button>
+					)}
+					{!!onHandleRefetch && (
+						<Button
+							variant={loading ? 'disabled' : 'primary'}
+							size='sm'
+							icon={ArrowPathIcon}
+							onClick={onHandleRefetch}>
+							Reload
+						</Button>
+					)}
+				</ButtonList>
 			</Header>
 
 			{/* Table data */}
@@ -286,6 +288,7 @@ const ReactTable = ({
 // Styled components
 const Wrapper = tw.div`flex flex-col items-stretch bg-white isolate`;
 const Header = tw.div`flex items-center justify-between bg-gray-50 p-4 z-0`;
+const ButtonList = tw.div`flex items-center gap-1`;
 const Body = ({ isEmpty, ...props }) => (
 	<div
 		{...props}
