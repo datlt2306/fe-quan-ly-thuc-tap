@@ -37,12 +37,12 @@ const FormElement = ({ student }) => {
 			setDeadLine(times?.time);
 		}
 	}, [times]);
-	//click vào form nào thì lấy value của form đó
+	//Click vào form nào thì lấy value của form đó
 	const handleFormChange = useCallback((value) => {
 		setSelectedOption(value);
 	}, []);
 
-	//check thời hạn hoạt động của form từ lúc bắt đầu đến lúc kết thúc nếu thời gian hiện tại nằm trong khoảng thời gian này thì mới hiện form
+	//Check thời hạn hoạt động của form từ lúc bắt đầu đến lúc kết thúc nếu thời gian hiện tại nằm trong khoảng thời gian này thì mới hiện form
 	const deadlineCheck = useMemo(() => {
 		if (deadline) {
 			return deadline.endTime > new Date().getTime() && deadline.startTime < new Date().getTime();

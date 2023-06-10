@@ -7,7 +7,7 @@ import SuccessStateSection from '../Shared/SuccessStateSection';
 const RegistrationPage = () => {
 	const user = useSelector((state) => state.auth?.user);
 	const { data: student } = useGetOneStudentQuery(user?.id);
-	//kiểm tra xem statusCheck có phải là trạng thái sửa cv hoặc chưa đăng ký
+	//Kiểm tra xem statusCheck có phải là trạng thái sửa cv hoặc chưa đăng ký
 	const checkStatusStudent = useMemo(() => {
 		return student?.statusCheck == 10 || student?.statusCheck == 1;
 	}, [student?.statusCheck]);
