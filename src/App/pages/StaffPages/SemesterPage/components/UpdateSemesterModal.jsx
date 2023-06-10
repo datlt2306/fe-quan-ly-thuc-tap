@@ -20,7 +20,6 @@ const UpdateSemesterModal = ({ semesterData, onOpenStateChange, openState }) => 
 
 	useEffect(() => {
 		if (semesterData) {
-			console.log('semesterData :>> ', semesterData);
 			reset({
 				name: semesterData?.name,
 				start_time: moment(semesterData?.start_time).format('YYYY-MM-DD'),

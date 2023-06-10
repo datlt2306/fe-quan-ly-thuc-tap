@@ -9,13 +9,11 @@ export const companySchema = yup.object({
 		.test({
 			message: 'Đã có công ty với mã số thuế này',
 			test: function (value, { options: { context } }) {
-				console.log('context.companiesList :>> ', context);
 				const result = Array.isArray(context.companiesList)
 					? !context.companiesList.some(
 							(company) => company.tax_code === value && this.parent.name !== company.name
 					  )
 					: false;
-				console.log('result :>> ', result);
 				return result;
 			}
 		})
