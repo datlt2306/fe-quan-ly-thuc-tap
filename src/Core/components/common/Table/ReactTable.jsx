@@ -142,7 +142,7 @@ const ReactTable = ({
 				/>
 				<ButtonList>
 					{!!filters.length && (
-						<Button size='sm' onClick={() => setAllFilters([])} icon={XMarkIcon}>
+						<Button size='sm' variant='outline' onClick={() => setAllFilters([])} icon={XMarkIcon}>
 							Xóa lọc
 						</Button>
 					)}
