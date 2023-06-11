@@ -9,10 +9,8 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
-
-const FormRequestSupport = ({ formType, setOpenState }) => {
-	//xử lý gửi yêu cầu của hỗ trợ các form biên bản ,cv,báo cáo
-	const user = useSelector((state) => state.auth?.user);
+const FormRequestSupport = ({ formType, setOpenState, user }) => {
+	//Xử lý gửi yêu cầu của hỗ trợ các form biên bản ,cv,báo cáo
 	const [requestOfStudentMutation, { isLoading }] = useRequestOfStudentMutation();
 	const { control, handleSubmit, reset } = useForm({
 		resolver: yupResolver(requestOfStudentValidator)
@@ -21,7 +19,7 @@ const FormRequestSupport = ({ formType, setOpenState }) => {
 		const response = await requestOfStudentMutation({
 			type: formType,
 			description: description,
-			userId: user?.id
+			userId: user?._id
 		});
 		const error = response?.error;
 		setOpenState(false);
@@ -33,6 +31,7 @@ const FormRequestSupport = ({ formType, setOpenState }) => {
 		toast.success('Gửi yêu cầu hỗ trợ thành công');
 	};
 	const [open, setOpen] = useState(false);
+
 	return (
 		<Form onSubmit={handleSubmit(onSubmit)}>
 			{open ? (
@@ -60,7 +59,11 @@ const FormRequestSupport = ({ formType, setOpenState }) => {
 					</Form.Action>
 				</Fragment>
 			) : (
-				<Button variant='primary' className='mt-3 w-full' onClick={() => setOpen(true)} icon={EnvelopeIcon}>
+				<Button
+					variant={user?.statusCheck === 9 ? 'disabled' : 'primary'}
+					className='mt-3 w-full'
+					onClick={() => setOpen(true)}
+					icon={EnvelopeIcon}>
 					Gửi yêu cầu hỗ trợ
 				</Button>
 			)}

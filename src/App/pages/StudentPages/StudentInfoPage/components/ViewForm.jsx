@@ -41,7 +41,7 @@ const ViewForm = ({ data: user, setOpenState }) => {
 					</List.Item>
 				))}
 			</List>
-			<FormRequestSupport formType='form' setOpenState={setOpenState} />
+			<FormRequestSupport formType='form' setOpenState={setOpenState} user={user} />
 		</Fragment>
 	);
 };

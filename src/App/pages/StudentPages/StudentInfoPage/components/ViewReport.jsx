@@ -36,7 +36,7 @@ const ViewReport = ({ data: user, setOpenState }) => {
 					</List.Item>
 				))}
 			</List>
-			<FormRequestSupport formType='report' setOpenState={setOpenState} />
+			<FormRequestSupport formType='report' setOpenState={setOpenState} user={user} />
 		</Fragment>
 	);
 };
