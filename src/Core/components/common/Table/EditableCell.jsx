@@ -30,9 +30,9 @@ const EditableCell = ({
 					if (handleConfirmChange) {
 						handleConfirmChange(id, value, original);
 					}
-				}}>
-				<CheckIcon className='h-4 w-4' />
-			</Button>
+				}}
+				icon={CheckIcon}
+			/>
 		</EditBox>
 	);
 };

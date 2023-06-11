@@ -52,7 +52,7 @@ const Button = (
 	);
 	return (
 		<Element {...props} className={buttonStyles} ref={resolvedRef} disabled={variant === 'disabled' || disabled}>
-			{loading && <LoadingSpinner size='sm' variant='primary' />}
+			{loading && <LoadingSpinner size='sm' />}
 			{props.icon && !loading && (
 				<props.icon
 					className={classNames('aspect-square', {

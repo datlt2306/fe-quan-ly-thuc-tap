@@ -41,10 +41,10 @@
 		@apply !bg-error !text-white hover:!bg-error-active;
 	}
 	.btn-ghost {
-		@apply !bg-transparent text-gray-600 !shadow-none hover:!bg-gray-100 focus:active:!bg-gray-200;
+		@apply !bg-transparent text-base-content !shadow-none hover:!bg-gray-100 focus:active:!bg-gray-200 [&>:where(.loading)]:!border-r-base-content [&>:where(.loading)]:!border-t-base-content;
 	}
 	.btn-outline {
-		@apply rounded-[inherit] border bg-transparent text-gray-600 !shadow-none ring-inset ring-[1] ring-gray-300 hover:bg-gray-100 focus:active:bg-gray-200;
+		@apply rounded-[inherit] border bg-gray-100 text-base-content !shadow-none ring-inset ring-[1] ring-base-content hover:bg-gray-200 focus:active:bg-gray-200 [&>:where(.loading)]:!border-r-base-content [&>:where(.loading)]:!border-t-base-content;
 	}
 	.btn-disabled {
 		@apply !bg-gray-200 !text-gray-400 !shadow-none;
@@ -72,7 +72,7 @@
 	}
 
 	.loading {
-		@apply pointer-events-none animate-spin rounded-full border-[3px] border-gray-200 border-r-white border-t-white;
+		@apply pointer-events-none animate-spin rounded-full border-[3px] border-transparent border-r-white border-t-white [&>:where(.loading)]:!border-r-base-content [&>:where(.loading)]:!border-t-base-content;
 	}
 	.loading-sm {
 		@apply h-4 w-4;
