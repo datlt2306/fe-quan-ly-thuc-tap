@@ -10,9 +10,8 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 
-const FormRequestSupport = ({ formType, setOpenState }) => {
+const FormRequestSupport = ({ formType, setOpenState, user }) => {
 	//xử lý gửi yêu cầu của hỗ trợ các form biên bản ,cv,báo cáo
-	const user = useSelector((state) => state.auth?.user);
 	const [requestOfStudentMutation, { isLoading }] = useRequestOfStudentMutation();
 	const { control, handleSubmit, reset } = useForm({
 		resolver: yupResolver(requestOfStudentValidator)
@@ -21,7 +20,7 @@ const FormRequestSupport = ({ formType, setOpenState }) => {
 		const response = await requestOfStudentMutation({
 			type: formType,
 			description: description,
-			userId: user?.id
+			userId: user?._id
 		});
 		const error = response?.error;
 		setOpenState(false);
@@ -60,7 +59,11 @@ const FormRequestSupport = ({ formType, setOpenState }) => {
 					</Form.Action>
 				</Fragment>
 			) : (
-				<Button variant='primary' className='mt-3 w-full' onClick={() => setOpen(true)} icon={EnvelopeIcon}>
+				<Button
+					variant={user?.statusCheck === 9 ? 'disabled' : 'primary'}
+					className='mt-3 w-full'
+					onClick={() => setOpen(true)}
+					icon={EnvelopeIcon}>
 					Gửi yêu cầu hỗ trợ
 				</Button>
 			)}

@@ -69,7 +69,7 @@ const ViewCv = ({ data: user, setOpenState }) => {
 					</Fragment>
 				) : null}
 			</List>
-			<FormRequestSupport formType='narrow' setOpenState={setOpenState} />
+			<FormRequestSupport formType='narrow' setOpenState={setOpenState} user={user} />
 		</Fragment>
 	);
 };
