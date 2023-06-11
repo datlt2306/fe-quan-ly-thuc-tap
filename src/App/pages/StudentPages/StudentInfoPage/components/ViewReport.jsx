@@ -19,7 +19,7 @@ const ViewReport = ({ data: user, setOpenState }) => {
 		{ label: 'Thời gian kết thúc', value: formatDate(user?.endInternShipTime) },
 		{
 			label: 'Báo cáo',
-			value: user?.['report'] && (
+			value: user?.report && (
 				<Button as='a' href={user?.report} target='_blank' size='sm' variant='outline' icon={EyeIcon}>
 					Preview
 				</Button>
@@ -36,7 +36,7 @@ const ViewReport = ({ data: user, setOpenState }) => {
 					</List.Item>
 				))}
 			</List>
-			<FormRequestSupport formType='report' setOpenState={setOpenState} />
+			<FormRequestSupport formType='report' setOpenState={setOpenState} user={user} />
 		</Fragment>
 	);
 };
