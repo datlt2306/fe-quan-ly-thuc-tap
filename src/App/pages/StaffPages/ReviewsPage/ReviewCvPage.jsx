@@ -52,20 +52,16 @@ const ReviewCvPage = () => {
 					<Typography level={6} className='inline-flex items-center gap-3'>
 						Review CV sinh viên
 					</Typography>
-					<ButtonList>
-						{!!selectedStudents.length && (
-							<Button
-								variant='secondary'
-								size='sm'
-								onClick={() => setOpen(!open)}
-								icon={ChatBubbleLeftEllipsisIcon}>
-								Review
-							</Button>
-						)}
-						<Button variant='primary' size='sm' icon={ArrowPathIcon} onClick={refetch} loading={isFetching}>
-							Reload
+
+					{!!selectedStudents.length && (
+						<Button
+							variant='secondary'
+							size='sm'
+							onClick={() => setOpen(!open)}
+							icon={ChatBubbleLeftEllipsisIcon}>
+							Review
 						</Button>
-					</ButtonList>
+					)}
 				</Box>
 
 				<ReactTable
@@ -82,6 +78,5 @@ const ReviewCvPage = () => {
 
 const Container = tw.div`flex flex-col gap-6`;
 const Box = tw.div`flex justify-between items-center py-4 h-[3rem]`;
-const ButtonList = tw.div`flex items-center gap-1`;
 
 export default ReviewCvPage;

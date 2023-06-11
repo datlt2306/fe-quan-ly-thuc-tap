@@ -9,7 +9,7 @@ import {
 	XMarkIcon
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
-import { memo, useEffect, useMemo } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from 'react-table';
 import tw from 'twin.macro';
 import Button from '../Button';
@@ -33,7 +33,7 @@ fuzzyTextFilterFn.autoRemove = (val) => !val; // Let the table remove the filter
  * @returns React table element
  */
 const ReactTable = ({
-	onHandleRefetch,
+	onHandleRefetch: handleRefetch,
 	columns,
 	data,
 	serverSidePagination,
@@ -93,6 +93,8 @@ const ReactTable = ({
 		useRowSelect
 	);
 
+	const [isForceRefetch, setIsForceRefetch] = useState(false);
+
 	useEffect(() => {
 		if (handleGetSelectedRows) handleGetSelectedRows(selectedFlatRows.map((d) => d.original));
 	}, [selectedFlatRows]);
@@ -146,12 +148,17 @@ const ReactTable = ({
 							Xóa lọc
 						</Button>
 					)}
-					{!!onHandleRefetch && (
+					{!!handleRefetch && (
 						<Button
-							variant={loading ? 'disabled' : 'primary'}
+							variant='outline'
 							size='sm'
 							icon={ArrowPathIcon}
-							onClick={onHandleRefetch}>
+							loading={loading && isForceRefetch}
+							disabled={loading}
+							onClick={() => {
+								setIsForceRefetch(true);
+								handleRefetch();
+							}}>
 							Reload
 						</Button>
 					)}

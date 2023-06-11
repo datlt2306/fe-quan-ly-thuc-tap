@@ -49,20 +49,16 @@ const ReviewRecordPage = () => {
 			<Container>
 				<Box>
 					<Typography level={6}>Review biên bản sinh viên</Typography>
-					<ButtonList>
-						{!!selectedStudents.length && (
-							<Button
-								variant='secondary'
-								size='sm'
-								onClick={() => setOpen(!open)}
-								icon={ChatBubbleLeftEllipsisIcon}>
-								Review
-							</Button>
-						)}
-						<Button variant='primary' size='sm' icon={ArrowPathIcon} onClick={refetch} loading={isFetching}>
-							Reload
+
+					{!!selectedStudents.length && (
+						<Button
+							variant='secondary'
+							size='sm'
+							onClick={() => setOpen(!open)}
+							icon={ChatBubbleLeftEllipsisIcon}>
+							Review
 						</Button>
-					</ButtonList>
+					)}
 				</Box>
 
 				<ReactTable
@@ -79,6 +75,5 @@ const ReviewRecordPage = () => {
 
 const Container = tw.div`flex flex-col gap-6`;
 const Box = tw.div`flex justify-between items-center py-4 h-[3rem]`;
-const ButtonList = tw.div`flex items-center gap-1`;
 
 export default ReviewRecordPage;
