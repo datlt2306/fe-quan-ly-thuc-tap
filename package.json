@@ -36,6 +36,7 @@
 		"react-table": "^7.8.0",
 		"react-toastify": "^9.1.2",
 		"redux-persist": "^6.0.0",
+		"styled-components": "^6.0.0-rc.3",
 		"tailwind-scrollbar": "^3.0.0",
 		"xlsx": "^0.18.5",
 		"yup": "^1.1.1"
