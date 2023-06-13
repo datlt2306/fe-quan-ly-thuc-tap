@@ -26,7 +26,7 @@ export default defineConfig({
 	}
 	proxy: {
 		"/api": {
-			target: 'thuctap.poly.edu.vn/api',
+			target: 'https://thuctap.poly.edu.vn/api',
 			changeOrigin: true,
 			rewrite: (path) => path.replace(/^\/api/, ""),
 		},
