@@ -7,6 +7,7 @@ import store, { persistor } from './App/providers/store.js';
 import LoadingProgressBar from './Core/components/common/Loading/LoadingProgressBar';
 import './index.css';
 
+// eslint-disable-next-line react-refresh/only-export-components
 const App = lazy(() => import('./App'));
 
 ReactDOM.createRoot(document.getElementById('root')).render(
