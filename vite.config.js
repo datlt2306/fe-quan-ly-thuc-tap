@@ -8,19 +8,26 @@ export default defineConfig({
 		alias: [
 			{
 				find: '@',
-				replacement: path.resolve(__dirname, 'src'),
-			},
-		],
+				replacement: path.resolve(__dirname, 'src')
+			}
+		]
 	},
 	plugins: [
 		react({
+			include: '**/*.jsx',
 			babel: {
-				plugins: ['babel-plugin-macros', 'babel-plugin-styled-components'],
-			},
-		}),
+				plugins: ['babel-plugin-macros', 'babel-plugin-styled-components']
+			}
+		})
 	],
-
 	server: {
-		port: 9988,
+		port: 3000
+	},	
+	proxy: {
+		"/api": {
+			target: 'https://thuctap.poly.edu.vn/api',
+			changeOrigin: true,
+			rewrite: (path) => path.replace(/^\/api/, ""),
+		},
 	},
 });

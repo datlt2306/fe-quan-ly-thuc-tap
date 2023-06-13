@@ -1,38 +1,72 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
-const colors = require("tailwindcss/colors");
+const defaultTheme = require('tailwindcss/defaultTheme');
+const colors = require('tailwindcss/colors');
+
 /** @type {import('tailwindcss').Config} */
 export default {
-	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+	important: true,
 	theme: {
 		colors: {
-			primary: "#f27125",
-			secondary: "#52a5d6",
-
-			error: "#f87272",
-			success: "#4eb849",
-			disabled: "#9ca3af",
-			...colors,
+			primary: '#fb923c',
+			'primary-active': '#f97316',
+			secondary: '#38bdf8',
+			'secondary-active': '#0ea5e9',
+			info: '#22d3ee',
+			'info-active': '#06b6d4',
+			error: '#f43f5e',
+			'error-active': '#e11d48',
+			success: '#34d399',
+			'success-active': '#10b981',
+			warning: '#eab308',
+			'warning-active': '#d97706',
+			disabled: '#9ca3af',
+			'base-content-active': '#3f3f46',
+			'base-content': '#6b7280',
+			...colors
 		},
 		screens: {
 			sm: {
-				min: "375px",
-				max: "767px",
+				min: '320px',
+				max: '767px'
 			},
 			md: {
-				min: "768px",
-				max: "1365px",
+				min: '768px',
+				max: '1365px'
 			},
 			lg: {
-				min: "1366px",
-				max: "1920px",
+				min: '1366px',
+				max: '1920px'
 			},
-			xl: { min: "1921px" },
+			xl: { min: '1921px' }
 		},
-		extends: {
+		extend: {
 			fontFamily: {
-				sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+				sans: ['Inter var', ...defaultTheme.fontFamily.sans]
 			},
-		},
+			animation: {
+				slide: 'shimmer 1s ease infinite',
+				roller: 'spin 1.2s ease infinite'
+			},
+			keyframes: {
+				shimmer: {
+					'0%': {
+						transform: 'translateX(0%)'
+					},
+					'100%': {
+						transform: 'translateX(100%)'
+					}
+				},
+				spin: {
+					'0%': { transform: 'rotate(0turn)' },
+					'100%': { transform: 'rotate(1turn)' }
+				}
+			}
+		}
 	},
-	plugins: [require("prettier-plugin-tailwindcss")],
+	plugins: [
+		require('prettier-plugin-tailwindcss'),
+		require('@tailwindcss/forms'),
+		require('tailwind-scrollbar')({ nocompatible: true }),
+		require('@tailwindcss/line-clamp')
+	]
 };

@@ -1,14 +1,22 @@
-import React from 'react';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App/App.jsx';
-import './index.css';
 import { Provider } from 'react-redux';
-import store from './App/providers/Redux/store.js';
+import { PersistGate } from 'redux-persist/integration/react';
+import store, { persistor } from './App/providers/store.js';
+import LoadingProgressBar from './Core/components/common/Loading/LoadingProgressBar';
+import './index.css';
+
+const App = lazy(() => import('./App'));
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-	<React.StrictMode>
-		<Provider store={store}>
-			<App />
-		</Provider>
-	</React.StrictMode>
+	<Provider store={store}>
+		<PersistGate persistor={persistor}>
+			<Suspense fallback={<LoadingProgressBar />}>
+				<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+					<App />
+				</GoogleOAuthProvider>
+			</Suspense>
+		</PersistGate>
+	</Provider>
 );
