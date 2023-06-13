@@ -1,4 +1,4 @@
-import { BasePaths } from '@/Core/constants/routePaths';
+import { BasePaths } from '@/App/configs/routePaths';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';

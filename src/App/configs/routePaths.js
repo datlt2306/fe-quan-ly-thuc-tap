@@ -3,8 +3,7 @@
  */
 const BasePaths = {
 	NOT_FOUND: '/404',
-	SIGNIN: '/signin',
-	ADMIN_SIGNIN: '/admin-signin'
+	SIGNIN: '/signin'
 };
 
 /**

@@ -152,13 +152,17 @@ const ReactTable = ({
 						<Button
 							variant='outline'
 							size='sm'
-							icon={ArrowPathIcon}
-							loading={loading && isForceRefetch}
+							// icon={ArrowPathIcon}
+							// loading={loading && isForceRefetch}
 							disabled={loading}
 							onClick={() => {
 								setIsForceRefetch(true);
 								handleRefetch();
 							}}>
+							<ArrowPathIcon
+								tw='w-3.5 h-3.5'
+								className={classNames({ 'animate-spin': loading && isForceRefetch })}
+							/>
 							Reload
 						</Button>
 					)}
@@ -299,8 +303,8 @@ const ButtonList = tw.div`flex items-center gap-1`;
 const Body = ({ isEmpty, ...props }) => (
 	<div
 		{...props}
-		className={classNames('overflow-x-auto', {
-			'py-10 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
+		className={classNames('overflow-x-auto py-10', {
+			'scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
 			'scrollbar-none': !isEmpty
 		})}>
 		{props.children}

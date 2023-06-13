@@ -1,4 +1,4 @@
-import { StaffPaths } from '@/Core/constants/routePaths';
+import { StaffPaths } from '@/App/configs/routePaths';
 import { lazy } from 'react';
 import StaffPrivateLayout from '../layouts/PrivateLayout/StaffPrivateLayout';
 const ReviewCvPage = lazy(() => import('../pages/StaffPages/ReviewsPage/ReviewCvPage'));

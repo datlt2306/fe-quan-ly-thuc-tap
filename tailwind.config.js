@@ -45,7 +45,7 @@ export default {
 			},
 			animation: {
 				slide: 'shimmer 1s ease infinite',
-				spin: 'spin 1.2s ease infinite'
+				roller: 'spin 1.2s ease infinite'
 			},
 			keyframes: {
 				shimmer: {

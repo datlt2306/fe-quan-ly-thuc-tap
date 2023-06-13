@@ -72,7 +72,7 @@
 	}
 
 	.loading {
-		@apply pointer-events-none animate-spin rounded-full border-[3px] border-transparent border-r-white border-t-white [&>:where(.loading)]:!border-r-base-content [&>:where(.loading)]:!border-t-base-content;
+		@apply pointer-events-none animate-roller rounded-full border-[3px] border-transparent border-r-white border-t-white [&>:where(.loading)]:!border-r-base-content [&>:where(.loading)]:!border-t-base-content;
 	}
 	.loading-sm {
 		@apply h-4 w-4;

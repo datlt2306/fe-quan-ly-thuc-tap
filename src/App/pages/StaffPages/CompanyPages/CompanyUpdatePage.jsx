@@ -9,7 +9,7 @@ import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
-import { StaffPaths } from '@/Core/constants/routePaths';
+import { StaffPaths } from '@/App/configs/routePaths';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';

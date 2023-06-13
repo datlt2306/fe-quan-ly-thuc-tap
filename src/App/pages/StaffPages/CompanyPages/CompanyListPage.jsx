@@ -13,7 +13,7 @@ import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
 import Text from '@/Core/components/common/Text/Text';
 import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
-import { StaffPaths } from '@/Core/constants/routePaths';
+import { StaffPaths } from '@/App/configs/routePaths';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import getFileExtension from '@/Core/utils/getFileExtension';
 import { CalendarDaysIcon, EyeIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';

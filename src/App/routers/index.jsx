@@ -1,15 +1,14 @@
-import { BasePaths } from '@/Core/constants/routePaths';
+import { BasePaths } from '@/App/configs/routePaths';
 import { Navigate, useRoutes } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import PrivateLayout from '../layouts/PrivateLayout';
 import DefaultPage from '../pages';
 import NotFoundPage from '../pages/404';
-import SigninPage from '../pages/Signin';
-import AdminSigninPage from '../pages/Signin/superAdmin';
+import SigninPage from '../pages/Auth/SigninPage';
+import adminRoutes from './adminRoutes';
 import managerRoutes from './managerRoutes';
 import staffRoutes from './staffRoutes';
 import studentRoutes from './studentRoutes';
-import adminRoutes from './adminRoutes';
 
 const routes = [
 	{
@@ -23,10 +22,6 @@ const routes = [
 	{
 		path: BasePaths.SIGNIN,
 		element: <SigninPage />
-	},
-	{
-		path: BasePaths.ADMIN_SIGNIN,
-		element: <AdminSigninPage />
 	},
 	{
 		path: '/',

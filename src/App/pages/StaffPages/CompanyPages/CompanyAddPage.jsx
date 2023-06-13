@@ -6,7 +6,7 @@ import InputFieldControl from '@/Core/components/common/FormControl/InputFieldCo
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
 import Typography from '@/Core/components/common/Text/Typography';
-import { StaffPaths } from '@/Core/constants/routePaths';
+import { StaffPaths } from '@/App/configs/routePaths';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';

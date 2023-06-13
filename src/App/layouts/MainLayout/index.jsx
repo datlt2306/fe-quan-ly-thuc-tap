@@ -9,12 +9,7 @@ import tw from 'twin.macro';
 import DesktopSidebar from './components/DesktopSidebar';
 import MobileSidebar from './components/MobileSidebar';
 import Navbar from './components/Navbar';
-import {
-	adminNavigation,
-	managerNavigation,
-	staffNavigation,
-	studentNavigation
-} from './constants/navigationConstants';
+import { adminNavigation, managerNavigation, staffNavigation, studentNavigation } from './config/navigationConstants';
 
 const MainLayout = () => {
 	const [sidebarOpen, setSidebarOpen] = useState(false);

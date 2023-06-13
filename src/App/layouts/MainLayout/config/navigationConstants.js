@@ -1,7 +1,6 @@
-import { AdminPaths, ManagerPaths, StaffPaths, StudentPaths } from '@/Core/constants/routePaths';
+import { AdminPaths, ManagerPaths, StaffPaths, StudentPaths } from '@/App/configs/routePaths';
 import {
 	AcademicCapIcon,
-	BookOpenIcon,
 	BuildingOffice2Icon,
 	CalendarDaysIcon,
 	ClipboardDocumentCheckIcon,

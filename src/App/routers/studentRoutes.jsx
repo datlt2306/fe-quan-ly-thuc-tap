@@ -1,4 +1,4 @@
-import { StudentPaths } from '@/Core/constants/routePaths';
+import { StudentPaths } from '@/App/configs/routePaths';
 import { lazy } from 'react';
 import StudentPrivateLayout from '../layouts/PrivateLayout/StudentPrivateLayout';
 const RecordPage = lazy(() => import('../pages/StudentPages/RecordPage'));

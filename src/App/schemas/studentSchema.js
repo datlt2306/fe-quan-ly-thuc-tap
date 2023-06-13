@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { StudentSchoolingStatus } from '../constants/studentConstants';
-import './customYupMethods';
+import '@/Core/utils/customYupMethods';
 /**
  * * Email manager: /^[A-Z0-9._%+-]+@fe\.edu\.vn$/i
  * * Email sinh viên: /^[\w-\.]+@fpt\.edu\.vn$/

@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import './customYupMethods';
+import '@/Core/utils/customYupMethods';
 
 export const companySchema = yup.object({
 	name: yup.string().trim().required('Vui lòng nhập đầy đủ tên doanh nghiệp'),
