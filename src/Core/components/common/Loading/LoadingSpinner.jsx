@@ -1,14 +1,12 @@
 import classNames from 'classnames';
 import { useMemo } from 'react';
-import tw from 'twin.macro';
 
-export const Spinner = tw.div`pointer-events-none animate-roller rounded-full border-[3px] border-gray-200 `;
+// export const Spinner = tw.div`pointer-events-none animate-roller rounded-full border-[3px] border-gray-200 `;
 
 export const LoadingSpinner = ({ size, variant }) => {
 	const loadingStyles = useMemo(
 		() =>
-			classNames({
-				loading: true,
+			classNames('loading', {
 				// size
 				'loading-sm': size === 'sm',
 				'loading-md': size === 'md',
