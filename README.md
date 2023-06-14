@@ -1,4 +1,4 @@
-# Project Name
+# Quản lý thực tập
 
 Internship Management System of FPT Polytechnic College
 
