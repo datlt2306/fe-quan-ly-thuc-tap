@@ -15,7 +15,7 @@ import { Option, Select } from '@/Core/components/common/FormControl/SelectField
 import Modal from '@/Core/components/common/Modal';
 import Table from '@/Core/components/common/Table/CoreTable';
 import Text from '@/Core/components/common/Text/Text';
-import { formatDate } from '@/Core/utils/formatDate';
+import { convertDate, formatDate } from '@/Core/utils/formatDate';
 import tw from 'twin.macro';
 import CompareDate from './CompareDate';
 
@@ -166,8 +166,22 @@ const RegistrantionTimePage = () => {
 			</Table>
 			<Modal openState={modal} onOpenStateChange={setModal} title='Đặt thời gian'>
 				<Modal.Form onSubmit={handleSubmit(onSubmit)}>
-					<InputFieldControl type='date' control={control} name='startTime' label='Start date' />
-					<InputFieldControl type='date' control={control} name='endTime' label='End date' />
+					<InputFieldControl
+						type='date'
+						control={control}
+						name='startTime'
+						label='Start date'
+						min={convertDate(selectedSemester?.start_time)}
+						max={convertDate(selectedSemester?.end_time)}
+					/>
+					<InputFieldControl
+						type='date'
+						control={control}
+						name='endTime'
+						label='End date'
+						min={convertDate(selectedSemester?.start_time)}
+						max={convertDate(selectedSemester?.end_time)}
+					/>
 					<Button type='submit' variant='primary' icon={ClockIcon}>
 						Đặt thời gian
 					</Button>
