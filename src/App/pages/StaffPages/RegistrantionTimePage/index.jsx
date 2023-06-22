@@ -61,19 +61,21 @@ const RegistrantionTimePage = () => {
 	});
 
 	const onSubmit = async (value) => {
+		// 23h59p59s to timestamp
+		const millisecondsPerDay = 1000 * 24 * 60 * 60 - 1;
 		const result = modalData._id
 			? await handleSetTime({
 					_id: modalData._id,
 					typeName: modalData.typeName,
 					typeNumber: modalData.typeNumber,
-					startTime: moment(value.startTime).valueOf(),
-					endTime: moment(value.endTime).valueOf()
+					startTime: moment(value.startTime).valueOf() + millisecondsPerDay,
+					endTime: moment(value.endTime).valueOf() + millisecondsPerDay
 			  })
 			: await handleSetTime({
 					typeName: modalData.typeName,
 					typeNumber: modalData.typeNumber,
-					startTime: moment(value.startTime).valueOf(),
-					endTime: moment(value.endTime).valueOf()
+					startTime: moment(value.startTime).valueOf() + millisecondsPerDay,
+					endTime: moment(value.endTime).valueOf() + millisecondsPerDay
 			  });
 		if (result.error) {
 			toast.error(`Cập nhật ${modalData.typeName} thất bại!`);
