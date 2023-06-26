@@ -27,11 +27,11 @@ const ModalConfirm = ({
 					leave='ease-in duration-200'
 					leaveFrom='opacity-100'
 					leaveTo='opacity-0'>
-					<div className='fixed inset-0 bg-gray-800 bg-opacity-75 transition-opacity' />
+					<Dialog.Backdrop className='fixed inset-0 z-[999] bg-gray-800 bg-opacity-75 transition-opacity' />
 				</Transition.Child>
 
 				<div className='fixed inset-0 z-10 overflow-y-auto'>
-					<div className='flex min-h-full  items-center justify-center p-4 text-center sm:items-center sm:p-0'>
+					<div className='flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0'>
 						<Transition.Child
 							as={Fragment}
 							enter='ease-out duration-300'
@@ -41,7 +41,7 @@ const ModalConfirm = ({
 							leaveFrom='opacity-100 translate-y-0 sm:scale-100'
 							leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'>
 							<Dialog.Panel className='relative max-w-lg rounded-lg bg-white p-6'>
-								<PanelContent>
+								<Dialog.Content>
 									<div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-error bg-opacity-10 sm:mx-0 sm:h-10 sm:w-10'>
 										<Icon className='h-6 w-6 text-error' aria-hidden='true' />
 									</div>
@@ -51,15 +51,15 @@ const ModalConfirm = ({
 										</Dialog.Title>
 										<Text className='whitespace-normal text-sm'>{message}</Text>
 									</div>
-								</PanelContent>
-								<ActionList>
+								</Dialog.Content>
+								<Dialog.Actions>
 									<Button size='sm' type='button' variant='outline' onClick={onCancel}>
 										{cancelText}
 									</Button>
 									<Button size='sm' type='button' variant='error' onClick={onConfirm}>
 										{okText}
 									</Button>
-								</ActionList>
+								</Dialog.Actions>
 							</Dialog.Panel>
 						</Transition.Child>
 					</div>
@@ -68,7 +68,8 @@ const ModalConfirm = ({
 		</Transition.Root>
 	);
 };
-const PanelContent = tw.div`flex items-start justify-start w-full gap-6`;
-const ActionList = tw.div`mt-5 flex justify-end gap-1`;
+
+Dialog.Content = tw.div`flex items-start justify-start w-full gap-6`;
+Dialog.Actions = tw.div`mt-5 flex justify-end gap-1`;
 
 export default memo(ModalConfirm);
