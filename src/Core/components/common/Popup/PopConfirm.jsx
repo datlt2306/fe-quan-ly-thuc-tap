@@ -20,7 +20,7 @@ const getPosition = (value) => {
 		case 'top-right':
 			return 'bottom-0 right-10';
 		default:
-			return 'left-10 top-1/2 -translate-y-1/2';
+			return 'left-10 -translate-y-1/2';
 	}
 };
 
@@ -57,20 +57,24 @@ const PopConfirm = ({
 	};
 
 	return (
-		<Popover className='relative'>
+		<Popover className='relative py-5'>
 			<Popover.Button className={'outline-none'} as={'div'}>
 				{children}
 			</Popover.Button>
 
 			<Transition as={Fragment} {...transitionProps}>
 				<Popover.Panel
-					className={classNames('absolute z-50 rounded-md bg-white p-4 shadow-lg', getPosition(position))}>
+					as='div'
+					className={classNames(
+						'absolute z-50 w-fit min-w-[320px] rounded-md bg-white p-4 shadow-lg',
+						getPosition(position)
+					)}>
 					{({ close }) => (
 						<Fragment>
 							<Text as='h4' className='mb-2 text-base font-medium text-gray-600'>
 								{title}
 							</Text>
-							<Text as='p' className='mb-6 text-sm text-base-content'>
+							<Text as='p' className='z-0 mb-6 whitespace-normal text-sm text-base-content line-clamp-4'>
 								{description}
 							</Text>
 

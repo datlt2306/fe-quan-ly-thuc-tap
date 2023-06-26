@@ -40,7 +40,8 @@ const ReactTable = ({
 	serverPaginationProps,
 	onServerPaginate: dispatch,
 	onGetSelectedRows: handleGetSelectedRows,
-	loading
+	loading,
+	isFetching
 }) => {
 	const filterTypes = useMemo(
 		() => ({
@@ -152,16 +153,14 @@ const ReactTable = ({
 						<Button
 							variant='outline'
 							size='sm'
-							// icon={ArrowPathIcon}
-							// loading={loading && isForceRefetch}
-							disabled={loading}
+							disabled={loading || isFetching}
 							onClick={() => {
 								setIsForceRefetch(true);
 								handleRefetch();
 							}}>
 							<ArrowPathIcon
 								tw='w-3.5 h-3.5'
-								className={classNames({ 'animate-spin': loading && isForceRefetch })}
+								className={classNames({ 'animate-spin': isFetching && isForceRefetch })}
 							/>
 							Reload
 						</Button>
@@ -297,13 +296,13 @@ const ReactTable = ({
 };
 
 // Styled components
-const Wrapper = tw.div`flex flex-col items-stretch bg-white isolate`;
+const Wrapper = tw.div`flex flex-col items-stretch bg-white isolate `;
 const Header = tw.div`flex items-center justify-between bg-gray-50 p-4 z-0`;
 const ButtonList = tw.div`flex items-center gap-1`;
 const Body = ({ isEmpty, ...props }) => (
 	<div
 		{...props}
-		className={classNames('overflow-x-auto py-10', {
+		className={classNames('overflow-x-auto', {
 			'scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
 			'scrollbar-none': !isEmpty
 		})}>
