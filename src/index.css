@@ -11,7 +11,7 @@
 		@apply divide-x divide-gray-200;
 	}
 	.table th {
-		@apply whitespace-nowrap p-3 text-left !text-sm font-semibold text-base-content-active first-letter:uppercase sm:pl-0;
+		@apply whitespace-nowrap px-3 py-4 text-left !text-sm font-semibold text-base-content-active first-letter:uppercase sm:pl-0;
 	}
 	.table tbody {
 		@apply divide-y divide-gray-200;
