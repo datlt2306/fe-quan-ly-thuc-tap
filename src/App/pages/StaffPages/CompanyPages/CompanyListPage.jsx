@@ -1,3 +1,4 @@
+import { StaffPaths } from '@/App/configs/routePaths';
 import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
 import {
 	useAddArrayCompanyMutation,
@@ -8,16 +9,15 @@ import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
 import { companyArraySchema } from '@/App/schemas/companySchema';
 import Button from '@/Core/components/common/Button';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
-import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
+import ModalConfirm from '@/Core/components/common/Modal/ModalConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
 import Text from '@/Core/components/common/Text/Text';
 import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
-import { StaffPaths } from '@/App/configs/routePaths';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import getFileExtension from '@/Core/utils/getFileExtension';
 import { CalendarDaysIcon, EyeIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -28,7 +28,7 @@ import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
 import { columnAccessors } from './constants';
 
 const CompanyListPage = () => {
-	const [handleDeleteCompany] = useDeleteCompanyMutation();
+	const [deleteCompany] = useDeleteCompanyMutation();
 	const [handleImportFile] = useImportFromExcel();
 	const [handleExportFile] = useExportToExcel();
 	const [handleAddArrayCompany] = useAddArrayCompanyMutation();
@@ -37,6 +37,7 @@ const CompanyListPage = () => {
 	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useState(defaultSemester?._id);
 	const fileInputRef = useRef(null);
+	const [modalConfirmState, setModalConfirmState] = useState({ open: false, payload: null });
 	const { data: majors } = useGetAllMajorQuery();
 	const {
 		data: companies,
@@ -53,14 +54,15 @@ const CompanyListPage = () => {
 	}, [defaultSemester]);
 
 	// hanle delete company
-	const onDeleteSubmit = async (id) => {
-		const result = await handleDeleteCompany({ id });
+	const handleConfirmDelete = useCallback(async (id) => {
+		const result = await deleteCompany({ id });
 		if (result?.error) {
 			toast.error(result?.error?.message || 'Xóa doanh nghiệp thất bại');
 			return;
 		}
+		setModalConfirmState({ open: false, payload: null });
 		toast.success('Đã xóa doanh nghiệp thành công');
-	};
+	}, []);
 	// Callback function will be executed after import file excel
 	const importExcelDataCallback = async (excelData) => {
 		try {
@@ -221,61 +223,73 @@ const CompanyListPage = () => {
 						icon={PencilSquareIcon}
 					/>
 
-					<PopConfirm
-						title={'Xóa công ty'}
-						description={'Bạn muốn xóa công ty này ?'}
-						onConfirm={() => onDeleteSubmit(value)}>
-						<Button size='sm' variant='ghost' className='text-error' shape='square' icon={TrashIcon} />
-					</PopConfirm>
+					<Button
+						onClick={() => setModalConfirmState({ open: true, payload: value })}
+						size='sm'
+						variant='ghost'
+						className='text-error'
+						shape='square'
+						icon={TrashIcon}
+					/>
 				</ActionList>
 			)
 		}
 	];
-
+	console.log('companyLoading :>> ', companyLoading);
 	return (
-		<Container>
-			<Box>
-				<SelectBox>
-					<label
-						htmlFor='semester-list'
-						className='inline-flex items-center gap-2 whitespace-nowrap text-base-content'>
-						<CalendarDaysIcon className='h-6 w-6' /> Kỳ học
-					</label>
-					<Select
-						className='min-w-[12rem] capitalize sm:text-sm'
-						defaultValue={currentSemester}
-						onChange={(e) => setCurrentSemester(e.target.value)}>
-						{Array.isArray(listSemesters) &&
-							listSemesters.map((item, index) => (
-								<Option value={item._id} key={index}>
-									{item.name}
-								</Option>
-							))}
-					</Select>
-				</SelectBox>
-				<DesktopButtonGroup
-					tableData={tableData}
-					handleExport={handleExportDataToExcel}
-					handleImport={handleImportCompanies}
-					canImport={currentSemester === defaultSemester?._id}
-					ref={fileInputRef}
-				/>
-				<MobileDropdownButtonGroup
-					tableData={tableData}
-					handleExport={handleExportDataToExcel}
-					handleImport={handleImportCompanies}
-					canImport={currentSemester === defaultSemester?._id}
-					ref={fileInputRef}
-				/>
-			</Box>
-			<CompanyDetailModal modalData={dataModal} openState={modalState} onOpenStateChange={setModalState} />
-			<ReactTable
-				columns={columnsData}
-				data={tableData}
-				loading={companyLoading || isFetching}
-				onHandleRefetch={refetch}
+		<Fragment>
+			<ModalConfirm
+				openState={modalConfirmState.open}
+				title='Xóa công ty này'
+				message='Bạn muốn xóa công ty này? Dữ liệu sau khi bị xóa không được khôi phục, sau khi bị xóa các thông tin khác có thể bị ảnh hưởng'
+				onConfirm={() => handleConfirmDelete(modalConfirmState.payload)}
+				onCancel={() => setModalConfirmState({ open: false, payload: null })}
 			/>
-		</Container>
+			<Container>
+				<Box>
+					<SelectBox>
+						<label
+							htmlFor='semester-list'
+							className='inline-flex items-center gap-2 whitespace-nowrap text-base-content'>
+							<CalendarDaysIcon className='h-6 w-6' /> Kỳ học
+						</label>
+						<Select
+							className='min-w-[12rem] capitalize sm:text-sm'
+							defaultValue={currentSemester}
+							onChange={(e) => setCurrentSemester(e.target.value)}>
+							{Array.isArray(listSemesters) &&
+								listSemesters.map((item, index) => (
+									<Option value={item._id} key={index}>
+										{item.name}
+									</Option>
+								))}
+						</Select>
+					</SelectBox>
+					<DesktopButtonGroup
+						tableData={tableData}
+						handleExport={handleExportDataToExcel}
+						handleImport={handleImportCompanies}
+						canImport={currentSemester === defaultSemester?._id}
+						ref={fileInputRef}
+					/>
+					<MobileDropdownButtonGroup
+						tableData={tableData}
+						handleExport={handleExportDataToExcel}
+						handleImport={handleImportCompanies}
+						canImport={currentSemester === defaultSemester?._id}
+						ref={fileInputRef}
+					/>
+				</Box>
+				<CompanyDetailModal modalData={dataModal} openState={modalState} onOpenStateChange={setModalState} />
+				<ReactTable
+					columns={columnsData}
+					data={tableData}
+					loading={companyLoading}
+					isFetching={isFetching}
+					onHandleRefetch={refetch}
+				/>
+			</Container>
+		</Fragment>
 	);
 };
 
