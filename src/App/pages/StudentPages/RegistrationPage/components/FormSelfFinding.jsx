@@ -1,4 +1,4 @@
-import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
+import { useUploadCvMutation } from '@/App/store/apis/internRegistrationApi';
 import { formSignUpSelfFindingSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';

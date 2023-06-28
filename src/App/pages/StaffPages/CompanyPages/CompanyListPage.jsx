@@ -4,8 +4,8 @@ import {
 	useAddArrayCompanyMutation,
 	useDeleteCompanyMutation,
 	useGetAllCompanyQuery
-} from '@/App/providers/apis/businessApi';
-import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
+} from '@/App/store/apis/businessApi';
+import { useGetAllMajorQuery } from '@/App/store/apis/majorApi';
 import { companyArraySchema } from '@/App/schemas/companySchema';
 import Button from '@/Core/components/common/Button';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';

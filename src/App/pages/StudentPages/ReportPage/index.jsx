@@ -1,6 +1,6 @@
-import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
-import { useUploadReportMutation } from '@/App/providers/apis/reportApi';
-import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
+import { useGetSetTimeQuery } from '@/App/store/apis/configTimesApi';
+import { useUploadReportMutation } from '@/App/store/apis/reportApi';
+import { useGetOneStudentQuery } from '@/App/store/apis/studentApi';
 import { reportSchema } from '@/App/schemas/reportSchema';
 import Button from '@/Core/components/common/Button';
 import FormControl from '@/Core/components/common/FormControl/FormControl';

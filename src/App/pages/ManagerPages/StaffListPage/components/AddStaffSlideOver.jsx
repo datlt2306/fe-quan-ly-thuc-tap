@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useAddStaffMutation } from '@/App/providers/apis/staffListApi';
+import { useAddStaffMutation } from '@/App/store/apis/staffListApi';
 import { staffDataValidator } from '@/App/schemas/staffSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';

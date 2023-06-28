@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { useGetAllSemestersQuery } from '@/App/providers/apis/semesterApi';
+import { useGetAllSemestersQuery } from '@/App/store/apis/semesterApi';
 import Button from '@/Core/components/common/Button';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/20/solid';

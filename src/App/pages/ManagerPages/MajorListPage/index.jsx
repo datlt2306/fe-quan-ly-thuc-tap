@@ -1,4 +1,4 @@
-import { useDeleteMajorMutation, useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
+import { useDeleteMajorMutation, useGetAllMajorQuery } from '@/App/store/apis/majorApi';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';

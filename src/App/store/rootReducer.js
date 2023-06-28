@@ -8,9 +8,9 @@ import requestStudentsApi from './apis/requestStudentsApi';
 import semesterApi from './apis/semesterApi';
 import staffListApi from './apis/staffListApi';
 import studentApi from './apis/studentApi';
-import authSlice from './slices/authSlice';
-import campusSlice from './slices/campusSlice';
-import semesterSlice from './slices/semesterSlice';
+import authSlice from './reducers/authSlice';
+import campusSlice from './reducers/campusSlice';
+import semesterSlice from './reducers/semesterSlice';
 import internRegistrationApi from './apis/internRegistrationApi';
 import reportApi from './apis/reportApi';
 
