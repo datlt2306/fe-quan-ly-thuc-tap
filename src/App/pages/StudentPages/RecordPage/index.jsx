@@ -1,6 +1,6 @@
-import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
-import { useUploadFormMutation } from '@/App/providers/apis/reportApi';
-import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
+import { useGetSetTimeQuery } from '@/App/store/apis/configTimesApi';
+import { useUploadFormMutation } from '@/App/store/apis/reportApi';
+import { useGetOneStudentQuery } from '@/App/store/apis/studentApi';
 import { recordSchema } from '@/App/schemas/recordSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';

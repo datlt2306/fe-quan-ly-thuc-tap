@@ -1,5 +1,5 @@
 import { BasePaths } from '@/App/configs/routePaths';
-import { Navigate, useRoutes } from 'react-router-dom';
+import { Navigate, RouterProvider, createBrowserRouter, useRoutes } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import PrivateLayout from '../layouts/PrivateLayout';
 import DefaultPage from '../pages';
@@ -9,8 +9,9 @@ import adminRoutes from './adminRoutes';
 import managerRoutes from './managerRoutes';
 import staffRoutes from './staffRoutes';
 import studentRoutes from './studentRoutes';
+import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 
-const routes = [
+const routes = createBrowserRouter([
 	{
 		path: '*',
 		element: <Navigate to={BasePaths.NOT_FOUND} replace={true} />
@@ -41,8 +42,8 @@ const routes = [
 			...adminRoutes
 		]
 	}
-];
+]);
 
-export default function AppRoutes() {
-	return useRoutes(routes);
+export default function Routers() {
+	return <RouterProvider router={routes} fallbackElement={<LoadingProgressBar />} />;
 }

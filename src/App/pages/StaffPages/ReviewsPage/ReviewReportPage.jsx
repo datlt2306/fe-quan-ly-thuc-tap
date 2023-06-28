@@ -1,5 +1,5 @@
 import { StudentColumnAccessors, StudentReviewTypeEnum, StudentStatusEnum } from '@/App/constants/studentConstants';
-import { useGetStudentsToReviewQuery, useUpdateStudentMutation } from '@/App/providers/apis/studentApi';
+import { useGetStudentsToReviewQuery, useUpdateStudentMutation } from '@/App/store/apis/studentApi';
 import { studentScoreSchema } from '@/App/schemas/studentSchema';
 import Button from '@/Core/components/common/Button';
 import EditableCell from '@/Core/components/common/Table/EditableCell';

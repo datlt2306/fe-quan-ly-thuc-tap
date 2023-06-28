@@ -1,5 +1,5 @@
 import { InternSupportType, StudentStatusEnum, StudentStatusGroupEnum } from '@/App/constants/studentConstants';
-import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
+import { useGetOneStudentQuery } from '@/App/store/apis/studentApi';
 import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';

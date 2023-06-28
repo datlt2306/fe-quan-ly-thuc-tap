@@ -1,5 +1,5 @@
 import useServerPagination from '@/App/hooks/useServerPagination';
-import { useDeleteStaffMutation, useGetAllStaffQuery } from '@/App/providers/apis/staffListApi';
+import { useDeleteStaffMutation, useGetAllStaffQuery } from '@/App/store/apis/staffListApi';
 import { staffDataValidator } from '@/App/schemas/staffSchema';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';

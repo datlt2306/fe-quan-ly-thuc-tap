@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useDeleteCampusMutation, useGetAllCampusQuery } from '@/App/providers/apis/campusApi';
+import { useDeleteCampusMutation, useGetAllCampusQuery } from '@/App/store/apis/campusApi';
 import { campusDataValidator } from '@/App/schemas/campusSchema';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';

@@ -3,7 +3,7 @@ import {
 	useGetRequestOfStudentQuery,
 	useRemoveRequestApiMutation,
 	useResetStudentRequestMutation
-} from '@/App/providers/apis/requestStudentsApi';
+} from '@/App/store/apis/requestStudentsApi';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';

@@ -1,5 +1,5 @@
 import { StudentReviewTypeEnum, StudentStatusEnum } from '@/App/constants/studentConstants';
-import { useGetStudentsToReviewQuery } from '@/App/providers/apis/studentApi';
+import { useGetStudentsToReviewQuery } from '@/App/store/apis/studentApi';
 import Button from '@/Core/components/common/Button';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import Typography from '@/Core/components/common/Text/Typography';

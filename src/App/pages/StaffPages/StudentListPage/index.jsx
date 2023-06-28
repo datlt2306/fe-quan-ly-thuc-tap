@@ -1,6 +1,6 @@
 import { StudentColumnAccessors } from '@/App/constants/studentConstants';
 import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
-import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/providers/apis/studentApi';
+import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/store/apis/studentApi';
 import { newStudentSchema } from '@/App/schemas/studentSchema';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
 import ReactTable from '@/Core/components/common/Table/ReactTable';

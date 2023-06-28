@@ -5,7 +5,7 @@ import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import Breadcrumbs from './Breadcrumbs';
-import { signout } from '@/App/providers/slices/authSlice';
+import { signout } from '@/App/store/reducers/authSlice';
 import { useDispatch } from 'react-redux';
 import useLocalStorage from '@/App/hooks/useLocalstorage';
 

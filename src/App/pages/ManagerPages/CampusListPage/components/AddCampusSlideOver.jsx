@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
-import { useAddCampusMutation } from '@/App/providers/apis/campusApi';
+import { useAddCampusMutation } from '@/App/store/apis/campusApi';
 import { campusDataValidator } from '@/App/schemas/campusSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';

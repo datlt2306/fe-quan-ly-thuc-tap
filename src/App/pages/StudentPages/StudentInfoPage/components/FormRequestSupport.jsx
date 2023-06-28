@@ -1,4 +1,4 @@
-import { useRequestOfStudentMutation } from '@/App/providers/apis/requestStudentsApi';
+import { useRequestOfStudentMutation } from '@/App/store/apis/requestStudentsApi';
 import { requestOfStudentValidator } from '@/App/schemas/requestStudentSchema';
 import Button from '@/Core/components/common/Button';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useCreateMajorMutation } from '@/App/providers/apis/majorApi';
+import { useCreateMajorMutation } from '@/App/store/apis/majorApi';
 import { majorSchema } from '@/App/schemas/majorSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
