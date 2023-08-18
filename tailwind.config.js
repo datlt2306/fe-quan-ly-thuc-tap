@@ -21,7 +21,7 @@ export default {
 			'warning-active': '#d97706',
 			disabled: '#9ca3af',
 			'base-content-active': '#3f3f46',
-			'base-content': '#6b7280',
+			'base-content': '#374151',
 			...colors
 		},
 		screens: {
@@ -53,7 +53,7 @@ export default {
 						transform: 'translateX(0%)'
 					},
 					'100%': {
-						transform: 'translateX(100%)'
+						transform: 'translateX(120%)'
 					}
 				},
 				spin: {

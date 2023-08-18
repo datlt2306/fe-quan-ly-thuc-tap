@@ -3,9 +3,9 @@ import { FunnelIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Fragment, useMemo, useState } from 'react';
 import { useAsyncDebounce } from 'react-table';
 import 'regenerator-runtime/runtime';
-import Button from '../Button';
-import { Input } from '../FormControl/InputFieldControl';
-import { Option, Select } from '../FormControl/SelectFieldControl';
+import Button from '../../Button';
+import { Input } from '../../FormControl/InputFieldControl';
+import { Option, Select } from '../../FormControl/SelectFieldControl';
 
 // Table filter global
 const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) => {
@@ -36,7 +36,7 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
 const InputColumnFilter = ({ column: { filterable, filterValue, preFilteredRows, setFilter } }) => {
 	const count = preFilteredRows.length;
 	return (
-		<Popover className='relative inline-block text-left' as='div'>
+		<Popover className='relative inline-block bg-white text-left' as='div'>
 			{({ open }) => (
 				<Fragment>
 					<Popover.Button as='div'>
@@ -52,12 +52,12 @@ const InputColumnFilter = ({ column: { filterable, filterValue, preFilteredRows,
 						leave='transition ease-in duration-75'
 						leaveFrom='transform opacity-100 scale-100'
 						leaveTo='transform opacity-0 scale-95'>
-						<Popover.Panel className='absolute left-0 right-0 top-8 z-10 w-[160px] rounded-md shadow-lg'>
+						<Popover.Panel className='absolute right-0 top-8 z-10 w-[160px] rounded-md shadow-lg'>
 							<Input
 								value={filterValue || ''}
 								type='search'
 								onChange={(e) => setFilter(e.target.value)}
-								className='w-full text-xs text-base-content'
+								className='relative w-full bg-white text-xs text-base-content'
 								placeholder={`Tìm trong ${count} hàng...`}
 							/>
 						</Popover.Panel>
@@ -93,7 +93,7 @@ const SelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows,
 						leave='transition ease-in duration-75'
 						leaveFrom='transform opacity-100 scale-100'
 						leaveTo='transform opacity-0 scale-95'>
-						<Popover.Panel className='absolute left-0 right-0 top-8 z-10 w-[160px] rounded-md shadow-lg'>
+						<Popover.Panel className='absolute right-0 top-8 z-10 w-[160px] rounded-md shadow-lg'>
 							<Select
 								className='min-w-[180px] py-1 text-sm'
 								value={filterValue}

@@ -2,7 +2,7 @@ import { useDeleteMajorMutation, useGetAllMajorQuery } from '@/App/store/apis/ma
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
-import { InputColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
+import { InputColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { Fragment, useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';

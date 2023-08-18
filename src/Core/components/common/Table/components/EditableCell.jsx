@@ -1,7 +1,7 @@
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { useEffect, useId, useState } from 'react';
 import tw from 'twin.macro';
-import Button from '../Button';
+import Button from '../../Button';
 
 const EditableCell = ({
 	value: initialValue,

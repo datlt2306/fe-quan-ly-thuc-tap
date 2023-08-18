@@ -4,7 +4,7 @@ import { staffDataValidator } from '@/App/schemas/staffSchema';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
-import { InputColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
+import { InputColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import { PencilSquareIcon, TrashIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Fragment, useMemo, useState } from 'react';

@@ -35,8 +35,8 @@ const StudentListPage = () => {
 	const [selectedStudents, setSelectedStudents] = useState([]);
 
 	useEffect(() => {
-		setCurrentSemester(defaultSemester?._id);
-	}, [defaultSemester]);
+		if (!currentSemester) setCurrentSemester(defaultSemester?._id);
+	}, [currentSemester]);
 
 	const tableData = useMemo(() => studentsListData ?? [], [studentsListData]);
 
@@ -184,6 +184,8 @@ const StudentListPage = () => {
 				loading={isLoading || isFetching}
 				onHandleRefetch={refetch}
 				onGetSelectedRows={setSelectedStudents}
+				stickyColumn
+				resizable
 			/>
 		</Container>
 	);

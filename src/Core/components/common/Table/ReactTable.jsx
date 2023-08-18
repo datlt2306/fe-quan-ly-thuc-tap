@@ -3,67 +3,67 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import {
 	ArrowDownIcon,
 	ArrowPathIcon,
+	ArrowUturnLeftIcon,
 	ArrowsUpDownIcon,
 	ChevronDoubleLeftIcon,
 	ChevronDoubleRightIcon,
 	XMarkIcon
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
-import { memo, useEffect, useMemo, useState } from 'react';
-import { useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from 'react-table';
+import { memo, useCallback, useEffect, useState } from 'react';
+import {
+	useFilters,
+	useFlexLayout,
+	useGlobalFilter,
+	usePagination,
+	useResizeColumns,
+	useRowSelect,
+	useSortBy,
+	useTable
+} from 'react-table';
+import { useSticky } from 'react-table-sticky';
 import tw from 'twin.macro';
 import Button from '../Button';
 import ButtonGroup from '../Button/ButtonGroup';
 import { Option, Select } from '../FormControl/SelectFieldControl';
 import Text from '../Text/Text';
 import Table from './CoreTable';
-import { GlobalFilter } from './ReactTableFilters';
+import { GlobalFilter } from './components/ReactTableFilters';
+import useCustomFilterTypes from './hooks/useCustomFilter';
+import useCustomSortTypes from './hooks/useCustomSort';
+import { FixedSizeGrid } from 'react-window';
+import { FixedSizeList } from 'react-window';
 
-function fuzzyTextFilterFn(rows, id, filterValue) {
-	return matchSorter(rows, filterValue, { keys: [(row) => row.values[id]] });
-}
-fuzzyTextFilterFn.autoRemove = (val) => !val; // Let the table remove the filter if the string is empty
-
-/**
- * @prop {Array} columns
- * @prop {Array} data
- * @prop {boolean} serverSidePagination
- * @prop {Function} onGetSelectedRows
- * @prop {boolean} loading
- * @returns React table element
- */
 const ReactTable = ({
 	onHandleRefetch: handleRefetch,
 	columns,
 	data,
 	serverSidePagination,
 	serverPaginationProps,
+	stickyColumn = false,
+	resizable = false,
 	onServerPaginate: dispatch,
 	onGetSelectedRows: handleGetSelectedRows,
 	loading,
 	isFetching
 }) => {
-	const filterTypes = useMemo(
-		() => ({
-			fuzzyText: fuzzyTextFilterFn,
-			text: (rows, id, filterValue) => {
-				return rows.filter((row) => {
-					const rowValue = row.values[id];
-					return rowValue !== undefined
-						? String(rowValue).toLowerCase().startsWith(String(filterValue).toLowerCase())
-						: true;
-				});
-			}
-		}),
-		[]
-	);
+	const extraPlugins = [
+		{ enable: resizable, plugins: [useResizeColumns, useFlexLayout] },
+		{ enable: stickyColumn, plugins: [useSticky] }
+	];
+
+	const filterTypes = useCustomFilterTypes();
+	const sortTypes = useCustomSortTypes();
 
 	const {
 		getTableProps,
 		getTableBodyProps,
 		prepareRow,
+		resetResizing,
 		headerGroups,
 		page,
+		totalColumnsWidth,
+		rows,
 		canNextPage,
 		canPreviousPage,
 		nextPage,
@@ -84,14 +84,15 @@ const ReactTable = ({
 			columns,
 			data,
 			manualPagination: serverSidePagination,
-			filterTypes
-			// defaultColumn,
+			filterTypes,
+			sortTypes
 		},
 		useFilters,
 		useGlobalFilter,
 		useSortBy,
 		usePagination,
-		useRowSelect
+		useRowSelect,
+		...extraPlugins.map((item) => (item.enable ? item.plugins : '')).flat()
 	);
 
 	const [isForceRefetch, setIsForceRefetch] = useState(false);
@@ -134,6 +135,23 @@ const ReactTable = ({
 		setPageSize(value);
 	};
 
+	const RenderRow = useCallback(
+		({ index, style }) => {
+			const row = page[index];
+			prepareRow(row);
+			return (
+				<Table.Row {...row.getRowProps()}>
+					{row.cells.map((cell, index) => (
+						<Table.Cell key={index} {...cell.getCellProps()}>
+							{cell.render('Cell', { className: 'border-b border-b-gray-200' })}
+						</Table.Cell>
+					))}
+				</Table.Row>
+			);
+		},
+		[prepareRow, page, rows]
+	);
+
 	return (
 		<Wrapper>
 			{/* Global search  */}
@@ -149,6 +167,9 @@ const ReactTable = ({
 							Xóa lọc
 						</Button>
 					)}
+					<Button icon={ArrowUturnLeftIcon} size='sm' variant='outline' onClick={resetResizing}>
+						Đặt lại
+					</Button>
 					{!!handleRefetch && (
 						<Button
 							variant='outline'
@@ -162,7 +183,7 @@ const ReactTable = ({
 								tw='w-3.5 h-3.5'
 								className={classNames({ 'animate-spin': isFetching && isForceRefetch })}
 							/>
-							Reload
+							Tải lại
 						</Button>
 					)}
 				</ButtonList>
@@ -173,9 +194,12 @@ const ReactTable = ({
 				<Table {...getTableProps()}>
 					<Table.Header sticky={true}>
 						{headerGroups.map((headerGroup) => (
-							<Table.Row {...headerGroup.getHeaderGroupProps()}>
+							<Table.Row {...headerGroup.getHeaderGroupProps()} className='bg-white'>
 								{headerGroup.headers.map((column, index) => (
 									<Table.Cell key={index} as='th' {...column.getHeaderProps()}>
+										{resizable && (
+											<Table.Resizer isResizing={column.isResizing} {...column.getResizerProps()} />
+										)}
 										<HeaderCell>
 											{column.render('Header')}
 											<HeaderCell.Actions>
@@ -184,16 +208,17 @@ const ReactTable = ({
 														onClick={() => column.toggleSortBy()}
 														{...column.getHeaderProps()}
 														size='xs'
+														className='!h-fit !w-fit'
 														variant={column.isSorted ? 'primary' : 'ghost'}
 														shape='square'>
 														{column.isSorted ? (
 															<ArrowDownIcon
-																className={classNames('block h-3.5 w-3.5', {
+																className={classNames(' h-3.5 w-3.5', {
 																	'-rotate-180': column.isSortedDesc
 																})}
 															/>
 														) : (
-															<ArrowsUpDownIcon className='block h-3.5 w-3.5' />
+															<ArrowsUpDownIcon className=' h-3.5 w-3.5' />
 														)}
 													</Button>
 												)}
@@ -205,18 +230,25 @@ const ReactTable = ({
 							</Table.Row>
 						))}
 					</Table.Header>
-
 					<Table.Body {...getTableBodyProps()}>
 						{loading ? (
-							<Table.Pending prepareRows={10} prepareCols={columns.length} />
+							<Table.Pending resizable={resizable} prepareRows={10} prepareCols={columns.length} />
 						) : data.length ? (
+							// <FixedSizeList
+							// 	height={300}
+							// 	width={totalColumnsWidth}
+							// 	itemSize={45}
+							// 	itemCount={page.length}
+							// 	className='overflow-x-hidden'>
+							// 	{RenderRow}
+							// </FixedSizeList>
 							page.map((row) => {
 								prepareRow(row);
 								return (
 									<Table.Row {...row.getRowProps()}>
 										{row.cells.map((cell, index) => (
 											<Table.Cell key={index} {...cell.getCellProps()}>
-												{cell.render('Cell', { className: 'text-blue-500' })}
+												{cell.render('Cell', { className: 'border-b border-b-gray-200' })}
 											</Table.Cell>
 										))}
 									</Table.Row>
@@ -296,13 +328,13 @@ const ReactTable = ({
 };
 
 // Styled components
-const Wrapper = tw.div`flex flex-col items-stretch bg-white isolate `;
+const Wrapper = tw.div`flex flex-col items-stretch bg-white isolate`;
 const Header = tw.div`flex items-center justify-between bg-gray-50 p-4 z-0`;
 const ButtonList = tw.div`flex items-center gap-1`;
 const Body = ({ isEmpty, ...props }) => (
 	<div
 		{...props}
-		className={classNames('overflow-x-auto', {
+		className={classNames('min-h-[120px] overflow-x-auto', {
 			'scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
 			'scrollbar-none': !isEmpty
 		})}>

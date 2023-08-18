@@ -107,7 +107,7 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 																								className={({ isActive }) =>
 																									navlinkClasses(isActive)
 																								}>
-																								<child.icon className='h-5 w-5 text-base-content' />{' '}
+																								<child.icon className='h-[18px] w-[18px] text-base-content' />{' '}
 																								{child.name}
 																							</NavLink>
 																						</Menu.Item>
