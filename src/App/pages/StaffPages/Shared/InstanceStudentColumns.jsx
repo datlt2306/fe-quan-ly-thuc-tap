@@ -1,9 +1,10 @@
 import { StudentColumnAccessors, StudentStatusGroupEnum } from '@/App/constants/studentConstants';
 import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
-import IndeterminateCheckbox from '@/Core/components/common/Table/RowSelectionCheckbox';
+import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
+import IndeterminateCheckbox from '@/Core/components/common/Table/components/RowSelectionCheckbox';
 import { EyeIcon } from '@heroicons/react/24/outline';
+import removeVietnameseTones from '@/Core/utils/removeVietnameseTones';
 import tw from 'twin.macro';
 
 const List = tw.ul`flex flex-col gap-1`;
@@ -20,22 +21,26 @@ const InstanceStudentColumns = [
 			<IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
 		),
 		accessor: '_id',
+		sticky: 'left',
 		Cell: ({ row }) => {
-			// const isDisabled = !(!!row.original?.CV || !!row.original?.form || !!row.original?.report);
 			return <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />;
 		}
 	},
 	{
 		Header: StudentColumnAccessors.index,
 		accessor: 'index',
-		sortable: true
+		sortable: true,
+		sticky: 'left'
 	},
 	{
 		Header: StudentColumnAccessors.name,
 		accessor: 'name',
 		Filter: InputColumnFilter,
+		filter: 'fullTextSearch',
+		sortType: 'fullTextSort',
 		filterable: true,
-		sortable: true
+		sortable: true,
+		sticky: 'left'
 	},
 	{
 		Header: StudentColumnAccessors.mssv,
@@ -43,6 +48,7 @@ const InstanceStudentColumns = [
 		Filter: InputColumnFilter,
 		filterable: true,
 		sortable: true,
+		sticky: 'left',
 		Cell: ({ value }) => <span className='font-semibold uppercase'>{value}</span>
 	},
 	{

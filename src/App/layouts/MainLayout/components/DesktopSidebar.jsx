@@ -5,6 +5,7 @@ import Logo from '/logo.png';
 
 import classNames from 'classnames';
 import { Image, Navigation, SidebarContent, SidebarWrapper } from '..';
+import { Fragment } from 'react';
 
 const DesktopSidebar = ({ navigation }) => {
 	const navlinkClasses = (isActive) =>
@@ -27,7 +28,7 @@ const DesktopSidebar = ({ navigation }) => {
 									<Disclosure as='div'>
 										{({ open }) => {
 											return (
-												<>
+												<Fragment>
 													<Disclosure.Button
 														className={classNames(
 															'z-10 flex w-full items-center justify-between border-none p-2 text-gray-800 outline-none focus:border-none hover:bg-gray-100',
@@ -51,22 +52,22 @@ const DesktopSidebar = ({ navigation }) => {
 													</Disclosure.Button>
 													<Transition
 														enter='transition duration-500 transform'
-														enterFrom='opacity-0 -translate-y-2 max-h-0'
-														enterTo='opacity-100 translate-y-0 max-h-none'
+														enterFrom='opacity-0 -translate-y-2'
+														enterTo='opacity-100 translate-y-0'
 														leave='transition duration-150 transform'
-														leaveFrom='opacity-100 translate-y-0 max-h-none'
-														leaveTo='opacity-0 -translate-y-2 max-h-0 blur-lg'>
-														<Disclosure.Panel className='z-0 bg-gray-50 ' as={Menu.Items}>
+														leaveFrom='opacity-100 translate-y-0'
+														leaveTo='opacity-0 -translate-y-2 blur-lg'>
+														<Disclosure.Panel className='z-0 bg-gray-50' as={Menu.Items}>
 															{item.children.map((child, index) => {
 																return (
 																	child?.show === true && (
 																		<Menu.Item
 																			key={index}
-																			className='border-none py-2 pl-10 pr-2 outline-none duration-200 focus:border-none hover:bg-gray-100 focus:active:bg-gray-100'>
+																			className='h-fit border-none py-2 pl-10 pr-2 outline-none duration-200 focus:border-none hover:bg-gray-100 focus:active:bg-gray-100'>
 																			<NavLink
 																				to={child.path}
 																				className={({ isActive }) => navlinkClasses(isActive)}>
-																				<child.icon className='h-5 w-5' /> {child.name}
+																				<child.icon className='h-[18px] w-[18px]' /> {child.name}
 																			</NavLink>
 																		</Menu.Item>
 																	)
@@ -74,7 +75,7 @@ const DesktopSidebar = ({ navigation }) => {
 															})}
 														</Disclosure.Panel>
 													</Transition>
-												</>
+												</Fragment>
 											);
 										}}
 									</Disclosure>
