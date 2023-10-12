@@ -5,24 +5,24 @@
 
 @layer components {
 	.table {
-		@apply divide-y divide-gray-300 bg-white;
+		@apply border-collapse bg-white;
 	}
 	.table-resizer {
-		@apply absolute right-0 top-0 z-[999] h-full w-1 cursor-col-resize select-none;
+		@apply absolute right-0 top-0 z-50 h-full w-1 cursor-col-resize select-none;
 	}
 
 	.table tr {
-		@apply relative !z-0 divide-x divide-gray-200;
+		@apply divide-x divide-gray-200;
 	}
 	.table th {
-		@apply relative whitespace-nowrap bg-white px-3 py-4 text-left !text-sm font-semibold text-base-content-active first-letter:uppercase sm:pl-0;
+		@apply whitespace-nowrap border-b border-gray-200 border-b-gray-200 bg-white px-3 py-1.5 text-left !text-sm font-semibold text-base-content-active first-letter:uppercase sm:pl-0;
 	}
 	.table tbody {
 		@apply divide-y divide-gray-200;
 	}
 
 	.table td {
-		@apply whitespace-nowrap bg-white px-3 py-2 text-sm text-base-content;
+		@apply whitespace-nowrap bg-white px-3 py-1.5 text-sm text-base-content;
 	}
 
 	.btn {

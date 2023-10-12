@@ -4,7 +4,6 @@ import Button from '@/Core/components/common/Button';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import IndeterminateCheckbox from '@/Core/components/common/Table/components/RowSelectionCheckbox';
 import { EyeIcon } from '@heroicons/react/24/outline';
-import removeVietnameseTones from '@/Core/utils/removeVietnameseTones';
 import tw from 'twin.macro';
 
 const List = tw.ul`flex flex-col gap-1`;
@@ -17,20 +16,22 @@ const handleGetInternStatusStyle = (value) => {
 
 const InstanceStudentColumns = [
 	{
-		Header: ({ getToggleAllPageRowsSelectedProps }) => (
-			<IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
-		),
+		Header: ({ getToggleAllRowsSelectedProps }) => <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />,
 		accessor: '_id',
 		sticky: 'left',
 		Cell: ({ row }) => {
 			return <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />;
-		}
+		},
+		maxWidth: 60,
+		minWidth: 60
 	},
 	{
 		Header: StudentColumnAccessors.index,
 		accessor: 'index',
 		sortable: true,
-		sticky: 'left'
+		sticky: 'left',
+		maxWidth: 96,
+		minWidth: 96
 	},
 	{
 		Header: StudentColumnAccessors.name,
@@ -40,6 +41,7 @@ const InstanceStudentColumns = [
 		sortType: 'fullTextSort',
 		filterable: true,
 		sortable: true,
+		minWidth: 192,
 		sticky: 'left'
 	},
 	{
@@ -49,6 +51,7 @@ const InstanceStudentColumns = [
 		filterable: true,
 		sortable: true,
 		sticky: 'left',
+		minWidth: 128,
 		Cell: ({ value }) => <span className='font-semibold uppercase'>{value}</span>
 	},
 	{
@@ -68,7 +71,8 @@ const InstanceStudentColumns = [
 		Header: StudentColumnAccessors.email,
 		accessor: 'email',
 		Filter: InputColumnFilter,
-		filterable: true
+		filterable: true,
+		minWidth: 224
 	},
 	{
 		Header: StudentColumnAccessors.support,
@@ -80,6 +84,7 @@ const InstanceStudentColumns = [
 		Header: StudentColumnAccessors.statusCheck,
 		accessor: 'statusCheck',
 		Filter: SelectColumnFilter,
+
 		filterable: true,
 		Cell: ({ value }) => <Badge variant={handleGetInternStatusStyle(value)}>{value}</Badge>
 	},
@@ -88,6 +93,7 @@ const InstanceStudentColumns = [
 		accessor: 'nameCompany',
 		id: 'company',
 		Filter: InputColumnFilter,
+
 		filterable: true,
 		Aggregated: ({ value }) => value,
 		Cell: ({ row }) => {
@@ -110,6 +116,7 @@ const InstanceStudentColumns = [
 	{
 		Header: StudentColumnAccessors.dream,
 		accessor: 'dream',
+
 		Filter: InputColumnFilter,
 		filterable: true
 	},
@@ -189,8 +196,7 @@ const InstanceStudentColumns = [
 	{
 		Header: StudentColumnAccessors.note,
 		accessor: 'note',
-		filterable: false,
-		sortable: false
+		filterable: false
 	}
 ];
 

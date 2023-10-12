@@ -16,6 +16,7 @@ import tw from 'twin.macro';
 import InstanceStudentColumns from '../Shared/InstanceStudentColumns';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
+import useLocalStorage from '@/App/hooks/useLocalstorage';
 
 const StudentListPage = () => {
 	const { currentCampus } = useSelector((state) => state.campus);
@@ -23,7 +24,7 @@ const StudentListPage = () => {
 	const [handleExportFile] = useExportToExcel();
 	const [addStudents] = useAddStudentsMutation();
 	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
-	const [currentSemester, setCurrentSemester] = useState();
+	const [currentSemester, setCurrentSemester] = useLocalStorage('current_semester', null);
 	const {
 		data: studentsListData,
 		isLoading,

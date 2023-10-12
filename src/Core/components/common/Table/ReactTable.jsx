@@ -10,8 +10,9 @@ import {
 	XMarkIcon
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
-import { memo, useCallback, useEffect, useState } from 'react';
+import { Fragment, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import {
+	useBlockLayout,
 	useFilters,
 	useFlexLayout,
 	useGlobalFilter,
@@ -31,7 +32,6 @@ import Table from './CoreTable';
 import { GlobalFilter } from './components/ReactTableFilters';
 import useCustomFilterTypes from './hooks/useCustomFilter';
 import useCustomSortTypes from './hooks/useCustomSort';
-import { FixedSizeGrid } from 'react-window';
 import { FixedSizeList } from 'react-window';
 
 const ReactTable = ({
@@ -48,13 +48,12 @@ const ReactTable = ({
 	isFetching
 }) => {
 	const extraPlugins = [
-		{ enable: resizable, plugins: [useResizeColumns, useFlexLayout] },
-		{ enable: stickyColumn, plugins: [useSticky] }
+		{ enable: resizable, plugins: [useResizeColumns, useBlockLayout] },
+		{ enable: stickyColumn, plugins: [useSticky, useBlockLayout] }
 	];
 
 	const filterTypes = useCustomFilterTypes();
 	const sortTypes = useCustomSortTypes();
-
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -92,7 +91,10 @@ const ReactTable = ({
 		useSortBy,
 		usePagination,
 		useRowSelect,
-		...extraPlugins.map((item) => (item.enable ? item.plugins : '')).flat()
+		...extraPlugins
+			.filter((plugin) => plugin.enable)
+			.map((item) => item.plugins)
+			.flat()
 	);
 
 	const [isForceRefetch, setIsForceRefetch] = useState(false);
@@ -135,22 +137,19 @@ const ReactTable = ({
 		setPageSize(value);
 	};
 
-	const RenderRow = useCallback(
-		({ index, style }) => {
-			const row = page[index];
-			prepareRow(row);
-			return (
-				<Table.Row {...row.getRowProps()}>
-					{row.cells.map((cell, index) => (
-						<Table.Cell key={index} {...cell.getCellProps()}>
-							{cell.render('Cell', { className: 'border-b border-b-gray-200' })}
-						</Table.Cell>
-					))}
-				</Table.Row>
-			);
-		},
-		[prepareRow, page, rows]
-	);
+	const RenderRow = ({ index, style }) => {
+		const row = page[index];
+		prepareRow(row);
+		return (
+			<Table.Row {...row.getRowProps({ style })}>
+				{row.cells.map((cell, index) => (
+					<Table.Cell key={index} {...cell.getCellProps()}>
+						{cell.render('Cell', { className: 'border-b border-b-gray-200' })}
+					</Table.Cell>
+				))}
+			</Table.Row>
+		);
+	};
 
 	return (
 		<Wrapper>
@@ -160,6 +159,7 @@ const ReactTable = ({
 					preGlobalFilteredRows={preGlobalFilteredRows}
 					globalFilter={globalFilter}
 					setGlobalFilter={setGlobalFilter}
+					filterFn={'fullTextSeach'}
 				/>
 				<ButtonList>
 					{!!filters.length && (
@@ -222,7 +222,7 @@ const ReactTable = ({
 														)}
 													</Button>
 												)}
-												{column.filterable && column.render('Filter')}
+												{!column.resizing && column.filterable && column.render('Filter')}
 											</HeaderCell.Actions>
 										</HeaderCell>
 									</Table.Cell>
@@ -234,14 +234,6 @@ const ReactTable = ({
 						{loading ? (
 							<Table.Pending resizable={resizable} prepareRows={10} prepareCols={columns.length} />
 						) : data.length ? (
-							// <FixedSizeList
-							// 	height={300}
-							// 	width={totalColumnsWidth}
-							// 	itemSize={45}
-							// 	itemCount={page.length}
-							// 	className='overflow-x-hidden'>
-							// 	{RenderRow}
-							// </FixedSizeList>
 							page.map((row) => {
 								prepareRow(row);
 								return (
@@ -260,7 +252,6 @@ const ReactTable = ({
 					</Table.Body>
 				</Table>
 			</Body>
-
 			{/* Pagination */}
 			<Footer>
 				<Footer.Item>
@@ -327,21 +318,21 @@ const ReactTable = ({
 	);
 };
 
-// Styled components
-const Wrapper = tw.div`flex flex-col items-stretch bg-white isolate`;
-const Header = tw.div`flex items-center justify-between bg-gray-50 p-4 z-0`;
+// Styled componentss
+const Wrapper = tw.div`flex flex-col items-stretch bg-white isolate max-h-[75vh]`;
+const Header = tw.div`flex items-center justify-between bg-gray-50 p-4 z-0 `;
 const ButtonList = tw.div`flex items-center gap-1`;
 const Body = ({ isEmpty, ...props }) => (
 	<div
 		{...props}
-		className={classNames('min-h-[120px] overflow-x-auto', {
+		className={classNames('min-h-[4rem] overflow-x-auto', {
 			'scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
 			'scrollbar-none': !isEmpty
 		})}>
 		{props.children}
 	</div>
 );
-const HeaderCell = tw.div`flex h-12 items-center justify-between gap-6`;
+const HeaderCell = tw.div`flex h-12 items-center gap-3`;
 const Footer = tw.div`flex w-full items-stretch bg-gray-50 p-3 divide-x divide-gray-300 [&>:first-child]:!pl-0 [&>:last-child]:!pr-0`;
 HeaderCell.Actions = tw.div`flex items-center gap-px`;
 Footer.Item = tw.div`px-6`;
