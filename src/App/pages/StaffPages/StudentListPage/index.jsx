@@ -15,7 +15,7 @@ import InstanceStudentColumns from '../Shared/InstanceStudentColumns';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
 import useLocalStorage from '@/App/hooks/useLocalstorage';
-
+import HttpStatusCode from '@/Core/constants/httpStatus';
 const StudentListPage = () => {
 	const { currentCampus } = useSelector((state) => state.campus);
 	const [handleExportFile] = useExportToExcel();
@@ -53,8 +53,41 @@ const StudentListPage = () => {
 			formData.append('smester_id', currentSemester);
 			formData.append('campus_id', currentCampus?._id);
 
-			await addStudents(formData);
+			try {
+				const { error } = await addStudents(formData);
+				if (error) {
+					const message =
+						error?.status === HttpStatusCode.CONFLICT
+							? 'Đã có sinh viên tồn tại trong hệ thống !'
+							: 'Đã có lỗi xảy ra, vui lòng kiểm tra lại dữ liệu tải lên';
 
+					toast.update(toastId.current, {
+						type: 'error',
+						render: message,
+						isLoading: false,
+						closeButton: true,
+						autoClose: 2000
+					});
+					fileInputRef.current.value = null;
+					return;
+				}
+				toast.update(toastId.current, {
+					type: 'success',
+					render: 'Tải lên dữ liệu thành công !',
+					isLoading: false,
+					closeButton: true,
+					autoClose: 2000
+				});
+			} catch (error) {
+				console.log('TCL: error', error);
+				toast.update(toastId.current, {
+					type: 'error',
+					render: error.message,
+					isLoading: false,
+					closeButton: true,
+					autoClose: 2000
+				});
+			}
 			fileInputRef.current.value = null; // reset input file after imported
 		},
 		[currentSemester]
@@ -78,6 +111,7 @@ const StudentListPage = () => {
 	);
 
 	useEffect(() => {
+		console.log(addStudentsState.error);
 		if (addStudentsState.isLoading) {
 			toastId.current = toast.loading('Đang tải lên dữ liệu ...');
 		}
