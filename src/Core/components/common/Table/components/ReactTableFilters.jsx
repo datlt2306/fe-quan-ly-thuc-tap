@@ -34,6 +34,16 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
 // Default filter component
 const InputColumnFilter = ({ column: { filterable, filterValue, preFilteredRows, setFilter } }) => {
 	const count = preFilteredRows.length;
+	// return (
+	// 	<Input
+	// 		value={filterValue || ''}
+	// 		type='search'
+	// 		onChange={(e) => setFilter(e.target.value)}
+	// 		className='relative w-full bg-white text-xs text-base-content'
+	// 		placeholder={`Tìm trong ${count} hàng...`}
+	// 	/>
+	// );
+
 	return (
 		<Popover className='relative !z-0 inline-block bg-white text-left' as='div'>
 			{({ open }) => (
@@ -51,12 +61,12 @@ const InputColumnFilter = ({ column: { filterable, filterValue, preFilteredRows,
 						leave='transition ease-in duration-75'
 						leaveFrom='transform opacity-100 scale-100'
 						leaveTo='transform opacity-0 scale-95'>
-						<Popover.Panel className='absolute right-0 top-8 w-[160px] rounded-md shadow-lg'>
+						<Popover.Panel className='absolute right-8 top-1/2 z-0 w-[160px] -translate-y-1/2 rounded-md shadow-lg'>
 							<Input
 								value={filterValue || ''}
 								type='search'
 								onChange={(e) => setFilter(e.target.value)}
-								className='relative w-full bg-white text-xs text-base-content'
+								className='w-full bg-white text-xs text-base-content'
 								placeholder={`Tìm trong ${count} hàng...`}
 							/>
 						</Popover.Panel>
@@ -75,8 +85,24 @@ const SelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows,
 		});
 		return [...options.values()];
 	}, [id, preFilteredRows]);
+
+	// return (
+	// 	<Select
+	// 		className='w-full py-1 text-sm'
+	// 		value={filterValue}
+	// 		onChange={(e) => {
+	// 			setFilter(e.target.value || undefined);
+	// 		}}>
+	// 		<Option value=''>All</Option>
+	// 		{options.map((option, index) => (
+	// 			<Option key={index} value={option}>
+	// 				{option}
+	// 			</Option>
+	// 		))}
+	// 	</Select>
+	// );
 	return (
-		<Popover className='relative !z-0 inline-block text-left text-base-content' as='div'>
+		<Popover className='relative !z-0 inline-block bg-white text-left' as='div'>
 			{({ open }) => (
 				<Fragment>
 					<Popover.Button as='div'>
@@ -92,9 +118,9 @@ const SelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows,
 						leave='transition ease-in duration-75'
 						leaveFrom='transform opacity-100 scale-100'
 						leaveTo='transform opacity-0 scale-95'>
-						<Popover.Panel className='absolute right-0 top-8 w-[160px] rounded-md shadow-lg'>
+						<Popover.Panel className='absolute right-8 top-1/2 w-[160px] -translate-y-1/2 rounded-md shadow-lg'>
 							<Select
-								className='min-w-[180px] py-1 text-sm'
+								className='py-1 text-sm'
 								value={filterValue}
 								onChange={(e) => {
 									setFilter(e.target.value || undefined);

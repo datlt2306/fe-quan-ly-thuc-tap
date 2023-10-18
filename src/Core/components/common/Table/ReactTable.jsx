@@ -190,7 +190,7 @@ const ReactTable = ({
 			</Header>
 
 			{/* Table data */}
-			<Body isEmpty={isEmptyData}>
+			<Body isEmpty={isEmptyData} loading={loading}>
 				<Table {...getTableProps()}>
 					<Table.Header sticky={true}>
 						{headerGroups.map((headerGroup) => (
@@ -208,7 +208,7 @@ const ReactTable = ({
 														onClick={() => column.toggleSortBy()}
 														{...column.getHeaderProps()}
 														size='xs'
-														className='!h-fit !w-fit'
+														className='z-0 !h-fit !w-fit'
 														variant={column.isSorted ? 'primary' : 'ghost'}
 														shape='square'>
 														{column.isSorted ? (
@@ -322,17 +322,19 @@ const ReactTable = ({
 const Wrapper = tw.div`flex flex-col items-stretch bg-white isolate max-h-[75vh]`;
 const Header = tw.div`flex items-center justify-between bg-gray-50 p-4 z-0 `;
 const ButtonList = tw.div`flex items-center gap-1`;
-const Body = ({ isEmpty, ...props }) => (
+const Body = ({ isEmpty, loading, ...props }) => (
 	<div
 		{...props}
-		className={classNames('min-h-[4rem] overflow-x-auto', {
+		className={classNames('min-h-[4rem]', {
 			'scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
-			'scrollbar-none': !isEmpty
+			'scrollbar-none': !isEmpty,
+			'overflow-x-auto': !loading,
+			'overflow-hidden': loading
 		})}>
 		{props.children}
 	</div>
 );
-const HeaderCell = tw.div`flex h-12 items-center gap-3`;
+const HeaderCell = tw.div`flex justify-between h-12 items-center gap-3`;
 const Footer = tw.div`flex w-full items-stretch bg-gray-50 p-3 divide-x divide-gray-300 [&>:first-child]:!pl-0 [&>:last-child]:!pr-0`;
 HeaderCell.Actions = tw.div`flex items-center gap-px`;
 Footer.Item = tw.div`px-6`;
