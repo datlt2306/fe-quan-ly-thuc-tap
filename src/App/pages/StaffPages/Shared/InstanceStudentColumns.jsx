@@ -3,6 +3,7 @@ import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import IndeterminateCheckbox from '@/Core/components/common/Table/components/RowSelectionCheckbox';
+import { formatDate } from '@/Core/utils/formatDate';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import tw from 'twin.macro';
 
@@ -191,6 +192,13 @@ const InstanceStudentColumns = [
 		Header: StudentColumnAccessors.createdAt,
 		accessor: 'createdAt',
 		Filter: InputColumnFilter,
+		filterable: true
+	},
+	{
+		Header: StudentColumnAccessors.updatedAt,
+		accessor: 'updatedAt',
+		Filter: InputColumnFilter,
+		Cell: ({ value }) => formatDate(value),
 		filterable: true
 	},
 	{

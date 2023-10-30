@@ -24,6 +24,7 @@ export const StudentColumnAccessors = {
 	attitudePoint: 'Điểm thái độ',
 	reviewer: 'Reviewer',
 	createdAt: 'Ngày bổ sung',
+	updatedAt: 'Ngày cập nhật',
 	note: 'Ghi chú'
 };
 
