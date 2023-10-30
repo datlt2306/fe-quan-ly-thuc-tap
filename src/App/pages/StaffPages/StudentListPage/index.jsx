@@ -52,20 +52,11 @@ const StudentListPage = () => {
 			try {
 				const { error } = await addStudents(formData);
 				if (error) {
-					const message =
-						error?.status === HttpStatusCode.CONFLICT
-							? 'Đã có sinh viên tồn tại trong hệ thống !'
-							: 'Đã có lỗi xảy ra, vui lòng kiểm tra lại dữ liệu tải lên';
+					const message = !!error?.data?.message
+						? error.data?.message
+						: 'Đã có lỗi xảy ra, vui lòng kiểm tra lại dữ liệu tải lên';
 
-					toast.update(toastId.current, {
-						type: 'error',
-						render: message,
-						isLoading: false,
-						closeButton: true,
-						autoClose: 2000
-					});
-					if (fileInputRef.current) fileInputRef.current.value = null;
-					return;
+					throw new Error(message);
 				}
 				toast.update(toastId.current, {
 					type: 'success',
@@ -83,7 +74,7 @@ const StudentListPage = () => {
 					autoClose: 2000
 				});
 			} finally {
-				if (fileInputRef.current && fileInputRef.current.value) fileInputRef.current.value = null;
+				if (fileInputRef.current) fileInputRef.current.value = null;
 			}
 		},
 		[currentSemester]
