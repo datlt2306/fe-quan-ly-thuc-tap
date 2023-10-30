@@ -22,7 +22,7 @@
 	}
 
 	.table td {
-		@apply whitespace-nowrap bg-white px-3 py-1.5 text-sm text-base-content;
+		@apply whitespace-nowrap bg-white px-3 py-1.5 align-middle text-sm text-base-content;
 	}
 
 	.btn {

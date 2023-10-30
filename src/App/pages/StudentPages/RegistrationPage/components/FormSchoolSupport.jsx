@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import SharedFields from './SharedFields';
+import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
 const FormSchoolSupport = ({ selectedOption, user }) => {
 	const navigate = useNavigate();
@@ -68,9 +69,15 @@ const FormSchoolSupport = ({ selectedOption, user }) => {
 				/>
 				<FileUploadFieldControl label='Upload CV (PDF)' className='w-full' control={control} name='CV' />
 			</Form.Group>
-			<Button type='submit' variant='primary' className='w-fit' disabled={isLoading} loading={isLoading}>
-				Đăng ký
-			</Button>
+			<Button
+				type='submit'
+				variant='primary'
+				icon={PaperAirplaneIcon}
+				text='Đăng ký'
+				className='w-fit'
+				disabled={isLoading}
+				loading={isLoading}
+			/>
 		</Form>
 	);
 };

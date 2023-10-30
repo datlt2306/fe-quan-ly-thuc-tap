@@ -15,12 +15,7 @@ import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 
 const StudentSupportPage = () => {
-	const {
-		data: studentRequests,
-		refetch,
-		isLoading,
-		isFetching
-	} = useGetRequestOfStudentQuery(undefined, { refetchOnMountOrArgChange: true });
+	const { data: studentRequests, refetch, isLoading, isFetching } = useGetRequestOfStudentQuery(undefined);
 	const [handleAccept] = useResetStudentRequestMutation();
 	const [handleReject] = useRemoveRequestApiMutation();
 	const [tableData, setTableData] = useState([]);

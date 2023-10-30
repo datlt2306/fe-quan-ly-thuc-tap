@@ -235,7 +235,6 @@ const CompanyListPage = () => {
 			)
 		}
 	];
-	console.log('companyLoading :>> ', companyLoading);
 	return (
 		<Fragment>
 			<ModalConfirm
@@ -287,6 +286,7 @@ const CompanyListPage = () => {
 					loading={companyLoading}
 					isFetching={isFetching}
 					onHandleRefetch={refetch}
+					resizable
 				/>
 			</Container>
 		</Fragment>

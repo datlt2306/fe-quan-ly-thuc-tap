@@ -16,18 +16,14 @@ import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
 import useLocalStorage from '@/App/hooks/useLocalstorage';
 import HttpStatusCode from '@/Core/constants/httpStatus';
+
 const StudentListPage = () => {
 	const { currentCampus } = useSelector((state) => state.campus);
 	const [handleExportFile] = useExportToExcel();
 	const [addStudents, addStudentsState] = useAddStudentsMutation();
 	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useLocalStorage('current_semester', null);
-	const {
-		data: studentsListData,
-		isLoading,
-		refetch,
-		isFetching
-	} = useGetStudentsQuery({ semester: currentSemester });
+	const { data: studentsListData, isLoading, refetch, isFetching } = useGetStudentsQuery({ semester: null });
 	const fileInputRef = useRef(null);
 	const toastId = useRef(null);
 	const [selectedStudents, setSelectedStudents] = useState([]);
@@ -44,7 +40,7 @@ const StudentListPage = () => {
 			const fileExtension = getFileExtension(file);
 			if (fileExtension !== AllowedFileExtension.XLSX) {
 				toast.error('File import không hợp lệ');
-				fileInputRef.current.value = null;
+				if (fileInputRef.current) fileInputRef.current.value = null;
 				return;
 			}
 
@@ -68,7 +64,7 @@ const StudentListPage = () => {
 						closeButton: true,
 						autoClose: 2000
 					});
-					fileInputRef.current.value = null;
+					if (fileInputRef.current) fileInputRef.current.value = null;
 					return;
 				}
 				toast.update(toastId.current, {
@@ -79,7 +75,6 @@ const StudentListPage = () => {
 					autoClose: 2000
 				});
 			} catch (error) {
-				console.log('TCL: error', error);
 				toast.update(toastId.current, {
 					type: 'error',
 					render: error.message,
@@ -87,8 +82,9 @@ const StudentListPage = () => {
 					closeButton: true,
 					autoClose: 2000
 				});
+			} finally {
+				if (fileInputRef.current && fileInputRef.current.value) fileInputRef.current.value = null;
 			}
-			fileInputRef.current.value = null; // reset input file after imported
 		},
 		[currentSemester]
 	);
@@ -111,7 +107,6 @@ const StudentListPage = () => {
 	);
 
 	useEffect(() => {
-		console.log(addStudentsState.error);
 		if (addStudentsState.isLoading) {
 			toastId.current = toast.loading('Đang tải lên dữ liệu ...');
 		}
@@ -171,7 +166,7 @@ const StudentListPage = () => {
 			<ReactTable
 				columns={columnsData}
 				data={tableData}
-				loading={isLoading || isFetching}
+				loading={isLoading}
 				onHandleRefetch={refetch}
 				onGetSelectedRows={setSelectedStudents}
 				stickyColumn

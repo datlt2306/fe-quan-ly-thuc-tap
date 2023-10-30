@@ -40,6 +40,11 @@ export default {
 			xl: { min: '1921px' }
 		},
 		extend: {
+			transitionProperty: {
+				height: 'height',
+				'max-height': 'max-height',
+				spacing: 'margin, padding'
+			},
 			fontFamily: {
 				sans: ['Inter var', ...defaultTheme.fontFamily.sans]
 			},
@@ -64,6 +69,7 @@ export default {
 		}
 	},
 	plugins: [
+		require('@headlessui/tailwindcss'),
 		require('prettier-plugin-tailwindcss'),
 		require('@tailwindcss/forms'),
 		require('tailwind-scrollbar')({ nocompatible: true }),

@@ -19,7 +19,7 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
 			<MagnifyingGlassIcon className='absolute left-2 top-1/2 z-50 h-4 w-4 -translate-y-1/2' />
 			<Input
 				placeholder={`Tìm kiếm trong bảng ...`}
-				className='w-full max-w-sm pl-8'
+				className='w-full max-w-sm pl-8 '
 				type='search'
 				value={value || ''}
 				onChange={(e) => {
@@ -34,15 +34,6 @@ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
 // Default filter component
 const InputColumnFilter = ({ column: { filterable, filterValue, preFilteredRows, setFilter } }) => {
 	const count = preFilteredRows.length;
-	// return (
-	// 	<Input
-	// 		value={filterValue || ''}
-	// 		type='search'
-	// 		onChange={(e) => setFilter(e.target.value)}
-	// 		className='relative w-full bg-white text-xs text-base-content'
-	// 		placeholder={`Tìm trong ${count} hàng...`}
-	// 	/>
-	// );
 
 	return (
 		<Popover className='relative !z-0 inline-block bg-white text-left' as='div'>
@@ -86,21 +77,6 @@ const SelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows,
 		return [...options.values()];
 	}, [id, preFilteredRows]);
 
-	// return (
-	// 	<Select
-	// 		className='w-full py-1 text-sm'
-	// 		value={filterValue}
-	// 		onChange={(e) => {
-	// 			setFilter(e.target.value || undefined);
-	// 		}}>
-	// 		<Option value=''>All</Option>
-	// 		{options.map((option, index) => (
-	// 			<Option key={index} value={option}>
-	// 				{option}
-	// 			</Option>
-	// 		))}
-	// 	</Select>
-	// );
 	return (
 		<Popover className='relative !z-0 inline-block bg-white text-left' as='div'>
 			{({ open }) => (

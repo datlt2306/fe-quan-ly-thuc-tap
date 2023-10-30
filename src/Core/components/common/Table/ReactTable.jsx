@@ -325,7 +325,7 @@ const ButtonList = tw.div`flex items-center gap-1`;
 const Body = ({ isEmpty, loading, ...props }) => (
 	<div
 		{...props}
-		className={classNames('min-h-[4rem]', {
+		className={classNames('min-h-[3rem]', {
 			'scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
 			'scrollbar-none': !isEmpty,
 			'overflow-x-auto': !loading,

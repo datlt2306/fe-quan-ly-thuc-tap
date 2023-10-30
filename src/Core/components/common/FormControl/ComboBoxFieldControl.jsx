@@ -76,7 +76,7 @@ const ComboBoxFieldControl = forwardRef(
 							<Combobox.Content>
 								<Combobox.Button as='div' className='flex items-center'>
 									<Combobox.Input
-										className='w-full border-none px-2.5 py-2 leading-6 text-base-content focus:ring-0'
+										className='w-full border-none px-2.5 py-1.5 leading-6 text-base-content focus:ring-0'
 										defaultValue={initialValue}
 										placeholder={placeholder}
 										displayValue={(selectedOption) => {
