@@ -16,7 +16,7 @@ import { useGetDefaultSemsterQuery } from '@/App/store/apis/semesterApi';
 export default function SigninPage() {
 	const [isAllowToLoggin, setAllowToLogin] = useState(false);
 	const [currentCampus, setCurrentCampus] = useState(null);
-	const { data: listCampus } = useGetAllCampusQuery();
+	const { data: listCampus, isFetching } = useGetAllCampusQuery();
 	const [signinMutation, { isLoading }] = useSigninMutation();
 	const { data: defaultSemester } = useGetDefaultSemsterQuery({ campus_id: currentCampus }, { skip: !currentCampus });
 	const dispatch = useDispatch();
@@ -51,7 +51,11 @@ export default function SigninPage() {
 			<Box>
 				<Image src={Logo} alt='FPT Polytechnic' />
 				<Form>
-					<Select onChange={(e) => handleSelectCampus(e.target.value)} className='capitalize'>
+					<Select
+						onChange={(e) => handleSelectCampus(e.target.value)}
+						className='capitalize'
+						disabled={isFetching}>
+						{isFetching && <Option selected>Đang tải ...</Option>}
 						<Option value=''>Chọn cơ sở</Option>
 						{Array.isArray(listCampus) &&
 							listCampus?.map((campus) => (
