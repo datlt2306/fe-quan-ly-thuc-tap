@@ -144,12 +144,14 @@ const CompanyListPage = () => {
 	const columnsData = [
 		{
 			Header: columnAccessors.index,
+			width: 60,
 			accessor: 'index'
 		},
 		{
 			Header: columnAccessors.name,
 			accessor: 'name',
 			Filter: InputColumnFilter,
+			minWidth: 240,
 			filterable: true,
 			sortable: true
 		},
@@ -158,6 +160,7 @@ const CompanyListPage = () => {
 			accessor: 'business_code',
 			Filter: InputColumnFilter,
 			filterable: true,
+			minWidth: 160,
 			sortable: true,
 			Cell: ({ value }) => <Text className='font-medium uppercase'>{value}</Text>
 		},
@@ -165,6 +168,7 @@ const CompanyListPage = () => {
 			Header: columnAccessors.tax_code,
 			accessor: 'tax_code',
 			Filter: InputColumnFilter,
+			minWidth: 180,
 			filterable: true,
 			sortable: true,
 			Cell: ({ value }) => <Text className='font-medium uppercase'>{value}</Text>
@@ -172,6 +176,7 @@ const CompanyListPage = () => {
 		{
 			Header: columnAccessors.internship_position,
 			accessor: 'internship_position',
+			minWidth: 240,
 			Filter: InputColumnFilter,
 			filterable: true
 		},
@@ -193,6 +198,7 @@ const CompanyListPage = () => {
 			accessor: 'address',
 			Filter: InputColumnFilter,
 			filterable: true,
+			minWidth: 300,
 			Cell: ({ value }) => <Text className='whitespace-normal'>{value}</Text>
 		},
 		{
