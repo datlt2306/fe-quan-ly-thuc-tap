@@ -23,7 +23,12 @@ const StudentListPage = () => {
 	const [addStudents, addStudentsState] = useAddStudentsMutation();
 	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useLocalStorage('current_semester', null);
-	const { data: studentsListData, isLoading, refetch, isFetching } = useGetStudentsQuery({ semester: null });
+	const {
+		data: studentsListData,
+		isLoading,
+		refetch,
+		isFetching
+	} = useGetStudentsQuery({ semester: currentSemester });
 	const fileInputRef = useRef(null);
 	const toastId = useRef(null);
 	const [selectedStudents, setSelectedStudents] = useState([]);
