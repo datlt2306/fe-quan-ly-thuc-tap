@@ -3,13 +3,19 @@ import { useMemo } from 'react';
 import { useGetOneStudentQuery } from '@/App/store/apis/studentApi';
 import FormElement from './components/FormElement';
 import SuccessStateSection from '../Shared/SuccessStateSection';
+import { StudentStatusCodeEnum } from '@/App/constants/studentConstants';
+import EmptyStateSection from '../Shared/EmptyStateSection';
 
 const RegistrationPage = () => {
 	const user = useSelector((state) => state.auth?.user);
 	const { data: student } = useGetOneStudentQuery(user?.id);
+	console.log(student?.statusCheck);
 	//Kiểm tra xem statusCheck có phải là trạng thái sửa cv hoặc chưa đăng ký
 	const checkStatusStudent = useMemo(() => {
-		return student?.statusCheck == 10 || student?.statusCheck == 1;
+		return (
+			student?.statusCheck === StudentStatusCodeEnum.NOT_REGISTERED ||
+			student?.statusCheck === StudentStatusCodeEnum.REVISE_CV
+		);
 	}, [student?.statusCheck]);
 
 	return checkStatusStudent ? (
@@ -20,7 +26,7 @@ const RegistrationPage = () => {
 			message='Phòng QHDN sẽ review và xác nhận thông tin của bạn.'
 		/>
 	) : (
-		<FormElement student={student} />
+		<EmptyStateSection title='Form đăng ký không khả dụng' message='Sinh viên hiện không đủ điều kiện ' />
 	);
 };
 
