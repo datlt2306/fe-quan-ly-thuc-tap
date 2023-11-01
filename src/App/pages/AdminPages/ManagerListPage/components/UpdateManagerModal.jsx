@@ -1,5 +1,5 @@
-import { useGetAllCampusQuery } from '@/App/providers/apis/campusApi';
-import { useUpdateManagerMutation, useUpdateStaffMutation } from '@/App/providers/apis/staffListApi';
+import { useGetAllCampusQuery } from '@/App/store/apis/campusApi';
+import { useUpdateManagerMutation, useUpdateStaffMutation } from '@/App/store/apis/staffListApi';
 import { managerDataValidator } from '@/App/schemas/staffSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';

@@ -14,6 +14,7 @@ const Button = (
 		shape,
 		disabled,
 		loading,
+		text,
 		as: Element = 'button', // Polymorphic button has behaviors as other tag
 		...props
 	},
@@ -61,7 +62,7 @@ const Button = (
 					})}
 				/>
 			)}
-			{props.children}
+			{props.children || text}
 		</Element>
 	);
 };

@@ -18,7 +18,7 @@ const FileUploadFieldControl = ({ control, name, label, disabled, rules }) => {
 
 	return (
 		<FormControl>
-			<label className='font-medium text-base-content' htmlFor={id}>
+			<label className='font-semibold text-base-content' htmlFor={id}>
 				{label}
 			</label>
 			<input type='file' onChange={(e) => handleChange(e)} />

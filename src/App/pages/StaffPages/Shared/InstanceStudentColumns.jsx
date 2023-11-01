@@ -1,8 +1,9 @@
 import { StudentColumnAccessors, StudentStatusGroupEnum } from '@/App/constants/studentConstants';
 import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
-import IndeterminateCheckbox from '@/Core/components/common/Table/RowSelectionCheckbox';
+import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
+import IndeterminateCheckbox from '@/Core/components/common/Table/components/RowSelectionCheckbox';
+import { formatDate } from '@/Core/utils/formatDate';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import tw from 'twin.macro';
 
@@ -16,26 +17,33 @@ const handleGetInternStatusStyle = (value) => {
 
 const InstanceStudentColumns = [
 	{
-		Header: ({ getToggleAllPageRowsSelectedProps }) => (
-			<IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
-		),
+		Header: ({ getToggleAllRowsSelectedProps }) => <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />,
 		accessor: '_id',
+		sticky: 'left',
 		Cell: ({ row }) => {
-			// const isDisabled = !(!!row.original?.CV || !!row.original?.form || !!row.original?.report);
 			return <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />;
-		}
+		},
+		maxWidth: 60,
+		minWidth: 60
 	},
 	{
 		Header: StudentColumnAccessors.index,
 		accessor: 'index',
-		sortable: true
+		sortable: true,
+		sticky: 'left',
+		maxWidth: 96,
+		minWidth: 96
 	},
 	{
 		Header: StudentColumnAccessors.name,
 		accessor: 'name',
 		Filter: InputColumnFilter,
+		filter: 'fullTextSearch',
+		sortType: 'fullTextSort',
 		filterable: true,
-		sortable: true
+		sortable: true,
+		minWidth: 192,
+		sticky: 'left'
 	},
 	{
 		Header: StudentColumnAccessors.mssv,
@@ -43,6 +51,8 @@ const InstanceStudentColumns = [
 		Filter: InputColumnFilter,
 		filterable: true,
 		sortable: true,
+		sticky: 'left',
+		minWidth: 128,
 		Cell: ({ value }) => <span className='font-semibold uppercase'>{value}</span>
 	},
 	{
@@ -62,7 +72,8 @@ const InstanceStudentColumns = [
 		Header: StudentColumnAccessors.email,
 		accessor: 'email',
 		Filter: InputColumnFilter,
-		filterable: true
+		filterable: true,
+		minWidth: 224
 	},
 	{
 		Header: StudentColumnAccessors.support,
@@ -74,6 +85,7 @@ const InstanceStudentColumns = [
 		Header: StudentColumnAccessors.statusCheck,
 		accessor: 'statusCheck',
 		Filter: SelectColumnFilter,
+
 		filterable: true,
 		Cell: ({ value }) => <Badge variant={handleGetInternStatusStyle(value)}>{value}</Badge>
 	},
@@ -82,6 +94,7 @@ const InstanceStudentColumns = [
 		accessor: 'nameCompany',
 		id: 'company',
 		Filter: InputColumnFilter,
+
 		filterable: true,
 		Aggregated: ({ value }) => value,
 		Cell: ({ row }) => {
@@ -104,6 +117,7 @@ const InstanceStudentColumns = [
 	{
 		Header: StudentColumnAccessors.dream,
 		accessor: 'dream',
+
 		Filter: InputColumnFilter,
 		filterable: true
 	},
@@ -181,10 +195,16 @@ const InstanceStudentColumns = [
 		filterable: true
 	},
 	{
+		Header: StudentColumnAccessors.updatedAt,
+		accessor: 'updatedAt',
+		Filter: InputColumnFilter,
+		Cell: ({ value }) => formatDate(value),
+		filterable: true
+	},
+	{
 		Header: StudentColumnAccessors.note,
 		accessor: 'note',
-		filterable: false,
-		sortable: false
+		filterable: false
 	}
 ];
 

@@ -21,7 +21,7 @@ export default {
 			'warning-active': '#d97706',
 			disabled: '#9ca3af',
 			'base-content-active': '#3f3f46',
-			'base-content': '#6b7280',
+			'base-content': '#374151',
 			...colors
 		},
 		screens: {
@@ -40,6 +40,11 @@ export default {
 			xl: { min: '1921px' }
 		},
 		extend: {
+			transitionProperty: {
+				height: 'height',
+				'max-height': 'max-height',
+				spacing: 'margin, padding'
+			},
 			fontFamily: {
 				sans: ['Inter var', ...defaultTheme.fontFamily.sans]
 			},
@@ -53,7 +58,7 @@ export default {
 						transform: 'translateX(0%)'
 					},
 					'100%': {
-						transform: 'translateX(100%)'
+						transform: 'translateX(120%)'
 					}
 				},
 				spin: {
@@ -64,6 +69,7 @@ export default {
 		}
 	},
 	plugins: [
+		require('@headlessui/tailwindcss'),
 		require('prettier-plugin-tailwindcss'),
 		require('@tailwindcss/forms'),
 		require('tailwind-scrollbar')({ nocompatible: true }),

@@ -1,4 +1,4 @@
-import { useUpdateReviewMutation } from '@/App/providers/apis/studentApi';
+import { useUpdateReviewMutation } from '@/App/store/apis/studentApi';
 import { reviewSchema } from '@/App/schemas/studentSchema';
 import Button from '@/Core/components/common/Button';
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';

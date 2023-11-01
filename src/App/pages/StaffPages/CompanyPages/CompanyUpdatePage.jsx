@@ -1,9 +1,5 @@
-import {
-	useGetAllCompanyQuery,
-	useGetOneCompanyQuery,
-	useUpdateCompanyMutation
-} from '@/App/providers/apis/businessApi';
-import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
+import { useGetAllCompanyQuery, useGetOneCompanyQuery, useUpdateCompanyMutation } from '@/App/store/apis/businessApi';
+import { useGetAllMajorQuery } from '@/App/store/apis/majorApi';
 import { companySchema } from '@/App/schemas/companySchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';

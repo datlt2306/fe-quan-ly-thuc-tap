@@ -1,8 +1,8 @@
 import { formSignUpSchoolSupportSchema } from '@/App/schemas/formSignUpInterShipSchema';
 import Button from '@/Core/components/common/Button';
 import FileUploadFieldControl from '@/Core/components/common/FormControl/FileUploadFieldControl';
-import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
-import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
+import { useGetAllCompanyQuery } from '@/App/store/apis/businessApi';
+import { useUploadCvMutation } from '@/App/store/apis/internRegistrationApi';
 import ComboBoxFieldControl from '@/Core/components/common/FormControl/ComboBoxFieldControl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import SharedFields from './SharedFields';
+import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
 const FormSchoolSupport = ({ selectedOption, user }) => {
 	const navigate = useNavigate();
@@ -68,9 +69,15 @@ const FormSchoolSupport = ({ selectedOption, user }) => {
 				/>
 				<FileUploadFieldControl label='Upload CV (PDF)' className='w-full' control={control} name='CV' />
 			</Form.Group>
-			<Button type='submit' variant='primary' className='w-fit' disabled={isLoading} loading={isLoading}>
-				Đăng ký
-			</Button>
+			<Button
+				type='submit'
+				variant='primary'
+				icon={PaperAirplaneIcon}
+				text='Đăng ký'
+				className='w-fit'
+				disabled={isLoading}
+				loading={isLoading}
+			/>
 		</Form>
 	);
 };

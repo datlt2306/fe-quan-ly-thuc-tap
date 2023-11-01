@@ -1,5 +1,5 @@
-import { signout } from '@/App/providers/slices/authSlice';
-import store from '@/App/providers/store';
+import { signout } from '@/App/store/reducers/authSlice';
+import store from '@/App/store/store';
 import axios from 'axios';
 import isJSON from '../utils/checkJsonType';
 import HttpStatusCode from '../constants/httpStatus';

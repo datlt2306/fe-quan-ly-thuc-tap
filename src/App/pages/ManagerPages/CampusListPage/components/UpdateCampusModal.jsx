@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useUpdateCampusMutation } from '@/App/providers/apis/campusApi';
+import { useUpdateCampusMutation } from '@/App/store/apis/campusApi';
 import { campusDataValidator } from '@/App/schemas/campusSchema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';

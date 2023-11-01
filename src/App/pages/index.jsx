@@ -3,7 +3,7 @@ import { AdminPaths, BasePaths, ManagerPaths, StaffPaths, StudentPaths } from '@
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useGetAllSemestersQuery } from '../providers/apis/semesterApi';
+import { useGetAllSemestersQuery } from '../store/apis/semesterApi';
 
 const DefaultPage = () => {
 	const user = useSelector((state) => state.auth?.user);

@@ -1,8 +1,8 @@
 import { StudentColumnAccessors, StudentReviewTypeEnum, StudentStatusEnum } from '@/App/constants/studentConstants';
-import { useGetStudentsToReviewQuery, useUpdateStudentMutation } from '@/App/providers/apis/studentApi';
+import { useGetStudentsToReviewQuery, useUpdateStudentMutation } from '@/App/store/apis/studentApi';
 import { studentScoreSchema } from '@/App/schemas/studentSchema';
 import Button from '@/Core/components/common/Button';
-import EditableCell from '@/Core/components/common/Table/EditableCell';
+import EditableCell from '@/Core/components/common/Table/components/EditableCell';
 import ReactTable from '@/Core/components/common/Table/ReactTable';
 import Typography from '@/Core/components/common/Text/Typography';
 import { ArrowPathIcon, ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
