@@ -26,7 +26,7 @@ const DesktopSidebar = ({ navigation }) => {
 
 				<Menu
 					as='div'
-					className='grid transition-all duration-500 [transition-timing-function:cubic-bezier(0,0.2,0.2,1)]'>
+					className='grid gap-1 transition-all duration-500 [transition-timing-function:cubic-bezier(0,0.2,0.2,1)]'>
 					{navigation.map((item) =>
 						item.children ? (
 							<Menu.Item key={item.name} className='ease rounded-md outline-none transition duration-200'>

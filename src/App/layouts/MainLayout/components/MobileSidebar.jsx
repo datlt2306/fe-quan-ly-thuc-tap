@@ -64,7 +64,7 @@ const MobileSidebar = ({ isOpen = false, onToggleSidebar: handleShowSlideOver, n
 							<Aside.Content>
 								<Image src={Logo} />
 
-								<Menu as='div' className='grid gap-0'>
+								<Menu as='div' className='grid gap-1'>
 									{navigation.map((item) =>
 										item.children ? (
 											<Menu.Item key={item.name} className='rounded-md'>
