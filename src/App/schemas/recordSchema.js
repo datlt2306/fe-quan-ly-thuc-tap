@@ -5,6 +5,7 @@ import { mixed, object, string } from 'yup';
 export const recordSchema = object({
 	form: mixed()
 		.test({
+			name: 'File type',
 			message: 'Vui lòng chọn file PDF',
 			test: (value) => {
 				const allFileTypes = Object.values(AllowedFileExtension);
@@ -14,6 +15,7 @@ export const recordSchema = object({
 				return allowedFileTypes.includes(getFileExtension(value));
 			}
 		})
+
 		.required('Vui lòng chọn file'),
 	date: string().required('Vui lòng nhập thời gian bắt đầu thực tập')
 });

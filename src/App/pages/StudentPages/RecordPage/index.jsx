@@ -25,7 +25,7 @@ const RecordPage = () => {
 	const [file, setFile] = useState(null);
 	const [handleSubmitForm, { isLoading }] = useUploadFormMutation();
 	const fileInputRef = useRef(null);
-	const { handleSubmit, control } = useForm({
+	const { handleSubmit, control, setError } = useForm({
 		resolver: yupResolver(recordSchema)
 	});
 
@@ -91,8 +91,16 @@ const RecordPage = () => {
 								label='Upload (Image, PDF)'
 								control={control}
 								name='form'
+								description='File tải lên có dung lượng không quá 1 MB'
 								type='file'
-								onChange={(e) => setFile(e.target.files[0])}
+								onChange={(e) => {
+									if (e.target.files[0].size > 1000000) {
+										setError('form', { message: 'Kích thước file quá lớn' });
+										return;
+									}
+									setError('form', null);
+									setFile(e.target.files[0]);
+								}}
 							/>
 							<Button variant='primary' type='submit' disabled={isLoading} loading={isLoading}>
 								Nộp biên bản

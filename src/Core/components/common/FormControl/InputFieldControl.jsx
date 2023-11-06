@@ -46,6 +46,7 @@ const InputFieldControl = ({ control, name, label, disabled, rules, type = 'text
 					inputRef.current = e;
 				}}
 			/>
+			{props.description && <small>{props.description}</small>}
 			{error && <small className='font-medium text-error'>{error?.message}</small>}
 		</FormControl>
 	);
