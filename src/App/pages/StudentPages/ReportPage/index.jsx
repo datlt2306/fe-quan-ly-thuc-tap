@@ -45,7 +45,7 @@ const ReportPage = () => {
 	const { data: student } = useGetOneStudentQuery(user?.id);
 	const [chosenFile, setChosenFile] = useState(null);
 	const [handleSubmitForm, { isLoading }] = useUploadReportMutation();
-	const { handleSubmit, control, reset } = useForm({
+	const { handleSubmit, control, reset, setError } = useForm({
 		resolver: yupResolver(reportSchema),
 		context: { startInternshipTime: student?.internshipTime }
 	});
@@ -152,7 +152,14 @@ const ReportPage = () => {
 									control={control}
 									name='file'
 									type='file'
-									onChange={(e) => setChosenFile(e.target.files[0])}
+									onChange={(e) => {
+										if (e.target.files[0].size > 1000000) {
+											setError('form', { message: 'Kích thước file quá lớn' });
+											return;
+										}
+										setError('form', null);
+										setChosenFile(e.target.files[0]);
+									}}
 								/>
 							</Form.Group>
 							<Button
