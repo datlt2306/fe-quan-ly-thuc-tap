@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { useGetAllSemestersQuery } from '@/App/store/apis/semesterApi';
 import Button from '@/Core/components/common/Button';
-import DataTable from '@/Core/components/common/Table';
+import DataTable from '@/Core/components/common/Table/DataTable';
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/20/solid';
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';

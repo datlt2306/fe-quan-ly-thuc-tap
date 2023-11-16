@@ -3,6 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+	input[type='file'] {
+		@apply file:btn file:btn-sm rounded-md border-none p-1 shadow-none outline-none ring-0 file:border-none file:bg-base-content file:text-sm file:text-white focus:border-none focus:outline-none file:focus:border-none file:focus:outline-none file:hover:bg-base-content-active;
+	}
+}
+
 @layer components {
 	.table {
 		@apply border-collapse bg-white;
@@ -54,7 +60,7 @@
 		@apply !bg-gray-200 !text-gray-400 !shadow-none;
 	}
 	.btn-xs {
-		@apply px-2 py-1 text-xs;
+		@apply px-2 py-[6px] text-xs;
 	}
 	.btn-sm {
 		@apply px-2.5 py-1.5 text-sm;
@@ -93,7 +99,93 @@
 	.loading-secondary {
 		@apply !border-r-secondary !border-t-secondary;
 	}
-	input[type='file'] {
-		@apply file:btn file:btn-sm rounded-md border-none p-1 shadow-none outline-none ring-0 file:border-none file:bg-base-content file:text-sm file:text-white focus:border-none focus:outline-none file:focus:border-none file:focus:outline-none file:hover:bg-base-content-active;
+	.tooltip {
+		@apply pointer-events-none
+			absolute z-[100]
+			w-max
+			-translate-x-1/2
+			rounded
+		 bg-white 
+			px-3
+			py-1.5 text-xs
+		 text-base-content
+			opacity-0 
+			shadow-xl
+			ring-[1px]
+			ring-gray-100
+			transition-opacity
+			duration-300
+			before:absolute
+			before:z-[99]
+			before:content-[""]
+			group-hover:opacity-100;
+	}
+	.tooltip-top {
+		@apply -top-[calc(100%+0.25rem)]
+		 	left-1/2
+			before:bottom-0
+			before:left-1/2
+			before:h-0
+			before:w-0
+			before:-translate-x-1/2
+			before:translate-y-[6px]
+			before:border-l-[6px]
+			before:border-r-[6px]
+			before:border-t-[6px]
+			before:border-l-transparent
+			before:border-r-transparent
+			before:border-t-white;
+	}
+	.tooltip-bottom {
+		@apply -bottom-[calc(100%+0.25rem)] 
+			left-1/2 
+			before:left-1/2 
+			before:top-0 
+			before:h-0 
+			before:w-0 
+			before:-translate-x-1/2 
+			before:translate-y-[1px]
+			before:border-b-[6px] 
+			before:border-l-[6px] 
+			before:border-r-[6px] 
+		 before:border-b-white 
+			before:border-l-transparent 
+			before:border-r-transparent;
+	}
+	.tooltip-right {
+		@apply -right-2
+			top-1/2
+			-translate-y-1/2
+			translate-x-full
+			before:right-full
+			before:top-1/2
+			before:h-0
+			before:w-0
+			before:-translate-y-1/2
+			before:translate-x-[1px]
+			before:border-b-[4px]
+			before:border-r-[6px]
+			before:border-t-[4px]
+			before:border-b-transparent
+		 before:border-r-white
+			before:border-t-transparent;
+	}
+	.tooltip-left {
+		@apply -left-2
+			top-1/2
+			-translate-x-full
+			-translate-y-1/2
+			before:left-full
+			before:top-1/2
+			before:h-0
+			before:w-0
+			before:-translate-x-[1px]
+			before:-translate-y-1/2
+			before:border-b-[4px]
+			before:border-l-[6px]
+			before:border-t-[4px]
+			before:border-b-transparent
+			before:border-l-white
+			before:border-t-transparent;
 	}
 }

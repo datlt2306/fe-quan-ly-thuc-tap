@@ -2,7 +2,7 @@ import { StudentColumnAccessors } from '@/App/constants/studentConstants';
 import { useExportToExcel } from '@/App/hooks/useExcel';
 import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/store/apis/studentApi';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
-import DataTable from '@/Core/components/common/Table';
+import DataTable from '@/Core/components/common/Table/DataTable';
 import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import getFileExtension from '@/Core/utils/getFileExtension';
@@ -16,6 +16,7 @@ import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
 import useLocalStorage from '@/App/hooks/useLocalstorage';
 import HttpStatusCode from '@/Core/constants/httpStatus';
+import Box from '@/Core/components/common/Box';
 
 const StudentListPage = () => {
 	const { currentCampus } = useSelector((state) => state.campus);
@@ -121,7 +122,7 @@ const StudentListPage = () => {
 
 	return (
 		<Container>
-			<Box>
+			<Box className='flex items-center justify-between lg:flex-row-reverse'>
 				<SelectBox>
 					<label
 						htmlFor='semester-list'
@@ -173,7 +174,7 @@ const StudentListPage = () => {
 };
 
 const Container = tw.div`flex flex-col gap-6`;
-const Box = tw.div`flex items-center justify-between lg:flex-row-reverse`;
+
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
 
 export default StudentListPage;

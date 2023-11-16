@@ -1,7 +1,7 @@
 import { StudentReviewTypeEnum, StudentStatusEnum } from '@/App/constants/studentConstants';
 import { useGetStudentsToReviewQuery } from '@/App/store/apis/studentApi';
 import Button from '@/Core/components/common/Button';
-import DataTable from '@/Core/components/common/Table';
+import DataTable from '@/Core/components/common/Table/DataTable';
 import Typography from '@/Core/components/common/Text/Typography';
 import { ArrowPathIcon, ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { Fragment, useMemo, useState } from 'react';

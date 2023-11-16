@@ -3,7 +3,7 @@ import { useGetSetTimeQuery } from '@/App/store/apis/configTimesApi';
 import { useGetAllSemestersQuery } from '@/App/store/apis/semesterApi';
 import Button from '@/Core/components/common/Button';
 import Modal from '@/Core/components/common/Modal';
-import DataTable from '@/Core/components/common/Table';
+import DataTable from '@/Core/components/common/Table/DataTable';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import Text from '@/Core/components/common/Text/Text';
 import { Fragment, useEffect, useMemo, useState } from 'react';

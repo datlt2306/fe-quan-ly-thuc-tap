@@ -3,7 +3,7 @@ import { useDeleteCampusMutation, useGetAllCampusQuery } from '@/App/store/apis/
 import { campusDataValidator } from '@/App/schemas/campusSchema';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
-import DataTable from '@/Core/components/common/Table';
+import DataTable from '@/Core/components/common/Table/DataTable';
 import { PlusIcon } from '@heroicons/react/20/solid';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';

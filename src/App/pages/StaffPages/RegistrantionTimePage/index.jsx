@@ -13,7 +13,7 @@ import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
 import Modal from '@/Core/components/common/Modal';
-import Table from '@/Core/components/common/Table/DataTable';
+import Table from '@/Core/components/common/Table/Table';
 import Text from '@/Core/components/common/Text/Text';
 import { convertDate, formatDate } from '@/Core/utils/formatDate';
 import tw from 'twin.macro';
