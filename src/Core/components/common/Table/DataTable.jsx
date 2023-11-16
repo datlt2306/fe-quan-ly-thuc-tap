@@ -1,8 +1,6 @@
 import classNames from 'classnames';
 import { Skeleton } from '../../customs/Skelton';
 import Text from '../Text/Text';
-import { LoadingSpinner } from '../Loading/LoadingSpinner';
-import React, { forwardRef, useRef, useState } from 'react';
 
 const Table = ({ children, ...props }) => (
 	<table {...props} className='table w-full'>
@@ -27,28 +25,19 @@ Table.Resizer = (props) => (
 	<div
 		{...props}
 		className={classNames('table-resizer', {
-			'bg-primary': props.isResizing
-		})}></div>
+			'bg-primary': props?.isResizing
+		})}
+	/>
 );
 
 Table.Empty = () => (
 	<Table.Row>
-		<Table.Cell colSpan='100%' className=''>
+		<Table.Cell colSpan='100%'>
 			<Text className='select-none text-base text-disabled'>Không có dữ liệu</Text>
 		</Table.Cell>
 	</Table.Row>
 );
-Table.Pending = ({ prepareRows = 5, prepareCols, resizable }) => {
-	if (resizable)
-		return (
-			<Table.Row>
-				<Table.Cell colSpan={prepareCols}>
-					<div className='flex items-center gap-3 py-10'>
-						<LoadingSpinner variant='primary' size='sm' /> Đang tải dữ liệu ...
-					</div>
-				</Table.Cell>
-			</Table.Row>
-		);
+Table.Pending = ({ prepareRows = 5, prepareCols, loading }) => {
 	const preRenderCells = Array.apply(null, Array(prepareCols)).map((_, i) => i);
 	const preRenderRows = Array.apply(null, Array(prepareRows)).map((_, j) => j);
 	return preRenderRows.map((_, i) => (

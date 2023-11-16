@@ -10,11 +10,10 @@ import {
 	XMarkIcon
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
-import { Fragment, memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import {
 	useBlockLayout,
 	useFilters,
-	useFlexLayout,
 	useGlobalFilter,
 	usePagination,
 	useResizeColumns,
@@ -28,29 +27,67 @@ import Button from '../Button';
 import ButtonGroup from '../Button/ButtonGroup';
 import { Option, Select } from '../FormControl/SelectFieldControl';
 import Text from '../Text/Text';
-import Table from './CoreTable';
+import Table from './DataTable';
 import { GlobalFilter } from './components/ReactTableFilters';
 import useCustomFilterTypes from './hooks/useCustomFilter';
 import useCustomSortTypes from './hooks/useCustomSort';
-import { FixedSizeList } from 'react-window';
 
-const ReactTable = ({
+// import { FixedSizeList } from 'react-window';
+
+/**
+ * @typedef {import('@reduxjs/toolkit/dist/query').QueryDefinition} QueryDefinition
+ */
+
+/**
+ * @typedef TReactTableProps
+ * @prop {QueryActionCreatorResult<QueryDefinition<any, ({ url, method, data, params }: {
+ *		url: any;
+ *		method: any;
+ *		data: any;
+ *		params: any;
+ *	}) => Promise<{
+ *		data: AxiosResponse<any, any>;
+ *		error?: undefined;
+ *	} | {
+ *		error: {
+ *			status: any;
+ *			data: any;
+ *		};
+ *		data?: undefined;
+ *	}>, string, any, string>>} onHandleRefetch
+ * @prop {React.Dispatch<React.SetStateAction<any[]>>} onGetSelectedRows
+ * @prop {boolean} stickyColumn
+ * @prop {boolean} resizable
+ * @prop {boolean} loading
+ * @prop {boolean} isFetching
+ * @prop {React.DispatchWithoutAction} onServerPaginate
+
+ */
+
+/**
+ * Core data table component with Tanstack table v7
+ * @type {React.FC<TReactTableProps>}
+ */
+const DataTable = ({
 	onHandleRefetch: handleRefetch,
 	columns,
 	data,
 	serverSidePagination,
 	serverPaginationProps,
 	stickyColumn = false,
-	resizable = false,
+	resizable,
 	onServerPaginate: dispatch,
 	onGetSelectedRows: handleGetSelectedRows,
 	loading,
 	isFetching
 }) => {
-	const extraPlugins = [
-		{ enable: resizable, plugins: [useResizeColumns, useBlockLayout] },
-		{ enable: stickyColumn, plugins: [useSticky, useBlockLayout] }
-	];
+	const extraPlugins = useMemo(
+		() => [
+			{ enable: resizable, plugins: [useResizeColumns, useBlockLayout] },
+			{ enable: stickyColumn, plugins: [useSticky] }
+		],
+		[stickyColumn]
+	);
 
 	const filterTypes = useCustomFilterTypes();
 	const sortTypes = useCustomSortTypes();
@@ -61,8 +98,6 @@ const ReactTable = ({
 		resetResizing,
 		headerGroups,
 		page,
-		totalColumnsWidth,
-		rows,
 		canNextPage,
 		canPreviousPage,
 		nextPage,
@@ -78,6 +113,8 @@ const ReactTable = ({
 		state: { pageIndex, pageSize, globalFilter, filters, selectedRowIds }
 		// preFilteredRows,
 		// visibleColumns,
+		// totalColumnsWidth,
+		// rows,
 	} = useTable(
 		{
 			columns,
@@ -103,7 +140,6 @@ const ReactTable = ({
 		if (handleGetSelectedRows) handleGetSelectedRows(selectedFlatRows.map((d) => d.original));
 	}, [selectedFlatRows]);
 
-	const isEmptyData = Array.isArray(data) && data.length > 0;
 	const hasNextPage = serverSidePagination ? serverPaginationProps.canNextPage : canNextPage;
 	const hasPreviousPage = serverSidePagination ? serverPaginationProps.canPreviousPage : canPreviousPage;
 
@@ -137,6 +173,9 @@ const ReactTable = ({
 		setPageSize(value);
 	};
 
+	/**
+	 * @deprecated
+	 */
 	const RenderRow = ({ index, style }) => {
 		const row = page[index];
 		prepareRow(row);
@@ -162,7 +201,7 @@ const ReactTable = ({
 					filterFn={'fullTextSeach'}
 				/>
 				<ButtonList>
-					{!!filters.length && (
+					{!!filters?.length && (
 						<Button size='sm' variant='outline' onClick={() => setAllFilters([])} icon={XMarkIcon}>
 							Xóa lọc
 						</Button>
@@ -190,68 +229,79 @@ const ReactTable = ({
 			</Header>
 
 			{/* Table data */}
-			<Body isEmpty={isEmptyData} loading={loading}>
+			<Body isEmpty={data.length === 0} loading={loading}>
 				<Table {...getTableProps()}>
 					<Table.Header sticky={true}>
-						{headerGroups.map((headerGroup) => (
-							<Table.Row {...headerGroup.getHeaderGroupProps()} className='bg-white'>
-								{headerGroup.headers.map((column, index) => (
-									<Table.Cell key={index} as='th' {...column.getHeaderProps()}>
-										{resizable && (
-											<Table.Resizer isResizing={column.isResizing} {...column.getResizerProps()} />
-										)}
-										<HeaderCell>
-											{column.render('Header')}
-											<HeaderCell.Actions>
-												{column.sortable && column.canSort && (
-													<Button
-														onClick={() => column.toggleSortBy()}
-														{...column.getHeaderProps()}
-														size='xs'
-														className='z-0 !h-fit !w-fit'
-														variant={column.isSorted ? 'primary' : 'ghost'}
-														shape='square'>
-														{column.isSorted ? (
-															<ArrowDownIcon
-																className={classNames(' h-3.5 w-3.5', {
-																	'-rotate-180': column.isSortedDesc
-																})}
-															/>
-														) : (
-															<ArrowsUpDownIcon className=' h-3.5 w-3.5' />
-														)}
-													</Button>
+						{headerGroups.map((headerGroup) => {
+							const { style, ...headerGroupProps } = headerGroup.getHeaderGroupProps();
+							return (
+								<Table.Row {...headerGroupProps} className='bg-white' style={loading ? null : style}>
+									{headerGroup.headers.map((column, index) => {
+										const { style, ...headerCellProps } = column?.getHeaderProps();
+										return (
+											<Table.Cell key={index} as='th' {...headerCellProps} style={loading ? null : style}>
+												{resizable && (
+													<Table.Resizer isResizing={column?.isResizing} {...column?.getResizerProps()} />
 												)}
-												{!column.resizing && column.filterable && column.render('Filter')}
-											</HeaderCell.Actions>
-										</HeaderCell>
-									</Table.Cell>
-								))}
-							</Table.Row>
-						))}
+												<HeaderCell>
+													{column?.render('Header')}
+													<HeaderCell.Actions>
+														{column.sortable && column.canSort && (
+															<Button
+																onClick={() => column?.toggleSortBy()}
+																{...column?.getHeaderProps()}
+																size='xs'
+																className='z-0 !h-fit !w-fit'
+																variant={column.isSorted ? 'primary' : 'ghost'}
+																shape='square'>
+																{column.isSorted ? (
+																	<ArrowDownIcon
+																		className={classNames(' h-3.5 w-3.5', {
+																			'-rotate-180': column.isSortedDesc
+																		})}
+																	/>
+																) : (
+																	<ArrowsUpDownIcon className=' h-3.5 w-3.5' />
+																)}
+															</Button>
+														)}
+														{!column?.resizing && column.filterable && column.render('Filter')}
+													</HeaderCell.Actions>
+												</HeaderCell>
+											</Table.Cell>
+										);
+									})}
+								</Table.Row>
+							);
+						})}
 					</Table.Header>
+					{/* <Table.Body>
+						<Table.Pending prepareRows={10} prepareCols={columns?.length} loading={loading} />
+					</Table.Body> */}
 					<Table.Body {...getTableBodyProps()}>
 						{loading ? (
-							<Table.Pending resizable={resizable} prepareRows={10} prepareCols={columns.length} />
-						) : data.length ? (
+							<Table.Pending prepareRows={10} prepareCols={columns?.length} loading={loading} />
+						) : (
+							data?.length > 0 &&
 							page.map((row) => {
 								prepareRow(row);
 								return (
 									<Table.Row {...row.getRowProps()}>
-										{row.cells.map((cell, index) => (
-											<Table.Cell key={index} {...cell.getCellProps()}>
+										{row.cells?.map((cell, index) => (
+											<Table.Cell key={index} {...cell?.getCellProps()}>
 												{cell.render('Cell', { className: 'border-b border-b-gray-200' })}
 											</Table.Cell>
 										))}
 									</Table.Row>
 								);
 							})
-						) : (
-							<Table.Empty />
 						)}
 					</Table.Body>
 				</Table>
 			</Body>
+			{data.length === 0 && (
+				<div className='flex items-center justify-center p-6 text-sm text-disabled'>Không có dữ liệu</div>
+			)}
 			{/* Pagination */}
 			<Footer>
 				<Footer.Item>
@@ -270,7 +320,6 @@ const ReactTable = ({
 							onClick={gotoPreviousPage}
 							icon={ChevronLeftIcon}
 						/>
-
 						<ButtonGroup.Item
 							variant={hasNextPage ? 'ghost' : 'disabled'}
 							shape='square'
@@ -293,7 +342,7 @@ const ReactTable = ({
 						Trang{' '}
 						{serverSidePagination
 							? `${serverPaginationProps?.pageIndex}/${serverPaginationProps?.totalPages}`
-							: `${pageIndex + 1}/${pageOptions.length}`}
+							: `${pageIndex + 1}/${pageOptions?.length}`}
 					</Text>
 				</Footer.Item>
 
@@ -318,7 +367,7 @@ const ReactTable = ({
 	);
 };
 
-// Styled componentss
+// Styled components
 const Wrapper = tw.div`flex flex-col items-stretch bg-white isolate max-h-[75vh]`;
 const Header = tw.div`flex items-center justify-between bg-gray-50 p-4 z-0 `;
 const ButtonList = tw.div`flex items-center gap-1`;
@@ -326,8 +375,8 @@ const Body = ({ isEmpty, loading, ...props }) => (
 	<div
 		{...props}
 		className={classNames('min-h-[3rem]', {
-			'scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': isEmpty,
-			'scrollbar-none': !isEmpty,
+			'scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-200': !isEmpty,
+			'scrollbar-none': isEmpty,
 			'overflow-x-auto': !loading,
 			'overflow-hidden': loading
 		})}>
@@ -339,4 +388,4 @@ const Footer = tw.div`flex w-full items-stretch bg-gray-50 p-3 divide-x divide-g
 HeaderCell.Actions = tw.div`flex items-center gap-px`;
 Footer.Item = tw.div`px-6`;
 
-export default memo(ReactTable);
+export default memo(DataTable);

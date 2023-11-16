@@ -34,7 +34,7 @@ const MainLayout = () => {
 		<Fragment>
 			<UnsupportScreen />
 			{/* Drawer menu on mobile */}
-			<MobileSidebar isOpen={sidebarOpen} onToggleSidebar={setSidebarOpen} navigation={navigation} />
+			<MobileSidebar open={sidebarOpen} onToggleSidebar={setSidebarOpen} navigation={navigation} />
 			{/* Static sidebar for desktop */}
 			<DesktopSidebar navigation={navigation} />
 			<Main>

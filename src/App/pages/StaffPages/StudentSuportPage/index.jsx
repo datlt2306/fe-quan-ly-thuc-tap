@@ -6,7 +6,7 @@ import {
 } from '@/App/store/apis/requestStudentsApi';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
+import DataTable from '@/Core/components/common/Table';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import Text from '@/Core/components/common/Text/Text';
 import { formatDate } from '@/Core/utils/formatDate';
@@ -140,7 +140,7 @@ const StudentSupportPage = () => {
 	}, [studentRequests, status]);
 
 	return (
-		<ReactTable columns={columnsData} data={tableData} loading={isLoading || isFetching} onHandleRefetch={refetch} />
+		<DataTable columns={columnsData} data={tableData} loading={isLoading || isFetching} onHandleRefetch={refetch} />
 	);
 };
 

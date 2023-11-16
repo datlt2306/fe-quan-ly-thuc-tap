@@ -3,7 +3,7 @@ import { useGetSetTimeQuery } from '@/App/store/apis/configTimesApi';
 import { useGetAllSemestersQuery } from '@/App/store/apis/semesterApi';
 import Button from '@/Core/components/common/Button';
 import Modal from '@/Core/components/common/Modal';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
+import DataTable from '@/Core/components/common/Table';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import Text from '@/Core/components/common/Text/Text';
 import { Fragment, useEffect, useMemo, useState } from 'react';
@@ -132,7 +132,7 @@ const CompanyListPage = () => {
 						</Modal.Content>
 					</Modal>
 
-					<ReactTable
+					<DataTable
 						columns={columnsData}
 						data={companies ?? []}
 						loading={companyLoading || isFetching}
