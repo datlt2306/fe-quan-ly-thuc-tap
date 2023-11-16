@@ -10,7 +10,7 @@ import { companyArraySchema } from '@/App/schemas/companySchema';
 import Button from '@/Core/components/common/Button';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
 import ModalConfirm from '@/Core/components/common/Modal/ModalConfirm';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
+import DataTable from '@/Core/components/common/Table';
 import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import Text from '@/Core/components/common/Text/Text';
 import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
@@ -286,7 +286,7 @@ const CompanyListPage = () => {
 					/>
 				</Box>
 				<CompanyDetailModal modalData={dataModal} openState={modalState} onOpenStateChange={setModalState} />
-				<ReactTable
+				<DataTable
 					columns={columnsData}
 					data={tableData}
 					loading={companyLoading}

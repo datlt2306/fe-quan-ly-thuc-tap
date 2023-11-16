@@ -2,7 +2,7 @@ import { StudentColumnAccessors } from '@/App/constants/studentConstants';
 import { useExportToExcel } from '@/App/hooks/useExcel';
 import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/store/apis/studentApi';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
+import DataTable from '@/Core/components/common/Table';
 import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import getFileExtension from '@/Core/utils/getFileExtension';
@@ -117,7 +117,7 @@ const StudentListPage = () => {
 		}
 	}, [addStudentsState]);
 	// Define columns of table
-	const columnsData = useMemo(() => InstanceStudentColumns, []);
+	const columns = useMemo(() => InstanceStudentColumns, [isLoading]);
 
 	return (
 		<Container>
@@ -159,8 +159,8 @@ const StudentListPage = () => {
 				/>
 			</Box>
 
-			<ReactTable
-				columns={columnsData}
+			<DataTable
+				columns={InstanceStudentColumns}
 				data={tableData}
 				loading={isLoading}
 				onHandleRefetch={refetch}

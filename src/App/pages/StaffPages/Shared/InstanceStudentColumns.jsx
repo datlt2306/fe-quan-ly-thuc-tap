@@ -47,7 +47,7 @@ const InstanceStudentColumns = [
 	},
 	{
 		Header: StudentColumnAccessors.mssv,
-		accessor: 'mssv', // object key
+		accessor: 'mssv',
 		Filter: InputColumnFilter,
 		filterable: true,
 		sortable: true,
