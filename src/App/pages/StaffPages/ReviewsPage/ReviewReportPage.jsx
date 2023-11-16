@@ -3,7 +3,7 @@ import { useGetStudentsToReviewQuery, useUpdateStudentMutation } from '@/App/sto
 import { studentScoreSchema } from '@/App/schemas/studentSchema';
 import Button from '@/Core/components/common/Button';
 import EditableCell from '@/Core/components/common/Table/components/EditableCell';
-import DataTable from '@/Core/components/common/Table';
+import DataTable from '@/Core/components/common/Table/DataTable';
 import Typography from '@/Core/components/common/Text/Typography';
 import { ArrowPathIcon, ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { Fragment, useMemo, useState } from 'react';

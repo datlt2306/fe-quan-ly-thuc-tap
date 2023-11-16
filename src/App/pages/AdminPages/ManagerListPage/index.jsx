@@ -3,7 +3,7 @@ import { useDeleteStaffMutation, useGetAllManagerQuery } from '@/App/store/apis/
 import { staffDataValidator } from '@/App/schemas/staffSchema';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
-import DataTable from '@/Core/components/common/Table';
+import DataTable from '@/Core/components/common/Table/DataTable';
 import { InputColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import { PencilSquareIcon, TrashIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
