@@ -1,6 +1,8 @@
-import { StaffPaths } from '@/App/configs/routePaths';
+import { StaffPaths } from '@/App/configs/route-paths.config';
 import { lazy } from 'react';
 import StaffPrivateLayout from '../layouts/PrivateLayout/StaffPrivateLayout';
+import SettingPage from '../pages/StaffPages/SettingPage';
+import InstructionPage from '../pages/StaffPages/InstructionPage';
 const ReviewCvPage = lazy(() => import('../pages/StaffPages/ReviewsPage/ReviewCvPage'));
 const ReviewReportPage = lazy(() => import('../pages/StaffPages/ReviewsPage/ReviewReportPage'));
 const ReviewRecordPage = lazy(() => import('../pages/StaffPages/ReviewsPage/ReviewRecordPage'));
@@ -90,6 +92,22 @@ const staffRoutes = [
 		element: (
 			<StaffPrivateLayout>
 				<StudentSuportPage />
+			</StaffPrivateLayout>
+		)
+	},
+	{
+		path: StaffPaths.SETTINGS,
+		element: (
+			<StaffPrivateLayout>
+				<SettingPage />
+			</StaffPrivateLayout>
+		)
+	},
+	{
+		path: StaffPaths.TUTORIALS,
+		element: (
+			<StaffPrivateLayout>
+				<InstructionPage />
 			</StaffPrivateLayout>
 		)
 	}

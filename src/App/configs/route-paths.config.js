@@ -46,7 +46,9 @@ const StaffPaths = {
 	REVIEW_RECORD: '/review-bien-ban',
 	SEMESTER: '/ky-hoc',
 	REGISTRATION_TIME: '/thoi-gian-dang-ky',
-	STUDENT_REQUESTS: '/yeu-cau-sinh-vien'
+	STUDENT_REQUESTS: '/yeu-cau-sinh-vien',
+	SETTINGS: '/cai-dat',
+	TUTORIALS: '/huong-dan-lay-mat-khau-ung-dung'
 };
 
 export { BasePaths, StudentPaths, StaffPaths, ManagerPaths, AdminPaths };

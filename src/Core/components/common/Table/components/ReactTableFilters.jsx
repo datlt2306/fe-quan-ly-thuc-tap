@@ -9,15 +9,15 @@ import { Option, Select } from '../../FormControl/SelectFieldControl';
 
 // Table filter global
 const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) => {
-	// const count = preGlobalFilteredRows?.length;
 	const [value, setValue] = useState(globalFilter);
 	const onChange = useAsyncDebounce((value) => {
 		setGlobalFilter(value.trim() || '');
 	}, 300);
 	return (
-		<div className='relative'>
+		<div className='relative' role='searchbox'>
 			<MagnifyingGlassIcon className='absolute left-2 top-1/2 z-50 h-4 w-4 -translate-y-1/2' />
 			<Input
+				role='search'
 				placeholder={`Tìm kiếm trong bảng ...`}
 				className='w-full max-w-sm pl-8 '
 				type='search'

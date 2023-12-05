@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import tw from 'twin.macro';
 
 // Styled components
-export const Wrapper = tw.div`flex flex-col items-stretch bg-white isolate max-h-[75vh]`;
 export const Header = tw.div`flex items-center justify-between bg-gray-50 p-4 z-0 `;
 
 export const Body = ({ isEmpty, loading, ...props }) => (

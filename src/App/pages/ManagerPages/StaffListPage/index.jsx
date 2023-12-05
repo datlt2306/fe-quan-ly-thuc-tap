@@ -1,6 +1,6 @@
 import useServerPagination from '@/App/hooks/useServerPagination';
-import { useDeleteStaffMutation, useGetAllStaffQuery } from '@/App/store/apis/staffListApi';
-import { staffDataValidator } from '@/App/schemas/staffSchema';
+import { useDeleteStaffMutation, useGetAllStaffQuery } from '@/App/store/apis/staff-list.api';
+import { staffDataValidator } from '@/App/schemas/staff.schema';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import DataTable from '@/Core/components/common/Table/DataTable';
@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import AddStaffSlideOver from './components/AddStaffSlideOver';
 import UpdateStaffModal from './components/UpdateStaffModal';
+import Tooltip from '@/Core/components/common/Tooltip';
 
 const StaffListPage = () => {
 	const currentUser = useSelector((state) => state.auth?.user);
@@ -103,23 +104,27 @@ const StaffListPage = () => {
 				isSort: false,
 				Cell: ({ row }) => (
 					<ButtonList>
-						<>
-							<Button size='xs' variant='ghost' shape='square' onClick={() => onOpenUpdate(row.original._id)}>
-								<PencilSquareIcon className='h-4 w-4' />
-							</Button>
+						<Tooltip message='Cập nhật'>
+							<Button
+								size='xs'
+								variant='ghost'
+								shape='square'
+								icon={PencilSquareIcon}
+								onClick={() => onOpenUpdate(row.original._id)}
+							/>
+						</Tooltip>
 
-							<PopConfirm
-								okText='Ok'
-								cancelText='Cancel'
-								title={'Xóa nhân viên'}
-								position='right'
-								description={'Bạn muốn xóa nhân viên này ?'}
-								onConfirm={() => onDeleteSubmit(row.original._id)}>
-								<Button size='xs' variant='ghost' className='text-error' shape='square'>
-									<TrashIcon className='h-4 w-4' />
-								</Button>
-							</PopConfirm>
-						</>
+						<PopConfirm
+							okText='Ok'
+							cancelText='Cancel'
+							title={'Xóa nhân viên'}
+							position='right'
+							description={'Bạn muốn xóa nhân viên này ?'}
+							onConfirm={() => onDeleteSubmit(row.original._id)}>
+							<Tooltip message='Xóa'>
+								<Button size='xs' variant='ghost' className='text-error' shape='square' icon={TrashIcon} />
+							</Tooltip>
+						</PopConfirm>
 					</ButtonList>
 				)
 			}

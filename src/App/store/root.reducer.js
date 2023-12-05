@@ -1,18 +1,18 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import authApi from './apis/authApi';
-import businessApi from './apis/businessApi';
-import campusApi from './apis/campusApi';
-import configTimesApi from './apis/configTimesApi';
-import majorApi from './apis/majorApi';
-import requestStudentsApi from './apis/requestStudentsApi';
-import semesterApi from './apis/semesterApi';
-import staffListApi from './apis/staffListApi';
-import studentApi from './apis/studentApi';
-import authSlice from './reducers/authSlice';
-import campusSlice from './reducers/campusSlice';
-import semesterSlice from './reducers/semesterSlice';
-import internRegistrationApi from './apis/internRegistrationApi';
-import reportApi from './apis/reportApi';
+import authApi from './apis/auth.api';
+import businessApi from './apis/business.api';
+import campusApi from './apis/campus.api';
+import configTimesApi from './apis/config-times.api';
+import majorApi from './apis/major.api';
+import requestStudentsApi from './apis/request-students.api';
+import semesterApi from './apis/semester.api';
+import staffListApi from './apis/staff-list.api';
+import studentApi from './apis/student.api';
+import authSlice from './slices/auth.slice';
+import campusSlice from './slices/campus.slice';
+import semesterSlice from './slices/semester.slice';
+import internRegistrationApi from './apis/intern-registration.api';
+import reportApi from './apis/report.api';
 
 const rootReducer = combineReducers({
 	[authSlice.name]: authSlice.reducer,

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useUpdateCampusMutation } from '@/App/store/apis/campusApi';
-import { campusDataValidator } from '@/App/schemas/campusSchema';
+import { useUpdateCampusMutation } from '@/App/store/apis/campus.api';
+import { campusDataValidator } from '@/App/schemas/campus.schema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';

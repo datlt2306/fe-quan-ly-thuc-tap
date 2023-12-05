@@ -50,7 +50,7 @@ const ComboBoxFieldControl = forwardRef(
 		}, [options]);
 
 		return (
-			<FormControl>
+			<FormControl role='combobox'>
 				{label && (
 					<Text as='label' className='font-semibold text-base-content' htmlFor={id}>
 						{label}
@@ -130,8 +130,8 @@ const ComboBoxFieldControl = forwardRef(
 				</Combobox>
 
 				{error && (
-					<Text as='small' color='error' className='font-medium'>
-						{error.message}
+					<Text as='small' aria-errormessage={error?.message} color='error' className='font-medium'>
+						{error?.message}
 					</Text>
 				)}
 			</FormControl>

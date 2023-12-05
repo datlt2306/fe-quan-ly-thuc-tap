@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
-import { useGetOneStudentQuery } from '@/App/store/apis/studentApi';
+import { useGetOneStudentQuery } from '@/App/store/apis/student.api';
 import FormElement from './components/FormElement';
 import SuccessStateSection from '../Shared/SuccessStateSection';
 import { StudentStatusCodeEnum } from '@/App/constants/studentConstants';

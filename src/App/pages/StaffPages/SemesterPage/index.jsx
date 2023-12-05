@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { useGetAllSemestersQuery } from '@/App/store/apis/semesterApi';
+import { useGetAllSemestersQuery } from '@/App/store/apis/semester.api';
 import Button from '@/Core/components/common/Button';
 import DataTable from '@/Core/components/common/Table/DataTable';
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/20/solid';
@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { campusDataValidator } from '@/App/schemas/campusSchema';
+import { campusDataValidator } from '@/App/schemas/campus.schema';
 import AddSemesterSlideOver from './components/AddSemesterSlideOver';
 import UpdateSemesterModal from './components/UpdateSemesterModal';
 

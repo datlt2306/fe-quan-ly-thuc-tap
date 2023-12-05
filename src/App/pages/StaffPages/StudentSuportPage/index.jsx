@@ -3,7 +3,7 @@ import {
 	useGetRequestOfStudentQuery,
 	useRemoveRequestApiMutation,
 	useResetStudentRequestMutation
-} from '@/App/store/apis/requestStudentsApi';
+} from '@/App/store/apis/request-students.api';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import DataTable from '@/Core/components/common/Table/DataTable';

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useAddStaffMutation } from '@/App/store/apis/staffListApi';
-import { staffDataValidator } from '@/App/schemas/staffSchema';
+import { useAddStaffMutation } from '@/App/store/apis/staff-list.api';
+import { staffDataValidator } from '@/App/schemas/staff.schema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import SlideOver from '@/Core/components/common/SlideOver';

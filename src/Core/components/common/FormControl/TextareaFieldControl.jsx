@@ -56,7 +56,11 @@ const TextareaFieldControl = forwardRef(
 						resolvedRef.current = e;
 					}}
 				/>
-				{error && <small className='font-medium text-error'>{error?.message}</small>}
+				{error && (
+					<Text as='small' aria-errormessage={error?.message} color='error' className='font-medium'>
+						{error?.message}
+					</Text>
+				)}
 			</FormControl>
 		);
 	}

@@ -4,7 +4,7 @@ import { LoadingSpinner } from '../Loading/LoadingSpinner';
 
 /**
  * @typedef TButtonProps
- * @prop {HTMLElementTagNameMap} as
+ * @prop {keyof HTMLElementTagNameMap} as
  * @prop {'xs' | 'sm' | 'md' | 'lg'} size
  * @prop {'square' | 'pill' | 'circle' | undefined} shape
  * @prop {'primary' | 'secondary' | 'info' | 'success' | 'error' | 'warning' | 'outline' | 'ghost' | 'disabled'} variant
@@ -58,7 +58,12 @@ const Button = (
 	);
 
 	return (
-		<Element {...props} className={buttonStyles} ref={resolvedRef} disabled={variant === 'disabled' || disabled}>
+		<Element
+			{...props}
+			role='button'
+			className={buttonStyles}
+			ref={resolvedRef}
+			disabled={variant === 'disabled' || disabled}>
 			{loading && <LoadingSpinner size='sm' />}
 			{props.icon && !loading && (
 				<props.icon

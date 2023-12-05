@@ -1,7 +1,7 @@
 import useLocalStorage from '@/App/hooks/useLocalstorage';
-import { useSigninMutation } from '@/App/store/apis/authApi';
-import { useGetAllCampusQuery } from '@/App/store/apis/campusApi';
-import { getCurrentCampus } from '@/App/store/reducers/campusSlice';
+import { useSigninMutation } from '@/App/store/apis/auth.api';
+import { useGetAllCampusQuery } from '@/App/store/apis/campus.api';
+import { getCurrentCampus } from '@/App/store/slices/campus.slice';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
 import { GoogleLogin } from '@react-oauth/google';
 import classNames from 'classnames';
@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import Logo from '/logo.png';
-import { useGetDefaultSemsterQuery } from '@/App/store/apis/semesterApi';
+import { useGetDefaultSemsterQuery } from '@/App/store/apis/semester.api';
 
 export default function SigninPage() {
 	const [isAllowToLoggin, setAllowToLogin] = useState(false);

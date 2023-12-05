@@ -1,4 +1,4 @@
-import { ManagerPaths } from '@/App/configs/routePaths';
+import { ManagerPaths } from '@/App/configs/route-paths.config';
 import { lazy } from 'react';
 import ManagerPrivateLayout from '../layouts/PrivateLayout/ManagerPrivateLayout';
 

@@ -1,6 +1,6 @@
 import { StudentColumnAccessors } from '@/App/constants/studentConstants';
 import { useExportToExcel } from '@/App/hooks/useExcel';
-import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/store/apis/studentApi';
+import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/store/apis/student.api';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
 import DataTable from '@/Core/components/common/Table/DataTable';
 import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
