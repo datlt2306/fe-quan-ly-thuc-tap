@@ -49,16 +49,16 @@ export default {
 				sans: ['Inter var', ...defaultTheme.fontFamily.sans]
 			},
 			animation: {
-				slide: 'shimmer 1s ease infinite',
+				slide: 'shimmer 1.6s ease infinite',
 				roller: 'spin 1.2s ease infinite'
 			},
 			keyframes: {
 				shimmer: {
 					'0%': {
-						transform: 'translateX(0%)'
+						transform: 'translateX(-100%)'
 					},
 					'100%': {
-						transform: 'translateX(120%)'
+						transform: 'translateX(100%)'
 					}
 				},
 				spin: {
