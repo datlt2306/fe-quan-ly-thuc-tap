@@ -1,6 +1,6 @@
 import { StudentColumnAccessors, StudentReviewTypeEnum, StudentStatusEnum } from '@/App/constants/studentConstants';
-import { useGetStudentsToReviewQuery, useUpdateStudentMutation } from '@/App/store/apis/studentApi';
-import { studentScoreSchema } from '@/App/schemas/studentSchema';
+import { useGetStudentsToReviewQuery, useUpdateStudentMutation } from '@/App/store/apis/student.api';
+import { studentScoreSchema } from '@/App/schemas/student.schema';
 import Button from '@/Core/components/common/Button';
 import EditableCell from '@/Core/components/common/Table/components/EditableCell';
 import DataTable from '@/Core/components/common/Table/DataTable';

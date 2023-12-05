@@ -1,12 +1,12 @@
-import { StaffPaths } from '@/App/configs/routePaths';
+import { StaffPaths } from '@/App/configs/route-paths.config';
 import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
 import {
 	useAddArrayCompanyMutation,
 	useDeleteCompanyMutation,
 	useGetAllCompanyQuery
-} from '@/App/store/apis/businessApi';
-import { useGetAllMajorQuery } from '@/App/store/apis/majorApi';
-import { companyArraySchema } from '@/App/schemas/companySchema';
+} from '@/App/store/apis/business.api';
+import { useGetAllMajorQuery } from '@/App/store/apis/major.api';
+import { companyArraySchema } from '@/App/schemas/company.schema';
 import Button from '@/Core/components/common/Button';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
 import ModalConfirm from '@/Core/components/common/Modal/ModalConfirm';
@@ -26,6 +26,7 @@ import CompanyDetailModal from './components/CompanyDetailModal';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
 import { columnAccessors } from './constants';
+import Tooltip from '@/Core/components/common/Tooltip';
 
 const CompanyListPage = () => {
 	const [deleteCompany] = useDeleteCompanyMutation();
@@ -210,33 +211,38 @@ const CompanyListPage = () => {
 			isSort: false,
 			Cell: ({ value, row }) => (
 				<ActionList>
-					<Button
-						size='sm'
-						shape='square'
-						variant='ghost'
-						icon={EyeIcon}
-						onClick={() => {
-							setModalState(!modalState);
-							setDataModal({ data: row.original, title: row.original?.name });
-						}}
-					/>
-					<Button
-						as={Link}
-						to={StaffPaths.COMPANY_UPDATE.replace(':id', value)}
-						size='sm'
-						shape='square'
-						variant='ghost'
-						icon={PencilSquareIcon}
-					/>
-
-					<Button
-						onClick={() => setModalConfirmState({ open: true, payload: value })}
-						size='sm'
-						variant='ghost'
-						className='text-error'
-						shape='square'
-						icon={TrashIcon}
-					/>
+					<Tooltip message='Chi tiết'>
+						<Button
+							size='sm'
+							shape='square'
+							variant='ghost'
+							icon={EyeIcon}
+							onClick={() => {
+								setModalState(!modalState);
+								setDataModal({ data: row.original, title: row.original?.name });
+							}}
+						/>
+					</Tooltip>
+					<Tooltip message='Cập nhật'>
+						<Button
+							as={Link}
+							to={StaffPaths.COMPANY_UPDATE.replace(':id', value)}
+							size='sm'
+							shape='square'
+							variant='ghost'
+							icon={PencilSquareIcon}
+						/>
+					</Tooltip>
+					<Tooltip message='Xóa'>
+						<Button
+							onClick={() => setModalConfirmState({ open: true, payload: value })}
+							size='sm'
+							variant='ghost'
+							className='text-error'
+							shape='square'
+							icon={TrashIcon}
+						/>
+					</Tooltip>
 				</ActionList>
 			)
 		}

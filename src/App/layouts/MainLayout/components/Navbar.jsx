@@ -1,18 +1,21 @@
 import Button from '@/Core/components/common/Button';
 import { Popover, Transition } from '@headlessui/react';
-import { ArrowLeftOnRectangleIcon, Bars3Icon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftOnRectangleIcon, Bars3Icon, ChevronDownIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import Breadcrumbs from './Breadcrumbs';
-import { signout } from '@/App/store/reducers/authSlice';
+import { signout } from '@/App/store/slices/auth.slice';
 import { useDispatch } from 'react-redux';
 import useLocalStorage from '@/App/hooks/useLocalstorage';
+import { StaffPrivateComponent } from '@/Core/components/private/PrivateComponent';
+import { Link } from 'react-router-dom';
+import { StaffPaths } from '@/App/configs/route-paths.config';
 
 const Navbar = ({ onToggleSidebar, navigation }) => {
 	const user = useSelector((state) => state.auth?.user);
 	const dispatch = useDispatch();
-	const [accessToken, setAccessToken] = useLocalStorage('access_token', null);
+	const [_, setAccessToken] = useLocalStorage('access_token', null);
 	const handleSignout = () => {
 		dispatch(signout());
 		setAccessToken(null);
@@ -29,9 +32,7 @@ const Navbar = ({ onToggleSidebar, navigation }) => {
 					onClick={() => onToggleSidebar(true)}>
 					<Bars3Icon className='h-5 w-5' aria-hidden='true' />
 				</Button>
-
 				<Separator />
-
 				<Breadcrumbs navigation={navigation} />
 			</NavbarStart>
 
@@ -61,6 +62,13 @@ const Navbar = ({ onToggleSidebar, navigation }) => {
 							onClick={handleSignout}>
 							<ArrowLeftOnRectangleIcon className='h-5 w-5 text-gray-700' /> Đăng xuất
 						</li>
+						<StaffPrivateComponent>
+							<Link to={StaffPaths.SETTINGS}>
+								<li className='flex items-center gap-2 whitespace-nowrap p-2 hover:bg-gray-100'>
+									<Cog6ToothIcon className='h-5 w-5 text-gray-700' /> Cài đặt
+								</li>
+							</Link>
+						</StaffPrivateComponent>
 					</Popover.Panel>
 				</Transition>
 			</Popover>

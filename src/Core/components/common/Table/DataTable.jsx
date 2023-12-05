@@ -1,7 +1,6 @@
 import { PaginationActionEnums } from '@/App/hooks/useServerPagination';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import {
-	ArchiveBoxXMarkIcon,
 	ArrowDownIcon,
 	ArrowPathIcon,
 	ArrowUturnLeftIcon,
@@ -23,18 +22,17 @@ import {
 	useTable
 } from 'react-table';
 import { useSticky } from 'react-table-sticky';
-import tw from 'twin.macro';
+import Box from '../Box';
 import Button from '../Button';
 import ButtonGroup from '../Button/ButtonGroup';
 import { Option, Select } from '../FormControl/SelectFieldControl';
 import Text from '../Text/Text';
+import Tooltip from '../Tooltip';
 import Table from './Table';
 import { GlobalFilter } from './components/ReactTableFilters';
+import { Body, Footer, Header } from './components/Styled';
 import useCustomFilterTypes from './hooks/useCustomFilter';
 import useCustomSortTypes from './hooks/useCustomSort';
-import { Body, Footer, Header, HeaderCell, Wrapper } from './components/Styled';
-import Box from '../Box';
-import Tooltip from '../Tooltip';
 
 /**
  * @typedef {import('@reduxjs/toolkit/dist/query').QueryDefinition} QueryDefinition
@@ -258,9 +256,9 @@ const DataTable = ({
 												{resizable && (
 													<Table.Resizer isResizing={column?.isResizing} {...column?.getResizerProps()} />
 												)}
-												<HeaderCell>
+												<Box className='flex h-12 items-center justify-between gap-3'>
 													{column?.render('Header')}
-													<HeaderCell.Actions>
+													<Box className='flex items-center gap-px'>
 														{column.sortable && column.canSort && (
 															<Button
 																onClick={() => column?.toggleSortBy()}
@@ -281,8 +279,8 @@ const DataTable = ({
 															</Button>
 														)}
 														{!column?.resizing && column.filterable && column.render('Filter')}
-													</HeaderCell.Actions>
-												</HeaderCell>
+													</Box>
+												</Box>
 											</Table.Cell>
 										);
 									})}

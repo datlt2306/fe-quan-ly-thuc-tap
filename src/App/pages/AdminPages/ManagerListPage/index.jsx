@@ -1,6 +1,6 @@
 import useServerPagination from '@/App/hooks/useServerPagination';
-import { useDeleteStaffMutation, useGetAllManagerQuery } from '@/App/store/apis/staffListApi';
-import { staffDataValidator } from '@/App/schemas/staffSchema';
+import { useDeleteStaffMutation, useGetAllManagerQuery } from '@/App/store/apis/staff-list.api';
+import { staffDataValidator } from '@/App/schemas/staff.schema';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import DataTable from '@/Core/components/common/Table/DataTable';

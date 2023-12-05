@@ -1,11 +1,11 @@
-import { useGetAllCompanyQuery, useGetOneCompanyQuery, useUpdateCompanyMutation } from '@/App/store/apis/businessApi';
-import { useGetAllMajorQuery } from '@/App/store/apis/majorApi';
-import { companySchema } from '@/App/schemas/companySchema';
+import { useGetAllCompanyQuery, useGetOneCompanyQuery, useUpdateCompanyMutation } from '@/App/store/apis/business.api';
+import { useGetAllMajorQuery } from '@/App/store/apis/major.api';
+import { companySchema } from '@/App/schemas/company.schema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
-import { StaffPaths } from '@/App/configs/routePaths';
+import { StaffPaths } from '@/App/configs/route-paths.config';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';

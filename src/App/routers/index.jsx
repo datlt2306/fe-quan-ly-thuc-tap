@@ -1,4 +1,4 @@
-import { BasePaths } from '@/App/configs/routePaths';
+import { BasePaths } from '@/App/configs/route-paths.config';
 import { Navigate, RouterProvider, createBrowserRouter, useRoutes } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import PrivateLayout from '../layouts/PrivateLayout';

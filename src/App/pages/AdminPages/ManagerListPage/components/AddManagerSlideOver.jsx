@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useAddManagerMutation } from '@/App/store/apis/staffListApi';
-import { managerDataValidator } from '@/App/schemas/staffSchema';
+import { useAddManagerMutation } from '@/App/store/apis/staff-list.api';
+import { managerDataValidator } from '@/App/schemas/staff.schema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';

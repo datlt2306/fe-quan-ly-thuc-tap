@@ -3,9 +3,11 @@ import { forwardRef, useRef } from 'react';
 import { useController } from 'react-hook-form';
 import tw from 'twin.macro';
 import FormControl from './FormControl';
+import Text from '../Text/Text';
 
 export const Radio = forwardRef(({ onChange: handleChange, ...props }, ref) => (
 	<input
+		role='radio'
 		{...props}
 		onChange={(e) => handleChange(e)}
 		ref={ref}
@@ -24,7 +26,7 @@ const RadioFieldControl = ({ control, name, options, onChange: handleChange, ...
 
 	return (
 		<FormControl>
-			<RadioGroup>
+			<RadioGroup role='radiogroup'>
 				{options.map((option, index) => (
 					<Label htmlFor={index.toString()} key={index}>
 						{option.label}
@@ -45,7 +47,11 @@ const RadioFieldControl = ({ control, name, options, onChange: handleChange, ...
 					</Label>
 				))}
 			</RadioGroup>
-			{error && <small className='font-medium text-error'>{error.message}</small>}
+			{error && (
+				<Text as='small' aria-errormessage={error?.message} color='error' className='font-medium'>
+					{error?.message}
+				</Text>
+			)}
 		</FormControl>
 	);
 };

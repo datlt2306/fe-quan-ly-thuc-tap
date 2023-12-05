@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import semesterApi from '../apis/semesterApi';
+import semesterApi from '../apis/semester.api';
 
 const semesterSlice = createSlice({
 	name: 'semester',

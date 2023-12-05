@@ -1,5 +1,5 @@
-import { formSignUpSelfFindingSchema } from '@/App/schemas/formSignUpInterShipSchema';
-import { useUploadCvMutation } from '@/App/store/apis/internRegistrationApi';
+import { formSignUpSelfFindingSchema } from '@/App/schemas/signup-internship.schema';
+import { useUploadCvMutation } from '@/App/store/apis/intern-registration.api';
 import Button from '@/Core/components/common/Button';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';

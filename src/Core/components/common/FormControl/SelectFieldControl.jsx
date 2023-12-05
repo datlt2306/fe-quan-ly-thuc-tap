@@ -30,7 +30,7 @@ const SelectFieldControl = (
 	return (
 		<FormControl>
 			{label && (
-				<Text as='label' className='font-semibold text-base-content' htmlFor={id}>
+				<Text aria-label='' as='label' className='font-semibold text-base-content' htmlFor={id}>
 					{label}
 				</Text>
 			)}
@@ -51,17 +51,19 @@ const SelectFieldControl = (
 				name={name}
 				disabled={disabled}
 				value={field.value}>
-				<Option value=''>{initialValue}</Option>
+				<Option value='' role='option'>
+					{initialValue}
+				</Option>
 				{Array.isArray(options) &&
 					options.map((option, index) => (
-						<Option value={option?.value} key={index}>
+						<Option role='option' value={option?.value} key={index}>
 							{option?.label}
 						</Option>
 					))}
 			</Select>
 			{error && (
-				<Text as='small' color='error' className='font-medium'>
-					{error.message}
+				<Text as='small' aria-errormessage={error?.message} color='error' className='font-medium'>
+					{error?.message}
 				</Text>
 			)}
 		</FormControl>

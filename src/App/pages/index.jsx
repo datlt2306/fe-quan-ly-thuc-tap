@@ -1,9 +1,9 @@
 import { UserRoleEnum } from '@/App/constants/userRoles';
-import { AdminPaths, BasePaths, ManagerPaths, StaffPaths, StudentPaths } from '@/App/configs/routePaths';
+import { AdminPaths, BasePaths, ManagerPaths, StaffPaths, StudentPaths } from '@/App/configs/route-paths.config';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useGetAllSemestersQuery } from '../store/apis/semesterApi';
+import { useGetAllSemestersQuery } from '../store/apis/semester.api';
 
 const DefaultPage = () => {
 	const user = useSelector((state) => state.auth?.user);

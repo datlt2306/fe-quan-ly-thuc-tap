@@ -1,4 +1,4 @@
-import { signout } from '@/App/store/reducers/authSlice';
+import { signout } from '@/App/store/slices/auth.slice';
 import store from '@/App/store/store';
 import axios from 'axios';
 import isJSON from '../utils/checkJsonType';

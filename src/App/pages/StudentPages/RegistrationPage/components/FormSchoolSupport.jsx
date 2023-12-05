@@ -1,8 +1,8 @@
-import { formSignUpSchoolSupportSchema } from '@/App/schemas/formSignUpInterShipSchema';
+import { formSignUpSchoolSupportSchema } from '@/App/schemas/signup-internship.schema';
 import Button from '@/Core/components/common/Button';
 import FileUploadFieldControl from '@/Core/components/common/FormControl/FileUploadFieldControl';
-import { useGetAllCompanyQuery } from '@/App/store/apis/businessApi';
-import { useUploadCvMutation } from '@/App/store/apis/internRegistrationApi';
+import { useGetAllCompanyQuery } from '@/App/store/apis/business.api';
+import { useUploadCvMutation } from '@/App/store/apis/intern-registration.api';
 import ComboBoxFieldControl from '@/Core/components/common/FormControl/ComboBoxFieldControl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';

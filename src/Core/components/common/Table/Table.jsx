@@ -3,13 +3,14 @@ import { Skeleton } from '../../customs/Skelton';
 import Text from '../Text/Text';
 
 const Table = ({ children, ...props }) => (
-	<table {...props} className='table w-full'>
+	<table {...props} role='table' className='table w-full'>
 		{children}
 	</table>
 );
 
 Table.Header = ({ sticky, children, ...props }) => (
 	<thead
+		role='rowheader'
 		{...props}
 		className={classNames({
 			'sticky top-0 z-20 bg-inherit': sticky
@@ -18,11 +19,20 @@ Table.Header = ({ sticky, children, ...props }) => (
 	</thead>
 );
 Table.Body = (props) => <tbody {...props}>{props.children}</tbody>;
-Table.Row = (props) => <tr {...props}>{props.children}</tr>;
+Table.Row = (props) => (
+	<tr role='row' {...props}>
+		{props.children}
+	</tr>
+);
 Table.Footer = (props) => <tfoot {...props}>{props.children}</tfoot>;
-Table.Cell = ({ as: Element = 'td', children, ...props }) => <Element {...props}>{children}</Element>;
+Table.Cell = ({ as: Element = 'td', children, ...props }) => (
+	<Element role='cell' {...props}>
+		{children}
+	</Element>
+);
 Table.Resizer = (props) => (
 	<div
+		role='button'
 		{...props}
 		className={classNames('table-resizer', {
 			'bg-primary': props?.isResizing

@@ -1,4 +1,4 @@
-import axiosClient from '@/Core/configs/axiosConfig';
+import axiosClient from '@/Core/configs/axios.config';
 
 // custom base query with axios
 export default function axiosBaseQuery() {

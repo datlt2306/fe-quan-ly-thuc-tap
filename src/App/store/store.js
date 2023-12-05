@@ -2,18 +2,18 @@ import { configureStore } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
 // APIs
-import campusApi from './apis/campusApi';
-import semesterApi from './apis/semesterApi';
-import rootReducer from './rootReducer';
-import authApi from './apis/authApi';
-import businessApi from './apis/businessApi';
-import configTimesApi from './apis/configTimesApi';
-import requestStudentsApi from './apis/requestStudentsApi';
-import studentApi from './apis/studentApi';
-import majorApi from './apis/majorApi';
-import staffListApi from './apis/staffListApi';
-import internRegistrationApi from './apis/internRegistrationApi';
-import reportApi from './apis/reportApi';
+import campusApi from './apis/campus.api';
+import semesterApi from './apis/semester.api';
+import rootReducer from './root.reducer';
+import authApi from './apis/auth.api';
+import businessApi from './apis/business.api';
+import configTimesApi from './apis/config-times.api';
+import requestStudentsApi from './apis/request-students.api';
+import studentApi from './apis/student.api';
+import majorApi from './apis/major.api';
+import staffListApi from './apis/staff-list.api';
+import internRegistrationApi from './apis/intern-registration.api';
+import reportApi from './apis/report.api';
 import RTKQueryLogger from './middlewares/RTKQueryLogger';
 
 const persistConfig = {

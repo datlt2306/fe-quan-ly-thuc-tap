@@ -1,6 +1,6 @@
 import { UserRoleEnum } from '@/App/constants/userRoles';
 import { createSlice } from '@reduxjs/toolkit';
-import authApi from '../apis/authApi';
+import authApi from '../apis/auth.api';
 
 const initialState = {
 	isSignedIn: false,

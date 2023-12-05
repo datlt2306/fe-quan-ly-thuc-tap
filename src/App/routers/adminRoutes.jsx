@@ -1,4 +1,4 @@
-import { AdminPaths } from '@/App/configs/routePaths';
+import { AdminPaths } from '@/App/configs/route-paths.config';
 import { lazy } from 'react';
 import AdminPrivateLayout from '../layouts/PrivateLayout/AdminPrivateLayout';
 

@@ -32,7 +32,7 @@ const Tooltip = ({ children, className, style, position, ...props }) => {
 
 Tooltip.defaultProps = {
 	className: '',
-	position: 'right'
+	position: 'top'
 };
 
 export default memo(Tooltip);

@@ -24,7 +24,7 @@ const InputFieldControl = ({ control, name, label, disabled, rules, type = 'text
 	return (
 		<FormControl>
 			{label && (
-				<Text as='label' className='font-semibold text-base-content' htmlFor={id}>
+				<Text as='label' className='font-semibold' htmlFor={id}>
 					{label}
 				</Text>
 			)}
@@ -47,7 +47,7 @@ const InputFieldControl = ({ control, name, label, disabled, rules, type = 'text
 				}}
 			/>
 			{props.description && <small>{props.description}</small>}
-			{error && <small className='font-medium text-error'>{error?.message}</small>}
+			{error && <Text className='font-medium text-error'>{error?.message}</Text>}
 		</FormControl>
 	);
 };

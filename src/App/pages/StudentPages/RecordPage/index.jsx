@@ -1,7 +1,7 @@
-import { useGetSetTimeQuery } from '@/App/store/apis/configTimesApi';
-import { useUploadFormMutation } from '@/App/store/apis/reportApi';
-import { useGetOneStudentQuery } from '@/App/store/apis/studentApi';
-import { recordSchema } from '@/App/schemas/recordSchema';
+import { useGetSetTimeQuery } from '@/App/store/apis/config-times.api';
+import { useUploadFormMutation } from '@/App/store/apis/report.api';
+import { useGetOneStudentQuery } from '@/App/store/apis/student.api';
+import { recordSchema } from '@/App/schemas/record.schema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import Typography from '@/Core/components/common/Text/Typography';

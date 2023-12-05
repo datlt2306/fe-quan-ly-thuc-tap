@@ -1,6 +1,6 @@
-import { useGetAllCompanyQuery } from '@/App/store/apis/businessApi';
-import { useGetSetTimeQuery } from '@/App/store/apis/configTimesApi';
-import { useGetAllSemestersQuery } from '@/App/store/apis/semesterApi';
+import { useGetAllCompanyQuery } from '@/App/store/apis/business.api';
+import { useGetSetTimeQuery } from '@/App/store/apis/config-times.api';
+import { useGetAllSemestersQuery } from '@/App/store/apis/semester.api';
 import Button from '@/Core/components/common/Button';
 import Modal from '@/Core/components/common/Modal';
 import DataTable from '@/Core/components/common/Table/DataTable';

@@ -2,6 +2,7 @@ import { useController } from 'react-hook-form';
 import tw from 'twin.macro';
 import FormControl from './FormControl';
 import { useId } from 'react';
+import Text from '../Text/Text';
 
 const FileUploadFieldControl = ({ control, name, label, disabled, rules }) => {
 	const id = useId();
@@ -18,11 +19,15 @@ const FileUploadFieldControl = ({ control, name, label, disabled, rules }) => {
 
 	return (
 		<FormControl>
-			<label className='font-semibold text-base-content' htmlFor={id}>
+			<Text as='label' className='font-semibold' htmlFor={id}>
 				{label}
-			</label>
+			</Text>
 			<input type='file' onChange={(e) => handleChange(e)} />
-			{error && <small className='font-medium text-error'>{error?.message}</small>}
+			{error && (
+				<Text as='small' aria-errormessage={error?.message} color='error' className='font-medium'>
+					{error?.message}
+				</Text>
+			)}
 		</FormControl>
 	);
 };
