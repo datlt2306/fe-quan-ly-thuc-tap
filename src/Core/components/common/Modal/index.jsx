@@ -40,7 +40,7 @@ const Modal = ({ openState, onOpenStateChange, title, children, panelProps }) =>
 							leaveTo='opacity-0 scale-95'>
 							<Dialog.Panel
 								className={classNames(
-									'relative w-auto min-w-fit max-w-md transform rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all',
+									'relative w-auto min-w-fit max-w-md transform rounded-lg bg-white text-left align-middle shadow-xl transition-all',
 									panelProps.className
 								)}>
 								{!!title && (
@@ -61,8 +61,7 @@ const Modal = ({ openState, onOpenStateChange, title, children, panelProps }) =>
 
 Modal.defaultProps = {
 	panelProps: {
-		className:
-			'relative w-auto min-w-fit max-w-md transform rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all'
+		className: 'p-6'
 	}
 };
 
