@@ -4,7 +4,7 @@ import { LoadingSpinner } from '../Loading/LoadingSpinner';
 
 /**
  * @typedef TButtonProps
- * @prop {keyof HTMLElementTagNameMap} as
+ * @prop {keyof HTMLElementTagNameMap | React.ElementType} as
  * @prop {'xs' | 'sm' | 'md' | 'lg'} size
  * @prop {'square' | 'pill' | 'circle' | undefined} shape
  * @prop {'primary' | 'secondary' | 'info' | 'success' | 'error' | 'warning' | 'outline' | 'ghost' | 'disabled'} variant

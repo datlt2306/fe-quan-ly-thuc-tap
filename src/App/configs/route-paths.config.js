@@ -47,7 +47,7 @@ const StaffPaths = {
 	SEMESTER: '/ky-hoc',
 	REGISTRATION_TIME: '/thoi-gian-dang-ky',
 	STUDENT_REQUESTS: '/yeu-cau-sinh-vien',
-	SETTINGS: '/cai-dat',
+	SETTINGS: '/cai-dat-mat-khau-ung-dung',
 	TUTORIALS: '/huong-dan-lay-mat-khau-ung-dung'
 };
 

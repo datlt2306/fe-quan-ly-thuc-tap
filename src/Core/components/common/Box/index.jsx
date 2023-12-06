@@ -1,12 +1,11 @@
 import React from 'react';
-import { css } from 'twin.macro';
 
 /**
  * @type {React.FC<React.CSSProperties & React.PropsWithChildren & React.HTMLAttributes<HTMLDivElement>>}
  */
 const Box = ({ children, className, style, ...props }) => {
 	return (
-		<div className={className} style={props.style} {...props}>
+		<div className={className} style={style} {...props}>
 			{children}
 		</div>
 	);

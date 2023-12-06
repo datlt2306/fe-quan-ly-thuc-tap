@@ -9,11 +9,13 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
  */
 
 /**
- * @type {React.FC<TBrowserMockupProps & React.PropsWithChildren>}
+ * @type {React.FC<TBrowserMockupProps & React.PropsWithChildren & React.HTMLAttributes<HTMLDivElement>}
  */
 const BrowserMockup = (props) => {
+	const { url, children, ...restProps } = props;
+
 	return (
-		<Browser>
+		<Browser {...restProps}>
 			<Browser.Toolbar>
 				<Browser.Actions>
 					<div />
@@ -23,11 +25,11 @@ const BrowserMockup = (props) => {
 				<Browser.Search>
 					<MagnifyingGlassIcon tw='h-3 w-3 absolute top-1/2 -translate-y-1/2 left-2 z-0' />
 					<div className='pointer-events-none select-none text-ellipsis whitespace-nowrap rounded-md border border-gray-200 py-1 pl-8 pr-1 text-xs'>
-						{props.url}
+						{url}
 					</div>
 				</Browser.Search>
 			</Browser.Toolbar>
-			<Browser.Content>{props.children}</Browser.Content>
+			<Browser.Content>{children}</Browser.Content>
 		</Browser>
 	);
 };

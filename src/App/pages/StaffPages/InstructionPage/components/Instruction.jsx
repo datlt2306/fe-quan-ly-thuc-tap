@@ -11,6 +11,7 @@ import Step2_1 from '@/App/assets/images/step-2.1.png';
 import Step2_2 from '@/App/assets/images/step-2.2.png';
 import Step2_3 from '@/App/assets/images/step-2.3.png';
 import { ViewContext } from '../context/ViewContext';
+import Box from '@/Core/components/common/Box';
 
 const Instruction = () => {
 	const [image, setImage] = useState(null);
@@ -24,41 +25,56 @@ const Instruction = () => {
 
 	return (
 		<>
-			<Box className='gap-10 overflow-y-auto scrollbar-none'>
+			<Box className='flex flex-col gap-20 overflow-y-auto scrollbar-none'>
 				<Typography level={6} fontWeight='semibold' textAlign='center' className='inline-flex items-center gap-3'>
 					<PaperClipIcon className='h-5 w-5' /> Hướng dẫn lấy mật khẩu ứng dụng
 				</Typography>
 
 				<Box ref={firstStepRef} className='mb-10' id='step-1'>
-					<Text className='font-semibold'>Bước 1</Text>
-					<Text className='mb-10 font-normal'>
+					<Text className='mb-2 block font-semibold'>Bước 1</Text>
+					<Text className='block font-normal'>
 						Truy cập{' '}
-						<a href='https://myaccount.google.com' target='_blank' className='font-semibold hover:text-primary'>
+						<a
+							href='https://myaccount.google.com'
+							target='_blank'
+							className='font-semibold transition-colors duration-200 hover:text-primary'>
 							Google Accounts
 						</a>{' '}
-						và đăng nhập với email của bạn
+						và đăng nhập với email của bạn.
+					</Text>
+					<Text className='font-normal italic'>
+						(*) Nếu bạn chưa bật "Xác mính 2 bước" có thể xem{' '}
+						<a
+							href='https://support.google.com/accounts/answer/185839?hl=vi&co=GENIE.Platform%3DDesktop'
+							target='_blank'
+							className='font-semibold transition-colors duration-200 hover:text-primary'>
+							hướng dẫn
+						</a>{' '}
+						tại đây
 					</Text>
 				</Box>
 
-				<Box ref={secondStepRef} className='mb-10' id='step-2'>
-					<Text className='font-semibold'>Bước 2</Text>
-					<Text className='mb-10 font-normal'>Lấy mật khẩu ứng dụng</Text>
+				<Box ref={secondStepRef} className='mb-10 flex flex-col space-y-10' id='step-2'>
+					<Box>
+						<Text className='mb-2 block font-semibold'>Bước 2</Text>
+						<Text className='mb-10 font-normal'>Lấy mật khẩu ứng dụng</Text>
+					</Box>
 
-					<Box className='mb-20'>
+					<Box className='mb-20 flex flex-col gap-1'>
 						<BrowserMockup url='https://myaccount.google.com/'>
 							<Image src={Step2_1} loading='lazy' className='max-w-full' onClick={handleOpenImage} />
 						</BrowserMockup>
 						<Description>Đi đến tab "Bảo mật", chọn "Xác minh 2 bước"</Description>
 					</Box>
 
-					<Box className='mb-20'>
+					<Box className='mb-20 flex flex-col gap-1'>
 						<BrowserMockup url='https://myaccount.google.com/'>
 							<Image src={Step2_2} loading='lazy' className='max-w-full' onClick={handleOpenImage} />
 						</BrowserMockup>
 						<Description>Kéo xuống, chọn "Mật khẩu ứng dụng"</Description>
 					</Box>
 
-					<Box className='mb-20'>
+					<Box className='mb-20 flex flex-col gap-1'>
 						<BrowserMockup url='https://myaccount.google.com/'>
 							<Image src={Step2_3} loading='lazy' className='max-w-full' onClick={handleOpenImage} />
 						</BrowserMockup>
@@ -66,9 +82,9 @@ const Instruction = () => {
 					</Box>
 				</Box>
 
-				<Box ref={thirdStepRef} id='step-3' className='min-h-[calc(100vh-25%)]'>
-					<Text className='mb-1 block font-semibold'>Bước 3</Text>
-					<Text className='mb-10 font-normal'>
+				<Box ref={thirdStepRef} id='step-3' className='flex min-h-[25vh] flex-col space-y-2'>
+					<Text className='block font-semibold'>Bước 3</Text>
+					<Text as='p' className='mb-10 font-normal'>
 						Copy mật khẩu ứng dụng đã tạo, đi đến trang cài đặt và paste mật khẩu trước đó và lưu lại.
 					</Text>
 					<Link className='btn btn-sm btn-primary w-fit' to={StaffPaths.SETTINGS}>
@@ -79,14 +95,15 @@ const Instruction = () => {
 			<Modal
 				openState={open}
 				onOpenStateChange={setOpen}
-				panelProps={{ className: '!p-0 rounded-md overflow-clip' }}>
-				<Image src={image} className='w-full max-w-7xl' />
+				panelProps={{ className: '!p-0 rounded-lg overflow-clip' }}>
+				<BrowserMockup url='https://myaccount.google.com/' className='border-none'>
+					<Image src={image} className='w-full max-w-7xl xl:max-w-[1440px]' />
+				</BrowserMockup>
 			</Modal>
 		</>
 	);
 };
 
-const Box = tw.div`flex flex-col gap-1`;
 const Image = tw.img`object-cover cursor-pointer`;
 const Description = tw.small`italic text-base-content`;
 

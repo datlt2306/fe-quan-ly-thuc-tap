@@ -14,6 +14,11 @@ const CompanyUpdatePage = lazy(() => import('../pages/StaffPages/CompanyPages/Co
 const SemesterPage = lazy(() => import('../pages/StaffPages/SemesterPage'));
 const StudentSuportPage = lazy(() => import('../pages/StaffPages/StudentSuportPage'));
 
+/**
+ * @typedef {import('react-router-dom').RouteObject} RouteObject
+ */
+
+/**@type {Array<RouteObject>} */
 const staffRoutes = [
 	{
 		path: StaffPaths.STUDENT_LIST,

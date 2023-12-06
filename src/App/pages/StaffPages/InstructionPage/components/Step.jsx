@@ -66,7 +66,7 @@ const Step = () => {
 											'border-gray-200 group-hover:border-gray-300': !step.active
 										}
 									)}>
-									{step.active && <span className='h-3 w-3 rounded-full bg-primary' />}
+									{step.active && <span className='h-2 w-2 rounded-full bg-primary' />}
 								</span>
 							</span>
 							<span className='ml-4 flex min-w-0 flex-col'>

@@ -83,8 +83,9 @@ const DataTable = ({
 }) => {
 	const extraPlugins = useMemo(
 		() => [
-			{ enable: resizable, plugins: [useResizeColumns, useBlockLayout] },
-			{ enable: stickyColumn, plugins: [useSticky] }
+			{ enable: resizable, plugins: [useResizeColumns] },
+			{ enable: stickyColumn, plugins: [useSticky] },
+			{ enable: resizable | stickyColumn, plugins: [useBlockLayout] }
 		],
 		[stickyColumn]
 	);

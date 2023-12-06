@@ -115,6 +115,7 @@ const ReviewReportPage = () => {
 					data={tableData}
 					columns={columnsData}
 					loading={isLoadingData || isFetching}
+					stickyColumn
 					onHandleRefetch={refetch}
 					onGetSelectedRows={setSelectedStudents}
 					// onUpdateData={updateTableData}
