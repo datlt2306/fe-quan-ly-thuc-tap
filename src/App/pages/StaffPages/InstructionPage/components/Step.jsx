@@ -7,7 +7,7 @@ const Step = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { isOnFirstStep, isOnSecondStep, isOnThirdStep } = useContext(ViewContext);
-
+	console.log('first', { isOnFirstStep, isOnSecondStep, isOnThirdStep });
 	useEffect(() => {
 		const currentStep = (() => {
 			switch (true) {
@@ -66,7 +66,9 @@ const Step = () => {
 											'border-gray-200 group-hover:border-gray-300': !step.active
 										}
 									)}>
-									{step.active && <span className='h-2 w-2 rounded-full bg-primary' />}
+									<span
+										className={classNames('h-2.5 w-2.5 rounded-full bg-primary', { hidden: !step.active })}
+									/>
 								</span>
 							</span>
 							<span className='ml-4 flex min-w-0 flex-col'>
