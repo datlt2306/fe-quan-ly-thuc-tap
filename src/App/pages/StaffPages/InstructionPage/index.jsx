@@ -1,5 +1,4 @@
 import Text from '@/Core/components/common/Text/Text';
-import { Fragment } from 'react';
 import tw from 'twin.macro';
 import Instruction from './components/Instruction';
 import Step from './components/Step';
@@ -10,7 +9,9 @@ const InstructionPage = () => {
 		<ViewProvider>
 			<Container>
 				<Section className='basis-1/4'>
-					<Text className='mb-6 font-medium text-base-content'>Các bước thực hiện</Text>
+					<Text as='h6' className='mb-6 font-medium text-base-content'>
+						Các bước thực hiện
+					</Text>
 					<Step />
 				</Section>
 				<Section className='basis-3/4'>

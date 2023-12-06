@@ -35,3 +35,10 @@ export const managerDataValidator = object({
 		.required('Vui lòng nhập đầy đủ email của nhân viên'),
 	campus_id: string().required('Cơ sở là bắt buộc')
 });
+
+export const applicationPasswordValidator = object({
+	applicationPassword: string()
+		.trim()
+		.length(16, 'Mật khẩu ứng dụng phải có đủ 16 ký tự')
+		.required('Mật khẩu ứng dụng không được bỏ trống')
+});

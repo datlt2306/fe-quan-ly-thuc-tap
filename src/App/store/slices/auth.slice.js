@@ -13,12 +13,17 @@ const initialState = {
 const authSlice = createSlice({
 	name: 'auth',
 	reducers: {
-		signout: (state, { payload }) => initialState
+		signout: () => initialState,
+		registerAppPassword: (state, action) => ({ ...state, hasRegisteredAppPassword: action.payload })
 	},
 	initialState: initialState,
 	extraReducers: (build) => {
 		build.addMatcher(authApi.endpoints.signin.matchFulfilled, (state, { payload }) => {
 			if (payload.isAdmin) {
+				console.log(payload);
+				const optionalPayload =
+					payload.manager?.role === 1 ? { hasRegisteredAppPassword: payload.hasRegisteredAppPassword } : {};
+				console.log(optionalPayload);
 				return {
 					isSignedIn: payload.success,
 					user: {
@@ -32,7 +37,8 @@ const authSlice = createSlice({
 								: payload.manager?.role === 2
 								? UserRoleEnum.MANAGER
 								: UserRoleEnum.ADMIN
-					}
+					},
+					...optionalPayload
 				};
 			}
 			return {
@@ -63,5 +69,5 @@ const authSlice = createSlice({
 	}
 });
 
-export const { signout } = authSlice.actions;
+export const { signout, registerAppPassword } = authSlice.actions;
 export default authSlice;

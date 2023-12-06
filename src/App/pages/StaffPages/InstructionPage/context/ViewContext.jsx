@@ -1,7 +1,14 @@
 import useOnScreen from '@/App/hooks/useOnScreen';
 import { createContext, useRef } from 'react';
 
-const ViewContext = createContext();
+const ViewContext = createContext({
+	firstStepRef: { current: null },
+	secondStepRef: { current: null },
+	thirdStepRef: { current: null },
+	isOnFirstStep: false,
+	isOnSecondStep: false,
+	isOnThirdStep: false
+});
 
 const ViewProvider = ({ children }) => {
 	const firstStepRef = useRef(null);

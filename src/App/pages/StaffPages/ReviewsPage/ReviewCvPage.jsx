@@ -69,6 +69,7 @@ const ReviewCvPage = () => {
 					loading={isLoadingData || isFetching}
 					onHandleRefetch={refetch}
 					onGetSelectedRows={setSelectedStudents}
+					stickyColumn
 				/>
 			</Container>
 		</Fragment>
