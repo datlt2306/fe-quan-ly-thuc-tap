@@ -9,7 +9,6 @@ import EmptyStateSection from '../Shared/EmptyStateSection';
 const RegistrationPage = () => {
 	const user = useSelector((state) => state.auth?.user);
 	const { data: student } = useGetOneStudentQuery(user?.id);
-	console.log(student?.statusCheck);
 	//Kiểm tra xem statusCheck có phải là trạng thái sửa cv hoặc chưa đăng ký
 	const checkStatusStudent = useMemo(() => {
 		return (

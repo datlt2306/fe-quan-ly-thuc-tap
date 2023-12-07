@@ -1,6 +1,6 @@
 import { StaffPaths } from '@/App/configs/route-paths.config';
 import { applicationPasswordValidator } from '@/App/schemas/staff.schema';
-import { useUpdateManagerMutation } from '@/App/store/apis/staff-list.api';
+import { useUpdateManagerMutation, useUpdateStaffMutation } from '@/App/store/apis/staff-list.api';
 import { registerAppPassword } from '@/App/store/slices/auth.slice';
 import Box from '@/Core/components/common/Box';
 import Button from '@/Core/components/common/Button';
@@ -20,10 +20,10 @@ const SettingPage = () => {
 	const { handleSubmit, control, reset } = useForm({
 		resolver: yupResolver(applicationPasswordValidator)
 	});
-	const [mutateAsync, { isLoading }] = useUpdateManagerMutation();
+	const [mutateAsync, { isLoading }] = useUpdateStaffMutation();
 	const dispatch = useDispatch();
 	const [open, setOpen] = useState(false);
-	const hasRegisteredAppPassword = useSelector((state) => state.auth?.hasRegisteredAppPassword);
+	const { hasRegisteredAppPassword, user } = useSelector((state) => state.auth);
 	const [disabled, setDisabled] = useState(hasRegisteredAppPassword);
 
 	useEffect(() => {
@@ -36,7 +36,7 @@ const SettingPage = () => {
 
 	const handleUpdateAppPassword = async (data) => {
 		try {
-			const response = await mutateAsync(data).unwrap();
+			const response = await mutateAsync({ id: user.id, payload: data }).unwrap();
 			dispatch(registerAppPassword(Boolean(response?.applicationPassword)));
 			toast.success('Cập nhật mật khẩu ứng dụng thành công');
 		} catch (error) {
@@ -86,7 +86,7 @@ const SettingPage = () => {
 			<NotificationWithAction
 				open={open}
 				onOpenStateChange={setOpen}
-				icon={CheckCircleIcon}
+				icon={StyledCheckIcon}
 				title=''
 				message='Bạn đã cài đặt mật khẩu ứng dụng. Bạn có muốn cập nhật mật khẩu ứng dụng mới không ?'
 				okText='Đồng ý'
@@ -99,5 +99,6 @@ const SettingPage = () => {
 
 const Container = tw.div`flex flex-col items-center justify-center gap-6 h-full`;
 const Form = tw.form`flex flex-col gap-6 max-w-xl w-full mx-auto mb-6`;
+const StyledCheckIcon = tw(CheckCircleIcon)`!text-success`;
 
 export default SettingPage;

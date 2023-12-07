@@ -116,10 +116,9 @@ const ReviewReportPage = () => {
 					columns={columnsData}
 					loading={isLoadingData || isFetching}
 					stickyColumn
+					resizable
 					onHandleRefetch={refetch}
 					onGetSelectedRows={setSelectedStudents}
-					// onUpdateData={updateTableData}
-					// skipPageReset={skipResetPage}
 				/>
 			</Container>
 		</Fragment>

@@ -9,7 +9,12 @@ import tw from 'twin.macro';
 import DesktopSidebar from './components/DesktopSidebar';
 import MobileSidebar from './components/MobileSidebar';
 import Navbar from './components/Navbar';
-import { adminNavigation, managerNavigation, staffNavigation, studentNavigation } from './config/navigation.config';
+import {
+	adminNavigation,
+	managerNavigation,
+	staffNavigation,
+	studentNavigation
+} from '../../configs/navigation.config';
 import { Main } from './components/Styled';
 
 const MainLayout = () => {

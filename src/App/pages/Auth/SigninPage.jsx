@@ -78,7 +78,7 @@ export default function SigninPage() {
 					</GoogleLoginWrapper>
 				</Form>
 			</Box>
-			<Footer>© {new Date().getFullYear()} FPT Polytechic College, Inc. All rights reserved.</Footer>
+			<Footer>©2023 FPT Polytechic College, Inc. All rights reserved.</Footer>
 		</Screen>
 	);
 }

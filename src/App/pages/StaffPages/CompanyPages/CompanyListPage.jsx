@@ -27,6 +27,7 @@ import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
 import { columnAccessors } from './constants';
 import Tooltip from '@/Core/components/common/Tooltip';
+import Box from '@/Core/components/common/Box';
 
 const CompanyListPage = () => {
 	const [deleteCompany] = useDeleteCompanyMutation();
@@ -257,7 +258,7 @@ const CompanyListPage = () => {
 				onCancel={() => setModalConfirmState({ open: false, payload: null })}
 			/>
 			<Container>
-				<Box>
+				<Box className='flex items-center justify-between lg:flex-row-reverse'>
 					<SelectBox>
 						<label
 							htmlFor='semester-list'
@@ -307,7 +308,6 @@ const CompanyListPage = () => {
 
 const ActionList = tw.div`flex items-stretch`;
 const Container = tw.div`flex flex-col gap-6 h-full `;
-const Box = tw.div`flex items-center justify-between lg:flex-row-reverse`;
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
 
 export default CompanyListPage;

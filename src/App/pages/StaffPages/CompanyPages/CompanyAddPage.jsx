@@ -115,7 +115,7 @@ const AddBusinessForm = () => {
 	);
 };
 
-const Container = tw.div`h-fit max-w-3xl md:(max-w-xl mx-auto) px-6 py-3`;
+const Container = tw.div`h-fit max-w-7xl mx-auto md:(max-w-2xl mx-auto) px-6 py-3`;
 const Form = tw.form`flex flex-col gap-6`;
 Form.Group = tw.div`flex grow gap-6 md:flex-wrap [&>*]:(basis-auto w-full)`;
 
