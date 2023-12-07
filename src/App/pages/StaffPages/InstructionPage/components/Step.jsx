@@ -7,7 +7,6 @@ const Step = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { isOnFirstStep, isOnSecondStep, isOnThirdStep } = useContext(ViewContext);
-	console.log('first', { isOnFirstStep, isOnSecondStep, isOnThirdStep });
 	useEffect(() => {
 		const currentStep = (() => {
 			switch (true) {

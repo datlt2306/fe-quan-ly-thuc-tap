@@ -20,10 +20,8 @@ const authSlice = createSlice({
 	extraReducers: (build) => {
 		build.addMatcher(authApi.endpoints.signin.matchFulfilled, (state, { payload }) => {
 			if (payload.isAdmin) {
-				console.log(payload);
 				const optionalPayload =
 					payload.manager?.role === 1 ? { hasRegisteredAppPassword: payload.hasRegisteredAppPassword } : {};
-				console.log(optionalPayload);
 				return {
 					isSignedIn: payload.success,
 					user: {

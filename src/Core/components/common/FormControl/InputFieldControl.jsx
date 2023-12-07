@@ -67,7 +67,7 @@ const InputFieldControl = ({ control, name, label, disabled, rules, type = 'text
 						type='button'
 						role='button'
 						onClick={() => setVisible(!visible)}
-						className='absolute right-2 top-1/2 inline-flex aspect-square h-4 -translate-y-1/2 items-center justify-center bg-white'>
+						className='absolute right-2 top-1/2 inline-flex aspect-square h-4 -translate-y-1/2 items-center justify-center'>
 						{visible ? <EyeIcon className='h-4 w-4' /> : <EyeSlashIcon className='h-4 w-4' />}
 					</button>
 				)}

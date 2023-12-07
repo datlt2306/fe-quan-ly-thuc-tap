@@ -70,6 +70,7 @@ const ReviewCvPage = () => {
 					onHandleRefetch={refetch}
 					onGetSelectedRows={setSelectedStudents}
 					stickyColumn
+					resizable
 				/>
 			</Container>
 		</Fragment>

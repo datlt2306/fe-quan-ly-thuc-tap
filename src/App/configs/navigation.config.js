@@ -77,7 +77,7 @@ export const staffNavigation = [
 				name: 'Cập nhật công ty',
 				path: StaffPaths.COMPANY_UPDATE,
 				icon: UserGroupIcon,
-				show: true
+				show: false
 			}
 		]
 	},
