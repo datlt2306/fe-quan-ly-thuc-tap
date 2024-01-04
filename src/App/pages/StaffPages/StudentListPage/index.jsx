@@ -1,11 +1,9 @@
 import { StudentColumnAccessors } from '@/App/constants/studentConstants';
-import { useExportToExcel, useImportFromExcel } from '@/App/hooks/useExcel';
-import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/providers/apis/studentApi';
-import { newStudentSchema } from '@/App/schemas/studentSchema';
+import { useExportToExcel } from '@/App/hooks/useExcel';
+import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/store/apis/student.api';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
+import DataTable from '@/Core/components/common/Table/DataTable';
 import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
-import HttpStatusCode from '@/Core/constants/httpStatus';
 import { convertToExcelData } from '@/Core/utils/excelDataHandler';
 import getFileExtension from '@/Core/utils/getFileExtension';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
@@ -16,14 +14,16 @@ import tw from 'twin.macro';
 import InstanceStudentColumns from '../Shared/InstanceStudentColumns';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
+import useLocalStorage from '@/App/hooks/useLocalstorage';
+import HttpStatusCode from '@/Core/constants/httpStatus';
+import Box from '@/Core/components/common/Box';
 
 const StudentListPage = () => {
 	const { currentCampus } = useSelector((state) => state.campus);
-	const [handleImportFile] = useImportFromExcel();
 	const [handleExportFile] = useExportToExcel();
-	const [addStudents] = useAddStudentsMutation();
+	const [addStudents, addStudentsState] = useAddStudentsMutation();
 	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
-	const [currentSemester, setCurrentSemester] = useState();
+	const [currentSemester, setCurrentSemester] = useLocalStorage('current_semester', null);
 	const {
 		data: studentsListData,
 		isLoading,
@@ -35,85 +35,53 @@ const StudentListPage = () => {
 	const [selectedStudents, setSelectedStudents] = useState([]);
 
 	useEffect(() => {
-		setCurrentSemester(defaultSemester?._id);
-	}, [defaultSemester]);
+		if (!currentSemester) setCurrentSemester(defaultSemester?._id);
+	}, [currentSemester]);
 
 	const tableData = useMemo(() => studentsListData ?? [], [studentsListData]);
 
-	// Callback function will be executed after import file excel
-	const importExcelDataCallback = async (excelData) => {
-		if (!excelData.length) {
-			toast.warn('Vui lòng nhập thông tin đầy đủ !');
-			return;
-		}
-		const newStudentList = excelData
-			.map((obj) => ({
-				name: obj[StudentColumnAccessors.name],
-				mssv: obj[StudentColumnAccessors.mssv],
-				course: obj[StudentColumnAccessors.course],
-				email: obj[StudentColumnAccessors.email],
-				phoneNumber: obj[StudentColumnAccessors.phoneNumber],
-				majorCode: obj[StudentColumnAccessors.majorCode],
-				statusStudent: obj[StudentColumnAccessors.statusStudent],
-				smester_id: currentSemester,
-				campus_id: currentCampus?._id
-			}))
-			.filter((student) => Object.keys(student).length === 9);
-		try {
-			toastId.current = toast.loading('Đang tải lên dữ liệu ...');
-			const payload = await newStudentSchema.validate(newStudentList);
-			const { error } = await addStudents({
-				data: payload,
-				smester_id: currentSemester,
-				campus_id: currentCampus?._id
-			});
-			if (error) {
-				const message =
-					error?.status === HttpStatusCode.CONFLICT
-						? 'Đã có sinh viên tồn tại trong hệ thống !'
+	// Get file from device and execute callback to add new students
+	const handleImportStudents = useCallback(
+		async (file) => {
+			const fileExtension = getFileExtension(file);
+			if (fileExtension !== AllowedFileExtension.XLSX) {
+				toast.error('File import không hợp lệ');
+				if (fileInputRef.current) fileInputRef.current.value = null;
+				return;
+			}
+
+			const formData = new FormData();
+			formData.append('file', file);
+			formData.append('smester_id', currentSemester);
+			formData.append('campus_id', currentCampus?._id);
+
+			try {
+				const { error } = await addStudents(formData);
+				if (error) {
+					const message = !!error?.data?.message
+						? error.data?.message
 						: 'Đã có lỗi xảy ra, vui lòng kiểm tra lại dữ liệu tải lên';
 
+					throw new Error(message);
+				}
 				toast.update(toastId.current, {
-					type: 'error',
-					render: message,
+					type: 'success',
+					render: 'Tải lên dữ liệu thành công !',
 					isLoading: false,
 					closeButton: true,
 					autoClose: 2000
 				});
-				fileInputRef.current.value = null;
-				return;
+			} catch (error) {
+				toast.update(toastId.current, {
+					type: 'error',
+					render: error.message,
+					isLoading: false,
+					closeButton: true,
+					autoClose: 2000
+				});
+			} finally {
+				if (fileInputRef.current) fileInputRef.current.value = null;
 			}
-			toast.update(toastId.current, {
-				type: 'success',
-				render: 'Tải lên dữ liệu thành công !',
-				isLoading: false,
-				closeButton: true,
-				autoClose: 2000
-			});
-		} catch (error) {
-			toast.update(toastId.current, {
-				type: 'error',
-				render: error.message,
-				isLoading: false,
-				closeButton: true,
-				autoClose: 2000
-			});
-		} finally {
-			fileInputRef.current.value = null;
-		}
-	};
-
-	// Get file from device and execute callback to add new students
-	const handleImportStudents = useCallback(
-		(file) => {
-			const fileExtension = getFileExtension(file);
-			if (fileExtension !== AllowedFileExtension.XLSX) {
-				toast.error('File import không hợp lệ');
-				fileInputRef.current.value = null;
-				return;
-			}
-			handleImportFile(file, importExcelDataCallback);
-			fileInputRef.current.value = null; // reset input file after imported
 		},
 		[currentSemester]
 	);
@@ -135,12 +103,26 @@ const StudentListPage = () => {
 		[currentSemester]
 	);
 
+	useEffect(() => {
+		if (addStudentsState.isLoading) {
+			toastId.current = toast.loading('Đang tải lên dữ liệu ...');
+		}
+		if (addStudentsState.isSuccess) {
+			toast.update(toastId.current, {
+				type: 'success',
+				render: 'Tải lên dữ liệu thành công !',
+				isLoading: false,
+				closeButton: true,
+				autoClose: 2000
+			});
+		}
+	}, [addStudentsState]);
 	// Define columns of table
-	const columnsData = useMemo(() => InstanceStudentColumns, []);
+	const columns = useMemo(() => InstanceStudentColumns, [isLoading]);
 
 	return (
 		<Container>
-			<Box>
+			<Box className='flex items-center justify-between lg:flex-row-reverse'>
 				<SelectBox>
 					<label
 						htmlFor='semester-list'
@@ -178,19 +160,21 @@ const StudentListPage = () => {
 				/>
 			</Box>
 
-			<ReactTable
-				columns={columnsData}
+			<DataTable
+				columns={InstanceStudentColumns}
 				data={tableData}
-				loading={isLoading || isFetching}
+				loading={isLoading}
 				onHandleRefetch={refetch}
 				onGetSelectedRows={setSelectedStudents}
+				stickyColumn
+				resizable
 			/>
 		</Container>
 	);
 };
 
 const Container = tw.div`flex flex-col gap-6`;
-const Box = tw.div`flex items-center justify-between lg:flex-row-reverse`;
+
 const SelectBox = tw.div`flex basis-1/4 items-center gap-2`;
 
 export default StudentListPage;

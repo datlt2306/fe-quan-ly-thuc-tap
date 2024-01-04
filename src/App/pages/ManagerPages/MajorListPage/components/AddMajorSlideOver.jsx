@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useCreateMajorMutation } from '@/App/providers/apis/majorApi';
-import { majorSchema } from '@/App/schemas/majorSchema';
+import { useCreateMajorMutation } from '@/App/store/apis/major.api';
+import { majorSchema } from '@/App/schemas/major.schema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';

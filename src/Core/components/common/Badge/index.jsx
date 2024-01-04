@@ -4,6 +4,7 @@ import Text from '../Text/Text';
 const Badge = ({ variant, size = 'sm', ...props }) => {
 	return (
 		<Text
+			role='status'
 			className={classNames('inline-flex items-center gap-x-1.5 rounded-sm font-semibold', {
 				'bg-primary/10 text-primary': variant === 'primary',
 				'bg-success/10 text-success': variant === 'success',

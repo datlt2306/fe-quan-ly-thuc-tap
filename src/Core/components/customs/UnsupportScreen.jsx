@@ -10,7 +10,7 @@ const UnsupportScreen = () => {
 				<Content>
 					<ExclamationTriangleIcon className='aspect-square w-8 text-error' />
 					<TextBox>
-						<Typography level={6}>Ooppsss! Some thing went wrong !</Typography>
+						<Typography level={6}>Ooppsss! Something went wrong !</Typography>
 						<Text className='sm:text-sm'>
 							Ứng dụng chưa hộ trợ màn hình này. Vui lòng sử dụng thiết bị có tỉ lệ màn hình lớn hơn.
 						</Text>

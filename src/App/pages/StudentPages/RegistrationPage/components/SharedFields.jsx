@@ -42,10 +42,10 @@ const SharedFields = ({ control, student, inputFields = [] }) => {
 const ReadOnlyField = ({ title, value }) => {
 	return (
 		<FormControl>
-			<Text as='label' className='font-medium text-base-content'>
+			<Text as='label' className='font-semibold text-base-content'>
 				{title}
 			</Text>
-			<Input readOnly value={value}></Input>
+			<Input disabled value={value}></Input>
 		</FormControl>
 	);
 };

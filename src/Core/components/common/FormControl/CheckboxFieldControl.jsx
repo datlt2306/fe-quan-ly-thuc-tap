@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { forwardRef, useId, useRef } from 'react';
 import { useController } from 'react-hook-form';
 import tw from 'twin.macro';
+import Text from '../Text/Text';
 
 const FormControl = tw.div`flex items-center gap-6`;
 
@@ -11,6 +12,7 @@ export const Checkbox = forwardRef(({ onChange: handleChange, disabled, ...props
 	return (
 		<input
 			{...props}
+			role='checkbox'
 			onChange={(e) => handleChange(e)}
 			ref={checkboxRef}
 			aria-describedby='comments-description'
@@ -57,7 +59,11 @@ const CheckboxFieldControl = ({ control, name, label, rules, checked, disabled, 
 				name={name}
 				disabled={disabled}
 			/>
-			{error && <small className='font-medium text-error'>{error.message}</small>}
+			{error && (
+				<Text as='small' aria-errormessage={error?.message} color='error' className='font-medium'>
+					{error?.message}
+				</Text>
+			)}
 		</FormControl>
 	);
 };

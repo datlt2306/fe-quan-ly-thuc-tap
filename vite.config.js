@@ -1,9 +1,9 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-
 import path from 'path';
 
 export default defineConfig({
+	// envDir: 'env',
 	resolve: {
 		alias: [
 			{
@@ -11,6 +11,9 @@ export default defineConfig({
 				replacement: path.resolve(__dirname, 'src')
 			}
 		]
+	},
+	esbuild: {
+		drop: ['console', 'debugger']
 	},
 	plugins: [
 		react({
@@ -20,14 +23,15 @@ export default defineConfig({
 			}
 		})
 	],
+	preview: { port: 4000 },
 	server: {
 		port: 3000
-	},	
+	},
 	proxy: {
-		"/api": {
+		'/api': {
 			target: 'https://thuctap.poly.edu.vn/api',
 			changeOrigin: true,
-			rewrite: (path) => path.replace(/^\/api/, ""),
-		},
-	},
+			rewrite: (path) => path.replace(/^\/api/, '')
+		}
+	}
 });

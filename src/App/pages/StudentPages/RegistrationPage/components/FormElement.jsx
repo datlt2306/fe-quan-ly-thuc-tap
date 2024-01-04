@@ -1,6 +1,6 @@
 import { Fragment, Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { InternSupportType } from '@/App/constants/studentConstants';
-import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
+import { useGetSetTimeQuery } from '@/App/store/apis/config-times.api';
 import { Radio } from '@/Core/components/common/FormControl/RadioFieldControl';
 import LoadingProgressBar from '@/Core/components/common/Loading/LoadingProgressBar';
 import Text from '@/Core/components/common/Text/Text';

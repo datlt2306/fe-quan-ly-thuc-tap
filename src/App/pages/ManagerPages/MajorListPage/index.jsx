@@ -1,8 +1,8 @@
-import { useDeleteMajorMutation, useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
+import { useDeleteMajorMutation, useGetAllMajorQuery } from '@/App/store/apis/major.api';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
-import { InputColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
+import DataTable from '@/Core/components/common/Table/DataTable';
+import { InputColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { Fragment, useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -139,7 +139,7 @@ const MajorListPage = () => {
 					</Button>
 				</ButtonList>
 
-				<ReactTable
+				<DataTable
 					columns={columnsData}
 					data={tableData}
 					loading={isLoading || isFetching}

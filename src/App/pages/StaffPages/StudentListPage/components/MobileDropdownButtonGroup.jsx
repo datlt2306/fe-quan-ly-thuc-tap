@@ -72,4 +72,4 @@ const MobileDropdownButtonGroup = forwardRef(({ tableData, handleImport, handleE
 	);
 });
 
-export default memo(MobileDropdownButtonGroup);
+export default MobileDropdownButtonGroup;

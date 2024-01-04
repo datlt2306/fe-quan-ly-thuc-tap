@@ -1,14 +1,13 @@
 import { StudentReviewTypeEnum, StudentStatusEnum } from '@/App/constants/studentConstants';
-import { useGetStudentsToReviewQuery } from '@/App/providers/apis/studentApi';
+import { useGetStudentsToReviewQuery } from '@/App/store/apis/student.api';
 import Button from '@/Core/components/common/Button';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
+import DataTable from '@/Core/components/common/Table/DataTable';
 import Typography from '@/Core/components/common/Text/Typography';
-import { ArrowPathIcon, ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
+import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { Fragment, useMemo, useState } from 'react';
 import tw from 'twin.macro';
 import InstanceStudentColumns from '../Shared/InstanceStudentColumns';
 import UpdateReviewModal from './components/UpdateReviewModal';
-import classNames from 'classnames';
 
 const ReviewCvPage = () => {
 	const {
@@ -64,12 +63,14 @@ const ReviewCvPage = () => {
 					)}
 				</Box>
 
-				<ReactTable
+				<DataTable
 					data={tableData}
 					columns={columnsData}
 					loading={isLoadingData || isFetching}
 					onHandleRefetch={refetch}
 					onGetSelectedRows={setSelectedStudents}
+					stickyColumn
+					resizable
 				/>
 			</Container>
 		</Fragment>

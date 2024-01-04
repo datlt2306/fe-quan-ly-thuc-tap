@@ -6,18 +6,16 @@ import {
 	XCircleIcon
 } from '@heroicons/react/20/solid';
 import { Fragment } from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { Slide, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AppRoutes from './routers';
+import Routers from './routers';
 
 function App() {
+	console.log('google client id:>>>', import.meta.env.VITE_GOOGLE_CLIENT_ID);
+
 	return (
 		<Fragment>
-			<BrowserRouter>
-				<AppRoutes />
-			</BrowserRouter>
-
+			<Routers />
 			<ToastContainer
 				hideProgressBar={true}
 				transition={Slide}

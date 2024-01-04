@@ -1,12 +1,12 @@
-import { useAddCompanyMutation, useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
-import { useGetAllMajorQuery } from '@/App/providers/apis/majorApi';
-import { companySchema } from '@/App/schemas/companySchema';
+import { useAddCompanyMutation, useGetAllCompanyQuery } from '@/App/store/apis/business.api';
+import { useGetAllMajorQuery } from '@/App/store/apis/major.api';
+import { companySchema } from '@/App/schemas/company.schema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
 import Typography from '@/Core/components/common/Text/Typography';
-import { StaffPaths } from '@/App/configs/routePaths';
+import { StaffPaths } from '@/App/configs/route-paths.config';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -115,7 +115,7 @@ const AddBusinessForm = () => {
 	);
 };
 
-const Container = tw.div`h-fit max-w-3xl md:(max-w-xl mx-auto) px-6 py-3`;
+const Container = tw.div`h-fit max-w-7xl mx-auto md:(max-w-2xl mx-auto) px-6 py-3`;
 const Form = tw.form`flex flex-col gap-6`;
 Form.Group = tw.div`flex grow gap-6 md:flex-wrap [&>*]:(basis-auto w-full)`;
 

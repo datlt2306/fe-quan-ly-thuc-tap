@@ -1,7 +1,7 @@
-import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
-import { useUploadReportMutation } from '@/App/providers/apis/reportApi';
-import { useGetOneStudentQuery } from '@/App/providers/apis/studentApi';
-import { reportSchema } from '@/App/schemas/reportSchema';
+import { useGetSetTimeQuery } from '@/App/store/apis/config-times.api';
+import { useUploadReportMutation } from '@/App/store/apis/report.api';
+import { useGetOneStudentQuery } from '@/App/store/apis/student.api';
+import { reportSchema } from '@/App/schemas/report.schema';
 import Button from '@/Core/components/common/Button';
 import FormControl from '@/Core/components/common/FormControl/FormControl';
 import InputFieldControl, { Input } from '@/Core/components/common/FormControl/InputFieldControl';
@@ -45,7 +45,7 @@ const ReportPage = () => {
 	const { data: student } = useGetOneStudentQuery(user?.id);
 	const [chosenFile, setChosenFile] = useState(null);
 	const [handleSubmitForm, { isLoading }] = useUploadReportMutation();
-	const { handleSubmit, control, reset } = useForm({
+	const { handleSubmit, control, reset, setError } = useForm({
 		resolver: yupResolver(reportSchema),
 		context: { startInternshipTime: student?.internshipTime }
 	});
@@ -152,7 +152,14 @@ const ReportPage = () => {
 									control={control}
 									name='file'
 									type='file'
-									onChange={(e) => setChosenFile(e.target.files[0])}
+									onChange={(e) => {
+										if (e.target.files[0].size > 1000000) {
+											setError('form', { message: 'Kích thước file quá lớn' });
+											return;
+										}
+										setError('form', null);
+										setChosenFile(e.target.files[0]);
+									}}
 								/>
 							</Form.Group>
 							<Button

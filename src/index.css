@@ -3,26 +3,36 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+	input[type='file'] {
+		@apply file:btn file:btn-sm rounded-md border-none p-1 shadow-none outline-none ring-0 file:border-none file:bg-base-content file:text-sm file:text-white focus:border-none focus:outline-none file:focus:border-none file:focus:outline-none file:hover:bg-base-content-active;
+	}
+}
+
 @layer components {
 	.table {
-		@apply divide-y divide-gray-300 bg-white;
+		@apply border-collapse bg-white;
 	}
+	.table-resizer {
+		@apply absolute right-0 top-0 z-50 h-full w-1 cursor-col-resize select-none;
+	}
+
 	.table tr {
 		@apply divide-x divide-gray-200;
 	}
 	.table th {
-		@apply whitespace-nowrap p-3 text-left !text-sm font-semibold text-base-content-active first-letter:uppercase sm:pl-0;
+		@apply whitespace-nowrap border-b border-gray-200 border-b-gray-200 bg-white px-3 py-0.5 text-left !text-sm font-semibold text-base-content-active first-letter:uppercase sm:pl-0;
 	}
 	.table tbody {
 		@apply divide-y divide-gray-200;
 	}
 
 	.table td {
-		@apply whitespace-nowrap px-3 py-2 text-sm text-base-content;
+		@apply whitespace-nowrap bg-white px-3 py-1.5 align-middle text-sm text-base-content;
 	}
 
 	.btn {
-		@apply inline-flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] bg-gray-50 font-semibold text-base-content outline-none duration-200 hover:bg-gray-50 focus:active:animate-[pulse_ease-in-out_0.3s];
+		@apply inline-flex w-auto items-center justify-center gap-2 whitespace-nowrap !rounded-[4px] bg-base-content  font-semibold outline-none duration-200 hover:bg-gray-50 focus:active:animate-[pulse_ease-in-out_0.3s];
 	}
 
 	.btn-primary {
@@ -50,7 +60,7 @@
 		@apply !bg-gray-200 !text-gray-400 !shadow-none;
 	}
 	.btn-xs {
-		@apply px-2 py-1 text-xs;
+		@apply px-2 py-[6px] text-xs;
 	}
 	.btn-sm {
 		@apply px-2.5 py-1.5 text-sm;
@@ -89,7 +99,93 @@
 	.loading-secondary {
 		@apply !border-r-secondary !border-t-secondary;
 	}
-	input[type='file'] {
-		@apply file:btn file:btn-sm rounded-md border-none p-1 shadow-none outline-none ring-0 file:border-none file:bg-base-content file:text-sm file:text-white focus:border-none focus:outline-none file:focus:border-none file:focus:outline-none file:hover:bg-base-content-active;
+	.tooltip {
+		@apply pointer-events-none
+			absolute z-[100]
+			w-max
+			-translate-x-1/2
+			rounded
+		 bg-white 
+			px-3
+			py-1.5 text-xs
+		 text-base-content
+			opacity-0 
+			shadow-xl
+			ring-[1px]
+			ring-gray-100
+			transition-opacity
+			duration-300
+			before:absolute
+			before:z-[99]
+			before:content-[""]
+			group-hover:opacity-100;
+	}
+	.tooltip-top {
+		@apply -top-[calc(100%+0.25rem)]
+		 	left-1/2
+			before:bottom-0
+			before:left-1/2
+			before:h-0
+			before:w-0
+			before:-translate-x-1/2
+			before:translate-y-[6px]
+			before:border-l-[6px]
+			before:border-r-[6px]
+			before:border-t-[6px]
+			before:border-l-transparent
+			before:border-r-transparent
+			before:border-t-white;
+	}
+	.tooltip-bottom {
+		@apply -bottom-[calc(100%+0.25rem)] 
+			left-1/2 
+			before:left-1/2 
+			before:top-0 
+			before:h-0 
+			before:w-0 
+			before:-translate-x-1/2 
+			before:translate-y-[1px]
+			before:border-b-[6px] 
+			before:border-l-[6px] 
+			before:border-r-[6px] 
+		 before:border-b-white 
+			before:border-l-transparent 
+			before:border-r-transparent;
+	}
+	.tooltip-right {
+		@apply -right-2
+			top-1/2
+			-translate-y-1/2
+			translate-x-full
+			before:right-full
+			before:top-1/2
+			before:h-0
+			before:w-0
+			before:-translate-y-1/2
+			before:translate-x-[1px]
+			before:border-b-[4px]
+			before:border-r-[6px]
+			before:border-t-[4px]
+			before:border-b-transparent
+		 before:border-r-white
+			before:border-t-transparent;
+	}
+	.tooltip-left {
+		@apply -left-2
+			top-1/2
+			-translate-x-full
+			-translate-y-1/2
+			before:left-full
+			before:top-1/2
+			before:h-0
+			before:w-0
+			before:-translate-x-[1px]
+			before:-translate-y-1/2
+			before:border-b-[4px]
+			before:border-l-[6px]
+			before:border-t-[4px]
+			before:border-b-transparent
+			before:border-l-white
+			before:border-t-transparent;
 	}
 }

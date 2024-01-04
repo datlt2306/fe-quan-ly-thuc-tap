@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useUpdateSemesterMutation } from '@/App/providers/apis/semesterApi';
-import { semesterDataValidator } from '@/App/schemas/semesterSchema';
+import { useUpdateSemesterMutation } from '@/App/store/apis/semester.api';
+import { semesterDataValidator } from '@/App/schemas/semester.schema';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
 import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';

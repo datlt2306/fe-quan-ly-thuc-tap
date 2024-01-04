@@ -24,6 +24,7 @@ export const StudentColumnAccessors = {
 	attitudePoint: 'Điểm thái độ',
 	reviewer: 'Reviewer',
 	createdAt: 'Ngày bổ sung',
+	updatedAt: 'Ngày cập nhật',
 	note: 'Ghi chú'
 };
 
@@ -64,6 +65,23 @@ export const StudentSchoolingStatus = {
 	HDI: 'Học đi',
 	HL: 'Học lại',
 	TN: 'Tốt nghiệp'
+};
+
+/**@enum */
+export const StudentStatusCodeEnum = {
+	WAITING_FOR_CV_CHECK: 0,
+	REVISE_CV: 1,
+	RECEIVE_CV: 2,
+	NOT_QUALIFIED: 3,
+	SUBMITTED_REPORT: 4,
+	REVISE_REPORT: 5,
+	INTERNSHIP: 6,
+	SUBMITTED_REPORT: 7,
+	REVISE_REPORT: 8,
+	COMPLETED: 9,
+	NOT_REGISTERED: 10,
+	REGISTERED: 11,
+	NOT_PASS: 12
 };
 
 /**

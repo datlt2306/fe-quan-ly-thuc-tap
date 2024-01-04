@@ -1,5 +1,5 @@
-import { useUpdateReviewMutation } from '@/App/providers/apis/studentApi';
-import { reviewSchema } from '@/App/schemas/studentSchema';
+import { useUpdateReviewMutation } from '@/App/store/apis/student.api';
+import { reviewSchema } from '@/App/schemas/student.schema';
 import Button from '@/Core/components/common/Button';
 import SelectFieldControl from '@/Core/components/common/FormControl/SelectFieldControl';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';

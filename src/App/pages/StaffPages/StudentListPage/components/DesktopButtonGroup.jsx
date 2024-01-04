@@ -1,9 +1,9 @@
-import Button from '@/Core/components/common/Button';
-import React, { forwardRef, memo, useRef } from 'react';
-import tw from 'twin.macro';
-import { studentListSampleData } from '../mocks';
 import { useExportToExcel } from '@/App/hooks/useExcel';
+import Box from '@/Core/components/common/Box';
+import Button from '@/Core/components/common/Button';
 import { ArrowDownTrayIcon, DocumentArrowDownIcon, DocumentArrowUpIcon } from '@heroicons/react/24/outline';
+import { forwardRef, memo, useRef } from 'react';
+import { studentListSampleData } from '../mocks';
 
 const DesktopButtonGroup = forwardRef(({ tableData, handleImport, handleExport, canImport }, ref) => {
 	const localRef = useRef(null);
@@ -11,9 +11,14 @@ const DesktopButtonGroup = forwardRef(({ tableData, handleImport, handleExport, 
 	const [handleExportFile] = useExportToExcel();
 
 	return (
-		<ButtonList>
-			<Button as='label' size='sm' htmlFor='file-input' variant={canImport ? 'primary' : 'disabled'}>
-				<DocumentArrowUpIcon className='h-5 w-5 text-[inherit]' /> Tải lên file Excel
+		<Box className='flex items-center gap-1 sm:hidden md:hidden'>
+			<Button
+				as='label'
+				size='sm'
+				htmlFor='file-input'
+				variant={canImport ? 'primary' : 'disabled'}
+				icon={DocumentArrowUpIcon}>
+				Tải lên file Excel
 				<input
 					ref={fileInputRef}
 					type='file'
@@ -25,18 +30,24 @@ const DesktopButtonGroup = forwardRef(({ tableData, handleImport, handleExport, 
 					disabled={!canImport}
 				/>
 			</Button>
-			<Button variant='success' size='sm' onClick={() => handleExport(tableData)}>
-				<DocumentArrowDownIcon className='h-5 w-5 text-[inherit]' />
-				Export file Excel
-			</Button>
-			<Button variant='secondary' size='sm' onClick={() => handleExportFile(studentListSampleData)}>
-				<ArrowDownTrayIcon className='h-5 w-5 text-[inherit]' />
-				Tải file mẫu
-			</Button>
-		</ButtonList>
+
+			<Button
+				variant='success'
+				size='sm'
+				onClick={() => handleExport(tableData)}
+				icon={DocumentArrowDownIcon}
+				text='Export file Excel'
+			/>
+
+			<Button
+				variant='secondary'
+				size='sm'
+				onClick={() => handleExportFile(studentListSampleData)}
+				icon={ArrowDownTrayIcon}
+				text='Tải file mẫu'
+			/>
+		</Box>
 	);
 });
-
-const ButtonList = tw.div`flex items-center gap-1 sm:hidden md:hidden`;
 
 export default memo(DesktopButtonGroup);

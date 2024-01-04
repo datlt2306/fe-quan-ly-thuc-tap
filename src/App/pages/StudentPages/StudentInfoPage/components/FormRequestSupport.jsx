@@ -1,5 +1,5 @@
-import { useRequestOfStudentMutation } from '@/App/providers/apis/requestStudentsApi';
-import { requestOfStudentValidator } from '@/App/schemas/requestStudentSchema';
+import { useRequestOfStudentMutation } from '@/App/store/apis/request-students.api';
+import { requestOfStudentValidator } from '@/App/schemas/request-student.schema';
 import Button from '@/Core/components/common/Button';
 import TextareaFieldControl from '@/Core/components/common/FormControl/TextareaFieldControl';
 import { EnvelopeIcon, PaperAirplaneIcon, XMarkIcon } from '@heroicons/react/24/outline';

@@ -1,7 +1,7 @@
-import { useUploadCvMutation } from '@/App/providers/apis/internRegistrationApi';
-import { formSignUpSelfFindingSchema } from '@/App/schemas/formSignUpInterShipSchema';
+import { formSignUpSelfFindingSchema } from '@/App/schemas/signup-internship.schema';
+import { useUploadCvMutation } from '@/App/store/apis/intern-registration.api';
 import Button from '@/Core/components/common/Button';
-import { LoadingSpinner } from '@/Core/components/common/Loading/LoadingSpinner';
+import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -78,10 +78,15 @@ const FormSelfFinding = ({ selectedOption, user }) => {
 				<SharedFields control={control} student={user} inputFields={FieldsFormSelfFinding} />
 			</Form.Group>
 
-			<Button type='submit' variant='primary' disabled={isLoading} className='w-fit'>
-				{isLoading && <LoadingSpinner size='sm' variant='primary' />}
-				Đăng ký
-			</Button>
+			<Button
+				type='submit'
+				variant='primary'
+				loading={isLoading}
+				icon={PaperAirplaneIcon}
+				disabled={isLoading}
+				className='w-fit'
+				text='Đăng ký'
+			/>
 		</Form>
 	);
 };

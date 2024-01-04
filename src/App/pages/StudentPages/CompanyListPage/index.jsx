@@ -1,10 +1,10 @@
-import { useGetAllCompanyQuery } from '@/App/providers/apis/businessApi';
-import { useGetSetTimeQuery } from '@/App/providers/apis/configTimesApi';
-import { useGetAllSemestersQuery } from '@/App/providers/apis/semesterApi';
+import { useGetAllCompanyQuery } from '@/App/store/apis/business.api';
+import { useGetSetTimeQuery } from '@/App/store/apis/config-times.api';
+import { useGetAllSemestersQuery } from '@/App/store/apis/semester.api';
 import Button from '@/Core/components/common/Button';
 import Modal from '@/Core/components/common/Modal';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
+import DataTable from '@/Core/components/common/Table/DataTable';
+import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import Text from '@/Core/components/common/Text/Text';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -132,7 +132,7 @@ const CompanyListPage = () => {
 						</Modal.Content>
 					</Modal>
 
-					<ReactTable
+					<DataTable
 						columns={columnsData}
 						data={companies ?? []}
 						loading={companyLoading || isFetching}

@@ -3,11 +3,11 @@ import {
 	useGetRequestOfStudentQuery,
 	useRemoveRequestApiMutation,
 	useResetStudentRequestMutation
-} from '@/App/providers/apis/requestStudentsApi';
+} from '@/App/store/apis/request-students.api';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/ReactTableFilters';
+import DataTable from '@/Core/components/common/Table/DataTable';
+import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
 import Text from '@/Core/components/common/Text/Text';
 import { formatDate } from '@/Core/utils/formatDate';
 import { useEffect, useMemo, useState } from 'react';
@@ -15,12 +15,7 @@ import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 
 const StudentSupportPage = () => {
-	const {
-		data: studentRequests,
-		refetch,
-		isLoading,
-		isFetching
-	} = useGetRequestOfStudentQuery(undefined, { refetchOnMountOrArgChange: true });
+	const { data: studentRequests, refetch, isLoading, isFetching } = useGetRequestOfStudentQuery(undefined);
 	const [handleAccept] = useResetStudentRequestMutation();
 	const [handleReject] = useRemoveRequestApiMutation();
 	const [tableData, setTableData] = useState([]);
@@ -145,7 +140,7 @@ const StudentSupportPage = () => {
 	}, [studentRequests, status]);
 
 	return (
-		<ReactTable columns={columnsData} data={tableData} loading={isLoading || isFetching} onHandleRefetch={refetch} />
+		<DataTable columns={columnsData} data={tableData} loading={isLoading || isFetching} onHandleRefetch={refetch} />
 	);
 };
 

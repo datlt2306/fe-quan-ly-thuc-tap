@@ -1,9 +1,9 @@
 import { StudentColumnAccessors, StudentReviewTypeEnum, StudentStatusEnum } from '@/App/constants/studentConstants';
-import { useGetStudentsToReviewQuery, useUpdateStudentMutation } from '@/App/providers/apis/studentApi';
-import { studentScoreSchema } from '@/App/schemas/studentSchema';
+import { useGetStudentsToReviewQuery, useUpdateStudentMutation } from '@/App/store/apis/student.api';
+import { studentScoreSchema } from '@/App/schemas/student.schema';
 import Button from '@/Core/components/common/Button';
-import EditableCell from '@/Core/components/common/Table/EditableCell';
-import ReactTable from '@/Core/components/common/Table/ReactTable';
+import EditableCell from '@/Core/components/common/Table/components/EditableCell';
+import DataTable from '@/Core/components/common/Table/DataTable';
 import Typography from '@/Core/components/common/Text/Typography';
 import { ArrowPathIcon, ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { Fragment, useMemo, useState } from 'react';
@@ -111,14 +111,14 @@ const ReviewReportPage = () => {
 					)}
 				</Box>
 
-				<ReactTable
+				<DataTable
 					data={tableData}
 					columns={columnsData}
 					loading={isLoadingData || isFetching}
+					stickyColumn
+					resizable
 					onHandleRefetch={refetch}
 					onGetSelectedRows={setSelectedStudents}
-					// onUpdateData={updateTableData}
-					// skipPageReset={skipResetPage}
 				/>
 			</Container>
 		</Fragment>

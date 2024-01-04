@@ -3,9 +3,18 @@ import { forwardRef, useMemo, useRef } from 'react';
 import { LoadingSpinner } from '../Loading/LoadingSpinner';
 
 /**
- * @prop {{as: HTMLElementTagNameMap, variant: const, size: const, disabled: boolean, loading: boolean, [key: string]: React.ButtonHTMLAttributes }} props
- * @prop {MutableRefObject<any>} ref
- * @returns Tailwind styled Button component
+ * @typedef TButtonProps
+ * @prop {keyof HTMLElementTagNameMap | React.ElementType} as
+ * @prop {'xs' | 'sm' | 'md' | 'lg'} size
+ * @prop {'square' | 'pill' | 'circle' | undefined} shape
+ * @prop {'primary' | 'secondary' | 'info' | 'success' | 'error' | 'warning' | 'outline' | 'ghost' | 'disabled'} variant
+ * @prop {React.ElementType} icon
+ * @prop {boolean} loading
+ * @prop {string} text
+ */
+
+/**
+ * @type {React.ForwardRefExoticComponent<TButtonProps & React.HTMLAttributes<HTMLButtonElement>, React.Ref>}
  */
 const Button = (
 	{
@@ -14,6 +23,7 @@ const Button = (
 		shape,
 		disabled,
 		loading,
+		text,
 		as: Element = 'button', // Polymorphic button has behaviors as other tag
 		...props
 	},
@@ -22,36 +32,38 @@ const Button = (
 	const localRef = useRef(null);
 	const resolvedRef = ref || localRef;
 
-	const buttonStyles = useMemo(
-		() =>
-			classNames(
-				{
-					btn: true,
-					/* Variant */
-					'btn-primary': variant === 'primary',
-					'btn-secondary': variant === 'secondary',
-					'btn-outline': variant === 'outline',
-					'btn-ghost': variant === 'ghost',
-					'btn-info': variant === 'info',
-					'btn-success': variant === 'success',
-					'btn-error': variant === 'error',
-					'btn-disabled': variant === 'disabled',
-					/* Shape */
-					'btn-square': shape === 'square',
-					'btn-circle': shape === 'circle',
-					'btn-pill': shape === 'pill',
-					/* Size */
-					'btn-xs': size === 'xs',
-					'btn-sm': size === 'sm',
-					'btn-md': size === 'md',
-					'btn-lg': size === 'lg'
-				},
-				props.className
-			),
-		[variant, shape, size]
+	const buttonStyles = classNames(
+		{
+			btn: true,
+			/* Variant */
+			'btn-primary': variant === 'primary',
+			'btn-secondary': variant === 'secondary',
+			'btn-outline': variant === 'outline',
+			'btn-ghost': variant === 'ghost',
+			'btn-info': variant === 'info',
+			'btn-success': variant === 'success',
+			'btn-error': variant === 'error',
+			'btn-disabled': variant === 'disabled',
+			/* Shape */
+			'btn-square': shape === 'square',
+			'btn-circle': shape === 'circle',
+			'btn-pill': shape === 'pill',
+			/* Size */
+			'btn-xs': size === 'xs',
+			'btn-sm': size === 'sm',
+			'btn-md': size === 'md',
+			'btn-lg': size === 'lg'
+		},
+		props.className
 	);
+
 	return (
-		<Element {...props} className={buttonStyles} ref={resolvedRef} disabled={variant === 'disabled' || disabled}>
+		<Element
+			{...props}
+			role='button'
+			className={buttonStyles}
+			ref={resolvedRef}
+			disabled={variant === 'disabled' || disabled}>
 			{loading && <LoadingSpinner size='sm' />}
 			{props.icon && !loading && (
 				<props.icon
@@ -61,7 +73,7 @@ const Button = (
 					})}
 				/>
 			)}
-			{props.children}
+			{props.children || text}
 		</Element>
 	);
 };
