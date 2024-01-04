@@ -54,8 +54,9 @@ export default function SigninPage() {
 					<Select
 						onChange={(e) => handleSelectCampus(e.target.value)}
 						className='capitalize'
+						defaultValue=''
 						disabled={isFetching}>
-						{isFetching && <Option selected>Đang tải ...</Option>}
+						{isFetching && <Option>Đang tải ...</Option>}
 						<Option value=''>Chọn cơ sở</Option>
 						{Array.isArray(listCampus) &&
 							listCampus?.map((campus) => (

@@ -26,11 +26,6 @@ const SemesterPage = () => {
 	const { reset } = useForm({
 		resolver: yupResolver(campusDataValidator)
 	});
-	const [canCreateSemester, setCanCreateSemester] = useState(false);
-
-	useEffect(() => {
-		setCanCreateSemester(!!semesters?.defaultSemester === false);
-	}, [semesters]);
 
 	const tableData = useMemo(() => {
 		return Array.isArray(semesters?.listSemesters)
@@ -116,7 +111,7 @@ const SemesterPage = () => {
 				<ButtonList>
 					<Button
 						type='button'
-						variant={canCreateSemester ? 'primary' : 'disabled'}
+						variant='primary'
 						size='sm'
 						onClick={() => {
 							reset();

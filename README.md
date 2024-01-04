@@ -11,21 +11,25 @@ The Internship Management System provides a comprehensive solution for managing 
 ## Installation and Setup
 
 1. Clone the repository:
+
    ```
    git clone https://github.com/datlt2306/fe-quan-ly-thuc-tap.git <your_folder_name>
    ```
 
 2. Navigate to the project directory:
+
    ```
    cd <your_folder_name>
    ```
 
 3. Install the dependencies:
+
    ```
    npm install
    ```
 
 4. Start the development server:
+
    ```
    npm run dev
    ```
@@ -34,18 +38,18 @@ The Internship Management System provides a comprehensive solution for managing 
 
 ## Features
 
-- Student registration: Students can register for internships and provide necessary information.
-- Company management: Companies can register, update their profiles, and offer internships.
-- Internship assignment: Administrators can assign students to available internships based on their preferences.
-- Evaluation: Supervisors can evaluate students' performance during the internship period.
-- Reporting: Generate reports and statistics on internship activities.
+-  Student registration: Students can register for internships and provide necessary information.
+-  Company management: Companies can register, update their profiles, and offer internships.
+-  Internship assignment: Administrators can assign students to available internships based on their preferences.
+-  Evaluation: Supervisors can evaluate students' performance during the internship period.
+-  Reporting: Generate reports and statistics on internship activities.
 
 ## Technologies Used
 
-- React: JavaScript library for building user interfaces.
-- Tailwind CSS/HeadlessUI: Utility-first CSS framework for styling the application.
-- React Table: Lightweight and flexible table library for displaying data.
-- Other libraries and tools: Redux Toolkit, React Router, Axios, Yup, etc.
+-  React: JavaScript library for building user interfaces.
+-  Tailwind CSS/HeadlessUI: Utility-first CSS framework for styling the application.
+-  React Table: Lightweight and flexible table library for displaying data.
+-  Other libraries and tools: Redux Toolkit, React Router, Axios, Yup, etc.
 
 ## Contributing
 
