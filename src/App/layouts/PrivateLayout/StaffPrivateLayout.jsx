@@ -1,6 +1,6 @@
 import { StaffPaths } from '@/App/configs/route-paths.config';
 import { UserRoleEnum } from '@/App/constants/userRoles';
-import NotificationWithAction from '@/Core/components/common/Notifycation/NotificationWithAction';
+import NotificationWithAction from '@/Core/components/common/Notification/NotificationWithAction';
 import { BellAlertIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';

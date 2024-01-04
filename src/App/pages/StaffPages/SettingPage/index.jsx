@@ -5,7 +5,7 @@ import { registerAppPassword } from '@/App/store/slices/auth.slice';
 import Box from '@/Core/components/common/Box';
 import Button from '@/Core/components/common/Button';
 import InputFieldControl from '@/Core/components/common/FormControl/InputFieldControl';
-import NotificationWithAction from '@/Core/components/common/Notifycation/NotificationWithAction';
+import NotificationWithAction from '@/Core/components/common/Notification/NotificationWithAction';
 import Typography from '@/Core/components/common/Text/Typography';
 import { CheckCircleIcon, CheckIcon, LinkIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';

@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import path from 'path';
 
 export default defineConfig({
-	envDir: 'env',
+	// envDir: 'env',
 	resolve: {
 		alias: [
 			{
@@ -23,6 +23,7 @@ export default defineConfig({
 			}
 		})
 	],
+	preview: { port: 4000 },
 	server: {
 		port: 3000
 	},

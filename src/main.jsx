@@ -13,11 +13,11 @@ const App = lazy(() => import('./App'));
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<Provider store={store}>
 		<PersistGate persistor={persistor}>
-			<Suspense fallback={<LoadingProgressBar />}>
-				<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+			<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+				<Suspense fallback={<LoadingProgressBar />}>
 					<App />
-				</GoogleOAuthProvider>
-			</Suspense>
+				</Suspense>
+			</GoogleOAuthProvider>
 		</PersistGate>
 	</Provider>
 );
