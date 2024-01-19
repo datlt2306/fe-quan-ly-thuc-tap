@@ -1,15 +1,30 @@
-import { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import _ from 'lodash';
+import { useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-const useQueryParams = (...path) => {
-	const { search } = useLocation();
-	if (!path) {
-		return {};
-	}
-	const query = useMemo(() => new URLSearchParams(search), [search]);
-	const queryObject = path.reduce((prevQuery, currentQuery) => {
-		return { ...prevQuery, [currentQuery]: query.get(currentQuery) };
-	}, {});
-	return queryObject;
-};
-export default useQueryParams;
+/**
+ * @param  {...string} path
+ * @returns {[Record<string, string>, (key: string, value: any) => void, (key: string) => void]}
+ */
+export default function useQueryParams(...path) {
+	const [searchParmams, setSearchParams] = useSearchParams();
+	const params =
+		path.length === 0
+			? Object.fromEntries(searchParmams.entries())
+			: _.pick(Object.fromEntries(searchParmams.entries()), path);
+
+	const setParam = (key, value) =>
+		setSearchParams((params) => {
+			params.set(key, value);
+			return params;
+		});
+
+	const removeParam = (key) => {
+		setSearchParams((params) => {
+			params.delete(key);
+			return params;
+		});
+	};
+
+	return [params, setParam, removeParam];
+}

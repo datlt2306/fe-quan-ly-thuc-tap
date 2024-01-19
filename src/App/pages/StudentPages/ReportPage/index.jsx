@@ -152,6 +152,7 @@ const ReportPage = () => {
 									control={control}
 									name='file'
 									type='file'
+									description='File tải PDF lên có dung lượng không quá 5 MB'
 									onChange={(e) => {
 										if (e.target.files[0].size > 1000000) {
 											setError('form', { message: 'Kích thước file quá lớn' });

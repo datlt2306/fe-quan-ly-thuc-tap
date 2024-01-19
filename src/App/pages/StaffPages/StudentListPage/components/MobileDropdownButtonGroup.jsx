@@ -52,7 +52,11 @@ const MobileDropdownButtonGroup = forwardRef(({ tableData, handleImport, handleE
 							type='file'
 							id='file-input'
 							className='hidden'
-							onChange={(e) => handleImport(e.target.files[0])}
+							onChange={(e) =>
+								handleImport(e.target.files[0]).then(() => {
+									e.target.value = '';
+								})
+							}
 						/>
 					</Menu.Item>
 					<Menu.Item as='button' className={getMenuItemClassNames()} onClick={() => handleExport(tableData)}>

@@ -1,11 +1,15 @@
 import { StudentColumnAccessors, StudentStatusGroupEnum } from '@/App/constants/studentConstants';
 import Badge from '@/Core/components/common/Badge';
 import Button from '@/Core/components/common/Button';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
+import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/TableFilter';
 import IndeterminateCheckbox from '@/Core/components/common/Table/components/RowSelectionCheckbox';
 import { formatDate } from '@/Core/utils/formatDate';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import tw from 'twin.macro';
+
+/**
+ * @typedef {import('react-table').Column} Column
+ */
 
 const List = tw.ul`flex flex-col gap-1`;
 List.Item = ({ ...props }) => <li {...props}>{props.children}</li>;
@@ -15,6 +19,9 @@ const handleGetInternStatusStyle = (value) => {
 	return style;
 };
 
+/**
+ * @type {Column<object>[]}
+ */
 const InstanceStudentColumns = [
 	{
 		Header: ({ getToggleAllRowsSelectedProps }) => <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />,
@@ -23,6 +30,7 @@ const InstanceStudentColumns = [
 		Cell: ({ row }) => {
 			return <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />;
 		},
+
 		maxWidth: 60,
 		minWidth: 60
 	},
@@ -87,7 +95,9 @@ const InstanceStudentColumns = [
 		Filter: SelectColumnFilter,
 
 		filterable: true,
-		Cell: ({ value }) => <Badge variant={handleGetInternStatusStyle(value)}>{value}</Badge>
+		Cell: ({ value }) => <Badge variant={handleGetInternStatusStyle(value)}>{value}</Badge>,
+		minWidth: 60,
+		width: 192
 	},
 	{
 		Header: 'Công ty thực tập',

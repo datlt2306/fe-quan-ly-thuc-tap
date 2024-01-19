@@ -91,8 +91,9 @@ const RecordPage = () => {
 								label='Upload (Image, PDF)'
 								control={control}
 								name='form'
-								description='File tải lên có dung lượng không quá 1 MB'
+								description='File tải PDF lên có dung lượng không quá 5 MB'
 								type='file'
+								accept='application/pdf'
 								onChange={(e) => {
 									if (e.target.files[0].size > 1000000) {
 										setError('form', { message: 'Kích thước file quá lớn' });

@@ -25,7 +25,9 @@ const DesktopButtonGroup = forwardRef(({ tableData, handleImport, handleExport, 
 					id='file-input'
 					className='hidden'
 					onChange={(e) => {
-						handleImport(e.target.files[0]);
+						handleImport(e.target.files[0]).then(() => {
+							e.target.value = '';
+						});
 					}}
 					disabled={!canImport}
 				/>

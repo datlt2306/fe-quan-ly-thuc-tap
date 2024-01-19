@@ -2,13 +2,16 @@ import { useDeleteMajorMutation, useGetAllMajorQuery } from '@/App/store/apis/ma
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import DataTable from '@/Core/components/common/Table/DataTable';
-import { InputColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
+import { InputColumnFilter } from '@/Core/components/common/Table/components/TableFilter';
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { Fragment, useCallback, useMemo, useState } from 'react';
+import { Fragment, useCallback, useContext, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import AddMajorSlideOver from './components/AddMajorSlideOver';
 import UpdateMajorSlideOver from './components/UpdateMajorSlideOver';
+import { TableContext } from '@/Core/components/common/Table/context/TableProvider';
+import Box from '@/Core/components/common/Box';
+import TableRowActions from './components/TableRowActions';
 
 const MajorListPage = () => {
 	const [major, setMajor] = useState();
@@ -86,29 +89,7 @@ const MajorListPage = () => {
 				canSort: false,
 				filterable: false,
 				isSort: false,
-				Cell: ({ value }) => (
-					<ButtonList>
-						<Button
-							size='xs'
-							variant='ghost'
-							shape='square'
-							onClick={() => {
-								onOpenUpdate(value);
-							}}>
-							<PencilSquareIcon className='h-4 w-4' />
-						</Button>
-						<PopConfirm
-							okText='Ok'
-							cancelText='Cancel'
-							title={'Xóa chuyên ngành'}
-							description={'Bạn muốn xóa chuyên ngành này ?'}
-							onConfirm={() => onDeleteSubmit(value)}>
-							<Button size='xs' variant='ghost' className='text-error' shape='square'>
-								<TrashIcon className='h-4 w-4' />
-							</Button>
-						</PopConfirm>
-					</ButtonList>
-				)
+				Cell: ({ value }) => <TableRowActions value={value} onUpdate={onOpenUpdate} onDelete={onDeleteSubmit} />
 			}
 		],
 		[onDeleteSubmit, onOpenUpdate]
@@ -131,26 +112,16 @@ const MajorListPage = () => {
 				title={'Sửa ngành học'}
 			/>
 
-			<Box>
-				<ButtonList>
-					<Button type='button' variant='primary' size='sm' onClick={handleAddSlideOver}>
-						<PlusIcon className='h-4 w-4 text-[inherit] ' />
-						Thêm ngành học
-					</Button>
-				</ButtonList>
+			<Box className='flex flex-col gap-y-6'>
+				<Button type='button' variant='primary' size='sm' className='w-fit' onClick={handleAddSlideOver}>
+					<PlusIcon className='h-4 w-4 text-[inherit] ' />
+					Thêm ngành học
+				</Button>
 
-				<DataTable
-					columns={columnsData}
-					data={tableData}
-					loading={isLoading || isFetching}
-					onHandleRefetch={refetch}
-				/>
+				<DataTable columns={columnsData} data={tableData} loading={isLoading} onHandleRefetch={refetch} />
 			</Box>
 		</Fragment>
 	);
 };
-
-const Box = tw.div`flex flex-col gap-6`;
-const ButtonList = tw.div`flex items-center gap-px`;
 
 export default MajorListPage;

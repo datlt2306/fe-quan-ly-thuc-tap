@@ -11,8 +11,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Routers from './routers';
 
 function App() {
-	console.log('google client id:>>>', import.meta.env.VITE_GOOGLE_CLIENT_ID);
-
 	return (
 		<Fragment>
 			<Routers />
