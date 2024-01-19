@@ -62,6 +62,7 @@ const transformResponseData = (response, arg) => {
 };
 
 export const {
+	usePrefetch,
 	useGetAllStaffQuery,
 	useUpdateStaffMutation,
 	useAddStaffMutation,

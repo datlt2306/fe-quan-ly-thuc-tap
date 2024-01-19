@@ -7,9 +7,9 @@ import { Fragment, useState } from 'react';
 import { Aside, Image } from './Styled';
 
 const navlinkClasses = (isActive) =>
-	classNames('hover:bg-gray-100', {
+	classNames({
 		'flex items-center gap-2 p-2 ': true,
-		'text-primary bg-gray-50': isActive,
+		'text-primary': isActive,
 		'text-base-content': !isActive
 	});
 
@@ -25,7 +25,7 @@ const DesktopSidebar = ({ navigation }) => {
 							Array.isArray(item.children) ? (
 								<Disclosure key={item.name} as={Menu.Item} className='overflow-hidden rounded-md outline-none'>
 									<Fragment>
-										<Disclosure.Button className='z-10 flex w-full items-center justify-between border-none p-2 text-gray-800 outline-none focus:border-none ui-open:bg-gray-50 hover:bg-gray-50'>
+										<Disclosure.Button className='z-10 flex w-full items-center justify-between rounded-md border-none p-2 text-gray-800 outline-none duration-300 focus:border-none hover:bg-gray-100'>
 											<span className='flex flex-1 items-center gap-2 text-base-content'>
 												<item.icon className='h-6 w-6' />
 												{item.name}
@@ -35,7 +35,7 @@ const DesktopSidebar = ({ navigation }) => {
 										</Disclosure.Button>
 
 										<Transition
-											className='-translate-y-1 overflow-hidden bg-gray-50'
+											className='-translate-y-1 overflow-hidden'
 											enter='transition-max-height duration-300 ease-in'
 											enterFrom='max-h-0'
 											enterTo='max-h-full'
@@ -48,7 +48,7 @@ const DesktopSidebar = ({ navigation }) => {
 														child?.show && (
 															<Menu.Item
 																key={index}
-																className='rounded-sm border-none py-2 pl-10 pr-2 outline-none transition-all duration-200 ease-in-out focus:border-none hover:bg-gray-200 focus:active:bg-gray-100'>
+																className='rounded-sm border-none py-2 pl-10 pr-2 outline-none transition-all duration-200 ease-in-out focus:border-none hover:bg-gray-100'>
 																<NavLink
 																	role='link'
 																	to={child.path}
@@ -66,7 +66,7 @@ const DesktopSidebar = ({ navigation }) => {
 							) : (
 								<Menu.Item
 									key={item.name}
-									className='overflow-hidden rounded-md outline-none transition duration-500 hover:bg-gray-50'>
+									className='overflow-hidden rounded-md outline-none transition duration-500 hover:bg-gray-100'>
 									<NavLink to={item.path} role='link' className={({ isActive }) => navlinkClasses(isActive)}>
 										<item.icon className='h-6 w-6 shrink-0 text-[inherit]' aria-hidden='true' />
 										{item.name}

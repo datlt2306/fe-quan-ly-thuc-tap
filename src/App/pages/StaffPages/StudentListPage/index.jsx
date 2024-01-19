@@ -1,6 +1,8 @@
 import { StudentColumnAccessors } from '@/App/constants/studentConstants';
 import { useExportToExcel } from '@/App/hooks/useExcel';
+import useLocalStorage from '@/App/hooks/useLocalstorage';
 import { useAddStudentsMutation, useGetStudentsQuery } from '@/App/store/apis/student.api';
+import Box from '@/Core/components/common/Box';
 import { Option, Select } from '@/Core/components/common/FormControl/SelectFieldControl';
 import DataTable from '@/Core/components/common/Table/DataTable';
 import { AllowedFileExtension } from '@/Core/constants/allowedFileType';
@@ -14,9 +16,6 @@ import tw from 'twin.macro';
 import InstanceStudentColumns from '../Shared/InstanceStudentColumns';
 import DesktopButtonGroup from './components/DesktopButtonGroup';
 import MobileDropdownButtonGroup from './components/MobileDropdownButtonGroup';
-import useLocalStorage from '@/App/hooks/useLocalstorage';
-import HttpStatusCode from '@/Core/constants/httpStatus';
-import Box from '@/Core/components/common/Box';
 
 const StudentListPage = () => {
 	const { currentCampus } = useSelector((state) => state.campus);
@@ -24,12 +23,7 @@ const StudentListPage = () => {
 	const [addStudents, addStudentsState] = useAddStudentsMutation();
 	const { defaultSemester, listSemesters } = useSelector((state) => state.semester);
 	const [currentSemester, setCurrentSemester] = useLocalStorage('current_semester', null);
-	const {
-		data: studentsListData,
-		isLoading,
-		refetch,
-		isFetching
-	} = useGetStudentsQuery({ semester: currentSemester });
+	const { data: studentsListData, isLoading, refetch } = useGetStudentsQuery({ semester: currentSemester });
 	const fileInputRef = useRef(null);
 	const toastId = useRef(null);
 	const [selectedStudents, setSelectedStudents] = useState([]);
@@ -118,7 +112,6 @@ const StudentListPage = () => {
 		}
 	}, [addStudentsState]);
 	// Define columns of table
-	const columns = useMemo(() => InstanceStudentColumns, [isLoading]);
 
 	return (
 		<Container>

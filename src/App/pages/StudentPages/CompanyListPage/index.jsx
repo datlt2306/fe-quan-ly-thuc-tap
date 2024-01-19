@@ -4,7 +4,7 @@ import { useGetAllSemestersQuery } from '@/App/store/apis/semester.api';
 import Button from '@/Core/components/common/Button';
 import Modal from '@/Core/components/common/Modal';
 import DataTable from '@/Core/components/common/Table/DataTable';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
+import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/TableFilter';
 import Text from '@/Core/components/common/Text/Text';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';

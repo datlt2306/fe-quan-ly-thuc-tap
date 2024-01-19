@@ -54,10 +54,10 @@
 		@apply !bg-transparent text-base-content !shadow-none hover:!bg-gray-100 focus:active:!bg-gray-200 [&>:where(.loading)]:!border-r-base-content [&>:where(.loading)]:!border-t-base-content;
 	}
 	.btn-outline {
-		@apply rounded-[inherit] border bg-gray-100 text-base-content !shadow-none ring-inset ring-[1] ring-base-content hover:bg-gray-200 focus:active:bg-gray-200 [&>:where(.loading)]:!border-r-base-content [&>:where(.loading)]:!border-t-base-content;
+		@apply rounded-[inherit] border bg-white text-base-content !shadow-none ring-inset ring-[1] ring-base-content hover:bg-gray-100 focus:active:bg-gray-200 [&>:where(.loading)]:!border-r-base-content [&>:where(.loading)]:!border-t-base-content;
 	}
 	.btn-disabled {
-		@apply !bg-gray-200 !text-gray-400 !shadow-none;
+		@apply !bg-gray-100 !text-base-content !shadow-none;
 	}
 	.btn-xs {
 		@apply px-2 py-[6px] text-xs;

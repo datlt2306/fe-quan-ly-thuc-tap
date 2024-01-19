@@ -1,12 +1,12 @@
-import useServerPagination from '@/App/hooks/useServerPagination';
-import { useDeleteStaffMutation, useGetAllManagerQuery } from '@/App/store/apis/staff-list.api';
 import { staffDataValidator } from '@/App/schemas/staff.schema';
+import { useDeleteStaffMutation, useGetAllManagerQuery } from '@/App/store/apis/staff-list.api';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import DataTable from '@/Core/components/common/Table/DataTable';
-import { InputColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
+import { InputColumnFilter } from '@/Core/components/common/Table/components/TableFilter';
 import { PencilSquareIcon, TrashIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
+import _ from 'lodash';
 import { Fragment, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -14,18 +14,19 @@ import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import AddStaffSlideOver from './components/AddManagerSlideOver';
 import UpdateStaffModal from './components/UpdateManagerModal';
+import useQueryParams from '@/App/hooks/useQueryParams';
 
 const ManagerListPage = () => {
 	const currentUser = useSelector((state) => state.auth?.user);
 	const [isEditing, setIsEditing] = useState(false);
 	const [user, setUser] = useState();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
-	const { paginationState, handlePaginate } = useServerPagination();
+	const [params] = useQueryParams('page', 'limit');
+
 	const { data, isLoading, refetch, isFetching } = useGetAllManagerQuery({
-		page: paginationState?.pageIndex,
-		limit: paginationState?.pageSize
+		page: Boolean(params.page) ? params.page : 1,
+		limit: Boolean(params.limit) ? params.limit : 10
 	});
-	const tableData = useMemo(() => data?.data ?? [], [data]);
 
 	const { reset } = useForm({
 		resolver: yupResolver(staffDataValidator)
@@ -46,8 +47,8 @@ const ManagerListPage = () => {
 		toast.success('Xóa nhân viên thành công!');
 	};
 
-	const onOpenUpdate = (data) => {
-		const selectedUser = Array.isArray(tableData) && tableData?.find((item) => item?._id === data);
+	const onOpenUpdate = (id) => {
+		const selectedUser = Array.isArray(data) && data?.data?.find((item) => item?._id === id);
 		if (selectedUser) {
 			setUser(selectedUser);
 		}
@@ -116,7 +117,7 @@ const ManagerListPage = () => {
 				)
 			}
 		],
-		[tableData]
+		[data]
 	);
 
 	return (
@@ -147,16 +148,11 @@ const ManagerListPage = () => {
 					onHandleRefetch={refetch}
 					loading={isLoading || isFetching}
 					columns={columnsData}
-					data={tableData}
-					serverSidePagination={true}
-					serverPaginationProps={{
-						...paginationState,
-						pageIndex: data?.page,
-						totalPages: data?.totalPages,
-						canNextPage: data?.hasNextPage,
-						canPreviousPage: data?.hasPrevPage
+					data={data?.data ?? []}
+					manualPagination
+					paginationState={{
+						..._.omit(data, ['data'])
 					}}
-					onServerPaginate={handlePaginate}
 				/>
 			</Box>
 		</Fragment>

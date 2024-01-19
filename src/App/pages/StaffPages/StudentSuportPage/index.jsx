@@ -7,7 +7,7 @@ import {
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import DataTable from '@/Core/components/common/Table/DataTable';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
+import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/TableFilter';
 import Text from '@/Core/components/common/Text/Text';
 import { formatDate } from '@/Core/utils/formatDate';
 import { useEffect, useMemo, useState } from 'react';

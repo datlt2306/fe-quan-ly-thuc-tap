@@ -1,38 +1,35 @@
-import useServerPagination from '@/App/hooks/useServerPagination';
-import { useDeleteStaffMutation, useGetAllStaffQuery } from '@/App/store/apis/staff-list.api';
 import { staffDataValidator } from '@/App/schemas/staff.schema';
+import { useDeleteStaffMutation, useGetAllStaffQuery, usePrefetch } from '@/App/store/apis/staff-list.api';
 import Button from '@/Core/components/common/Button';
 import PopConfirm from '@/Core/components/common/Popup/PopConfirm';
 import DataTable from '@/Core/components/common/Table/DataTable';
-import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/ReactTableFilters';
+import { InputColumnFilter, SelectColumnFilter } from '@/Core/components/common/Table/components/TableFilter';
+import Tooltip from '@/Core/components/common/Tooltip';
 import { PencilSquareIcon, TrashIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useContext, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import tw from 'twin.macro';
 import AddStaffSlideOver from './components/AddStaffSlideOver';
 import UpdateStaffModal from './components/UpdateStaffModal';
-import Tooltip from '@/Core/components/common/Tooltip';
+import _ from 'lodash';
+import useQueryParams from '@/App/hooks/useQueryParams';
+import { TableContext } from '@/Core/components/common/Table/context/TableProvider';
+import TableRowActions from './components/TableRowActions';
+import Box from '@/Core/components/common/Box';
 
 const StaffListPage = () => {
 	const currentUser = useSelector((state) => state.auth?.user);
 	const [isEditing, setIsEditing] = useState(false);
 	const [user, setUser] = useState();
 	const [slideOverVisibility, setSlideOverVisibility] = useState(false);
-	const { paginationState, handlePaginate } = useServerPagination();
-	const {
-		data: staffList,
-		isLoading,
-		refetch,
-		isFetching
-	} = useGetAllStaffQuery({
-		page: paginationState?.pageIndex,
-		limit: paginationState?.pageSize
+	const [params] = useQueryParams('page', 'limit');
+	const { data, isLoading, refetch, isFetching } = useGetAllStaffQuery({
+		page: Boolean(params.page) ? params.page : 1,
+		limit: Boolean(params.limit) ? params.limit : 10
 	});
-
-	const tableData = useMemo(() => staffList?.data ?? [], [staffList]);
 
 	const { reset } = useForm({
 		resolver: yupResolver(staffDataValidator)
@@ -53,8 +50,10 @@ const StaffListPage = () => {
 		toast.success('Xóa nhân viên thành công!');
 	};
 
+	const prefetch = usePrefetch('getAllStaff');
+
 	const onOpenUpdate = (data) => {
-		const selectedUser = Array.isArray(tableData) && tableData?.find((item) => item?._id === data);
+		const selectedUser = Array.isArray(data?.data) && data?.data?.find((item) => item?._id === data);
 		if (selectedUser) {
 			setUser(selectedUser);
 		}
@@ -102,34 +101,10 @@ const StaffListPage = () => {
 				canSort: false,
 				filterable: false,
 				isSort: false,
-				Cell: ({ row }) => (
-					<ButtonList>
-						<Tooltip message='Cập nhật'>
-							<Button
-								size='xs'
-								variant='ghost'
-								shape='square'
-								icon={PencilSquareIcon}
-								onClick={() => onOpenUpdate(row.original._id)}
-							/>
-						</Tooltip>
-
-						<PopConfirm
-							okText='Ok'
-							cancelText='Cancel'
-							title={'Xóa nhân viên'}
-							position='right'
-							description={'Bạn muốn xóa nhân viên này ?'}
-							onConfirm={() => onDeleteSubmit(row.original._id)}>
-							<Tooltip message='Xóa'>
-								<Button size='xs' variant='ghost' className='text-error' shape='square' icon={TrashIcon} />
-							</Tooltip>
-						</PopConfirm>
-					</ButtonList>
-				)
+				Cell: ({ row }) => <TableRowActions row={row} onDelete={onDeleteSubmit} onUpdate={onOpenUpdate} />
 			}
 		],
-		[tableData]
+		[data]
 	);
 
 	return (
@@ -137,7 +112,7 @@ const StaffListPage = () => {
 			<AddStaffSlideOver
 				openState={slideOverVisibility}
 				onOpenStateChange={setSlideOverVisibility}
-				formContext={staffList?.data}
+				formContext={data?.data}
 				panelTitle={'Thêm nhân viên'}
 			/>
 			<UpdateStaffModal
@@ -145,43 +120,35 @@ const StaffListPage = () => {
 				onOpenStateChange={setIsEditing}
 				title={'Sửa nhân viên'}
 				userData={user}
-				users={staffList?.data ?? []}
+				users={data?.data ?? []}
 			/>
-			<Box>
-				<ButtonList>
-					<Button
-						type='button'
-						variant='primary'
-						size='sm'
-						onClick={() => {
-							reset();
-							setSlideOverVisibility(!slideOverVisibility);
-						}}>
-						<UserPlusIcon className='h-4 w-4 text-[inherit] ' /> Thêm nhân viên
-					</Button>
-				</ButtonList>
+			<Box className='flex flex-col gap-y-6'>
+				<Button
+					type='button'
+					variant='primary'
+					size='sm'
+					className='w-fit'
+					onClick={() => {
+						reset();
+						setSlideOverVisibility(!slideOverVisibility);
+					}}>
+					<UserPlusIcon className='h-4 w-4 text-[inherit] ' /> Thêm nhân viên
+				</Button>
 
 				<DataTable
 					onHandleRefetch={refetch}
-					loading={isLoading || isFetching}
+					loading={isLoading}
 					columns={columnsData}
-					data={tableData}
-					onServerPaginate={handlePaginate}
-					serverSidePagination
-					serverPaginationProps={{
-						...paginationState,
-						pageIndex: staffList?.page,
-						totalPages: staffList?.totalPages,
-						canNextPage: staffList?.hasNextPage,
-						canPreviousPage: staffList?.hasPrevPage
+					data={data?.data ?? []}
+					manualPagination
+					onPrefetch={prefetch}
+					paginationState={{
+						..._.omit(data, ['data'])
 					}}
 				/>
 			</Box>
 		</Fragment>
 	);
 };
-
-const Box = tw.div`flex flex-col gap-6`;
-const ButtonList = tw.div`flex items-center gap-px`;
 
 export default StaffListPage;

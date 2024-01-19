@@ -154,7 +154,7 @@ const RegistrantionTimePage = () => {
 										variant={selectedSemester?._id !== defaultSemester?._id ? 'disabled' : 'success'}
 										onClick={() =>
 											handleClick(
-												tableData.find((i) => i.typeNumber === item.typeNumber),
+												tableData?.find((i) => i.typeNumber === item.typeNumber),
 												{ typeName: item.typeName, typeNumber: item.typeNumber }
 											)
 										}>
