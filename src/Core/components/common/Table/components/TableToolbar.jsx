@@ -18,7 +18,7 @@ const TableToolbar = ({ table, handleRefetch, loading }) => {
 				{!!table.state?.filters?.length && (
 					<Tooltip message='Xóa lọc' position='top'>
 						<Button
-							size='sm'
+							size='xs'
 							variant='error'
 							shape='square'
 							className='!h-fit !w-fit'
